@@ -1,19 +1,9 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
-	<h1>Hello World!</h1>
-
-	<script type="importmap">
-      {
-        "imports": {
-          "@google/generative-ai": "https://esm.run/@google/generative-ai"
-        }
-      }
-    </script>
-	<!-- <script type="module" src="js/test.js"></script> -->
-</body>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}">
+	
+	<th:block layout:fragment="content">
+		<h1>Hello World!</h1>
+	</th:block>
+	
 </html>
