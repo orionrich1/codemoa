@@ -1,4 +1,4 @@
-package com.codemoa.project.mapper;
+package com.codemoa.project.domain.information.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 

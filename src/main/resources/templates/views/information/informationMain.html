@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeloadf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/main_layout}">
+	
+	<th:block layout:fragment="content">
+		<th:block>
+			<link th:href="@{css/information/main.css}" rel="stylesheet" />
+			<link th:href="@{css/information/layout.css}" rel="stylesheet" />
+		</th:block>
+		<section id="section01">
+			<div class="layout">
+				<div class="in">
+					<div class="l">
+						<strong>
+							<i>codemoa 정보 게시판 메인</i>
+							<span>정보 공유 콘텐츠</span>
+						</strong>
+						<b>
+							"CODEMOA"
+						</b>
+					</div>
+					<div class="r">
+						<div class="boxs">
+							<strong>원하는 Contents를 검색해보세요!</strong>
+							<div class="searchbox">
+								<input type="text" id="totalSearchText"
+								placeholder="검색어를 입력해주세요.">
+								<a href="#">돋보기 아이콘</a>
+ 							</div>
+							<span id="kwList">
+								<i># Content1</i>
+								<i># Content2</i>
+								<i># Content3</i>
+								<i># Content4</i>
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		
+		<section id="section02">
+			<div class="layout">
+				<div class="in">
+					<div class="titles">
+						<strong>contents</strong>
+						<p>온라인 콘텐츠</p>
+					</div>
+					<div data-skin="tab">
+						<ul>
+							<li data-tab-btn="1">
+								<a href="#"><span>전체보기</span></a>
+							</li>
+							<li data-tab-btn="2">
+								<a href="#"><span>컨텐츠 1</span></a>
+							</li>
+							<li data-tab-btn="3">
+								<a href="#"><span>컨텐츠 2</span></a>
+							</li>
+							<li data-tab-btn="3">
+								<a href="#"><span>컨텐츠 3</span></a>
+							</li>
+							<li class="more" id="clPlust">
+								<a href="#"><span>주제 더보기</span></a>
+							</li>
+						</ul>
+						<div class="cont" id="eCombineDiv">
+							<div data-tab-cont="1" class="activce">
+								<div class="swiper mySwiper swiper-container-horizontal swiper-container-multirow">
+									<div class="swiper-wrapper" style="width:10000px; transform: translate3d(0, 0, 0)">
+										
+										<div class="swiper-slide swiper-slide-active" data-swiper-column="0" 
+											data-swiper-row="0" style="order: 0; width: 298px; margin-right: 20px">
+											<div class="swiper-area">
+												<a href="#"><span>컨텐츠1 이미지</span></a>
+												<div class="texts">
+													<span>
+														<i data-color="3">질병정보</i>
+														<i data-color="1">누구나</i>
+													</span>
+													<a href="#">
+														<strong>컨텐츠1 제목</strong>
+													</a>
+													<div style="display: flex; flex-wrap: nowrap; align-items: flex-start;
+														justify-content: space-between; margin-top: 1.125rem; color: #535353;
+														font-weight: 500;">
+														<span>"2025"</span>
+														<span>WHO(World Hea)</span>
+													</div>
+												</div>
+												<a href="#">
+													<div class="cover-item">
+														<div class="cover-text">
+															<span class="cover-label"></span>
+															"From commitment to action: countries unite to eliminate cervical cancer"
+														</div>
+													</div>
+													<div class="cover-item">
+														<div class="cover-text">
+															<span class="cover-label"></span>
+														</div>
+													</div>
+													<div class="cover-item">
+														<div class="cover-text">
+															<span class="cover-label"></span>
+														</div>
+													</div>
+													<div class="cover-item">
+														<div class="cover-text">
+															<span class="cover-label">출처</span>
+															"WHO(World Health Organization)"
+														</div>
+													</div>
+												</a>
+											</div>
+										</div>
+										
+										<div class="swiper-slide specialty swiper-slide-next" data-swiper-column="0" 
+											data-swiper-row="1" style="-webkit-box-oridnal-group:40; order: 40; margin-top: 25px;
+											width: 298px; margin-right: 20px">
+											<div class="swiper-area">
+												<a href="#"><span>컨텐츠2 이미지</span></a>
+												<div class="texts">
+													<span>
+														<i data-color="3">질병정보</i>
+														<i data-color="1">누구나</i>
+													</span>
+													<a href="#">
+														<strong>컨텐츠2 제목</strong>
+													</a>
+													<div style="display: flex; flex-wrap: nowrap; align-items: flex-start;
+														justify-content: space-between; margin-top: 1.125rem; color: #535353;
+														font-weight: 500;">
+														<span>"2025"</span>
+														<span>WHO(World Hea)</span>
+													</div>
+												</div>
+												<a href="#">
+													<div class="cover-item">
+														<div class="cover-text">
+															<span class="cover-label"></span>
+															"From commitment to action: countries unite to eliminate cervical cancer"
+														</div>
+													</div>
+													<div class="cover-item">
+														<div class="cover-text">
+															<span class="cover-label"></span>
+														</div>
+													</div>
+													<div class="cover-item">
+														<div class="cover-text">
+															<span class="cover-label"></span>
+														</div>
+													</div>
+													<div class="cover-item">
+														<div class="cover-text">
+															<span class="cover-label">출처</span>
+															"WHO(World Health Organization)"
+														</div>
+													</div>
+												</a>
+											</div>
+										</div>
+										
+									</div>
+									
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section id="section03">
+		</section>
+	</th:block>
+</html>
