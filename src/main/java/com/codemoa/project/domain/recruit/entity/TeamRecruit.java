@@ -3,48 +3,40 @@ package com.codemoa.project.domain.recruit.entity;
 
 import java.time.LocalDateTime;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class TeamRecruit {
 
     private int recruitId;      // recruit_id (PK)
     private String userId;      // user_id (FK, 작성자)
-    private String title;
-    private String content;
-    private String category;    // 모집 분야 (예: 공모전, 스터디)
+    private String contestTitle;	//공모전 Url정보
+    private String recruitType;	//모집 분류 (팀원구인 / 팀원으로 참가희망)
+    private String recruitperiod;	//모집 기간
+    private String activeityPeriod;	//활동 기간
+    private int totalMembers;		//모집 희망 인원
+    private int remainingMembers;		//남은 인원
+    private String progressType;		//진행 방식 (온라인 /오프라인/ 혼합)
+    private String contact;			//연락 방법
+    private String techStack;		//기술 스택(#태그)
     private String status;      // 모집 상태 (예: 모집중, 모집완료)
-    private LocalDateTime dueDate;     // 모집 마감일
-    private int viewCount;
-    private LocalDateTime regDate;
-    private LocalDateTime updateDate;
+    private String applyGuide;	//지원 방법 (포트폴리오, 간단한 자기소개서 등)
+    private String title;				//게시글 제목
+    private String content;			//내용
+    private String attachmentUrl; //첨부파일
+    
+    
+    private int viewCount;			//열람 횟수 기록
+    private LocalDateTime regDate;		// 작성 시간
+    private LocalDateTime updateDate;		//수정일
 
     // --- Getters and Setters ---
 
-    public int getRecruitId() { return recruitId; }
-    public void setRecruitId(int recruitId) { this.recruitId = recruitId; }
-
-    public String getUserId() { return userId; }
-    public void setUserId(String userId) { this.userId = userId; }
-
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
-
-    public String getContent() { return content; }
-    public void setContent(String content) { this.content = content; }
-
-    public String getCategory() { return category; }
-    public void setCategory(String category) { this.category = category; }
-
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
-
-    public LocalDateTime getDueDate() { return dueDate; }
-    public void setDueDate(LocalDateTime dueDate) { this.dueDate = dueDate; }
-
-    public int getViewCount() { return viewCount; }
-    public void setViewCount(int viewCount) { this.viewCount = viewCount; }
-
-    public LocalDateTime getRegDate() { return regDate; }
-    public void setRegDate(LocalDateTime regDate) { this.regDate = regDate; }
-
-    public LocalDateTime getUpdateDate() { return updateDate; }
-    public void setUpdateDate(LocalDateTime updateDate) { this.updateDate = updateDate; }
+    
 }
