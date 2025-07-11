@@ -19,7 +19,8 @@ public class BoardController {
 	public String boardList(Model model) {
 		model.addAttribute("bList", boardService.boardList());
 		
-		return "main";
+		return "views/boardList";
+		//return "main";
 	}
 
 }
