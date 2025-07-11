@@ -1,6 +1,9 @@
 //윤식
 package com.codemoa.project.domain.chat.mapper;
 
-public class ChatMapper {
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface ChatMapper {
 
 }
