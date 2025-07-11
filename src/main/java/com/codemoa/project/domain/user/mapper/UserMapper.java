@@ -1,6 +1,9 @@
 //기찬
 package com.codemoa.project.domain.user.mapper;
 
-public class UserMapper {
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface UserMapper {
 
 }
