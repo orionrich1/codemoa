@@ -1,6 +1,9 @@
 //재용
 package com.codemoa.project.domain.information.mapper;
 
-public class InformationMapper {
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface InformationMapper {
 
 }

@@ -1,6 +1,9 @@
 //종효
 package com.codemoa.project.domain.employment.mapper;
 
-public class EmploymentMapper {
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface EmploymentMapper {
 
 }

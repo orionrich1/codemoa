@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 @NoArgsConstructor
 public class TestController {
 
-	@GetMapping("/")
+	@GetMapping("/test01")
 	public String test() {
 		return "test/test";
 	}
