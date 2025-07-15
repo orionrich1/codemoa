@@ -19,7 +19,7 @@
 					<h2 class="fs-3 fw-bold">게시글 리스트</h2>
 				</div>
 			</div>
-			<form name="searchForm" id="searchForm" action="boardList"
+			<form name="searchForm" id="searchForm" action="teamRecruit"
 					class="row justify-content-center my-3">
 				<div class="col-auto">
 					<select name="type" class="form-select">
@@ -54,12 +54,12 @@
 						</thead>
 					<tbody>
 						<th:block th:if="${not #lists.isEmpty(bList)}">
-							<tr th:block th:each="board, status: ${bList}">
-								<td>[[ ${board.no} ]]</td>
-								<td>[[ ${board.title} ]]</td>
-								<td th:text="${ board.writer }"></td>
-								<td>[[${ #dates.format(board.regDate, 'yyyy-MM-dd') }]]</td>
-								<td th:text="${ board.readCount }"></td>
+							<tr th:block th:each="teamRecruit, status: ${bList}">
+								<td>[[ ${teamRecruit.recruitId} ]]</td>
+								<td>[[ ${teamRecruit.title} ]]</td>
+								<td th:text="${ teamRecruit.userId }"></td>
+								<td>[[${ #dates.format(teamRecruit.regDate, 'yyyy-MM-dd') }]]</td>
+								<td th:text="${ teamRecruit.viewCount }"></td>
 							</tr>
 						</th:block>
 						<th:block th:unless="${not #lists.isEmpty(bList)}">
