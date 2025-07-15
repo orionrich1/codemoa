@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.codemoa.project.domain.chat.mapper.ChatMapper">
+<mapper
+	namespace="com.codemoa.project.domain.problem.mapper.ProblemMapper">
+	<select id="getProblemList" resultType="Problem">
+		SELECT * FROM problems ORDER BY category, difficulty;
+	</select>
+	
+	<select id="getProblemDetail" resultType="Problem">
+		SELECT * FROM problems WHERE problem_id=#{no}
+	</select>
 </mapper>

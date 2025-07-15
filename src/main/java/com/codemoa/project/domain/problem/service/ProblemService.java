@@ -1,6 +1,25 @@
 //도영
 package com.codemoa.project.domain.problem.service;
 
-public class ProblemService {
+import java.util.List;
 
+import org.springframework.stereotype.Service;
+
+import com.codemoa.project.domain.problem.entity.Problem;
+import com.codemoa.project.domain.problem.mapper.ProblemMapper;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class ProblemService {
+	private final ProblemMapper problemMapper;
+
+	public List<Problem> getProblemList() {
+		return problemMapper.getProblemList();
+	};
+
+	public Problem getProblemDetail(int no) {
+		return problemMapper.getProblemDetail(no);
+	}
 }
