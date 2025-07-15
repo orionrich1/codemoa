@@ -16,7 +16,7 @@ public class TeamRecruit {
 
     private int recruitId;      // recruit_id (PK)
     private String userId;      // user_id (FK, 작성자)
-    private String contestTitle;	//공모전 Url정보
+    private String contestTitle;	//공모전 url정보
     private String recruitType;	//모집 분류 (팀원구인 / 팀원으로 참가희망)
     private String recruitperiod;	//모집 기간
     private String activeityPeriod;	//활동 기간
@@ -30,8 +30,6 @@ public class TeamRecruit {
     private String title;				//게시글 제목
     private String content;			//내용
     private String attachmentUrl; //첨부파일
-    
-    
     private int viewCount;			//열람 횟수 기록
     private LocalDateTime regDate;		// 작성 시간
     private LocalDateTime updateDate;		//수정일
