@@ -3,6 +3,13 @@ package com.codemoa.project.domain.user.entity;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Entity;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Entity // 1. 이 클래스가 DB 테이블과 연결되는 'Entity'임을 선언합니다.
+@Getter // 2. 각 필드의 값을 외부에서 읽을 수 있도록 Getter를 자동으로 만들어줍니다.
+@NoArgsConstructor // 3. JPA는 Entity를 만들 때 기본 생성자를 필요로 하므로 추가합니다.
 public class User {
 
     private String userId;      // user_id (PK)
