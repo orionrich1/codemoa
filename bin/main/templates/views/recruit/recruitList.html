@@ -56,7 +56,7 @@
 						<th:block th:if="${not #lists.isEmpty(bList)}">
 							<tr th:block th:each="teamRecruit, status: ${bList}">
 								<td>[[ ${teamRecruit.recruitId} ]]</td>
-								<td>[[ ${teamRecruit.title} ]]</td>
+								<td><a th:href="@{TeamRecruitDetail(recruitId=${teamRecruit.recruitId})}">[[ ${teamRecruit.title} ]]</a></td>
 								<td th:text="${ teamRecruit.userId }"></td>
 								<td>[[${ #dates.format(teamRecruit.regDate, 'yyyy-MM-dd') }]]</td>
 								<td th:text="${ teamRecruit.viewCount }"></td>

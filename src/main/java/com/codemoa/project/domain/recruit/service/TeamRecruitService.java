@@ -18,6 +18,11 @@ public class TeamRecruitService {
 	@Autowired
 	private TeamRecruitMapper teamRecruitMapper;
 	
+	public TeamRecruit getTeamRecruit(int recruitId) {
+		log.info("TeamRecruitService: getTeamRecruit(int recruitId)");
+		return teamRecruitMapper.getTeamRecruit(recruitId);
+	}
+	
 	public List<TeamRecruit> teamRecruitList(){
 		log.info("TeamRecruitService: TeamRecruitList()");
 		
