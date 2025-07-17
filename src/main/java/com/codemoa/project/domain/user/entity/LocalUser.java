@@ -7,18 +7,18 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "localUser")
+@Table(name = "local_user") // DB 테이블 이름 "local_user"로 변경
 public class LocalUser {
 
-    @Id // User의 user_id를 PK로 그대로 사용합니다.
+    @Id
     @Column(name = "user_id")
     private String userId;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @MapsId // User의 Id를 LocalUser의 Id로 매핑합니다.
+    @MapsId
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(nullable = false)
-    private String pass; // 비밀번호
+    @Column(name = "pass")
+    private String pass;
 }

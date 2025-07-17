@@ -9,6 +9,6 @@ import lombok.Setter;
 public class UserLoginRequest {
 	// 로그인 요청 시 필요한 필드
 	private String userId;
-	private String password;
+	private String pass;
 
 }
