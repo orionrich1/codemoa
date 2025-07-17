@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns: th="http://www.thymeleaf.org"
+		 xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		 xmlns:decorate="~{layouts/main_layout}">
+		
+<th:block layout:fragment="content">
+	<div class="container my-5" id="recruit-write-wrapper">
+		<h2 class="text-center fw-bold mb-4"> 공모전 팀 모집 글 작성</h2>
+		
+		<form th:action="@{/recruit/write}" th:object"${teamRecruitForm}method="post" 
+		enctype="multipart/form-date" id="recruitWriterForm">
+		
+			<!-- 공모전 URL 및 미리보기 구문 -->
+			<div class="border rounded p-4 mb-4">
+				<h4 class="fw-semibold mb-3">공모전 정보 (contest URL)</h4>
+				
+				<div class="mb-3 row g-2 align-items-center">
+					<label for="contestTitle" class="col-sm-2 col-form-lable">공모전 페이지 URL</label>
+					<div class="vol-sm-8">
+						<input type="url" class="from-control" id="contestTitle" 
+						th:field="*{contestTitle}" placeholder="https://..." required>
+					</div>
+					<div class="col-sm-2 d-grid">
+						<button type="button" class="btn btn-outline-secondary" 
+						id="btnContestPreview"> 미리보기 불러오기</button>
+					</div>
+				</div>
+				
+				<!-- 미리보기 영역 -->
+				<div id="contestPreviewBox" class="border p-3 text-center d-none">
+					<div class="mb-2" id="contestPreviewImageWrapper">
+						<img id="contestPrewviewImage" src="" alt="공모전 미리보기 이미지" class="img-fluid"
+						style="max-height:150px; dhisplay:none;">						
+					</div>
+					<div class="mb-2 fw-bold" id="contestPreviewTitle"></div>
+					<div class="small text-muted mb-2" id="contestPreviewDesc"></div>
+					<a id="contestPreviewLink" href="#" target="_blank" class=" btn btn-outline-primary btn-sm">공모전 바로가기</a>
+				</div>				
+			</div>
+			
+			<!-- 모집 정보 -->
+			<div class="border rounded p-4 mb-4">
+				<h4 class="fw-swmibold mb-3">모집 정보 (Recruit Info)</h4>
+				
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-label fw-bold">모집 분류 : </div>
+						<div class="form-check-input recruitTypeChk" type="checkbox" value="TEAM_RECRUIT" id="recruitTypeRecruit">
+							<label class="form-check-lable" for="recruitTypeRecruit">팀원 구인</label>
+						</div>
+						<div class="form-check">
+							<input class="form-check-input revruitTypeChk" type="checkbox" value="TEAM_JOIN" id="recruiteTypeJoin">
+							<label class="from-check-label" for="recruitTypeJoin">팀원으로 참가 희망</label>
+						</div>
+						<input type="hidden" th:field="*{recruitType}" id="recruitTypeHidden" />
+					</div>
+					
+					<!-- 모집 기간: 날짜지정 -->
+					<div class="mb-3">
+						<label class="form-lable fw-bold">활동기간(시작 ~ 종료) :</label>
+						<div class="row g-2">
+							<div class="row g-2">
+								<div class="col"'>
+									<input type="date" class="form-control" id="activityStartDate" />
+								</div>
+								<div class="col-auto align-self-center">~</div>
+								<div class="col">
+									<input type="date" class="form-control" id="activityEndDate" />
+								</div>
+							</div>
+							<input type="hiddne" th:field="*{activeityPeriod}" id="acrivityPeriodHidden" />
+						</div>
+						
+						<!-- 모집 인원과 남은 인원 -->
+						<div class="mb-3">
+							<label class="form-label fw-bold"> 모집 인원 / 남은 인원 :</label>
+							<div class="row g-2">
+								<div class="col">
+									<input type="number" min="0" class="form-control" th:field="*{totalMembers}"
+									id="totalMembers" placeholder="총 인원" />
+								</div>
+								<div class="col-auto align-self-center">/</div>
+								<div class="col">
+									<input type="number" min="0" class="form-control" th:field="*{remainingMembers}" 
+									id="reaminingMembers" placeholder="남은 인원" />
+								</div>
+							</div>
+							<div class="form-test"> ※ 모집 분류에서 "팀원으로 참가 희망"을 선택시 자동 잠금.</div> 
+						</div>						
+					</div>
+					
+					<div class="col-md-6">
+						<div class="mb-3">
+							<div class="form-label fw-bold">진행 방식 (라디오 스타일 / 복수 선택 가능) : </div>
+							<div class="form-check form-check-inline">
+								<input class="form-check-input progressTypeChk" type="checkbox" value="ONLINE" id="progressOnline">
+								<label class="form-check-label" for="progressOnline"> 온라인 </label>
+							</div>							
+							<div class="form-check form-check-inline">
+								<input class="form-check-input progressTypeChk" type="checkbox" value="OFFLINE" id="progressOFFline">
+								<label class="form-check-label" for="progressOFFline"> 오프라인 </label>
+							</div>							
+							<div class="form-check form-check-inline">
+								<input class="form-check-input progressTypeChk" type="checkbox" value="MIXED" id="progressMIXED">
+								<label class="form-check-label" for="progressMixed"> 혼합 </label>
+							</div>
+							<input type="hidden" th:field="*{progressType}" id="progressTypeHidden" />			
+						</div>
+						
+						<!-- 연락 방법 -->
+						<div class="mb-3">
+							<label for="contac" class="form-label fw-bold">연락 방법 : </label>
+							<input type="text" class="form-control" id="contact" th:field="*{contact}" placeholder="이메일 / 디스코드 / 오픈채팅 등">
+						</div>
+						
+						<!-- 기술 스택 -->
+						<div class="mb-3">
+							<label for="techStackInput" class="form-label" fw-bold">기술 스택 :</label>
+							<input type="text" class="form-control" id="techStackInput" placeholder="예: Java,Spring Boot, React 등" />
+							<div class="form-text">콤마(,) 또는 엔터로 추가. 추가된 태그는 아래에 표시 됩니다.</div>
+							<div id="techTagContainer" class="mt-2"></div>
+							<input type="hidden" th:field="*{techStack}" id="techStackHidden">
+						</div>
+						
+						<!-- 지원 방법 -->
+						<div class="mb-3">
+							<label for="applyGuide" class="form-label fw-bold">지원 방법</label>
+							<textarea class="form-control" id="applyGuide" th:field="*{applyGuide}" rows="3" placeholder="포트폴리오, 자기소개서 등 입력, 제출"></textarea>
+						</div>						
+					</div>	
+				</div>
+			</div>
+			
+			<!-- 상세 내용 -->
+			<div class="border rounded p-4 mb-4">
+				<h4 class="fw-semibold mb-3">게시글 내용</h4>
+				
+				<div class="mb-3">
+					<label for="title" class="form-label fw-bold">제목</label>
+					<input type="text" class="form-control" id="title" th:field="*{title}" maxlength="100" required>
+				</div>
+				
+				<div class="mb-3">
+					<label for="content" class="form-label fw-bold">내용</label>
+					<textarea class="form-control" id="content" th:field="*{content}" rows="10" placeholder="모집 상세 내용을 입력하세요" required></textarea>
+				</div>
+				
+				<!-- 첨부파일 업로드 -->
+				<div class="mb-3">
+					<label for="attachmentFile" class="form-label fw-bold">첨부파일</label>
+					<input type=file class="form-control" id="attachmentFile" name="attachmentFile">
+				</div>
+			</div>
+			
+			<!-- 제출 버튼 -->
+			<div class="text-end">
+				<button type="submit" class="btn btn-primary">등록하기</button>
+				<a th:href="@{/recruit/list}" class="btn vtn-secondary">취소</a>
+			</div>
+		</form>
+	</div>
+	
+	<!--  script 구문 -->
+	<script src="/js/recruitWrite.js defer></script>	
+</th:block>
+</html>
