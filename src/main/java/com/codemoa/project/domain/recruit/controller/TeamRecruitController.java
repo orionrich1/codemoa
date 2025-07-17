@@ -18,13 +18,18 @@ public class TeamRecruitController {
 	@Autowired
 	private TeamRecruitService teamRecruitService;
 	
-	@GetMapping("/TeamRecruitDetail")
+	@GetMapping("/addTeamRecruit")
+	public String addteamRecruit(){
+		return "veiws/teamRecruitwriteForm";
+	}
+	
+	@GetMapping("/teamRecruitDetail")
 	public String getTeamRecruit(Model model, @RequestParam("recruitId") int recruitId) {
 		model.addAttribute("teamRecruit", teamRecruitService.getTeamRecruit(recruitId));
 		return "views/teamRecruitDetail";
 	}
 	
-	@GetMapping({"/", "/teamRecruit"})
+	@GetMapping({"/", "/teamRecruitList"})
 	public String TeamRecruitList(Model model) {
 		model.addAttribute("bList", teamRecruitService.teamRecruitList());
 		
