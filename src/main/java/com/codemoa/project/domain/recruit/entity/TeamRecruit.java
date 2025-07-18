@@ -18,7 +18,7 @@ public class TeamRecruit {
     private String userId;      // user_id (FK, 작성자)
     private String contestTitle;	//공모전 url정보
     private String recruitType;	//모집 분류 (팀원구인 / 팀원으로 참가희망)
-    private String recruitperiod;	//모집 기간
+    private String recruitPeriod;	//모집 기간
     private String activeityPeriod;	//활동 기간
     private int totalMembers;		//모집 희망 인원
     private int remainingMembers;		//남은 인원

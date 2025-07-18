@@ -2,6 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.codemoa.project.domain.chat.mapper.ChatMapper">
 
+<insert id="insertTeamRecruit" parameterType="TeamRecruit">
+INSERT INTO recruitbbs(userid, contesttitle, recruittype, recruitperiod, 
+activeityPeriod, totalMembers, remainingMembers, progresstype, contact, techstack, 
+status, applyguide, title, content, attachmenturl, viewcount, regdate, updatedate)
+
+</insert>
+
 <select id="getTeamRecruitList" resultType="TeamRecruitList">
 SELECT *
 FROM recruitbbs;
