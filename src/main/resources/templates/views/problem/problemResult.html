@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}">
+
+<div layout:fragment="content">
+	<!-- 임시 css 사용중 -->
+	<link rel="stylesheet" th:href="@{/css/problem.css}" />
+
+	<h3 id="problemCategory">[[${problem.category}]]</h3>
+	<h5 id="problemTitle">[[${problem.title}]]</h5>
+	<pre id="problemContent">[[${problem.content}]]</pre>
+	<pre id="problemAnswer">[[${problem.answer}]]</pre>
+	<pre id="userAnswer">[[${answer}]]</pre>
+	<hr>
+
+	<pre id="result">결과 받아오는 중 . . .</pre>
+
+	<script th:src="@{/js/Problem.js}"></script>
+	<script>
+		requestApi();
+	</script>
+</div>
+
+</html>

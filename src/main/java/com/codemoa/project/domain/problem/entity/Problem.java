@@ -3,11 +3,15 @@ package com.codemoa.project.domain.problem.entity;
 
 import java.time.LocalDateTime;
 
+import groovy.transform.ToString;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@NoArgsConstructor
 @Getter
 @Setter
+@ToString
 public class Problem {
 
 	private int problemId; // problem_id (PK)
