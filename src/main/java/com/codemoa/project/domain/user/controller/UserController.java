@@ -4,19 +4,10 @@ package com.codemoa.project.domain.user.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-<<<<<<< HEAD
-import com.codemoa.project.domain.user.dto.request.UserLoginRequest;
-import com.codemoa.project.domain.user.entity.User;
-import com.codemoa.project.domain.user.service.UserService;
-
-=======
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import com.codemoa.project.domain.user.dto.request.UserLoginRequest;
 import com.codemoa.project.domain.user.entity.User;
 import com.codemoa.project.domain.user.service.UserService;
-
->>>>>>> 01035d48d4a5fe34decf2dc8118ba73d386c15ea
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
@@ -25,26 +16,7 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 
     private final UserService userService; // 4단계에서 만든 Service 사용
-
-<<<<<<< HEAD
-    @GetMapping("/login")
-    public String loginForm() { return "views/main/index"; }
-    
-
-    
-    @PostMapping("/login")
-    public String login(UserLoginRequest requestDto, HttpSession session) { // 3단계에서 만든 DTO 사용
-        User loginUser = userService.login(requestDto);
-        if (loginUser == null) return "redirect:/login";
-        session.setAttribute("loginUser", loginUser);
-        return "redirect:/";
-    }
-=======
    
-   
-    
-
-    
     @GetMapping("/login")
     public String loginForm() {
         // templates/user/loginForm.html 파일을 찾아서 보여줍니다.
@@ -73,5 +45,4 @@ public class UserController {
 		// 메인 페이지로 리다이렉트
 		return "redirect:/";
 	}
->>>>>>> 01035d48d4a5fe34decf2dc8118ba73d386c15ea
 }

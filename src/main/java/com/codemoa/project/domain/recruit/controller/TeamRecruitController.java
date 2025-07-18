@@ -35,13 +35,13 @@ public class TeamRecruitController {
 		return "veiws/teamRecruitwriteForm";
 	}
 	
-	@GetMapping("/teamRecruitDetail")
+	@GetMapping("/TeamRecruitDetail")
 	public String getTeamRecruit(Model model, @RequestParam("recruitId") int recruitId) {
 		model.addAttribute("teamRecruit", teamRecruitService.getTeamRecruit(recruitId));
 		return "views/teamRecruitDetail";
 	}
 	
-	@GetMapping({"/", "/teamRecruitList"})
+	@GetMapping({"/", "/TeamRecruitList"})
 	public String TeamRecruitList(Model model) {
 		model.addAttribute("bList", teamRecruitService.teamRecruitList());
 		

@@ -31,6 +31,6 @@ public class TeamRecruitService {
 	public List<TeamRecruit> teamRecruitList(){
 		log.info("TeamRecruitService: TeamRecruitList()");
 		
-		return teamRecruitMapper.teamRecruitList();
+		return teamRecruitMapper.TeamRecruitList();
 	}
 }

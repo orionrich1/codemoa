@@ -12,7 +12,7 @@ public interface TeamRecruitMapper {
 
 	public void insertTeamRecruit(TeamRecruit teamRecruit);
 	
-	public List<TeamRecruit> teamRecruitList();
+	public List<TeamRecruit> TeamRecruitList();
 
 	public TeamRecruit getTeamRecruit(int recruitId);
 	
