@@ -11,7 +11,11 @@ import com.codemoa.project.domain.recruit.entity.TeamRecruit;
 public interface TeamRecruitMapper {
 
 	public List<TeamRecruit> teamRecruitList();
+	
+	public void updateTeamRecruit(TeamRecruit teamRecruit);
 
+	public void insertTeamRecruit(TeamRecruit teamRecruit);
+	
 	public TeamRecruit getTeamRecruit(int recruitId);
 	
 
