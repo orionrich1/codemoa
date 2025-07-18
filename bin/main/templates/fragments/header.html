@@ -45,26 +45,31 @@
 			</div>
 
 			<div class="col-lg-2">
- <ul class="navbar-nav flex-row justify-content-end align-items-center">
+    <ul class="navbar-nav flex-row justify-content-end align-items-center">
 
-        <li class="nav-item" th:unless="${session.loginUser}">
-            <a class="nav-link" th:href="@{/login}">로그인</a>
-        </li>
-        <li class="nav-item ms-3" th:unless="${session.loginUser}">
-            <a class="nav-link" th:href="@{/auth/signup}">회원가입</a>
-        </li>
+        <th:block th:if="${session.loginUser != null}">
+            <li class="nav-item">
+                    <a class="nav-link" href="/mypage">
+        <span th:text="${session.loginUser.userId}"></span><span>님</span>
+    </a>
+            </li>
+            <li class="nav-item ms-3">
+                <a class="nav-link" th:href="@{/logout}">로그아웃</a>
+            </li>
+        </th:block>
 
-        <li class="nav-item" th:if="${session.loginUser}">
-            <a class="nav-link" href="/mypage">
-                <span th:text="${session.loginUser.nickname + '님'}"></span>
-            </a>
-        </li>
-        <li class="nav-item ms-3" th:if="${session.loginUser}">
-            <a class="nav-link" th:href="@{/logout}">로그아웃</a>
-        </li>
+        <th:block th:unless="${session.loginUser != null}">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/loginForm}">로그인</a>
+            </li>
+            <li class="nav-item ms-3">
+                <a class="nav-link" th:href="@{/auth/signup}">회원가입</a>
+            </li>
+        </th:block>
 
     </ul>
-			</div>
+
+</div>
 
 		</div>
 	</div>

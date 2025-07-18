@@ -34,7 +34,9 @@ public class UserService {
 	            // 아이디 있음 -> 이제 비밀번호를 비교합니다.
 	            if (localUser.getPass().equals(requestDto.getPass())) {
 	                // 비밀번호 일치 -> 성공! -> 연결된 User 객체 반환
+	            	
 	                return localUser.getUser();
+	                
 
 	            } else {
 	                // 비밀번호 불일치 -> 실패 -> null 반환
