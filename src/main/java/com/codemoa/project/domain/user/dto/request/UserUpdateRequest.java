@@ -2,5 +2,6 @@
 package com.codemoa.project.domain.user.dto.request;
 
 public class UserUpdateRequest {
+	
 
 }

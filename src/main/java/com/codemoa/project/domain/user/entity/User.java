@@ -19,35 +19,38 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "user")
+@Table(name = "user") // 실제 DB 테이블 이름
 public class User {
 
     @Id
-    @Column(name = "user_id")
+    @Column(name = "user_id") // 실제 DB 컬럼 이름
     private String userId;
 
-    @Column(nullable = false)
+    @Column(name = "name")
     private String name;
 
-    @Column(unique = true)
+    @Column(name = "nickname")
     private String nickname;
 
+    @Column(name = "mobile")
     private String mobile;
+
+    @Column(name = "address")
     private String address;
+
+    @Column(name = "email")
     private String email;
 
-    @Column(name = "total_points", nullable = false)
-    private Integer totalPoints = 0; // 기본값 0 설정
+    @Column(name = "total_points")
+    private Integer totalPoints;
 
-    @Column(name = "membership_date", updatable = false)
+    @Column(name = "membership_date")
     private LocalDateTime membershipDate;
 
-    // --- 관계 매핑 ---
-    @ManyToOne(fetch = FetchType.LAZY) // N:1 관계, User가 N, UserGrade가 1
-    @JoinColumn(name = "grade_id") // 외래 키(FK)가 있는 쪽이 관계의 주인입니다.
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "grade_id") // 실제 DB 외래 키 컬럼 이름
     private UserGrade userGrade;
 
-    // PrePersist: Entity가 저장되기 전에 실행됩니다.
     @PrePersist
     public void prePersist() {
         this.membershipDate = LocalDateTime.now();
