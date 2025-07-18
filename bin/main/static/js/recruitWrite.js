@@ -15,8 +15,8 @@
 	
 	const recruitTypeBoxes = $$('.recruitTypeChk');
 	const recruitTypeHidden = $('#recruitTypeHidden');
-	const totalMembersInput = $('#totalMembers');
-	const remainingMembersInput = $('#remainingMembers');
+	const totalMembersInput =$('#totalMembers');
+	const remainingMembersInput =$('#remainingMembers');
 	
 	function syncRecruitType(){
 		const values = Array.from(recruitTypeBoxes).filter(cb=>cb.checked).map(cb=>cb.value);
@@ -27,8 +27,8 @@
 		totalMembersInput.disabled = hasJoin;
 		remainingMembersInput.disabled = hasJoin;
 		if(hasJoin){
-			totalMembersInput.value = '';
-			remainingMembersInput.value = '';
+			totalMembersInput.value = ' ';
+			remainingMembersInput.value = ' ';
 		}
 	}
 	recruitTypeBoxes.forEach(cb=>cb.addEventListener('change', syncRecruitType));
@@ -53,9 +53,9 @@
 	const activityHidden = $('#activityPeriodHidden');
 	
 	function joinDateRange(startE1, endE1){
-		const s = (startE1 && startE1.value) ? startE1.value : '';
-		const e = (endE1 && endE1.value) ? endE1.value : '';
-		if(! s && !e) return '';
+		const s = (startE1 && startE1.value) ? startE1.value : ' ';
+		const e = (endE1 && endE1.value) ? endE1.value : ' ';
+		if(! s && !e) return ' ';
 		return s + ` ~ ` + e ;		
 	}
 	
@@ -76,7 +76,7 @@
 		
 	function renderTags(){
 		if(!tagContainer) return;
-		tagContainer.innerHTML='';
+		tagContainer.innerHTML=' ';
 		tags.forEach((t,idx)=>{
 			const span = document.createElement('span');
 			span.className = 'badge bg-secondary me-1 mb-1';
@@ -107,12 +107,12 @@
 			if(e.key==='Enter'){
 				e.preventDefault();
 				parseInputTags(tagInput.value);
-				tagInput.value='';
+				tagInput.value=' ';
 			}
 		});
 		tagInput.addEventListener('blur', function(){
 			parseInputTags(tagInput.value);
-			tagInput.value='';
+			tagInput.value=' ';
 		});
 	}
 	
@@ -128,13 +128,13 @@
 	const previewL = $('#contestPreviewLink');
 	
 	async function loadOgPreview(){
-		const url = contestUrlInput ? contestUrlInput.value.trim() : '';
+		const url = contestUrlInput ? contestUrlInput.value.trim() : ' ';
 		if(! url){
 			alert(" 공모전 URL 주소를 입력하세요");
 			return;
 		}
 		if(previewT) previewT.textContent = '불러오는 중...';
-		if(previewD) previewD.textContent = '';
+		if(previewD) previewD.textContent = ' ';
 		if(previewImg) previewImg.style.display='none';
 		if(previewBox) previewBox.classList.remove('d-none');
 		
@@ -144,9 +144,9 @@
 			const data = await resp.json();
 			if(data.success){
 				if(previewT) previewT.textContent = data.title || url;
-				if(previewD) previewD.textContent = data.description || '';
+				if(previewD) previewD.textContent = data.description || ' ';
 				if(previewImg) {
-					if(data.imageUrl){
+					if(data.imageURL){
 					previewImg.src = data.imageUrl;
 					previewImg.style.display='inline-block';
 				} else {

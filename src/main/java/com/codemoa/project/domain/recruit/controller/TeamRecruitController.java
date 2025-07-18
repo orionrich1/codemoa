@@ -20,6 +20,8 @@ public class TeamRecruitController {
 	@Autowired
 	private TeamRecruitService teamRecruitService;
 	
+	public String updateTeamRecruit;
+	
 	@PostMapping("/addTeamRecruit")
 	public String addTeamRecruit(TeamRecruit teamRecruit) {
 		log.info("title : ", teamRecruit.getTitle());

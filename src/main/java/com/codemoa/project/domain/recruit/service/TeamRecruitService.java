@@ -18,13 +18,8 @@ public class TeamRecruitService {
 	@Autowired
 	private TeamRecruitMapper teamRecruitMapper;
 	
-	public void updateTeamRecruit(TeamRecruit teamRecruit) {
-		log.info("TeamRecruitService: updateTeamRecruit(TeamRecruit teamRecruit)");
-		teamRecruitMapper.updateTeamRecruit(teamRecruit);
-	}
-	
 	public void addTeamRecruit(TeamRecruit teamRecruit) {
-		log.info("TeamRecruitService: addTeamRecruit(TeamRecruit teamRecruit)");
+		log.info("TeamRecruitServic: addTeamRecruit(teamRecruit)");
 		teamRecruitMapper.insertTeamRecruit(teamRecruit);
 	}
 	

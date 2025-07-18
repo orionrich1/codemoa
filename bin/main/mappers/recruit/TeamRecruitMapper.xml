@@ -2,29 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.codemoa.project.domain.chat.mapper.ChatMapper">
 
-<update id="updateTeamRecruit" parameterType="TeamRecruit">
-UPDATE recruitbbs;
-SET
-userId = #{userId}, contestTitle=#{contestTitle}, recruitType=#{recruitType},
-recruitPeriod=#{recruitPeriod}, activeityPeriod=#{activeityPeriod}, 
-totalMembers=#{totalMembers}, remainingMembers =#{remainingMembers}, 
-progressType=#{progressType}, contact=#{contact},
-techStack=#{techStack}, status=#{status},
-applyGuide=#{applyGuide},
-title = #{title}, content = #{content},
-attachmentUrl=#{attachmentUrl},
-reg_date = SYSDATE()
-WHERE no = #{recruitId}
-</update>
-
 <insert id="insertTeamRecruit" parameterType="TeamRecruit">
 INSERT INTO recruitbbs(userId, contestTitle, recruitType, recruitPeriod, 
 activeityPeriod, totalMembers, remainingMembers, progressType, contact, techStack, 
 status, applyGuide, title, content, attachmentUrl, viewCount, regDate, updateDate)
 
-VALUES(#{userId}, #{contestTitle}, #{recruitType}, #{recruitPeriod}, 
+VLAUES(#{userId}, #{contestTitle}, #{recruitType}, #{recruitPeriod}, 
 #{activeityPeriod}, #{totalMembers}, #{remainingMembers}, #{progressType}, #{contact}, #{techStack}, 
-#{status}, #{applyGuide}, #{title}, #{content}, #{attachMenturl}, #{viewCount}, SYSDATE(), SYSDATE() )
+#{status}, #{applyGuide}, #{title}, #{content}, #{attachmentUrl}, #{viewCount}, SYSDATE(), SYSDATE() )
+
 </insert>
 
 <select id="getTeamRecruitList" resultType="TeamRecruitList">
