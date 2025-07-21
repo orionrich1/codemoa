@@ -32,19 +32,19 @@ public class TeamRecruitController {
 	
 	@GetMapping("/addTeamRecruit")
 	public String addTeamRecruit(){
-		return "veiws/teamRecruitwriteForm";
+		return "views/recruit/teamRecruitwriteForm";
 	}
 	
 	@GetMapping("/TeamRecruitDetail")
 	public String getTeamRecruit(Model model, @RequestParam("recruitId") int recruitId) {
 		model.addAttribute("teamRecruit", teamRecruitService.getTeamRecruit(recruitId));
-		return "views/teamRecruitDetail";
+		return "recruit/teamRecruitDetail";
 	}
 	
 	@GetMapping({"/", "/TeamRecruitList"})
 	public String TeamRecruitList(Model model) {
 		model.addAttribute("bList", teamRecruitService.teamRecruitList());
 		
-		return "views/teamRecruitList";
+		return "recruit/teamRecruitList";
 	}
 }
