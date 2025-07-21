@@ -17,19 +17,29 @@
 				<th>출제일</th>
 			</tr>
 		</thead>
+		<tbody>
 
-		<th:block th:each="problem : ${problemList}">
-			<tbody>
-				<tr class="problems" style="cursor: pointer;"
-					th:onclick="@{|location.href='problemDetail?problemId=${problem.problemId}'|}">
-					<td>[[${problem.category}]]</td>
-					<td>[[${problem.title}]]</td>
-					<td>[[${problem.difficulty}]]</td>
-					<td>[[${problem.userId}]]</td>
-					<td>[[${#temporals.format(problem.regDate, 'yyyy-MM-dd')}]]</td>
+			<th:block
+				th:if="${problemList != null && !#lists.isEmpty(problemList)}">
+				<th:block th:each="problem : ${problemList}">
+					<tr class="problems" style="cursor: pointer;"
+						th:onclick="@{|location.href='problemDetail?problemId=${problem.problemId}'|}">
+						<td>[[${problem.category}]]</td>
+						<td>[[${problem.title}]]</td>
+						<td>[[${problem.difficulty}]]</td>
+						<td>[[${problem.userId}]]</td>
+						<td>[[${#temporals.format(problem.regDate, 'yyyy-MM-dd')}]]</td>
+					</tr>
+				</th:block>
+			</th:block>
+
+			<th:block
+				th:unless="${problemList != null && !#lists.isEmpty(problemList)}">
+				<tr>
+					<td colspan=5>문제가 존재하지 않습니다. 관리자에게 문의해주세요.</td>
 				</tr>
-			</tbody>
-		</th:block>
+			</th:block>
+		</tbody>
 	</table>
 </div>
 </html>
