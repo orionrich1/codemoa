@@ -19,6 +19,7 @@ public class Problem {
 	private String title;
 	private String content;
 	private String answer;
+	private String hint;
 	private String difficulty; // 난이도 (예: BRONZE, SILVER, GOLD)
 	private String category; // 문제 유형 (예: DP, DFS/BFS)
 	private LocalDateTime regDate;
