@@ -61,6 +61,17 @@ public class ProblemController {
 		return "views/problem/problemResult";
 	}
 
+	@GetMapping("/problemWrite")
+	public String problemWriteForm() {
+		return "views/problem/problemWriteForm";
+	}
+
+	@PostMapping("/problemWrite")
+	public String problemWriteResult(Problem problem) {
+		problemService.addProblem(problem);
+		return "redirect:/problems/";
+	}
+
 	// 작성된 답안을 gemini에게 전송하여 결과를 받아옴
 	// 이런 메소드가 더 늘어날 시 RestController로 분리 필요
 	@PostMapping("/apiRequest")

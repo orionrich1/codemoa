@@ -7,39 +7,57 @@
 	<!-- 임시 css 사용중 -->
 	<link rel="stylesheet" th:href="@{/css/problem.css}" />
 
-	<table class="table text-center my-3 align-middle">
-		<thead>
-			<tr class="table-skyblue">
-				<th>언어</th>
-				<th>제목</th>
-				<th>난이도</th>
-				<th>출제자</th>
-				<th>출제일</th>
-			</tr>
-		</thead>
-		<tbody>
+	<div class="row">
+		<div class="col">
+			<div class="row text-center mt-5">
+				<div class="col">
+					<h2 class="fs-3 fw-bold">문제 목록</h2>
+				</div>
+			</div>
 
-			<th:block
-				th:if="${problemList != null && !#lists.isEmpty(problemList)}">
-				<th:block th:each="problem : ${problemList}">
-					<tr class="problems" style="cursor: pointer;"
-						th:onclick="@{|location.href='problemDetail?problemId=${problem.problemId}'|}">
-						<td>[[${problem.category}]]</td>
-						<td>[[${problem.title}]]</td>
-						<td>[[${problem.difficulty}]]</td>
-						<td>[[${problem.userId}]]</td>
-						<td>[[${#temporals.format(problem.regDate, 'yyyy-MM-dd')}]]</td>
+			<!-- 권한 설정 필요 -->
+			<div class="row">
+				<div class="col text-end my-2">
+					<button class="btn btn-primary"
+						th:onclick="|location.href='@{problemWrite}'|">문제 작성</button>
+				</div>
+			</div>
+
+
+			<table class="table text-center my-3 align-middle">
+				<thead>
+					<tr class="table-skyblue">
+						<th>언어</th>
+						<th>제목</th>
+						<th>난이도</th>
+						<th>출제자</th>
+						<th>출제일</th>
 					</tr>
-				</th:block>
-			</th:block>
+				</thead>
+				<tbody>
+					<th:block
+						th:if="${problemList != null && !#lists.isEmpty(problemList)}">
+						<th:block th:each="problem : ${problemList}">
+							<tr class="problems" style="cursor: pointer;"
+								th:onclick="@{|location.href='problemDetail?problemId=${problem.problemId}'|}">
+								<td>[[${problem.category}]]</td>
+								<td>[[${problem.title}]]</td>
+								<td>[[${problem.difficulty}]]</td>
+								<td>[[${problem.userId}]]</td>
+								<td>[[${#temporals.format(problem.regDate, 'yyyy-MM-dd')}]]</td>
+							</tr>
+						</th:block>
+					</th:block>
 
-			<th:block
-				th:unless="${problemList != null && !#lists.isEmpty(problemList)}">
-				<tr>
-					<td colspan=5>문제가 존재하지 않습니다. 관리자에게 문의해주세요.</td>
-				</tr>
-			</th:block>
-		</tbody>
-	</table>
+					<th:block
+						th:unless="${problemList != null && !#lists.isEmpty(problemList)}">
+						<tr>
+							<td colspan=5>문제가 존재하지 않습니다. 관리자에게 문의해주세요.</td>
+						</tr>
+					</th:block>
+				</tbody>
+			</table>
+		</div>
+	</div>
 </div>
 </html>

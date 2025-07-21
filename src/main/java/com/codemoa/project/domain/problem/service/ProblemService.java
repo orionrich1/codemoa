@@ -22,5 +22,13 @@ public class ProblemService {
 	public Problem getProblemDetail(int no) {
 		return problemMapper.getProblemDetail(no);
 	}
+	
+	public void addProblem(Problem problem) {
+		// 임시 아이디
+		if (problem.getUserId() == null) {
+			problem.setUserId("admin");
+		}
+		problemMapper.addProblem(problem);
+	}
 
 }

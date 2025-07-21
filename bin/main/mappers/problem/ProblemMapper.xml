@@ -9,4 +9,9 @@
 	<select id="getProblemDetail" resultType="Problem">
 		SELECT * FROM problems WHERE problem_id=#{no}
 	</select>
+	
+	<insert id="addProblem" parameterType="Problem" >
+		INSERT INTO problems(user_id, title, content, answer, hint, difficulty, category)
+		VALUES (#{userId}, #{title}, #{content}, #{answer}, #{hint}, #{difficulty}, #{category})
+	</insert>
 </mapper>

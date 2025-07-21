@@ -12,4 +12,6 @@ public interface ProblemMapper {
 	List<Problem> getProblemList();
 
 	Problem getProblemDetail(int no);
+	
+	void addProblem(Problem problem);
 }
