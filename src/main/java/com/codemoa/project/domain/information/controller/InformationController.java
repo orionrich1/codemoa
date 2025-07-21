@@ -23,13 +23,31 @@ public class InformationController {
 		return "views/information/informationMain";
 	}
 	
-	@GetMapping("/information/detail")
-	public String informationDetail(Model model, 
+	@GetMapping("/information/lectureDetail")
+	public String informationLectureDetail(Model model, 
 			@RequestParam(value = "no") int no,
 			@RequestParam(value = "isCount", defaultValue = "false") boolean isCount) {
 		
 		model.addAttribute(informationService.getLecture(no, isCount));
-		return "views/information/informationDetail";
+		return "views/information/informationLectureDetail";
+	}
+	
+	@GetMapping("/information/bookDetail")
+	public String informationBookDetail(Model model, 
+			@RequestParam(value = "no") int no,
+			@RequestParam(value = "isCount", defaultValue = "false") boolean isCount) {
+		
+		model.addAttribute(informationService.getLecture(no, isCount));
+		return "views/information/informationBookDetail";
+	}
+	
+	@GetMapping("/information/contestDetail")
+	public String informationContestDetail(Model model, 
+			@RequestParam(value = "no") int no,
+			@RequestParam(value = "isCount", defaultValue = "false") boolean isCount) {
+		
+		model.addAttribute(informationService.getLecture(no, isCount));
+		return "views/information/informationContestDetail";
 	}
 	
 	@GetMapping("/information/list")
