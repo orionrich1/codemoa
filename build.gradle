@@ -38,6 +38,7 @@ dependencies {
 	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.3'
 	implementation "com.google.genai:google-genai:1.8.0"
 	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+	implementation 'org.jsoup:jsoup:1.18.1'
 }
 
 tasks.named('test') {
