@@ -36,7 +36,8 @@
 		</div>
 		<div class="row">
 			<div class="col-4">
-				<input type="button" class="btn btn-warning" id="showHintBtn" value="힌트 보기">
+				<input type="button" class="btn btn-warning" id="showHintBtn"
+					value="힌트 보기">
 			</div>
 		</div>
 
@@ -54,6 +55,17 @@
 			<div class="col-6">
 				<input type="button" class="formBtns btn btn-secondary" value="돌아가기"
 					onclick="history.back()">
+			</div>
+		</div>
+
+		<div class="row text-center my-5">
+			<div class="col-6">
+				<input type="button" class="formBtns btn btn-warning" value="수정"
+					th:onclick="|location.href='@{problemUpdate(no=${problem.problemId})}'|">
+			</div>
+			<div class="col-6">
+				<input type="button" class="formBtns btn btn-danger" value="삭제"
+					th:onclick="|location.href='@{problemDelete(no=${problem.problemId})}'|">
 			</div>
 		</div>
 	</form>

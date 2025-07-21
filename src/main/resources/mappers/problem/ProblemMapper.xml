@@ -14,4 +14,14 @@
 		INSERT INTO problems(user_id, title, content, answer, hint, difficulty, category)
 		VALUES (#{userId}, #{title}, #{content}, #{answer}, #{hint}, #{difficulty}, #{category})
 	</insert>
+	
+	<update id="updateProblem" parameterType="Problem" >
+		UPDATE problems SET title=#{title}, content=#{content}, answer=#{answer}, 
+			hint=#{hint}, difficulty=#{difficulty}, category=#{category}
+		WHERE problem_id=#{problemId} 
+	</update>
+	
+	<delete id="deleteProblem">
+		DELETE FROM problems WHERE problem_id=#{no}
+	</delete>
 </mapper>

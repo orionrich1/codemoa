@@ -11,7 +11,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
 public class Problem {
 
 	private int problemId; // problem_id (PK)
@@ -23,5 +22,11 @@ public class Problem {
 	private String difficulty; // 난이도 (예: BRONZE, SILVER, GOLD)
 	private String category; // 문제 유형 (예: DP, DFS/BFS)
 	private LocalDateTime regDate;
+
+	@Override
+	public String toString() {
+		return "Problem [problemId=" + problemId + ", title=" + title + ", content=" + content + ", answer=" + answer
+				+ ", hint=" + hint + ", difficulty=" + difficulty + ", category=" + category + "]";
+	}
 
 }

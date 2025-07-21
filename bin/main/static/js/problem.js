@@ -7,10 +7,11 @@ $(function() {
 			return false;
 		}
 	});
-	
-	$("#showHintBtn").click(function(){
+
+	// ProblemDetail 페이지 힌트 보기
+	$("#showHintBtn").click(function() {
 		var hint = $("#hint").text();
-		if (hint.length <= 0){
+		if (hint.length <= 0) {
 			hint = "힌트가 없습니다.";
 		}
 		alert(hint);
@@ -33,11 +34,10 @@ $(function() {
 		}
 	});
 
-	// ProblemWriteForm 페이지 유효성 검사
-	$("#writeForm").on("submit", function(e) {
+	// ProblemWriteForm, ProblemUpdateForm 페이지 유효성 검사
+	$("#writeForm, #updateForm").on("submit", function(e) {
 		var title = $("#title");
 		var content = $("#content");
-		var hint = $("#hint");
 		var category = $("#category");
 
 		if (title.val().length <= 0) {

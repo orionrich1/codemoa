@@ -53,9 +53,8 @@ public class ProblemController {
 	// 결과 페이지, 페이지로 이동 후 아래의 /apiRequest 로 fetch 실행함
 	@PostMapping("/problemResult")
 	public String problemResult(Model model, @RequestParam("answer") String answer, @RequestParam("no") int no) {
-		Problem problem = problemService.getProblemDetail(no);
 
-		model.addAttribute("problem", problem);
+		model.addAttribute("problem", problemService.getProblemDetail(no));
 		model.addAttribute("answer", answer);
 
 		return "views/problem/problemResult";
@@ -68,7 +67,31 @@ public class ProblemController {
 
 	@PostMapping("/problemWrite")
 	public String problemWriteResult(Problem problem) {
+//		if (!checkAuth())
+//			return "redirect:/problems/";
 		problemService.addProblem(problem);
+		return "redirect:/problems/";
+	}
+
+	@GetMapping("/problemUpdate")
+	public String problemUpdateForm(@RequestParam("no") int no, Model model) {
+		model.addAttribute("problem", problemService.getProblemDetail(no));
+		return "views/problem/problemUpdateForm";
+	}
+
+	@PostMapping("/problemUpdate")
+	public String problemUpdateResult(Problem problem) {
+//		if (!checkAuth())
+//			return "redirect:/problems/";
+		problemService.updateProblem(problem);
+		return "redirect:/problems/";
+	}
+
+	@GetMapping("/problemDelete")
+	public String problemDelete(@RequestParam("no") int no) {
+//		if (!checkAuth())
+//		return "redirect:/problems/";
+		problemService.deleteProblem(no);
 		return "redirect:/problems/";
 	}
 
@@ -82,5 +105,9 @@ public class ProblemController {
 		GenerateContentResponse response = aiSupportService.apiRequest(request);
 		map.put("result", response.text());
 		return map;
+	}
+
+	private boolean checkAuth() {
+		return false;
 	}
 }
