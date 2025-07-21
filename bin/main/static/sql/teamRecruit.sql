@@ -6,7 +6,7 @@ CREATE TABLE recruitbbs (
 	contest_title VARCHAR(255),
 	recruit_type VARCHAR(50) NOT NULL,
 	recruit_period VARCHAR(50),
-	activeity_period VARCHAR(50),
+	activity_period VARCHAR(50),
 	total_members INT NOT NULL,
 	remaining_members INT NOT NULL,
 	progress_type VARCHAR(50),
@@ -23,7 +23,7 @@ CREATE TABLE recruitbbs (
 );
     
 INSERT INTO recruitbbs
-(user_id, contest_title, recruit_type, recruit_period, activeity_period, total_members, remaining_members, progress_type, contact, tech_stack, status, apply_guide, title, content, attachment_url, view_count, reg_date, update_date)
+(user_id, contest_title, recruit_type, recruit_period, activity_period, total_members, remaining_members, progress_type, contact, tech_stack, status, apply_guide, title, content, attachment_url, view_count, reg_date, update_date)
 VALUES
 ('user01', 'https://www.k-startup.go.kr/web/contents/bizpbanc-ongoing.do', '팀원구인', '2025-07-01 ~ 2025-07-31', '2025-08-01 ~ 2025-12-31',
  5, 2, '온라인', 'email:user01@test.com', '#Java #Spring #MySQL', '모집중', '이메일로 간단한 자기소개서 제출', 'AI 공모전 팀원 모집', 'AI 공모전 함께할 팀원을 모집합니다.', NULL, 12, NOW(), NOW()),
@@ -85,4 +85,4 @@ VALUES
 ('user20', 'https://www.k-startup.go.kr/web/contents/bizpbanc-ongoing.do', '팀원구인', '2025-07-08 ~ 2025-07-29', '2025-08-01 ~ 2025-12-15',
  5, 2, '오프라인', 'email:user20@test.com', '#C# #Unity', '모집중', '메일 포트폴리오', '게임 해커톤 팀원 모집', 'Unity 개발자 환영.', NULL, 12, NOW(), NOW());   
     
-select * from team_recruit;
+select * from recruitbbs;

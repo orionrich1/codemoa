@@ -3,25 +3,25 @@
 <mapper namespace="com.codemoa.project.domain.recruit.mapper.TeamRecruitMapper">
 
 <insert id="insertTeamRecruit" parameterType="TeamRecruit">
-INSERT INTO team_recruit(userId, contestTitle, recruitType, recruitPeriod, 
+INSERT INTO recruitbbs(userId, contestTitle, recruitType, recruitPeriod, 
 activeityPeriod, totalMembers, remainingMembers, progressType, contact, techStack, 
 status, applyGuide, title, content, attachmentUrl, viewCount, regDate, updateDate)
 
 VALUES(#{userId}, #{contestTitle}, #{recruitType}, #{recruitPeriod}, 
-#{activeityPeriod}, #{totalMembers}, #{remainingMembers}, #{progressType}, #{contact}, #{techStack}, 
+#{activityPeriod}, #{totalMembers}, #{remainingMembers}, #{progressType}, #{contact}, #{techStack}, 
 #{status}, #{applyGuide}, #{title}, #{content}, #{attachmentUrl}, #{viewCount}, SYSDATE(), SYSDATE() )
 
 </insert>
 
 <select id="getTeamRecruit" resultType="TeamRecruit">
 SELECT *
-FROM recruitbbs;
-WHERE no = #{recruitId}
+FROM recruitbbs
+WHERE recruit_Id = #{recruitId}
 </select>
 
 <select id="TeamRecruitList" resultType="TeamRecruit">
 SELECT *
-FROM team_recruit;
-ORDER BY no DESC
+FROM recruitbbs
+ORDER BY recruit_Id DESC
 </select>
 </mapper>

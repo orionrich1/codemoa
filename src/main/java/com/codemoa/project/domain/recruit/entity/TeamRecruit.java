@@ -19,7 +19,7 @@ public class TeamRecruit {
     private String contestTitle;	//공모전 url정보
     private String recruitType;	//모집 분류 (팀원구인 / 팀원으로 참가희망)
     private String recruitPeriod;	//모집 기간
-    private String activeityPeriod;	//활동 기간
+    private String activityPeriod;	//활동 기간
     private int totalMembers;		//모집 희망 인원
     private int remainingMembers;		//남은 인원
     private String progressType;		//진행 방식 (온라인 /오프라인/ 혼합)

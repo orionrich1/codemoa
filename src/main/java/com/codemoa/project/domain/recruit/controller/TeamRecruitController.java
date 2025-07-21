@@ -38,13 +38,13 @@ public class TeamRecruitController {
 	@GetMapping("/TeamRecruitDetail")
 	public String getTeamRecruit(Model model, @RequestParam("recruitId") int recruitId) {
 		model.addAttribute("teamRecruit", teamRecruitService.getTeamRecruit(recruitId));
-		return "recruit/teamRecruitDetail";
+		return "views/recruit/teamRecruitDetail";
 	}
 	
 	@GetMapping({"/", "/TeamRecruitList"})
 	public String TeamRecruitList(Model model) {
 		model.addAttribute("bList", teamRecruitService.teamRecruitList());
 		
-		return "recruit/teamRecruitList";
+		return "views/recruit/teamRecruitList";
 	}
 }

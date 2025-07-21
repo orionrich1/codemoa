@@ -58,7 +58,7 @@
 								<td>[[ ${teamRecruit.recruitId} ]]</td>
 								<td><a th:href="@{TeamRecruitDetail(recruitId=${teamRecruit.recruitId})}">[[ ${teamRecruit.title} ]]</a></td>
 								<td th:text="${ teamRecruit.userId }"></td>
-								<td>[[${ #dates.format(teamRecruit.regDate, 'yyyy-MM-dd') }]]</td>
+								<td><span th:text="${#temporals.format(teamRecruit.regDate, 'yyyy-MM-dd') }"></span></td>
 								<td th:text="${ teamRecruit.viewCount }"></td>
 							</tr>
 						</th:block>

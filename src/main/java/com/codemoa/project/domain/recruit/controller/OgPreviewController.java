@@ -1,4 +1,4 @@
-package com.codemoa.project.domain.user.controller;
+package com.codemoa.project.domain.recruit.controller;
 
 import org.springframework.web.bind.annotation.*;
 
