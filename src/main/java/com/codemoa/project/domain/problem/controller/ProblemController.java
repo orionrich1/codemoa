@@ -67,8 +67,10 @@ public class ProblemController {
 
 	@PostMapping("/problemWrite")
 	public String problemWriteResult(Problem problem) {
-//		if (!checkAuth())
-//			return "redirect:/problems/";
+		// 권한 체크
+		if (!checkAuth())
+			return "redirect:/problems/";
+
 		problemService.addProblem(problem);
 		return "redirect:/problems/";
 	}
@@ -81,16 +83,20 @@ public class ProblemController {
 
 	@PostMapping("/problemUpdate")
 	public String problemUpdateResult(Problem problem) {
-//		if (!checkAuth())
-//			return "redirect:/problems/";
+		// 권한 체크
+		if (!checkAuth())
+			return "redirect:/problems/";
+
 		problemService.updateProblem(problem);
 		return "redirect:/problems/";
 	}
 
 	@GetMapping("/problemDelete")
 	public String problemDelete(@RequestParam("no") int no) {
-//		if (!checkAuth())
-//		return "redirect:/problems/";
+		// 권한 체크
+		if (!checkAuth())
+			return "redirect:/problems/";
+
 		problemService.deleteProblem(no);
 		return "redirect:/problems/";
 	}
@@ -107,7 +113,8 @@ public class ProblemController {
 		return map;
 	}
 
+	// 권한 체크 메소드, 아직 미완성
 	private boolean checkAuth() {
-		return false;
+		return true;
 	}
 }
