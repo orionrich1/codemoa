@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}">
+
+<div layout:fragment="content">
+	<!-- 임시 css 사용중 -->
+	<link rel="stylesheet" th:href="@{/css/problem.css}" />
+
+	
+	<h4 id="problemTitle">[[${problem.title}]]</h4>
+	<h5 id="problemCategory">[[${problem.category}]]</h5>
+	<pre id="problemContent">[[${problem.content}]]</pre>
+	<hr>
+	<h5>모범 답안</h5>
+	<pre id="problemAnswer">[[${problem.answer}]]</pre>
+	<hr>
+	<h5>제출 답안</h5>
+	<pre id="userAnswer">[[${answer}]]</pre>
+	<hr>
+
+	<pre id="result">결과 받아오는 중 . . .</pre>
+	
+		<div class="row text-center my-5">
+			<div class="col">
+				<input type="button" class="formBtns btn btn-secondary" value="돌아가기"
+					th:onclick="|location.href='@{/problems}'|">
+			</div>
+		</div>
+
+	<script th:src="@{/js/problem.js}"></script>
+	<script>
+		requestApi();
+	</script>
+</div>
+
+</html>
