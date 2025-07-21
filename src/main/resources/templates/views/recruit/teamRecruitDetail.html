@@ -20,12 +20,33 @@ layout:decorate="~{layouts/default_layout}">
 				</div>
 				<div class="mb-3">
 					<strong>공모전 정보 : </strong>
-					<div class="border p-2 text-center">
-						<div>미리보기</div>
-						<div>공모전 미리보기 이미지</div>
-						<a th:href="${teamRecruit.contestTitle}" target="_blank" class="btn btn-outline-primary">공모전 바로가기</a>
+					<div class="border p-2 text-center" id="contestPreviewWrapper">
+						<!--  미리보기 카드 -->
+						<div class="card p-3 text-center mx-auto" style="max-width:400px;">
+						
+						<!-- 미리보기 이미지 -->
+						<img id="contestPreviewImage"
+								src=""
+								class="card-img-top"
+								alt="공모전 미리보기 이미지"
+								style="display:none">
+						
+						<div class="card-body">
+						<!-- 타이틀 -->
+						<h5 id="contestPreviewTitle" class="card-title">미리보기</h5>
+							<!-- 미리보기 설명 -->
+							<div id="contestPreviewDesc" class="card-text"></div>
+							
+							<!-- 바로가기 버튼 -->
+							<a id="contestPreviewLink"
+								th:href="${teamRecruit.contestTitle}" 
+								target="_blank" 
+								class="btn btn-outline-primary"
+								style="margin-top:10px;">공모전 바로가기</a>
+						</div>
 					</div>
 				</div>
+			</div>
 				
 				<div class="mb-3">
 					<div class="col-md-6">
