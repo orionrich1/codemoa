@@ -18,29 +18,41 @@
 	const totalMembersInput =$('#totalMembers');
 	const remainingMembersInput =$('#remainingMembers');
 	
-	function syncRecruitType(){
-		const values = Array.from(recruitTypeBoxes).filter(cb=>cb.checked).map(cb=>cb.value);
-		recruitTypeHidden.value = values.join(',');
+	function singleCheckHandler(boxes, hiddenField, extraCallback){
+		boxes.forEach(cb =>{
+			cb.addEventListener('change', function(){
+				if(this.checked){
+					boxes.forEach(other=>{
+						if (other !== this) other.checked = false;			
+					});		
+					hiddenField.value = this.value;
+					} else {
+						hiddenField.value = '';
+					}
+					if(extraCallback) extraCallbakck();
+				});
+			});		
+		}
+		
 		
 		//TEAM_JOIN 선택시 인원 입력 기능 잠금 적용 함수
-		const hasJoin = values.includes('TEAM_JOIN');
-		totalMembersInput.disabled = hasJoin;
-		remainingMembersInput.disabled = hasJoin;
-		if(hasJoin){
-			totalMembersInput.value = '';
-			remainingMembersInput.value = '';
+		function toggleMemberInputs(){
+			const hasJoin = recruitTypeHidden.value === 'TEAM_JOIN'
+			totalMembersInput.disabled = hasJoin;
+			remainingMembersInput.disabled = hasJoin;
+			if(hasJoin){
+						totalMembersInput.value = '';
+						remainingMembersInput.value = '';
+			}
 		}
-	}
-	recruitTypeBoxes.forEach(cb=>cb.addEventListener('change', syncRecruitType));
+		
+	singleCheckHandler(recruitTypeBoxes, recruitTypeHidden, toggleMemberInputs);
+	
 	
 	//진행 방식(ONLINE / OFFLINE / MIXED) 다중 선택 허용
 	const progressTypeBoxes = $$('.progressTypeChk');
 	const progressTypeHidden = $('#progressTypeHidden');
-	function syncProgressType(){
-		const values = Array.from(progressTypeBoxes).filter(cb=>cb.checked).map(cb=>cb.value);
-		progressTypeHidden.value = values.join(',');
-	}
-	progressTypeBoxes.forEach(cb=>cb.addEventListener('change', syncProgressType));
+	singleCheckHandler(progressTypeBoxes, progressTypeHidden);
 	
 	// 모집 / 활동 기간 hidden 문자열 조합
 	// 저장 형식 : "YYYY-MM-DD ~ YYYY-MM-DD" (둘다 있을때만) / 없다면 공백
@@ -63,9 +75,50 @@
 		if(recruitHidden) recruitHidden.value = joinDateRange(recruitStart, recruitEnd);
 		if(activityHidden) activityHidden.value = joinDateRange(activityStart, activityEnd);
 	}
-	[recruitStart, recruitEnd, activityStart, activityEnd].forEach(e1=>{
-		if(e1) e1.addEventListener('change', syncPeriods);
-	});
+	function validateDateRange(startInput, endInput){
+		if(!startInput || !endInput) return;
+		
+		endInput.addEventListener('mousedown', function(e){
+			if(!startInput.value){
+				e.preventDefault();
+				alert("시작 날짜를 먼저 선택해주세요");
+			}
+		});
+		
+		endInput.addEventListener('change', function(){
+			if(!startInput.value){
+				e.preventDefault();
+				alert("먼저 시작 날짜를 선택하세요");
+				endInput.value='';
+				return;
+			}
+			if(startInput.value&& endInput.value && startInput.value > endInput.value){
+							alert("종료 날짜를 시작 날짜보다 이전으로 선택할수 없습니다.");
+							endInput.value='';
+						}
+			syncPeriods();
+		});
+
+		startInput.addEventListener('change', syncPeriods);
+	}
+	
+	validateDateRange(recruitStart, recruitEnd);
+	validateDateRange(activityStart, activityEnd);
+
+	//--모집 인원 / 남은 인원 (음수입력 방지)
+	function preventNegative(input){
+		if(!input) return;
+		input.addEventListener('input', function(){
+			//음수 방지
+			if(this.value < 0) this.value=0;
+			//2자리 숫자 제한
+			if(this.value.length > 2){
+				this.value = this.value.slice(0, 2);
+			}
+		});
+	}	
+	preventNegative(totalMembersInput);
+	preventNegative(remainingMembersInput);
 	
 	//기술 스택 태그 입력 (콤마 / Enter / blur)
 	const tagInput = $('#techStackInput');
@@ -172,13 +225,18 @@
 	//-------------------------------
 	// 작성 폼 제출전 유효성 검증
 	//---------------------------------
+	
 	form.addEventListener('submit', function(e){
-		syncRecruitType();
-		syncProgressType();
 		syncPeriods();
+		
 		if(recruitTypeHidden && !recruitTypeHidden.value){
 			e.preventDefault();
 			alert('모집 분류를 선택하세요');
+			return;
+		}
+		if(progressTypeHidden && !progressTypeHidden.value){
+			e.preventDefault();
+			alert("진행 방식을 선택하세요");
 			return;
 		}
 		//추가 검증 : 모집 기간, 활동 기간 미입력시 경고 표시후 그대로 진행할지 여부 확인
@@ -197,8 +255,7 @@
 	});
 	
 	//진행 여부에서 아니요를 누르면 한번 초기화
-	syncRecruitType();
-	syncProgressType();
+	toggleMemberInputs();
 	syncPeriods();
 }) ();
 
