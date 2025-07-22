@@ -21,4 +21,9 @@ public class LocalUser {
 
     @Column(name = "pass")
     private String pass;
+    
+    public LocalUser(User user, String pass) {
+        this.user = user;
+        this.pass = pass;
+    }
 }

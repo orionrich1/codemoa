@@ -1,29 +1,18 @@
-//기찬
 package com.codemoa.project.domain.user.entity;
 
 import java.time.LocalDateTime;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-
 
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "user") // 실제 DB 테이블 이름
+@Table(name = "user")
 public class User {
 
     @Id
-    @Column(name = "user_id") // 실제 DB 컬럼 이름
+    @Column(name = "user_id")
     private String userId;
 
     @Column(name = "name")
@@ -35,9 +24,6 @@ public class User {
     @Column(name = "mobile")
     private String mobile;
 
-    @Column(name = "address")
-    private String address;
-
     @Column(name = "email")
     private String email;
 
@@ -48,8 +34,18 @@ public class User {
     private LocalDateTime membershipDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "grade_id") // 실제 DB 외래 키 컬럼 이름
+    @JoinColumn(name = "grade_id")
     private UserGrade userGrade;
+
+    public User(String userId, String name, String nickname, String email, String mobile, Integer totalPoints, UserGrade userGrade) {
+        this.userId = userId;
+        this.name = name;
+        this.nickname = nickname;
+        this.email = email;
+        this.mobile = mobile;
+        this.totalPoints = totalPoints;
+        this.userGrade = userGrade;
+    }
 
     @PrePersist
     public void prePersist() {
