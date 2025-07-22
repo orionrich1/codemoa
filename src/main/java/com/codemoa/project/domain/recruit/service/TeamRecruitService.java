@@ -18,8 +18,20 @@ public class TeamRecruitService {
 	@Autowired
 	private TeamRecruitMapper teamRecruitMapper;
 	
+	public boolean userIdCheck(int recruitId, String userId) {
+		log.info("TeamRecruitService: userIdCheck(int recruitId, String userId)");
+		boolean result =false;
+		
+		String dbUserId = teamRecruitMapper.userIdCheck(recruitId);
+		
+		if(dbUserId.equals(userId)) {
+			result = true;
+		}
+		return result;
+	}
+	
 	public void addTeamRecruit(TeamRecruit teamRecruit) {
-		log.info("TeamRecruitServic: addTeamRecruit(teamRecruit)");
+		log.info("TeamRecruitService: addTeamRecruit(teamRecruit)");
 		teamRecruitMapper.insertTeamRecruit(teamRecruit);
 	}
 	
