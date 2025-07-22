@@ -2,26 +2,29 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.codemoa.project.domain.recruit.mapper.TeamRecruitMapper">
 
-<insert id="insertTeamRecruit" parameterType="TeamRecruit">
+<insert id="insertTeamRecruit" 
+parameterType="com.codemoa.project.domain.recruit.entity.TeamRecruit">
 INSERT INTO recruitbbs(userId, contestTitle, recruitType, recruitPeriod, 
-activeityPeriod, totalMembers, remainingMembers, progressType, contact, techStack, 
+activityPeriod, totalMembers, remainingMembers, progressType, contact, techStack, 
 status, applyGuide, title, content, attachmentUrl, viewCount, regDate, updateDate)
 
 VALUES(#{userId}, #{contestTitle}, #{recruitType}, #{recruitPeriod}, 
 #{activityPeriod}, #{totalMembers}, #{remainingMembers}, #{progressType}, #{contact}, #{techStack}, 
-#{status}, #{applyGuide}, #{title}, #{content}, #{attachmentUrl}, #{viewCount}, SYSDATE(), SYSDATE() )
+#{status}, #{applyGuide}, #{title}, #{content}, #{attachmentUrl}, #{viewCount}, NOW(), NOW() );
 
 </insert>
 
-<select id="getTeamRecruit" resultType="TeamRecruit">
+<select id="getTeamRecruit" 
+resultType="com.codemoa.project.domain.recruit.entity.TeamRecruit">
 SELECT *
 FROM recruitbbs
-WHERE recruit_Id = #{recruitId}
+WHERE recruit_id = #{recruitId}
 </select>
 
-<select id="TeamRecruitList" resultType="TeamRecruit">
+<select id="TeamRecruitList" 
+resultType="com.codemoa.project.domain.recruit.entity.TeamRecruit">
 SELECT *
 FROM recruitbbs
-ORDER BY recruit_Id DESC
+ORDER BY recruit_id DESC
 </select>
 </mapper>

@@ -6,12 +6,13 @@ layout:decorate="~{layouts/default_layout}">
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>BoardService</title>
-		<link href="bootstrap/bootstrap.min.css" rel="stylesheet" >
-		<style>
-		</style>
+		<link th:href="@{/bootstrap/bootstrap.min.css}" rel="stylesheet" >
 	</head>
-<body>
-	<div class="container"></div>
+	
+<th:block layout:fragment="content">
+	<div class="container mt-4">
+		<h2>팀 모집 게시판</h2>
+	
 
 	<!-- content -->
 	<div class="row my-5" id="global-content">
@@ -50,28 +51,40 @@ layout:decorate="~{layouts/default_layout}">
 								<th>NO</th>
 								<th>제목</th>
 								<th>작성자</th>
+								<th>모집 분류</th>
+								<th>모집 상태</th>
+								<th>남은 인원</th>
 								<th>작성일</th>
 								<th>조회수</th>
 							</tr>
 						</thead>
 					<tbody>
 						<th:block th:if="${not #lists.isEmpty(bList)}">
-							<tr th:block th:each="teamRecruit, status: ${bList}">
+							<tr th:each="teamRecruit, status: ${bList}">
 								<td>[[ ${teamRecruit.recruitId} ]]</td>
-								<td><a th:href="@{TeamRecruitDetail(recruitId=${teamRecruit.recruitId})}">[[ ${teamRecruit.title} ]]</a></td>
-								<td th:text="${ teamRecruit.userId }"></td>
+								<td class="text-start">
+									<a th:href="@{TeamRecruitDetail(recruitId=${teamRecruit.recruitId})}" 
+									class="text-decoration-none fw-bold">[[ ${teamRecruit.title} ]]
+									</a>
+								</td>
+								<td>[[${teamRecruit.userId}]]</td>
+								<td>[[${teamRecruit.recruitType}]]</td>
+								<td>[[${teamRecruit.status}]]</td>
+								<td>[[${teamRecruit.remainingMembers}]]명</td>
+								
 								<td><span th:text="${#temporals.format(teamRecruit.regDate, 'yyyy-MM-dd') }"></span></td>
-								<td th:text="${ teamRecruit.viewCount }"></td>
+								<td>[[${ teamRecruit.viewCount }]]</td>
 							</tr>
 						</th:block>
 						<th:block th:unless="${not #lists.isEmpty(bList)}">
 							<tr>
-								<td colspan="5">게시글이 존재하지 않음</td>
+								<td colspan="8">게시글이 존재하지 않음</td>
 							</tr>
 						</th:block>
 					</tbody>
 				</table>
 			</div>
 		</div>
+	</div>
 	</div>
 </div>

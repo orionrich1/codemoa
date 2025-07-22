@@ -7,7 +7,7 @@
 	<div class="container my-5" id="recruit-write-wrapper">
 		<h2 class="text-center fw-bold mb-4"> 공모전 팀 모집 글 작성</h2>
 		
-		<form th:action="@{/recruit/write}" th:object"${teamRecruitForm}" method="post" 
+		<form th:action="@{/recruit/write}" th:object="${teamRecruit}" method="post" 
 		enctype="multipart/form-data" id="recruitWriteForm">
 		
 			<!-- 공모전 URL 및 미리보기 구문 -->
@@ -49,7 +49,7 @@
             	<strong>모집 분류 :</strong> 
 	            <input class="form-check-input recruitTypeChk" 
 	            type="checkbox" value="TEAM_RECRUIT"
-	            th:checked="${lists.contains(#strings.split(teamRecruitForm.recruitType, ','), 'TEAM_RECRUIT')}"> 팀원 구인 
+	            th:checked="${lists.contains(#strings.split(teamRecruit.recruitType, ','), 'TEAM_RECRUIT')}"> 팀원 구인 
 	            
 	            <input class="form-check-input recruitTypeChk ms-2" 
 	            type="checkbox" value="TEAM_JOIN"> 팀원 참가 희망
@@ -61,13 +61,13 @@
 	            <input type="hidden" id="recruitStartDate" id="recruitStartDateHidden"> ~ 
 	            <input type="hidden" id="recruitEndDate" id="recruitEndDateHidden">
 	        </div>
-            <input type="hidden" th:field="*{recruitperiod}" id="recruitperiodHidden" />
+            <input type="hidden" th:field="*{recruitPeriod}" id="recruitperiodHidden" />
            
             <div class="mt-3">
 	            <strong>활동 기간 :</strong> 
 	            <input type="date" id="activityStartDate"> ~ <input type="date" id="activityEndDate">
 	        </div>
-            <input type="hidden" th:field="*{activeityPeriod}" id="activityPeriodHidden" />
+            <input type="hidden" th:field="*{activityPeriod}" id="activityPeriodHidden" />
             <div class="mt-3">
             	<strong>모집 인원 :</strong> 
             	<input type="number" th:field="*{totalMembers}" 

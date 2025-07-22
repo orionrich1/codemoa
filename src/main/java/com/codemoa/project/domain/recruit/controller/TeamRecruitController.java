@@ -31,7 +31,8 @@ public class TeamRecruitController {
 	}
 	
 	@GetMapping("/addTeamRecruit")
-	public String addTeamRecruit(){
+	public String addTeamRecruit(Model model){
+		model.addAttribute("teamRecruit", new TeamRecruit());
 		return "views/recruit/teamRecruitwriteForm";
 	}
 	
@@ -43,7 +44,9 @@ public class TeamRecruitController {
 	
 	@GetMapping({"/", "/TeamRecruitList"})
 	public String TeamRecruitList(Model model) {
-		model.addAttribute("bList", teamRecruitService.teamRecruitList());
+		var list = teamRecruitService.teamRecruitList();
+		log.info("조회된 게시글 수 : {}", list.size());
+		model.addAttribute("bList", list);
 		
 		return "views/recruit/teamRecruitList";
 	}
