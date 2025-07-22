@@ -47,7 +47,7 @@ public class User {
     @Column(name = "membership_date")
     private LocalDateTime membershipDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "grade_id") // 실제 DB 외래 키 컬럼 이름
     private UserGrade userGrade;
 

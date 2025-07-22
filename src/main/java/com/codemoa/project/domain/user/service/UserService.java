@@ -1,47 +1,34 @@
-//기찬
 package com.codemoa.project.domain.user.service;
 
-import java.util.Optional;
-
-import org.springframework.stereotype.Service;
-
 import com.codemoa.project.domain.user.dto.request.UserLoginRequest;
-import com.codemoa.project.domain.user.dto.response.UserResponse;
+import com.codemoa.project.domain.user.dto.response.UserSessionResponse;
 import com.codemoa.project.domain.user.entity.LocalUser;
-import com.codemoa.project.domain.user.entity.User;
 import com.codemoa.project.domain.user.repository.LocalUserRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+// ✅ [핵심 수정!] jakarta가 아닌 org.springframework.transaction... 로 임포트해야 합니다.
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
-	
-	 private final LocalUserRepository localUserRepository;
-	
-	 public User login(UserLoginRequest requestDto) {
 
-	     	// 1. LocalUserRepository를 사용하여 아이디로 LocalUser를 조회합니다.
-	        LocalUser localUser = localUserRepository.findById(requestDto.getUserId()).orElse(null);
+    private final LocalUserRepository localUserRepository;
 
-	        // 2. if-else 문으로 직접 null을 체크합니다.
-	        //    localUser가 null이라는 것은, 아이디가 존재하지 않는다는 뜻입니다.
-	        if (localUser == null) {
-	            // 아이디 없음 -> 실패 -> null 반환
-	            return null;
+    // ✅ [핵심 수정!] 이 어노테이션이 있어야 DB 연결이 유지됩니다.
+    @Transactional(readOnly = true)
+    public UserSessionResponse login(UserLoginRequest requestDto) {
+        // ID로 LocalUser를 찾습니다. orElse(null)로 없으면 null을 반환합니다.
+        LocalUser localUser = localUserRepository.findById(requestDto.getUserId()).orElse(null);
 
-	        } else {
-	            // 아이디 있음 -> 이제 비밀번호를 비교합니다.
-	            if (localUser.getPass().equals(requestDto.getPass())) {
-	                // 비밀번호 일치 -> 성공! -> 연결된 User 객체 반환
-	            	
-	                return localUser.getUser();
-	                
-
-	            } else {
-	                // 비밀번호 불일치 -> 실패 -> null 반환
-	                return null;
-	            }
-	        }
-	    }
+        // localUser가 존재하고, 비밀번호가 일치하는지 확인합니다.
+        if (localUser != null && localUser.getPass().equals(requestDto.getPass())) {
+            // 성공 시, User Entity를 DTO로 변환해서 반환합니다.
+            // 이 시점에는 DB 연결이 살아있어서 getNickname() 호출이 안전합니다.
+            return new UserSessionResponse(localUser.getUser());
+        } else {
+            // 실패 시 null을 반환합니다.
+            return null;
+        }
+    }
 }
