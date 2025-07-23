@@ -154,7 +154,7 @@ public class TeamRecruitController {
 		return "views/recruit/teamRecruitDetail";
 	}
 	
-	@GetMapping({"/", "/TeamRecruitList"})
+	@GetMapping( "/TeamRecruitList")
 	public String TeamRecruitList(Model model) {
 		var list = teamRecruitService.teamRecruitList();
 		log.info("조회된 게시글 수 : {}", list.size());
