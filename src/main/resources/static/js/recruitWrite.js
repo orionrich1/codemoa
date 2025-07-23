@@ -19,17 +19,17 @@
 	const remainingMembersInput =$('#remainingMembers');
 	
 	function singleCheckHandler(boxes, hiddenField, extraCallback){
-		boxes.forEach(cb =>{
+		boxes.forEach(cb => {
 			cb.addEventListener('change', function(){
-				if(this.checked){
-					boxes.forEach(other=>{
+				if(this.checked) {
+					boxes.forEach(other => {
 						if (other !== this) other.checked = false;			
 					});		
 					hiddenField.value = this.value;
 					} else {
 						hiddenField.value = '';
 					}
-					if(extraCallback) extraCallbakck();
+					if(extraCallback) extraCallback();
 				});
 			});		
 		}
@@ -37,7 +37,7 @@
 		
 		//TEAM_JOIN 선택시 인원 입력 기능 잠금 적용 함수
 		function toggleMemberInputs(){
-			const hasJoin = recruitTypeHidden.value === 'TEAM_JOIN'
+			const hasJoin = recruitTypeHidden.value === 'TEAM_JOIN';
 			totalMembersInput.disabled = hasJoin;
 			remainingMembersInput.disabled = hasJoin;
 			if(hasJoin){

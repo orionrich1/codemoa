@@ -10,9 +10,26 @@ WHERE recruit_id = #{recruitId}
 
 <insert id="insertTeamRecruit" 
 parameterType="com.codemoa.project.domain.recruit.entity.TeamRecruit">
-INSERT INTO recruitbbs(userId, contestTitle, recruitType, recruitPeriod, 
-activityPeriod, totalMembers, remainingMembers, progressType, contact, techStack, 
-status, applyGuide, title, content, attachmentUrl, viewCount, regDate, updateDate)
+INSERT INTO recruitbbs(
+user_id, 
+contest_title, 
+recruit_type, 
+recruit_period, 
+activity_period, 
+total_members, 
+remaining_members, 
+progress_type, 
+contact, 
+tech_stack, 
+status, 
+apply_guide, 
+title, 
+content, 
+attachment_url, 
+view_count, 
+reg_date, 
+update_date
+)
 
 VALUES(#{userId}, #{contestTitle}, #{recruitType}, #{recruitPeriod}, 
 #{activityPeriod}, #{totalMembers}, #{remainingMembers}, #{progressType}, #{contact}, #{techStack}, 
@@ -33,4 +50,27 @@ SELECT *
 FROM recruitbbs
 ORDER BY recruit_id DESC
 </select>
+
+<resultMap id="TeamRecruitResultMap" type="com.codemoa.project.domain.recruit.entity.TeamRecruit">
+    <id property="recruitId" column="recruit_id"/>
+    <result property="userId" column="user_id"/>
+    <result property="contestTitle" column="contest_title"/>
+    <result property="recruitType" column="recruit_type"/>
+    <result property="recruitPeriod" column="recruit_period"/>
+    <result property="activityPeriod" column="activity_period"/>
+    <result property="totalMembers" column="total_members"/>
+    <result property="remainingMembers" column="remaining_members"/>
+    <result property="progressType" column="progress_type"/>
+    <result property="contact" column="contact"/>
+    <result property="techStack" column="tech_stack"/>
+    <result property="status" column="status"/>
+    <result property="applyGuide" column="apply_guide"/>
+    <result property="title" column="title"/>
+    <result property="content" column="content"/>
+    <result property="attachmentUrl" column="attachment_url"/>
+    <result property="viewCount" column="view_count"/>
+    <result property="regDate" column="reg_date"/>
+    <result property="updateDate" column="update_date"/>
+</resultMap>
+
 </mapper>

@@ -68,34 +68,38 @@ public class TeamRecruitController {
 			RedirectAttributes redirectAttrs) {
 		log.info("팀 모집 등록 요청 title={}", teamRecruit.getTitle());
 		
+		teamRecruit.setUserId("testUser"); // 로그인 완성 후 세션에서 가져오도록 수정 필요
+	    //String loginUserId = (String) session.getAttribute("loginUserId");
+	    //teamRecruit.setUserId(loginUserId);
+		
+		log.info("팀 모집 등록 요청 title={}", teamRecruit.getTitle());
+		
 		//파일 업로드 처리
-		if(attachmentFile != null && !attachmentFile.isEmpty()) {
-			try {
-				Files.createDirectories(Paths.get(UPLOAD_DIR));
-				
-				//원본 확장자 추출
-				String originalName = StringUtils.cleanPath(attachmentFile.getOriginalFilename());
-				String ext = "";
-				int dot = originalName.lastIndexOf('.');
-				if(dot != -1) {
-					ext = originalName.substring(dot);
-				}
-				String saveName = UUID.randomUUID() + ext;
-				Path savePath = Paths.get(UPLOAD_DIR, saveName);
-				attachmentFile.transferTo(savePath.toFile());
-				
-				//DB에 저장할 URL
-				teamRecruit.setAttachmentUrl(saveName);
-				
-			} catch (IOException  e) {
-				log.error("파일 업로드 실패", e);
-				redirectAttrs.addFlashAttribute("uploadError", "파일 업로드에 실패했습니다.");
-			}
+		 try {
+		        if (attachmentFile != null && !attachmentFile.isEmpty()) {
+		            Files.createDirectories(Paths.get(UPLOAD_DIR));
+
+		            String originalName = StringUtils.cleanPath(attachmentFile.getOriginalFilename());
+		            String ext = "";
+		            int dot = originalName.lastIndexOf('.');
+		            if (dot != -1) {
+		                ext = originalName.substring(dot);
+		            }
+		            String saveName = UUID.randomUUID() + ext;
+		            Path savePath = Paths.get(UPLOAD_DIR, saveName);
+		            attachmentFile.transferTo(savePath.toFile());
+
+		            teamRecruit.setAttachmentUrl(saveName);
+		        }
+		    } catch (IOException e) {
+		        log.error("파일 업로드 실패", e);
+		        redirectAttrs.addFlashAttribute("uploadError", "파일 업로드에 실패했습니다.");
+		    }
+
+		    teamRecruitService.addTeamRecruit(teamRecruit);
+		    redirectAttrs.addFlashAttribute("msg", "등록이 완료되었습니다.");
+		    return "redirect:/TeamRecruitList";
 		}
-		teamRecruitService.addTeamRecruit(teamRecruit);
-		redirectAttrs.addFlashAttribute("msg", "등록이 완료되었습니다.");
-		return "redirect:/TeamRecruitList";
-	}
 	
 	/*
 	@PostMapping("/delete")
