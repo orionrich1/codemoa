@@ -3,10 +3,10 @@
 
 <mapper namespace="com.codemoa.project.domain.user.mapper.AdminMapper">
 	<select id="getUserList" resultType="UserResponse">
-		SELECT * FROM user u JOIN user_grade g USING (grade_id);
+		SELECT * FROM user JOIN user_grade USING (grade_id);
 	</select>
 	
 	<select id="getUserDetail" resultType="UserResponse">
-		SELECT * FROM user u JOIN user_grade g USING (grade_id) WHERE user_id=#{userId};
+		SELECT * FROM user JOIN user_grade USING (grade_id) WHERE user_id=#{userId};
 	</select>
 </mapper>

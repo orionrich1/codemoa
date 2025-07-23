@@ -16,6 +16,11 @@ public class UserResponse {
     private String mobile;
     private Integer totalPoints;
     private LocalDateTime membershipDate;
+    private LocalDateTime unbanDate;
+    
+    private LocalDateTime banDate;
+    private int banDay;
+    private String banReason;
 
     private String gradeName;
 }

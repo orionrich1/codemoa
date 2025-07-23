@@ -34,6 +34,7 @@ public class AdminController {
 			return "views/user/admin/users";
 		} else {
 			model.addAttribute("user", adminService.getUserDetail(userId));
+			model.addAttribute("banHistory", adminService.getUserDetail(userId));
 			return "views/user/admin/userDetail";
 		}
 	}
