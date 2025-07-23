@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "userGrade") // ERD의 테이블명과 클래스명을 맞춰줍니다.
+@Table(name = "user_grade") // ERD의 테이블명과 클래스명을 맞춰줍니다.
 public class UserGrade {
 
     @Id

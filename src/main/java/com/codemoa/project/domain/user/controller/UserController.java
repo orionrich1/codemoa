@@ -1,47 +1,63 @@
-//기찬
 package com.codemoa.project.domain.user.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import com.codemoa.project.domain.user.dto.request.UserLoginRequest;
-import com.codemoa.project.domain.user.entity.User;
+import com.codemoa.project.domain.user.dto.request.UserSignUpRequest;
+import com.codemoa.project.domain.user.dto.response.UserResponse;
 import com.codemoa.project.domain.user.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
 public class UserController {
 
-	private final UserService userService; // 4단계에서 만든 Service 사용
+    private final UserService userService;
 
-	@GetMapping("/login")
-	public String loginForm() {
-		// templates/user/loginForm.html 파일을 찾아서 보여줍니다.
-		return "user/loginForm";
-	}
+    @GetMapping("/loginForm")
+    public String loginForm() {
+        return "views/user/loginForm";
+    }
 
-	// 2. "로그인 데이터를 처리하는" 역할만 담당 (POST 요청)
-	@PostMapping("/login")
-	public String login(UserLoginRequest requestDto, HttpSession session) {
+    @GetMapping("/joinForm")
+    public String joinForm() {
+        return "views/user/joinForm";
+    }
 
-		User loginUser = userService.login(requestDto);
+    @PostMapping("/join")
+    public String join(UserSignUpRequest request) {
+        userService.signUp(request);
+        return "redirect:/loginForm";
+    }
 
-		if (loginUser == null) {
-			return "redirect:/login"; // 실패 시 다시 로그인 폼으로
-		}
+//    @PostMapping("/login")
+//    public String login(UserLoginRequest request, HttpSession session, RedirectAttributes redirectAttributes) { // 파라미터로 RedirectAttributes 추가
+//        try {
+//            UserResponse loginUser = userService.login(request);
+//            session.setAttribute("loginUser", loginUser);
+//            return "redirect:/";
+//        } catch (IllegalArgumentException e) {
+//            // 파라미터로 받은 redirectAttributes 객체를 사용
+//            redirectAttributes.addFlashAttribute("error", "아이디 또는 비밀번호가 올바르지 않습니다.");
+//            return "redirect:/loginForm";
+//        }
+//    }
 
-		// 성공 시 세션에 저장
-		session.setAttribute("loginUser", loginUser);
-		return "redirect:/"; // 메인 페이지로
-	}
+    // 스프링 Security 기본 기능과 충돌할 수 있으므로 주석 처리
+	/*
+	 * @PostMapping("/logout") public String logout(HttpSession session) {
+	 * session.invalidate(); return "redirect:/loginForm"; }
+	 */
 
-	@GetMapping("/logout")
-	public String logout(HttpSession session) {
-		// 세션에서 로그인 정보를 제거
-		session.removeAttribute("loginUser");
-		// 메인 페이지로 리다이렉트
-		return "redirect:/";
-	}
+    @ExceptionHandler(IllegalArgumentException.class)
+    public String handleException(IllegalArgumentException exception, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("error", exception.getMessage());
+        // 어떤 예외가 발생했는지에 따라 리다이렉트 경로를 다르게 할 수 있습니다.
+        // 여기서는 간단하게 joinForm으로 통일합니다.
+        return "redirect:/joinForm";
+    }
 }
