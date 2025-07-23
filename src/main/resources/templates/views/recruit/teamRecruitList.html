@@ -63,7 +63,7 @@ layout:decorate="~{layouts/default_layout}">
 							<tr th:each="teamRecruit, status: ${bList}">
 								<td>[[ ${teamRecruit.recruitId} ]]</td>
 								<td class="text-start">
-									<a th:href="@{TeamRecruitDetail(recruitId=${teamRecruit.recruitId})}" 
+									<a th:href="@{TeamRecruitDetail(recruitId=${teamRecruit.recruitId},pageNum=${currentPage})}" 
 									class="text-decoration-none fw-bold">[[ ${teamRecruit.title} ]]
 									</a>
 								</td>
@@ -83,6 +83,30 @@ layout:decorate="~{layouts/default_layout}">
 						</th:block>
 					</tbody>
 				</table>
+				<div class="row">
+					<div class="col text-center">
+						<nav aria-label="page Navigation">
+						<ul class="pagination justify-content-center">
+							<li class="page-item" th:if="${startPage > pageGroup}">
+								<a class="page-link" th:href="@{|?pageNum=${startPage - 1}|}">이전</a>								
+							</li>
+							<li class="page-item"
+								th:each="num : ${#numbers.sequence(startPage, endPagePage)}"
+								th:classappend="${Num == currentPage} ? 'active'" aria-current="page">
+								<th:block th:if="${num != currentPage}">
+								<a th:text="${num}" class="page-link" th:href="@{|/TeamRecruitList?page=${pageNum}&keyword=${keyword}|}">[[${pageNum}]]</a>
+								</th:block>
+								<th:block th:unless="${num != currentPage}">
+									<span th:text="${num}" class="page-link"></span>
+								</th:block>								
+							</li>
+							<li class="page-item" th:if="${endPage < pageCount}">
+								<a class="page-link" th:href="@{|/TeamRecruitList?pageNum=${startPage + PageGroup}&keyword=${keyword}|}">다음</a>
+							</li>
+						</ul>
+						</nav>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

@@ -8,6 +8,7 @@ import java.net.URLEncoder;
 import java.nio.file.Paths;
 import java.nio.file.Path;
 import java.nio.file.Files;
+import java.util.Map;
 import java.util.UUID;
 
 
@@ -24,6 +25,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -60,7 +62,6 @@ public class TeamRecruitController {
 	@Autowired
 	private TeamRecruitService teamRecruitService;
 	
-	public String updateTeamRecruit;
 	
 	@PostMapping("/recruit/write")
 	public String writeRecruit(TeamRecruit teamRecruit, 
@@ -120,7 +121,7 @@ public class TeamRecruitController {
 			@RequestParam("userId") String userId) {
 		boolean userIdCheck = teamRecruitService.userIdCheck(recruitId, userId);
 		if(! userIdCheck) {
-			response.setContentType("text/html: charset=utf-8");
+			response.setContentType("text/html; charset=utf-8");
 			out.print("<script>");
 			out.print("alert('작성자가 일치하지 않습니다.);");
 			out.print("history.back();");
@@ -140,7 +141,7 @@ public class TeamRecruitController {
 		
 	}
 	
-	@GetMapping("/addTeamRecruit")
+	@GetMapping("/showAddForm")
 	public String addTeamRecruit(Model model){
 		TeamRecruit recruit = new TeamRecruit();
 		recruit.setRecruitType("");
@@ -154,11 +155,13 @@ public class TeamRecruitController {
 		return "views/recruit/teamRecruitDetail";
 	}
 	
-	@GetMapping({"/", "/TeamRecruitList"})
-	public String TeamRecruitList(Model model) {
-		var list = teamRecruitService.teamRecruitList();
-		log.info("조회된 게시글 수 : {}", list.size());
-		model.addAttribute("bList", list);
+	@GetMapping("/TeamRecruitList")
+	public String TeamRecruitList(Model model, 
+			@RequestParam(value = "pageNum", required=false, defaultValue="1") int pageNum
+			) {
+		Map<String,Object> modelMap = teamRecruitServcie.teamRecruitList(pageNum);
+		
+		model.addAllAttributes(modelMap);
 		
 		return "views/recruit/teamRecruitList";
 	}

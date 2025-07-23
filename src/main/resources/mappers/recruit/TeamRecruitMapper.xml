@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.codemoa.project.domain.recruit.mapper.TeamRecruitMapper">
 
-<select id="userIdCheck">
-SELECT userId
+<select id="userIdCheck" parameterType="int" resultType="string">
+SELECT user_id
 FROM recruitbbs
 WHERE recruit_id = #{recruitId}
 </select>
@@ -37,19 +37,85 @@ VALUES(#{userId}, #{contestTitle}, #{recruitType}, #{recruitPeriod},
 
 </insert>
 
-<select id="getTeamRecruit" 
-resultType="com.codemoa.project.domain.recruit.entity.TeamRecruit">
+<select id="getTeamRecruit" parameterType="int"
+resultType="TeamRecruitResultMap">
 SELECT *
 FROM recruitbbs
 WHERE recruit_id = #{recruitId}
 </select>
 
-<select id="TeamRecruitList" 
+<select id="TeamRecruitList" parameterType="map" 
 resultType="com.codemoa.project.domain.recruit.entity.TeamRecruit">
-SELECT *
+SELECT 
+recruit_id,
+title,
+user_id,
+recruit_type,
+status,
+remaining_members,
+reg_date,
+view_count
 FROM recruitbbs
+WHERE 1=1
+	<if test="keyword != null and keyword !='' and type !=null and type !=''">
+		<choose>
+			<when test="type == 'title'">
+				AND title LIKE CONCAT('%', #{keyword},'%')
+			</when>
+			<when test="type == 'userId'">
+				AND user_id LIKE CONCAT('%', #{keyword},'%')
+			</when>
+			<when test="type == 'content'">
+				AND content LIKE CONCAT('%', #{keyword},'%')
+			</when>
+			<when test="type == 'recruitType'">
+				AND recruitType LIKE CONCAT('%', #{keyword},'%')
+			</when>
+			<when test="type == 'status'">
+				AND status LIKE CONCAT('%', #{keyword},'%')
+			</when>
+			<when test="type == 'techStack'">
+				AND techStack LIKE CONCAT('%', #{keyword},'%')
+			</when>
+			<otherwise>
+			title Like CONCAT('%', #{keyword},'%')
+			</otherwise>			
+		</choose>
+	</if>
+
 ORDER BY recruit_id DESC
+LIMIT #{num} OFFSET, #{startRow}
 </select>
+
+<select id="getTeamRecruitCount" parameterType="map" resultType="int">
+SELECT
+COUNT(*)
+FROM recruitbbs
+  where 1=1
+      <if test="keyword != null and keyword != '' and type !=null and type !=''">
+        <choose>
+          <when test="type == 'title'">
+            AND title LIKE CONCAT('%', #{keyword}, '%')
+          </when>
+          <when test="type == 'userId'">
+            AND user_id LIKE CONCAT('%', #{keyword}, '%')
+          </when>
+          <when test="type == 'content'">
+            AND content LIKE CONCAT('%', #{keyword}, '%')
+          </when>
+           <when test="type == 'recruitType'">
+            AND recruitType LIKE CONCAT('%', #{keyword}, '%')
+          </when>
+           <when test="type == 'status'">
+            AND status LIKE CONCAT('%', #{keyword}, '%')
+          </when>
+           <when test="type == 'techStack'">
+            AND techStack LIKE CONCAT('%', #{keyword}, '%')
+          </when>
+        </choose>
+      </if>
+  </select>
+
 
 <resultMap id="TeamRecruitResultMap" type="com.codemoa.project.domain.recruit.entity.TeamRecruit">
     <id property="recruitId" column="recruit_id"/>
