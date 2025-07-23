@@ -1,9 +1,11 @@
 -- 외래 키 제약 조건으로 인해 DROP 순서가 중요합니다.
 -- 참조하는 테이블(자식)부터 역순으로 삭제합니다.
-DROP TABLE IF EXISTS localuser;
-DROP TABLE IF EXISTS snsuser;
+DROP TABLE IF EXISTS local_user;
+DROP TABLE IF EXISTS sns_user;
+DROP TABLE IF EXISTS ban_history;
 DROP TABLE IF EXISTS user;
-DROP TABLE IF EXISTS usergrade;
+DROP TABLE IF EXISTS user_grade;
+
 
 
 -- 1. user_grade 테이블 생성 (기준 정보)
@@ -23,9 +25,9 @@ CREATE TABLE user (
     name VARCHAR(10) NULL COMMENT '이름',
     nickname VARCHAR(10) NULL UNIQUE COMMENT '닉네임',
     mobile VARCHAR(15) NULL COMMENT '전화번호',
-    address VARCHAR(100) NULL COMMENT '주소',
     total_points INT NOT NULL DEFAULT 0 COMMENT '총 포인트',
     membership_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '가입일',
+    unban_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '차단해제일',
     email VARCHAR(100) NULL COMMENT '이메일',
     grade_id VARCHAR(30) NULL COMMENT '회원 등급 ID (FK)',
     PRIMARY KEY (user_id),
@@ -54,6 +56,19 @@ CREATE TABLE sns_user (
 ) COMMENT '소셜 로그인 회원 정보';
 
 
+-- 5. ban_history 테이블 생성 (차단 기록)
+-- user 테이블을 참조합니다.
+CREATE TABLE ban_history (
+	history_no INT NOT NULL AUTO_INCREMENT,
+    user_id VARCHAR(10) NOT NULL COMMENT '사용자 ID (FK)',
+    ban_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '차단된 날짜',
+    ban_day INT NOT NULL COMMENT '차단한 일일 수',
+    ban_reason VARCHAR(100) NULL COMMENT '차단 사유',
+    PRIMARY KEY (history_no),
+    FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE -- 회원이 삭제되면 같이 삭제
+) COMMENT '회원 차단 기록';
+
+
 
 INSERT INTO user_grade (grade_id, grade_name, min_points)
 SELECT 'GENERAL', '일반회원', 0
@@ -71,7 +86,16 @@ VALUES ('oaeoae', '테스트계정', '오애오애', 'oaeoae@test.com', 0, 'GENE
 INSERT INTO local_user (user_id, pass)
 VALUES ('oaeoae', '1234'); 
 
-
-
 select * from user;
 
+
+INSERT INTO ban_history (user_id, ban_day, ban_reason) VALUES ('oaeoae', 7,'도배');
+
+SELECT * FROM user u
+JOIN user_grade USING (grade_id)
+LEFT JOIN ban_history b ON u.user_id = b.user_id
+WHERE u.user_id='oaeoae';
+
+INSERT INTO user_grade (grade_id, grade_name, min_points) VALUES ('BRONZE', '브론즈', 0);
+INSERT INTO user_grade (grade_id, grade_name, min_points) VALUES ('SILVER', '실버', 1000);
+INSERT INTO user_grade (grade_id, grade_name, min_points) VALUES ('GOLD', '골드', 5000);

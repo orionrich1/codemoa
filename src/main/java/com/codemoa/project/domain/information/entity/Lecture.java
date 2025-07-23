@@ -25,5 +25,7 @@ public class Lecture {
 	private String lectureSource;
 	private String content1;
 	private String content2;
+	private String pass;
+	private String file1;
 	private int recommendNum;
 }

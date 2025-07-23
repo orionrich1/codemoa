@@ -21,9 +21,6 @@ public class WebConfig implements WebMvcConfigurer{
 		 * 물리적인 이름이 결정된다.   
 		 **/
 
-		// 로그인 폼 뷰 전용 컨트롤러 설정 추가
-		registry.addViewController("/loginForm").setViewName("views/user/loginForm");
-	
 		
 	}
 

@@ -14,7 +14,7 @@ public class SnsUser {
     @Column(name = "user_id")
     private String userId;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @MapsId
     @JoinColumn(name = "user_id")
     private User user;

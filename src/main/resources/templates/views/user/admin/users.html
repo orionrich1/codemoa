@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}">
+
+<div layout:fragment="content">
+	<!-- 임시 css 사용중 -->
+	<link rel="stylesheet" th:href="@{/css/admin/users.css}" />
+	
+	<table class="table text-center my-3 align-middle">
+		<thead>
+			<tr class="table-skyblue">
+				<th>아이디</th>
+				<th>이름</th>
+				<th>닉네임</th>
+				<th>등급</th>
+				<th>가입일</th>
+			</tr>
+		</thead>
+		<tbody>
+			<th:block th:if="${userList != null && !#lists.isEmpty(userList)}">
+				<th:block th:each="user : ${userList}">
+					<tr class="users" style="cursor: pointer;" th:data-id="${user.userId}">
+						<td>[[${user.userId}]]</td>
+						<td>[[${user.name}]]</td>
+						<td>[[${user.nickname}]]</td>
+						<td>[[${user.gradeName}]]</td>
+						<td>[[${#temporals.format(user.membershipDate,
+							'yyyy-MM-dd')}]]</td>
+					</tr>
+				</th:block>
+			</th:block>
+
+			<th:block
+				th:unless="${userList != null && !#lists.isEmpty(userList)}">
+				<tr>
+					<td colspan=5>가입한 유저가 존재하지 않습니다.</td>
+				</tr>
+			</th:block>
+		</tbody>
+	</table>
+	<script th:src="@{/js/admin/users.js}"></script>
+</div>
+</html>
