@@ -33,7 +33,8 @@
 		update lecture 
 		set title = #{title}, subtitle = #{subtitle}, 
 		category = #{category}, rating = #{rating}, 
-		content1 = #{content1}, content2 = #{content2}, reg_date = SYSDATE()  
+		content1 = #{content1}, content2 = #{content2}, reg_date = SYSDATE(),
+		lecture_source = #{lectureSource}, file1 = #{file1}
 		where recommend_no = #{recommendNo}
 	</update>
 	
@@ -43,10 +44,10 @@
 
 	<!-- 작성한 게시글 정보를 DB 테이블에 저장하는 맵핑 -->
 	<insert id="addLecture" parameterType="com.codemoa.project.domain.information.entity.Lecture">
-		insert into lecture (title, writer, content, 
-			reg_date, read_count, pass, file1)
-		values(#{title}, #{writer}, #{content}, 
-			SYSDATE(), #{readCount}, #{pass}, #{file1})
+		insert into lecture (user_id, title, subtitle, category, rating, reg_date, 
+			lecture_source, content1, content2, pass, file1)
+		values(#{userId}, #{title}, #{subtitle}, #{category}, #{rating}, SYSDATE(), 
+			#{lectureSource}, #{content1}, #{content2}, #{pass}, #{file1})
 	</insert> 
 	
 	

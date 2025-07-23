@@ -128,12 +128,12 @@ public class InformationController {
 	
 	@GetMapping("/information/lectureAdd")
 	public String addLecture() {
-		return "views/information/information/informationLectureWriteForm";
+		return "views/information/informationLectureWriteForm";
 	}
 	
 	// 게시 글 쓰기 폼으로 부터 글 등록 요청을 받는 메서드
-	@PostMapping("/addBoard")
-	public String addBoard(Lecture lecture, @RequestParam(value = "addFile", required = false) MultipartFile multipartFile)
+	@PostMapping("/information/lectureWrite")
+	public String addLecture(Lecture lecture, @RequestParam(value = "addFile", required = false) MultipartFile multipartFile)
 			throws IOException { // 커맨드 객체 (도메인 객체와 이름이 같아야)
 
 		System.out.println("originName : " + multipartFile.getOriginalFilename());  // originName : 다운로드.jpg
@@ -175,8 +175,10 @@ public class InformationController {
 		// 게시글 쓰기가 완료되면 게시글 리스트로 리다이렉트 시킨다.
 		
 		// 리다이렉트 : 같은 글이 계속 들어가지 않게
-		return "redirect:boardList";
+		return "redirect:/information/lectureList";
 	}
+	
+	
 	
 	
 	@GetMapping("/information/bookDetail")

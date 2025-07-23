@@ -16,6 +16,8 @@ CREATE TABLE IF NOT EXISTS lecture (
     lecture_source VARCHAR(300),
     content1 VARCHAR(1000),
     content2 TEXT,  -- TEXT로 변경
+    pass VARCHAR(60),
+    file1 VARCHAR(100),
     recommend_num INTEGER DEFAULT 0
 );
 
