@@ -14,7 +14,7 @@
 		</div>
 	</div>
 
-	<form id="problemForm" method="post" action="problemResult">
+	<form id="problemForm" method="post" th:action="@{problemResult}">
 		<input type="hidden" name="no" th:value="${problem.problemId}">
 		<div class="row mt-5">
 			<table class="table align-middle border border-bottom-0">

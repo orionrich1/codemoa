@@ -4,9 +4,11 @@ package com.codemoa.project.domain.user.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.codemoa.project.domain.user.dto.request.UserBanRequest;
 import com.codemoa.project.domain.user.service.AdminService;
 
 import lombok.RequiredArgsConstructor;
@@ -34,9 +36,20 @@ public class AdminController {
 			return "views/user/admin/users";
 		} else {
 			model.addAttribute("user", adminService.getUserDetail(userId));
-			model.addAttribute("banHistory", adminService.getUserDetail(userId));
 			return "views/user/admin/userDetail";
 		}
+	}
+
+	@PostMapping("/banUser")
+	public String banUser(UserBanRequest request) {
+		adminService.banUser(request);
+		return "redirect:users?userId=" + request.getUserId();
+	}
+
+	@GetMapping("/unbanUser")
+	public String banUser(@RequestParam("userId") String userId) {
+		adminService.unbanUser(userId);
+		return "redirect:users?userId=" + userId;
 	}
 
 	@GetMapping("/banners")

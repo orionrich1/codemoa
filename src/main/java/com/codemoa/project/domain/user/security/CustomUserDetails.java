@@ -26,7 +26,7 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // UserGrade에서 권한 정보를 가져옵니다.
-        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getUserGrade().getGradeName()));
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getUserGrade().getGradeId()));
     }
 
     @Override

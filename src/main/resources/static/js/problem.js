@@ -67,6 +67,9 @@ function requestApi() {
 	var problemAnswer = $("#problemAnswer").text();
 	var userAnswer = $("#userAnswer").text();
 
+	const token = $("meta[name='_csrf']").attr("content");
+	const header = $("meta[name='_csrf_header']").attr("content");
+
 	var test = {
 		"problem": {
 			"category": problemCategory,
@@ -81,7 +84,7 @@ function requestApi() {
 
 	fetch('/problems/apiRequest', {
 		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
+		headers: { 'Content-Type': 'application/json', [header]: token },
 		body: JSON.stringify({
 			"problem": {
 				"category": problemCategory,
