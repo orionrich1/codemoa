@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="com.codemoa.project.domain.user.mapper.AdminMapper">
+	<select id="getUserList" resultType="UserResponse">
+		SELECT * FROM user u JOIN user_grade g USING (grade_id);
+	</select>
 	
+	<select id="getUserDetail" resultType="UserResponse">
+		SELECT * FROM user u JOIN user_grade g USING (grade_id) WHERE user_id=#{userId};
+	</select>
 </mapper>
