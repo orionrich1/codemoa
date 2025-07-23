@@ -34,24 +34,24 @@ public class UserController {
         return "redirect:/loginForm";
     }
 
-    @PostMapping("/login")
-    public String login(UserLoginRequest request, HttpSession session) {
-        try {
-            UserResponse loginUser = userService.login(request);
-            session.setAttribute("loginUser", loginUser);
-            return "redirect:/";
-        } catch (IllegalArgumentException e) {
-            RedirectAttributes redirectAttributes = null; // -> null로 생성
-            redirectAttributes.addFlashAttribute("error", "아이디 또는 비밀번호가 올바르지 않습니다."); // -> null에 접근하여 오류 발생
-            return "redirect:/loginForm";
-        }
-    }
+//    @PostMapping("/login")
+//    public String login(UserLoginRequest request, HttpSession session, RedirectAttributes redirectAttributes) { // 파라미터로 RedirectAttributes 추가
+//        try {
+//            UserResponse loginUser = userService.login(request);
+//            session.setAttribute("loginUser", loginUser);
+//            return "redirect:/";
+//        } catch (IllegalArgumentException e) {
+//            // 파라미터로 받은 redirectAttributes 객체를 사용
+//            redirectAttributes.addFlashAttribute("error", "아이디 또는 비밀번호가 올바르지 않습니다.");
+//            return "redirect:/loginForm";
+//        }
+//    }
 
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "redirect:/";
-    }
+    // 스프링 Security 기본 기능과 충돌할 수 있으므로 주석 처리
+	/*
+	 * @PostMapping("/logout") public String logout(HttpSession session) {
+	 * session.invalidate(); return "redirect:/loginForm"; }
+	 */
 
     @ExceptionHandler(IllegalArgumentException.class)
     public String handleException(IllegalArgumentException exception, RedirectAttributes redirectAttributes) {

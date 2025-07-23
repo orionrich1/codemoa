@@ -41,7 +41,7 @@ public class UserService {
         }
 
         UserGrade defaultGrade = userGradeRepository.findById("BRONZE")
-                .orElseThrow(() -> new RuntimeException("기본 등급(BRONZE)을 찾을 수 없습니다. DB를 확인해주세요."));
+                .orElseThrow(() -> new RuntimeException("DB 확인 필요: 기본 등급(BRONZE) 없음"));
 
         User newUser = new User(
                 request.getUserId(),
@@ -49,20 +49,23 @@ public class UserService {
                 request.getNickname(),
                 request.getEmail(),
                 request.getMobile(),
-                0, // 초기 포인트
+                0,
                 defaultGrade
         );
-        userRepository.save(newUser);
+        // userRepository.save(newUser); // <-- 이 라인을 삭제하거나 주석 처리
 
         LocalUser newLocalUser = new LocalUser(
                 newUser,
                 passwordEncoder.encode(request.getPass())
         );
+        
+        // LocalUser만 저장합니다.
+        // 만약 LocalUser에 cascade 옵션이 있다면 User도 함께 저장됩니다.
+        // 만약 cascade 옵션이 없다면, 아래의 해결책 2를 시도해야 합니다.
         localUserRepository.save(newLocalUser);
 
         return newUser.getUserId();
     }
-
     @Transactional(readOnly = true)
     public UserResponse getUserInfo(String userId) {
         User user = userRepository.findById(userId)
