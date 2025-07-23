@@ -7,4 +7,58 @@
 		select * from lecture where recommend_no = #{no}
 	</select>
 
+	<select id="getlectureList" parameterType="map">
+		select * from lecture
+		ORDER BY recommend_no DESC
+		LIMIT #{startRow}, #{num}	
+	</select>
+	
+	<select id="getLectureCount" resultType="int" parameterType="map">
+		select count(recommend_no) from lecture
+		<!-- CDATA -->
+		<where>
+			<if test="type == 'title'">
+				title like CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="type == 'writer'">
+				writer like CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="type == 'content'">
+				content like CONCAT('%', #{keyword}, '%')
+			</if>
+		</where>
+	</select>
+
+	<update id="updateLecture" parameterType="com.codemoa.project.domain.information.entity.Lecture">
+		update lecture 
+		set title = #{title}, subtitle = #{subtitle}, 
+		category = #{category}, rating = #{rating}, 
+		content1 = #{content1}, content2 = #{content2}, reg_date = SYSDATE(),
+		lecture_source = #{lectureSource}, file1 = #{file1}
+		where recommend_no = #{recommendNo}
+	</update>
+	
+	<delete id="deleteLecture">
+		delete from lecture where recommend_no = #{no}
+	</delete>
+
+	<!-- 작성한 게시글 정보를 DB 테이블에 저장하는 맵핑 -->
+	<insert id="addLecture" parameterType="com.codemoa.project.domain.information.entity.Lecture">
+		insert into lecture (user_id, title, subtitle, category, rating, reg_date, 
+			lecture_source, content1, content2, pass, file1)
+		values(#{userId}, #{title}, #{subtitle}, #{category}, #{rating}, SYSDATE(), 
+			#{lectureSource}, #{content1}, #{content2}, #{pass}, #{file1})
+	</insert> 
+	
+	
+	
+		
+	<select id="getBook">
+		select * from book where recommend_no = #{no}
+	</select>
+	
+	<select id="getRecommendContest">
+		select * from recommendContest where recommend_no = #{no}
+	</select>
+
 </mapper>
