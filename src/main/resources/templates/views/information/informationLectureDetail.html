@@ -3,17 +3,92 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/default_layout}">
 	
+	
 	<th:block layout:fragment="content">
-		<div>
-			<h2>작성자 : [[${lecture.userId}]]</h2>
-			<h2>제목 : [[${lecture.title}]]</h2>
-			<h2>부제목 : [[${lecture.subtitle}]]</h2>
-			<h2>카테고리 : [[${lecture.category}]]</h2>
-			<h2>별점 : [[${lecture.rating}]]</h2>
-			<h2>작성일 : [[${lecture.regDate}]]</h2>
-			<h2>출처 : [[${lecture.lectureSource}]]</h2>
-			<pre>내용 1 : [[${lecture.content1}]]</pre>
-			<pre>내용 2 : [[${lecture.content2}]]</pre>
+		<script th:src="@{/js/information/formcheck.js}"></script>
+		<div class="row my-5" id="global-content">
+			<div class="col-10 offset-1">
+				<form name="checkForm" id="checkForm">
+					<input type="hidden" name="no" id="no" th:value="${lecture.recommendNo}"/>
+					<input type="hidden" name="pass" id="rPass" />
+					<input type="hidden" name="pageNum" th:value="${pageNum}" />
+					<th:block th:if="${searchOption}">
+						<input type="hidden" name="type" th:value="${type}" />
+						<input type="hidden" name="keyword" th:value="${keyword}" />
+					</th:block>
+				</form>
+				<div class="row text-center">
+					<div class="col">
+						<h2 class="fs-3 fw-bold">게시글 상세보기</h2>
+					</div>
+				</div> 
+				<div class="row my-3">
+					<div class="col">
+						<table class="table table-bordered">
+							<tbody>
+								<tr>
+									<th class="table-secondary">제 목</th>
+									<td colspan="3" th:text="${lecture.title}">게시글 제목</td>		
+								</tr>
+								<tr>
+									<th class="table-secondary">부제목</th>
+									<td colspan="3" th:text="${lecture.subtitle}">게시글 부제목</td>		
+								</tr>
+								<tr>
+									<th class="table-secondary">카테고리</th>
+									<td colspan="3" th:text="${lecture.category}">게시글 카테고리</td>		
+								</tr>
+								<tr>
+									<th class="table-secondary">별점</th>
+									<td colspan="3" th:text="${lecture.rating}">게시글 별점</td>		
+								</tr>
+								<tr>
+									<th>글쓴이</th>
+									<td th:text="${lecture.userId}"></td>
+									<th>작성일</th>
+									<td>[[${#dates.format(lecture.regDate, 'yyyy-HH-dd HH:mm:ss')}]]</td>		
+								</tr>
+								<tr>		
+									<th>비밀번호</th>
+									<td>
+										<div class="col-sm-8">
+											<input class="form-control" type="password" name="pass" id="pass">
+										</div>
+									</td>
+									<th>추천수</th>
+									<td th:text="${lecture.recommendNum}"></td>
+								</tr>	
+								<tr>
+									<td colspan="4">
+										<h4>이런걸 배울 수 있어요 : </h4>
+										<span style="white-space:pre">[[${lecture.content1}]]</span>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="4" style="white-space:pre">[[${lecture.content2}]]</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="row my-3">
+					<div class="col text-center">
+						<input class="btn btn-warning" type="button" id="detailUpdate" value="수정하기"/>
+						&nbsp;&nbsp;<input class="btn btn-danger"  type="button" id="detailDelete" value="삭제하기" />			
+						&nbsp;&nbsp;
+						<!-- /* 일반 게시글 리스트에서 온 경우 */ -->
+						<th:block th:unless="searchOption">
+							<input class="btn btn-primary" type="button" value="목록보기"
+								th:onclick="@{|location.href='lectureList?pageNum=${pageNum}'|}"/>
+						</th:block>						
+						<!-- /* 검색 게시글 리스트에서 온 경우 */ -->
+						<th:block th:if="searchOption">
+							<input class="btn btn-primary" type="button" value="목록보기"
+								th:onclick="@{|location.href='lectureList?pageNum=${pageNum}&type=${type}&keyword=${keyword}'|}"/>
+						</th:block>						
+					</div>
+				</div>
+			</div>
 		</div>
 	</th:block>
 </html>
