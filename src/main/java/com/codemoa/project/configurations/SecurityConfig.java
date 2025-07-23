@@ -23,7 +23,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
                 // 1. (가장 구체적인 규칙) /admin/** 경로는 'ADMIN' 역할을 가진 사용자만 접근 가능
-                .requestMatchers("/admin/**").hasRole("ADMIN")
+//                .requestMatchers("/admin/**").hasRole("ADMIN")
 
                 // 2. (로그인 필요한 규칙) /mypage/** 등 로그인이 필요한 경로는 인증된 사용자만
                 .requestMatchers("/mypage/**").authenticated()

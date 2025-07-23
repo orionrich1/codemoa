@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.codemoa.project.domain.user.dto.response.UserResponse;
+import com.codemoa.project.domain.user.dto.response.UserDetailResponse;
 import com.codemoa.project.domain.user.mapper.AdminMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -15,11 +15,11 @@ import lombok.RequiredArgsConstructor;
 public class AdminService {
 	private final AdminMapper adminMapper;
 
-	public List<UserResponse> getUserList() {
+	public List<UserDetailResponse> getUserList() {
 		return adminMapper.getUserList();
 	}
 	
-	public UserResponse getUserDetail(String userId) {
+	public UserDetailResponse getUserDetail(String userId) {
 		return adminMapper.getUserDetail(userId);
 	}
 }

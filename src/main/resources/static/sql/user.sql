@@ -25,7 +25,6 @@ CREATE TABLE user (
     name VARCHAR(10) NULL COMMENT '이름',
     nickname VARCHAR(10) NULL UNIQUE COMMENT '닉네임',
     mobile VARCHAR(15) NULL COMMENT '전화번호',
-    address VARCHAR(100) NULL COMMENT '주소',
     total_points INT NOT NULL DEFAULT 0 COMMENT '총 포인트',
     membership_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '가입일',
     unban_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '차단해제일',
@@ -96,3 +95,7 @@ SELECT * FROM user u
 JOIN user_grade USING (grade_id)
 LEFT JOIN ban_history b ON u.user_id = b.user_id
 WHERE u.user_id='oaeoae';
+
+INSERT INTO user_grade (grade_id, grade_name, min_points) VALUES ('BRONZE', '브론즈', 0);
+INSERT INTO user_grade (grade_id, grade_name, min_points) VALUES ('SILVER', '실버', 1000);
+INSERT INTO user_grade (grade_id, grade_name, min_points) VALUES ('GOLD', '골드', 5000);

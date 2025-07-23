@@ -38,16 +38,6 @@ public class WebConfig implements WebMvcConfigurer{
 				.addResourceLocations("file:./src/main/resources/static/files/")
 				.setCachePeriod(1); // 캐쉬 지속시간(초)
 	}
-
-	
-	// 인터셉터 추가 메소드, Admin 관련 페이지에 진입할 때 작동함
-	@Override
-	public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new AdminInterceptor())
-        	.addPathPatterns("/admin/**");
-	}
-	
-	
 	
 
 }
