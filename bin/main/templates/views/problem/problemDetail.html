@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}">
+
+<div layout:fragment="content">
+	<!-- 임시 css 사용중 -->
+	<link rel="stylesheet" th:href="@{/css/problem.css}" />
+
+	<div class="row text-center mt-5">
+		<div class="col">
+			<h2 class="fs-3 fw-bold">문제 풀기</h2>
+			<div class="d-none" id="hint">[[${problem.hint}]]</div>
+		</div>
+	</div>
+
+	<form id="problemForm" method="post" action="problemResult">
+		<input type="hidden" name="no" th:value="${problem.problemId}">
+		<div class="row mt-5">
+			<table class="table align-middle border border-bottom-0">
+				<tr>
+					<td class="col-2 fw-bold">문제 제목</td>
+					<td colspan="3">[[${problem.title}]]</td>
+				</tr>
+				<tr>
+					<td class="col-2 fw-bold">프로그래밍 언어</td>
+					<td class="col-4">[[${problem.category}]]</td>
+					<td class="col-2 fw-bold">문제 난이도</td>
+					<td class="col-4">[[${problem.difficulty}]]</td>
+				</tr>
+				<tr>
+					<td class="fw-bold">문제 내용</td>
+					<td colspan="3"><pre th:text=${problem.content}></pre></td>
+				</tr>
+			</table>
+		</div>
+		<div class="row">
+			<div class="col-4">
+				<input type="button" class="btn btn-warning" id="showHintBtn"
+					value="힌트 보기">
+			</div>
+		</div>
+
+		<div class="row my-5">
+			<div class="col">
+				<textarea id="answer" name="answer" rows="15" class="useTabkey"
+					style="width: 100%; resize: none;" placeholder="답안 입력"></textarea>
+			</div>
+		</div>
+
+		<div class="row text-center">
+			<div class="col-6">
+				<input type="submit" class="formBtns btn btn-primary" value="제출">
+			</div>
+			<div class="col-6">
+				<input type="button" class="formBtns btn btn-secondary" value="돌아가기"
+					onclick="history.back()">
+			</div>
+		</div>
+
+		<!-- 권한 설정 필요 -->
+		<div class="row text-center my-5">
+			<div class="col-6">
+				<input type="button" class="formBtns btn btn-warning" value="수정"
+					th:onclick="|location.href='@{problemUpdate(no=${problem.problemId})}'|">
+			</div>
+			<div class="col-6">
+				<input type="button" class="formBtns btn btn-danger" value="삭제"
+					th:onclick="|location.href='@{problemDelete(no=${problem.problemId})}'|">
+			</div>
+		</div>
+	</form>
+	<script th:src="@{/js/problem.js}"></script>
+</div>
+</html>

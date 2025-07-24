@@ -1,58 +1,54 @@
-//기찬
 package com.codemoa.project.domain.user.entity;
 
 import java.time.LocalDateTime;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Entity
+@Getter
+@NoArgsConstructor
+@Table(name = "user")
 public class User {
 
-    private String userId;      // user_id (PK)
-    private String password;
+    @Id
+    @Column(name = "user_id")
+    private String userId;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "nickname")
     private String nickname;
+
+    @Column(name = "mobile")
+    private String mobile;
+
+    @Column(name = "email")
     private String email;
-    private String phone;
-    private String address;
-    private int point;
-    private String socialType;
-    private String role;
-    private LocalDateTime regDate;
-    private LocalDateTime updateDate;
 
-    // --- Getters and Setters ---
+    @Column(name = "total_points")
+    private Integer totalPoints;
 
-    public String getUserId() { return userId; }
-    public void setUserId(String userId) { this.userId = userId; }
+    @Column(name = "membership_date")
+    private LocalDateTime membershipDate;
 
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "grade_id")
+    private UserGrade userGrade;
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public User(String userId, String name, String nickname, String email, String mobile, Integer totalPoints, UserGrade userGrade) {
+        this.userId = userId;
+        this.name = name;
+        this.nickname = nickname;
+        this.email = email;
+        this.mobile = mobile;
+        this.totalPoints = totalPoints;
+        this.userGrade = userGrade;
+    }
 
-    public String getNickname() { return nickname; }
-    public void setNickname(String nickname) { this.nickname = nickname; }
-
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-
-    public String getPhone() { return phone; }
-    public void setPhone(String phone) { this.phone = phone; }
-
-    public String getAddress() { return address; }
-    public void setAddress(String address) { this.address = address; }
-
-    public int getPoint() { return point; }
-    public void setPoint(int point) { this.point = point; }
-
-    public String getSocialType() { return socialType; }
-    public void setSocialType(String socialType) { this.socialType = socialType; }
-
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
-
-    public LocalDateTime getRegDate() { return regDate; }
-    public void setRegDate(LocalDateTime regDate) { this.regDate = regDate; }
-
-    public LocalDateTime getUpdateDate() { return updateDate; }
-    public void setUpdateDate(LocalDateTime updateDate) { this.updateDate = updateDate; }
+    @PrePersist
+    public void prePersist() {
+        this.membershipDate = LocalDateTime.now();
+    }
 }

@@ -1,4 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.codemoa.project.domain.chat.mapper.ChatMapper">
+<mapper
+	namespace="com.codemoa.project.domain.problem.mapper.ProblemMapper">
+	<select id="getProblemList" resultType="Problem">
+		SELECT * FROM problems ORDER BY category, difficulty;
+	</select>
+	
+	<select id="getProblemDetail" resultType="Problem">
+		SELECT * FROM problems WHERE problem_id=#{no}
+	</select>
+	
+	<insert id="addProblem" parameterType="Problem" >
+		INSERT INTO problems(user_id, title, content, answer, hint, difficulty, category)
+		VALUES (#{userId}, #{title}, #{content}, #{answer}, #{hint}, #{difficulty}, #{category})
+	</insert>
+	
+	<update id="updateProblem" parameterType="Problem" >
+		UPDATE problems SET title=#{title}, content=#{content}, answer=#{answer}, 
+			hint=#{hint}, difficulty=#{difficulty}, category=#{category}
+		WHERE problem_id=#{problemId} 
+	</update>
+	
+	<delete id="deleteProblem">
+		DELETE FROM problems WHERE problem_id=#{no}
+	</delete>
 </mapper>
