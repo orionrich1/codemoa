@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -113,19 +112,17 @@ public class TeamRecruitController {
 			)
 	*/
 	
-	@PostMapping("/updateForm")
+	@GetMapping("/updateForm")
 	public String updateTeamRecruit(Model model, 
-			HttpServletResponse response, 
-			PrintWriter out, 
+			HttpServletResponse response,
 			@RequestParam("recruitId") int recruitId, 
-			@RequestParam("userId") String userId) {
+			@RequestParam("userId") String userId) throws IOException {
 		boolean userIdCheck = teamRecruitService.userIdCheck(recruitId, userId);
-		if(! userIdCheck) {
+		if(!userIdCheck) {
 			response.setContentType("text/html; charset=utf-8");
-			out.print("<script>");
-			out.print("alert('작성자가 일치하지 않습니다.);");
-			out.print("history.back();");
-			out.print("</script>");
+			PrintWriter out = response.getWriter();
+			out.print("<script>alert('작성자가 일치하지 않습니다.'); history.back();</script>");
+			out.flush();
 			return null;
 		}
 		TeamRecruit teamRecruit = teamRecruitService.getTeamRecruit(recruitId);
@@ -133,14 +130,7 @@ public class TeamRecruitController {
 		return "views/updateForm";
 	}
 	
-	@PostMapping("/addTeamRecruit")
-	public String addTeamRecruit(TeamRecruit teamRecruit) {
-		log.info("title : ", teamRecruit.getTitle());
-		teamRecruitService.addTeamRecruit(teamRecruit);
-		return "redirect:TeamRecruitList";
 		
-	}
-	
 	@GetMapping("/showAddForm")
 	public String addTeamRecruit(Model model){
 		TeamRecruit recruit = new TeamRecruit();
@@ -157,9 +147,12 @@ public class TeamRecruitController {
 	
 	@GetMapping("/TeamRecruitList")
 	public String TeamRecruitList(Model model, 
-			@RequestParam(value = "pageNum", required=false, defaultValue="1") int pageNum
+			@RequestParam(value = "pageNum", required=false, defaultValue="1") int pageNum,
+			@RequestParam(value = "type", required=false, defaultValue="") String type,
+			@RequestParam(value = "keyword", required=false, defaultValue="") String keyword
+			
 			) {
-		Map<String,Object> modelMap = teamRecruitServcie.teamRecruitList(pageNum);
+		Map<String,Object> modelMap = teamRecruitService.teamRecruitList(pageNum, type, keyword);
 		
 		model.addAllAttributes(modelMap);
 		
