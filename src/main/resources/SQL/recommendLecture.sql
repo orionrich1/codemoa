@@ -1,6 +1,7 @@
 ## DATABASE 생성 및 선택
 ## DROP DATABASE IF EXISTS springboot;
 ## CREATE DATABASE IF NOT EXISTS springboot;
+## 아래 use springboot; 이외에 전체 선택 + 전체 실행 -> 잘돌아감
 use springboot;
 
 ## recommendList 테이블
