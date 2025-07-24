@@ -57,7 +57,7 @@
 									<th>제목</th>
 									<th>작성자</th>
 									<th>작성일</th>
-									<th>추천수</th>
+									<!--  <th>추천수</th> -->
 								</tr>
 							</thead>
 							
@@ -71,13 +71,14 @@
 										style="text-decoration: none;">[[${lecture.title}]]</a></td>
 										<td th:text="${lecture.userId}"></td>
 										<td>[[${#dates.format(lecture.regDate, 'yyyy-MM-dd')}]]</td>
-										<td th:text="${lecture.recommendNum}"></td>
+										<!-- <td th:text="${lecture.recommendNum}"></td> -->
 									</tr>
 								</th:block>
 								<th:block th:if="${searchOption and #lists.isEmpty(lList)}">
 									<!-- 검색요청이면서 게시글이 없는 경우 -->
 									<tr>
-										<td colspan="5">"[[${keyword}]]"가 포함된 게시 글이 존재하지 않습니다.</td>
+										<!-- <td colspan="5">"[[${keyword}]]"가 포함된 게시 글이 존재하지 않습니다.</td> -->
+										<td colspan="4">"[[${keyword}]]"가 포함된 게시 글이 존재하지 않습니다.</td>
 									</tr>
 								</th:block>
 								
@@ -89,13 +90,14 @@
 										style="text-decoration: none;">[[${lecture.title}]]</a></td>
 										<td th:text="${lecture.userId}"></td>
 										<td>[[${#dates.format(lecture.regDate, 'yyyy-MM-dd')}]]</td>
-										<td th:text="${lecture.recommendNum}"></td>
+										<!-- <td th:text="${lecture.recommendNum}"></td> -->
 									</tr>
 								</th:block>
 								<th:block th:if="${not searchOption and #lists.isEmpty(lList)}">
 									<!-- 일반 게시글요청 이면서 게시글이 없는 경우-->
 									<tr>
-										<td colspan="5">게시 글이 존재하지 않음</td>
+										<!-- <td colspan="5">게시 글이 존재하지 않음</td> -->
+										<td colspan="4">게시 글이 존재하지 않음</td>
 									</tr>
 								</th:block>
 							</tbody>

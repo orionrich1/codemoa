@@ -15,10 +15,8 @@ CREATE TABLE IF NOT EXISTS lecture (
     reg_date TIMESTAMP NOT NULL,
     lecture_source VARCHAR(300),
     content1 VARCHAR(1000),
-    content2 TEXT,  -- TEXT로 변경
-    pass VARCHAR(60),
-    file1 VARCHAR(100),
-    recommend_num INTEGER DEFAULT 0
+    content2 VARCHAR(5000),  
+    file1 VARCHAR(100)
 );
 
 insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2) 
