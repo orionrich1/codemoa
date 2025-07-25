@@ -46,6 +46,10 @@ public class SecurityConfig {
                 .invalidateHttpSession(true)
         );
 
+        // 403 권한에러 해결
+        http.csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"));
+		http.csrf(csrf -> csrf.disable());
+		
         return http.build();
     }
 }
