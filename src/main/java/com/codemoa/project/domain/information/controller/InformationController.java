@@ -34,7 +34,12 @@ public class InformationController {
 	private InformationService informationService;
 	
 	@GetMapping("/information")
-	public String informationMain() {
+	public String informationMain(Model model,
+			@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+			@RequestParam(value = "type", required = false, defaultValue = "null") String type,
+			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword) {
+		
+		model.addAllAttributes(informationService.lectureList(pageNum, type, keyword));
 		return "views/information/informationMain";
 	}
 	

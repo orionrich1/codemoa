@@ -11,7 +11,7 @@
 						<h2 class="fs-3 fw-bold">강좌 추천글 수정하기</h2>
 					</div>
 				</div>  
-				<form name="lectureUpdateForm" action="lectureUpdate" id="updateForm" 
+				<form name="lectureUpdateForm" th:action="lectureUpdate" id="updateForm" 
 					class="row g-3 border-primary" method="post" enctype="multipart/form-data">
 					<input type="hidden" name="recommendNo" th:value="${lecture.recommendNo}">
 

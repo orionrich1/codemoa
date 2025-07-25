@@ -11,7 +11,7 @@ $(function() {
 		
 		// 비번이 입력되었으면 - 데이터와 함께 서버로 요청을 보냄
 		$("#rPass").val(pass);
-		$("#checkForm").attr("action","lectureDelete");
+		$("#checkForm").attr("th:action","lectureDelete");
 		$("#checkForm").attr("method","post");
 		$("#checkForm").submit();
 	});
@@ -28,7 +28,7 @@ $(function() {
 		
 		// 비번이 입력되었으면 - 데이터와 함께 서버로 요청을 보냄
 		$("#rPass").val(pass);
-		$("#checkForm").attr("action","lectureUpdateForm");
+		$("#checkForm").attr("th:action","lectureUpdateForm");
 		$("#checkForm").attr("method","post");
 		$("#checkForm").submit();
 	});

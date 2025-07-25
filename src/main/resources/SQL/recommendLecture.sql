@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS lecture (
     file1 VARCHAR(100)
 );
 
-insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2) 
+insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2, file1) 
 values ('admin', 
 '한 입 크기로 잘라먹는 타입스크립트(TypeScript)',
 '문법을 넘어 동작 원리와 개념 이해까지 배워도 배워도 헷갈리는 타입스크립트 이제 제대로 배워보세요! 여러분을 타입스크립트 마법사로 만들어드립니다.',
@@ -63,10 +63,11 @@ now(),
 타입스크립트는 수학의 집합론을 기반으로 동작하는 언어이기 때문에
 말과 글로만은 원리를 확실히 이해하기 어려울 수 있어요.
 그래서 다양한 시각 자료와 사례들을 준비했어요.
-아무리 어렵고 복잡한 개념이더라도 쉽고 재미있게 살펴볼 거예요.'
+아무리 어렵고 복잡한 개념이더라도 쉽고 재미있게 살펴볼 거예요.',
+'06f851e7-4f07-48db-a26c-5a14aa3182de.png'
 );
 
-insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2)
+insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2, file1)
 values (
 'admin',
 '한 입 크기로 잘라먹는 Next.js(v15)',
@@ -99,17 +100,16 @@ Next.js는 복잡한 매커니즘을 갖는 기능이 많은 편입니다.
 실제 상황과 최대한 가깝게 🚧
 실습을 위한 자체 제작 백엔드 서버 제공
 Next.js의 각종 캐싱 기능을 좀 더 실전에 가까운 환경에서 살펴보기 위해
-자체 제작한 백엔드 서버를 제공해드립니다.
-'
-
+자체 제작한 백엔드 서버를 제공해드립니다.',
+'f05c4379-91d7-4f8a-a11b-0f05dda7bb0b.png'
 );
 
 
-insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2)
+insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2, file1)
 values ('admin', 
 '[코드캠프] 부트캠프에서 만든 완벽한 프론트엔드 코스', -- 제목
 '수백명의 개발자를 배출한 ‘진짜’ 부트캠프의 완벽한 프론트엔드 커리큘럼 입니다. 이 강의 하나로 여러분은 현업 주니어 개발자 수준까지 성장 가능하며, 프론트엔드 기술스택의 활용 능력과 지식을 얻게 될거에요. 누구나 사회적, 경제적, 교육적 배경에 상관없이 커리어를 쌓을 수 있도록, [코드캠프]가 준비했습니다 :)', -- 부제목
-'프론트앤드', -- 카테고리
+'프론트엔드', -- 카테고리
 5.0,
 now(),
 'https://www.inflearn.com/course/%EC%BD%94%EB%93%9C%EC%BA%A0%ED%94%84-%EC%99%84%EB%B2%BD%ED%95%9C-%ED%94%84%EB%A1%A0%ED%8A%B8%EC%97%94%EB%93%9C-%EC%BD%94%EC%8A%A4', -- 출처
@@ -128,10 +128,11 @@ now(),
 이 강의에서는 쌩초보도 현업 개발자 수준으로 성장할 수 있도록 탄탄한 기초 강의부터 시작하니까요!
 
 온·오프라인으로 2,000명이 넘는 수강생이 선택한 고농축 프론트엔드 코스 
-더 강력하게 업데이트 되어 완벽한 프론트엔드 코스로 다시 찾아 왔습니다😀' -- 내용 2
+더 강력하게 업데이트 되어 완벽한 프론트엔드 코스로 다시 찾아 왔습니다😀', -- 내용 2
+'abd5b1aa-455b-44e9-8df8-ca20242eac37.png'
 );
 
-insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2)
+insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2, file1)
 values ('admin', 
 'React, Node.js, MongoDB로 만드는 나만의 회사 웹사이트: 완벽 가이드', -- 제목
 'React, Node.js, MongoDB를 활용해 회사 웹사이트를 직접 제작하는 과정을 배울 수 있는 실전 강의입니다. 간단한 React, Node.js 배경으로 풀스택 프로젝트를 같이 만들어요!', -- 부제목
@@ -169,10 +170,11 @@ React, Tailwind CSS, Node.js, MongoDB를 활용해 실제 회사 웹사이트 �
 RESTful API 설계와 상태 관리를 체계적으로 이해하고, 클라이언트와 서버 간의 데이터를 효율적으로 처리할 수 있게 돼요.
 MongoDB를 활용한 데이터베이스 설계와 최적화로 데이터를 체계적으로 관리할 수 있어요.
 Production Ready 웹사이트 개발 과정을 경험하며, 실무에서도 활용 가능한 포트폴리오를 만들게 돼요.
-개발 과정에서 테스트와 디버깅을 통해 코드의 품질을 높이고 안정적인 웹사이트를 완성할 수 있어요.' -- 내용 2
+개발 과정에서 테스트와 디버깅을 통해 코드의 품질을 높이고 안정적인 웹사이트를 완성할 수 있어요.', -- 내용 2
+'f9d3ef97-46b5-43fd-abab-1338ddb994b7.avif'
 );
 
-insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2)
+insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2, file1)
 values ('admin', 
 '[개정3판] Node.js 교과서 - 기본부터 프로젝트 실습까지', -- 제목
 '노드가 무엇인지부터, 자바스크립트 최신 문법, 노드의 API, npm, 모듈 시스템, 데이터베이스, 테스팅 등을 배우고 5가지 실전 예제로 프로젝트를 만들어 나갑니다. 클라우드에 서비스를 배포해보기도 하고 노드 프로젝트를 타입스크립트로 전환해도 봅니다.', -- 부제목
@@ -220,11 +222,11 @@ Node.js 교과서 개정 3판(길벗)의 내용을 다루는 동영상 강의입
 
 생생하게 배우는 라이브 코딩
 
-이미 만들어 둔 소스코드를 복붙하지 않습니다. 라이브 코딩 중심의 수업을 통해 개발하는 과정에서 발생할 수 있는 에러를 해결하는 방법과 노하우까지 고스란히 확인하실 수 있습니다.
-' -- 내용 2
+이미 만들어 둔 소스코드를 복붙하지 않습니다. 라이브 코딩 중심의 수업을 통해 개발하는 과정에서 발생할 수 있는 에러를 해결하는 방법과 노하우까지 고스란히 확인하실 수 있습니다.', -- 내용 2
+'42107ccb-750c-4c28-aafa-781c3afbcd29.avif'
 );
 
-insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2)
+insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2, file1)
 values ('admin', 
 'Do It! 장고+부트스트랩: 파이썬 웹개발의 정석', -- 제목
 '만들면서 배우는 파이썬 웹개발 A to Z! 웹 기초부터 블로그 개발, 배포까지 한 번에 배워요.', -- 부제목
@@ -254,10 +256,11 @@ CSS 프레임워크인 bootstrap의 활용방법을 배울 수 있어요.
 이 강의는 2019년 인프런에 공개한 파이썬 사용자를 위한 웹개발 입문 A to Z Django + Bootstrap 의 리뉴얼 & 확장판입니다.
 이 강의는 이지스퍼블리싱에서 출판된 <Do it! 장고+부트스트랩 파이썬 웹 개발의 정석> 을 영상으로 배우고 싶은 분들을 위한 강의입니다. 2021년 기준으로 최근 보편적으로 사용되는 기술을 추가로 담았고, 2019년에 오픈했던 강의의 수강생 분들의 피드백을 최대한 많이 반영했습니다.
 
-저와 함께 웹 개발, 이제 제대로 달려볼까요? 👉' -- 내용 2
+저와 함께 웹 개발, 이제 제대로 달려볼까요? 👉', -- 내용 2
+'7a83fb39-70a7-49ed-b27a-2b12b401fa9d.avif'
 );
 
-insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2)
+insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2, file1)
 values ('admin', 
 'Spring WebFlux + LLM 실전 구현', -- 제목
 'Spring WebFlux로 여러 기능을 만듭니다. 이 강의를 통해 WebFlux의 필수 개념과 실전 구현을 익힐 수 있습니다.', -- 부제목
@@ -280,10 +283,11 @@ LLM을 활용한 기능 구현', -- 내용 1
 
 여러분이 상상만 해보셨던 기능들 
 
-WebFlux와 LLM으로 전부 구현할 수 있을 만한 역량을 갖추실 수 있도록 도와드리겠습니다.' -- 내용 2
+WebFlux와 LLM으로 전부 구현할 수 있을 만한 역량을 갖추실 수 있도록 도와드리겠습니다.', -- 내용 2
+'246b5b6a-24a4-4737-b57d-fb553957f641.png'
 );
 
-insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2)
+insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2, file1)
 values ('admin', 
 '비전공자를 위한 진짜 입문 올인원 개발 부트캠프', -- 제목
 '왕초보도 할 수 있는 웹, 서버, 모바일 앱, 머신러닝까지 익히는 끝판왕 풀스택 강의!! 개발을 어디서부터 시작할지 막막했다면 이 강의를 강력 추천할게요. Javascript 하나로 진행합니다!', -- 부제목
@@ -360,10 +364,11 @@ Q. 완강하고 난 다음에 뭘 해야 할까요?
 
 마지막으로 드리고 싶은 말
 배우고자 하는 의지와 꾸준함만 있다면 여러분들 모두 충분히 하실 수 있어요! 저 그랩과 함께 느리더라도 꾸준히 하다 보면 어느 순간 개발 커리어의 초석을 쌓을 수 있을 거예요.
-수업 때 다시 인사드리도록 할게요.😄 감사합니다.' -- 내용 2
+수업 때 다시 인사드리도록 할게요.😄 감사합니다.', -- 내용 2
+'f394ec7e-36e9-4996-a3b2-3e354d979cb4.avif'
 );
 
-insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2)
+insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2, file1)
 values ('admin', 
 '[풀스택 완성] Supabase로 웹사이트 3개 클론하기 (Next.js 14)', -- 제목
 '풀스택 개발에 날개를 달아줄 Supabase! 3가지의 클론 프로젝트를 통해 Next.js 14와 Supabase로 실무 수준의 풀스택 개발을 하는 법을 속성으로 배우게 됩니다.', -- 부제목
@@ -406,11 +411,11 @@ Next.js 14와 Supabase의 강력한 조합으로 🚀
 
 가장 빠르게 풀스택 개발자로 만들어드립니다!
 
-3가지의 클론 프로젝트를 통해 빠르게 실력을 향상시켜 드립니다 👩🏻‍🎓
-' -- 내용 2
+3가지의 클론 프로젝트를 통해 빠르게 실력을 향상시켜 드립니다 👩🏻‍🎓', -- 내용 2
+'c7ce5e92-e46f-4467-b53a-18a8da567332.avif'
 );
 
-insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2)
+insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2, file1)
 values ('admin', 
 'Python을 위한 디자인 패턴', -- 제목
 '내 코드를 한 단계 성장시키고 싶으신가요? 🚀 초보 개발자분들을 위해 Python 디자인 패턴 📖 강의를 준비했어요. 복잡한 설계 노하우를 실무 예제로 알기 쉽게 풀어냈습니다. 이 강의에서는 이런 것들을 배워요: 💼 실무 예제 중심: 바로 써먹을 수 있는 현실적인 예제들 📚 클래식 패턴 정복: GoF의 핵심 패턴 마스터하기 🐍 파이썬다운 꿀팁: 더 간결하고 효율적인 코드 작성법 코드 설계에 자신감을 더해줄 거예요! ✨', -- 부제목
@@ -477,10 +482,11 @@ GoF의 핵심 패턴들을 자신 있게 설명하고 코드에 활용할 수 �
 유지보수와 확장이 쉬운 클린 코드가 무엇인지 몸으로 체득하게 됩니다.
 다른 개발자와 설계에 대해 막힘없이 소통할 수 있는 공통 언어를 갖게 됩니다.
 작동하는 코드를 넘어 자랑하고 싶은 코드를 짜는 개발자로 거듭납니다.
-소프트웨어 설계라는 망망대해에서 든든한 나침반이 되어줄 이 강의와 함께, 여러분의 개발 역량을 한 단계 점프시켜 보세요!' -- 내용 2
+소프트웨어 설계라는 망망대해에서 든든한 나침반이 되어줄 이 강의와 함께, 여러분의 개발 역량을 한 단계 점프시켜 보세요!', -- 내용 2
+'6223b5f3-7528-43d1-bcbf-25b069b6d4bb.png'
 );
 
-insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2)
+insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2, file1)
 values ('admin', 
 '프로덕션 레벨 실시간 채팅 서버 구축: 분산 처리부터 성능 최적화까지 (Kotlin & Spring)', -- 제목
 'Spring Boot 3.x + Kotlin으로 3개 인스턴스 클러스터를 구축하고, Redis Pub/Sub 분산 메시징과 Nginx 로드밸런서를 활용하여 대용량 트래픽 처리가 가능한 확장 가능한 WebSocket 실시간 채팅 서버를 개발합니다.', -- 부제목
@@ -550,10 +556,11 @@ Spring WebSocket을 활용하여 HTTP보다 훨씬 효율적인 양방향 실시
 Domain-driven Design 원칙에 따라 API, Domain, Persistence, WebSocket 계층을 독립적인 모듈로 분리합니다. 각 모듈의 책임을 명확히 구분하고 의존성 방향을 제어하여 유지보수성과 테스트 용이성을 극대화한 확장 가능한 서버 아키텍처를 구축합니다.
 
 Nginx 로드밸런서 + WebSocket 프록시
-n개의 Spring Boot 인스턴스에 트래픽을 균등 분산하는 Nginx 로드밸런서를 구성합니다. HTTP 요청뿐만 아니라 WebSocket 연결도 안정적으로 프록시하며, 프로덕션 레벨의 리버스 프록시 설정으로 고가용성 서비스 환경을 구축합니다.' -- 내용 2
+n개의 Spring Boot 인스턴스에 트래픽을 균등 분산하는 Nginx 로드밸런서를 구성합니다. HTTP 요청뿐만 아니라 WebSocket 연결도 안정적으로 프록시하며, 프로덕션 레벨의 리버스 프록시 설정으로 고가용성 서비스 환경을 구축합니다.', -- 내용 2
+'503b0c59-87bb-4c9f-b41f-a2cbe31120f3.png'
 );
 
-insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2)
+insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2, file1)
 values ('admin', 
 '코딩 없이 AI 자동화 전문가가 되는 법, n8n 완벽 가이드', -- 제목
 '요즘도 직접 코딩하시나요? 이젠 바이브 코딩도 귀찮은 시대! 코딩 없이 n8n으로 AI 자동화 전문가가 되어보세요. 실무에 바로 적용 가능한 자동화 워크플로우 설계 가이드 업무 효율을 극대화하는 실전 중심의 자동화 전략. n8n으로 직관적인 워크플로우를 구축하며, 업무 혁신을 경험해보세요', -- 부제목
@@ -619,10 +626,11 @@ LLM을 대화 상대가 아닌 작업자로 활용하는 방식
 OpenAI, Claude, Google API, 네이버 검색 API 등 다양한 기술을 활용해 AI Agent가 정보를 수집하고 처리하는 전체 과정을 직접 구현해봅니다.
 ✅ 완전 초보자도 OK!
 개발 지식이 없어도 괜찮습니다.
-시각적으로 구성된 인터페이스 덕분에, 따라 하기만 해도 결과물이 나오는 설계로 진행됩니다.' -- 내용 2
+시각적으로 구성된 인터페이스 덕분에, 따라 하기만 해도 결과물이 나오는 설계로 진행됩니다.', -- 내용 2
+'cfe4dba8-13dd-4e3d-bbf9-218b21c70ed6.png'
 );
 
-insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2)
+insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2, file1)
 values ('admin', 
 '[말 한마디로 뚝딱!] AI와 함께 나만의 수익화 웹사이트를 만드는 법', -- 제목
 'AI와 그누보드를 활용해, IT 초보라도 아이디어 하나로 ‘나만의 플랫폼 CEO’가 되는 시대! 기획부터 배포까지 실제 개발 과정을 낱낱이 시연하고, 광고·쇼핑몰 등 다양한 수익화 방법까지 알려드립니다. 지금 바로 온라인 비즈니스를 시작하세요!', -- 부제목
@@ -700,11 +708,11 @@ CI/CD(GitLab)
 매번 빠른 업데이트와 유지보수 실현
 Google 서비스(SEO & 수익화)
 Search Console, Analytics, Adsense 활용
-검색 노출 및 광고 수익화 방법 학습
-' -- 내용 2
+검색 노출 및 광고 수익화 방법 학습', -- 내용 2
+'a6bfa276-f609-4ddb-877a-5c1227c3a602.jpg'
 );
 
-insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2)
+insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2, file1)
 values ('admin', 
 'AI로 기획부터 개발까지! LLM 주도 Next.js 쇼핑몰 제작', -- 제목
 'v0, cursor AI 및 각종 LLM과 함께 PRD부터 AI 상품 추천까지! 실전 프로젝트로 Next.js 쇼핑몰을 완성하세요', -- 부제목
@@ -757,11 +765,11 @@ GPU (선택사항): AI 임베딩 기능을 로컬에서 실행하려면 NVIDIA G
 ✅ JavaScript 및 기본적인 TypeScript 문법 (Next.js 개발을 위해)
 ✅ Next.js 기본 개념 (페이지 라우팅, API Routes 등)
 ✅ SQL 및 데이터베이스 기초 (PostgreSQL과 Prisma 사용)
-✅ RESTful API 개념 (데이터 통신 이해)
-' -- 내용 2
+✅ RESTful API 개념 (데이터 통신 이해)', -- 내용 2
+'a6f6a6ae-298f-4aa0-a5de-358691f4b760.cover'
 );
 
-insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2)
+insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2, file1)
 values ('admin', 
 '바이브 코딩으로 만드는 재미있는 재무제표 (커서 ai)', -- 제목
 '프롬프트만으로 재무제표를 분석하고 시각화하는 매력적인 코딩 세계로 초대합니다. 코드 한 줄 없이 AI와 상의하며 서비스를 만들고 배포까지 진행합니다.', -- 부제목
@@ -795,11 +803,11 @@ now(),
 
 ✅ AI와 함께 배우는 웹앱 배포 실전 가이드
 기술을 몰라도 LLM과 대화하면서 웹앱 배포
-비전문가도 이해할 수 있는 쉬운 설명 생성 방법 마스터
-' -- 내용 2
+비전문가도 이해할 수 있는 쉬운 설명 생성 방법 마스터', -- 내용 2
+'44a659c0-4463-4231-bccf-211cafa78e84.png'
 );
 
-insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2)
+insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2, file1)
 values ('admin', 
 'AI 시대, 이제 현업이 개발한다! Cursor와 ChatGPT로 시작하는 바이브코딩', -- 제목
 '개발팀 눈치 보지 말고, 이제 내가 직접 만든다! 이 강의는 기획, 마케팅, 영업 등 실무 담당자가 개발자 도움 없이 AI도구를 활용하여 웹서비스의 핵심 기능을 직접 구현할 수 있도록 도와줍니다.', -- 부제목
@@ -854,10 +862,11 @@ FastAPI로 행사정보에 대한 벡엔드 API 만들기
 2) 프론트엔드 웹페이지 개발
 지역별 행사 및 세부 정보를 제공하는 웹페이지 개발
 
-벡엔드 API서버와 통신하여 달력UI로 각 지역별 행사 목록이 출력되는 웹페이지 작성합니다. 달력의 행사 목록이나 하단의 카드 목록을 클릭하면 각 행사에 대한 세부 정보를 확인할 수 있습니다.' -- 내용 2
+벡엔드 API서버와 통신하여 달력UI로 각 지역별 행사 목록이 출력되는 웹페이지 작성합니다. 달력의 행사 목록이나 하단의 카드 목록을 클릭하면 각 행사에 대한 세부 정보를 확인할 수 있습니다.', -- 내용 2
+'089cc453-c2fd-43a2-8ed4-5b9d757dd0b1.jpg'
 );
 
-insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2)
+insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2, file1)
 values ('admin', 
 '스트림릿(Streamlit)을 활용한 파이썬 웹앱 제작하기', -- 제목
 'Streamlit을 활용해 빠르고 쉽게 나만의 데이터 분석 앱을 구축하고 공유해 보세요!', -- 부제목
@@ -895,14 +904,15 @@ Streamlit이 지원하는 다양한 위젯(Widgets)
 강의와 함께 실습자료가 별도로 제공됩니다.
 본 강의와 연관된 영상은 유튜브 채널에서 학습할 수 있습니다.
 또한, 테디노트 YouTube에 업로드된 강의 외에도 인프런에서만 시청하실 수 있는 유료 콘텐츠를 앞으로 계속 추가할 예정입니다.
-인프런 유료 강의를 수강하실 경우, 수익금은 전액 불우한 어린이를 위한 기부금으로 사용됩니다.' -- 내용 2
+인프런 유료 강의를 수강하실 경우, 수익금은 전액 불우한 어린이를 위한 기부금으로 사용됩니다.', -- 내용 2
+'a26b53b8-b9d9-4166-842c-0f0bcd42b4f3.avif'
 );
 
-insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2)
+insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2, file1)
 values ('admin', 
 '[중급] 맛집 지도앱 만들기 (React Native & NestJS)', -- 제목
 '리액트 네이티브를 이용해서 나만의 맛집 기록앱을 개발하고 출시하는 과정을 배우게 됩니다. 디자인부터 프론트 및 백엔드 개발, 배포까지 전 과정을 준비했어요.', -- 부제목
-'모바일 웹 개발', -- 카테고리
+'모바일 앱 개발', -- 카테고리
 4.9,
 now(),
 'https://www.inflearn.com/course/%EB%A7%9B%EC%A7%91-%EC%A7%80%EB%8F%84%EC%95%B1-%EB%A7%8C%EB%93%A4%EA%B8%B0-reactnative-nestjs', -- 출처
@@ -962,11 +972,11 @@ React 지식이 필요해요. 기본 Hooks(useState, useEffect)등을 설명하�
 
 * 이 강의는 React Native CLI를 사용하는 중급 강의입니다. 이 점 꼭 유의하여 수강신청 해주세요! (Expo를 이용한 개발은 아바타 커뮤니티앱 만들기 강의를 참고해주세요.)
 
-* 리뉴얼이 진행중인 강의입니다. 2025년 7월부터 시작하여 순차적으로 업데이트 강의(섹션13~24)가 업로드될 예정입니다. 이점 유의하여 수강신청 해주세요!
-' -- 내용 2
+* 리뉴얼이 진행중인 강의입니다. 2025년 7월부터 시작하여 순차적으로 업데이트 강의(섹션13~24)가 업로드될 예정입니다. 이점 유의하여 수강신청 해주세요!', -- 내용 2
+'7cc01cb7-c0b9-4448-b44b-f1d39036bd00.png'
 );
 
-insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2)
+insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2, file1)
 values ('admin', 
 '순수 html/css/js만을 활용한 반응형웹 제작[실전편] 부트캠프', -- 제목
 '부트스트랩(BOOTSTRAP)을 사용하지 않고 순수하게 html/css/js 만을 활용하여 디바이스별로 다양한 레이아웃을 구현할 수 있는 반응형 웹페이지 만들기[2024년 최신판] 수업의 실전 제작수업입니다.', -- 부제목
@@ -1023,10 +1033,11 @@ HTML/CSS/jQuery를 활용한 반응형 웹페이지 / 웹앱 / 웹 디자인 실
 
 📌 실제 웹사이트에서 많이 활용되는 애니메이션 기법을 연습하여 원하는 요소에 마우스 호버시 디자인 요소가 애니메이션되는 인터랙티브 웹을 실습합니다.
 
-📌 외부 플러그인을 연결하여 내가 만든 코드에 다양한 기능을 손쉽게 활용할 수 있는 라이브러리를 추가하는 방법을 실습합니다.' -- 내용 2
+📌 외부 플러그인을 연결하여 내가 만든 코드에 다양한 기능을 손쉽게 활용할 수 있는 라이브러리를 추가하는 방법을 실습합니다.', -- 내용 2
+'5ab056d0-9459-4b7f-9d2f-9bfbc723ea12.avif'
 );
 
-insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2)
+insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2, file1)
 values ('admin', 
 '파이널 코딩테스트 : 프론트엔드', -- 제목
 '실제 기업에서 출제되는 Front-End 코딩 테스트를 참고하여 제작된 10가지 문제를 함께 풀어보며 2차 코딩 테스트(구현 테스트)를 완벽하게 대비해 봅시다!', -- 부제목
@@ -1122,10 +1133,11 @@ Q. 어떤 코드 에디터를 사용하나요?
 본 강의는 Visual Studio Code로 수업이 진행됩니다.
 
 수강생 여러분들이 더 편리하게 공부하실 수 있도록
-Notion 페이지 링크, 강의 자료(이미지 소스) 등 강의 수강 시 필요한 모든 것을 제공합니다.' -- 내용 2
+Notion 페이지 링크, 강의 자료(이미지 소스) 등 강의 수강 시 필요한 모든 것을 제공합니다.', -- 내용 2
+'8f302a3f-fa3c-45af-be12-8bd595cfe07d.avif'
 );
 
-insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2)
+insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2, file1)
 values ('admin', 
 '[2024]리베하얀의 HTML 기초 실무', -- 제목
 'HTML 기초문법을 다루는 강의입니다. 다양한 사례의 미션이 존재하며, 실무에서 사용가능한 최신문법까지 알려드립니다.', -- 부제목
@@ -1157,11 +1169,11 @@ HTML 표준문법을 준수하는것만으로 사용성과 접근성이 상당�
 
 
 3⃣ 30가지 이상의 실무 미션
-해당 과정의 주된 목적은 실무 응용입니다. 기초 문법을 학습하신 뒤 공유받은 피그마 샘플을 가지고 미션을 수행해보세요. 저와 함께 고민하면서 해결해 나아간다면 많은 자신감을 얻으실 수 있습니다.
-' -- 내용 2
+해당 과정의 주된 목적은 실무 응용입니다. 기초 문법을 학습하신 뒤 공유받은 피그마 샘플을 가지고 미션을 수행해보세요. 저와 함께 고민하면서 해결해 나아간다면 많은 자신감을 얻으실 수 있습니다.', -- 내용 2
+'0ad272fb-0d47-4911-835d-b1e5cd2ee0d7.avif'
 );
 
-insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2)
+insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2, file1)
 values ('admin', 
 '[2025 리뉴얼]플러터플로우로 코딩 없이 한달 안에 앱 만들기', -- 제목
 '세계 1위 노코드 앱빌더인 플러터플로우(FlutterFlow)를 통해 앱을 만들어 보는 입문 강의입니다! 🤗 트위터를 똑같이 만들면서 자연스럽게 개념을 배워나가니까... 쉽고 재밌을 거예요! 🥳', -- 부제목
@@ -1240,11 +1252,11 @@ now(),
 플러터플로우의 달라진 UI 와 환경에 맞추어 재촬영을 진행했습니다.
 이전에 이해하기 어려운 부분에 대해 설명을 보강했습니다.
 쉽고 재미있게 플러터플로우를 시작할 수 있는 본 강의를 듣고
-자신만의 앱 서비스를 최소비용, 최소시간으로 런칭하세요!
-' -- 내용 2
+자신만의 앱 서비스를 최소비용, 최소시간으로 런칭하세요!', -- 내용 2
+'b3cd4109-7c67-4c12-8551-c2bfb152d631.avif'
 );
 
-insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2)
+insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2, file1)
 values ('admin', 
 '[플러터플로우] 실전! 앱 출시를 위한 끝장 노하우!', -- 제목
 '플러터플로우를 이용해서 실제 앱을 출시하기 위한 A-Z 노하우를 담았습니다 : 배포부터 인앱결제, 카톡로그인, Supbase까지!', -- 부제목
@@ -1327,7 +1339,8 @@ Firebase 대신 오픈소스인 Supabase 선호하시는 분들도 많으시죠?
 연동하는 방법부터 주의점, 시행착오를 줄이는 모든 노하우를 담았습니다!
 
 
-2025년 업데이트 : 카카오 로그인 강의가 추가되었습니다!' -- 내용 2
+2025년 업데이트 : 카카오 로그인 강의가 추가되었습니다!', -- 내용 2
+'f4bd71a5-ec70-43fe-ab23-3bbfa768ee8e.avif'
 );
 
 
