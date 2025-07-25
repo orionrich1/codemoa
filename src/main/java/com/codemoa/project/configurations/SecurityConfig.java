@@ -1,19 +1,26 @@
 package com.codemoa.project.configurations;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.codemoa.project.domain.user.security.CustomOAuth2UserService;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-
+	@Lazy
+	@Autowired
+	private CustomOAuth2UserService customOAuth2UserService;
+	
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -33,13 +40,23 @@ public class SecurityConfig {
         );
 
         // 폼 로그인 및 로그아웃 설정은 기존과 동일합니다.
-        http.formLogin(form -> form
+        http
+        	.formLogin(form -> form
                 .loginPage("/loginForm")
                 .loginProcessingUrl("/login")
                 .defaultSuccessUrl("/")
                 .permitAll()
-        );
-
+                
+        	)
+        	// SNS 로그인
+        	.oauth2Login(oauth2 -> oauth2
+    	        .loginPage("/loginForm") 
+    	        .userInfoEndpoint(userInfo -> userInfo
+    	            .userService(customOAuth2UserService) 
+    	        )
+    	        .defaultSuccessUrl("/") 
+    	    );
+        
         http.logout(logout -> logout
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/loginForm")

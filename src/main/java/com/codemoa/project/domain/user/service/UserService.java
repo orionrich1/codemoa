@@ -1,15 +1,24 @@
 package com.codemoa.project.domain.user.service;
 
-import com.codemoa.project.domain.user.dto.request.UserLoginRequest;
 import com.codemoa.project.domain.user.dto.request.UserSignUpRequest;
 import com.codemoa.project.domain.user.dto.response.UserResponse;
 import com.codemoa.project.domain.user.entity.LocalUser;
+import com.codemoa.project.domain.user.entity.SnsUser;
 import com.codemoa.project.domain.user.entity.User;
 import com.codemoa.project.domain.user.entity.UserGrade;
 import com.codemoa.project.domain.user.repository.LocalUserRepository;
+import com.codemoa.project.domain.user.repository.SnsUserRepository;
 import com.codemoa.project.domain.user.repository.UserGradeRepository;
 import com.codemoa.project.domain.user.repository.UserRepository;
+import com.codemoa.project.domain.user.security.OAuth2UserLoginResult;
+
 import lombok.RequiredArgsConstructor;
+
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,21 +27,40 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserRepository userRepository;
-    private final LocalUserRepository localUserRepository;
-    private final UserGradeRepository userGradeRepository;
-    private final PasswordEncoder passwordEncoder;
+	private final UserRepository userRepository;
+	private final LocalUserRepository localUserRepository;
+	private final SnsUserRepository snsUserRepository;
+	private final UserGradeRepository userGradeRepository;
+	private final PasswordEncoder passwordEncoder;
 
-    @Transactional(readOnly = true)
-    public UserResponse login(UserLoginRequest request) {
-        LocalUser localUser = localUserRepository.findById(request.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("아이디 또는 비밀번호가 일치하지 않습니다."));
+	// SNS 로그인
+	@Transactional
+	public OAuth2UserLoginResult processOAuthUser(String provider, Map<String, Object> attributes) {
+		OAuth2UserLoginResult result = new OAuth2UserLoginResult();
+		String providerId = "";
 
-        if (!passwordEncoder.matches(request.getPass(), localUser.getPass())) {
-            throw new IllegalArgumentException("아이디 또는 비밀번호가 일치하지 않습니다.");
-        }
-        return new UserResponse(localUser.getUser());
-    }
+		if (provider.equals("google")) {
+			providerId = attributes.get("sub").toString();
+		} else if (provider.equals("kakao")) {
+			providerId = attributes.get("id").toString();
+			;
+		} else {
+			result.setStatus(OAuth2UserLoginResult.Status.FAIL);
+			return result;
+		}
+
+		Optional<SnsUser> user = snsUserRepository.findById(providerId);
+		if (user.isPresent()) {
+		    result.setStatus(OAuth2UserLoginResult.Status.SUCCESS);
+		    result.setUser(user.get().getUser()); // 실제 User 객체로 변환
+		    result.setProviderId(providerId);
+		} else {
+		    result.setStatus(OAuth2UserLoginResult.Status.NEED_SIGN);
+		    result.setProviderId(providerId);
+		}
+		
+		return result;
+	}
 
     @Transactional
     public String signUp(UserSignUpRequest request) {
@@ -66,6 +94,9 @@ public class UserService {
 
         return newUser.getUserId();
     }
+
+
+    
     @Transactional(readOnly = true)
     public UserResponse getUserInfo(String userId) {
         User user = userRepository.findById(userId)
