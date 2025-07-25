@@ -17,6 +17,8 @@ public interface AdminMapper {
 	public void banUserUpdate(UserBanRequest request);
 
 	public void banUserInsert(UserBanRequest request);
-	
+
 	public void unbanUser(String userId);
+
+	public void deleteUser(String userId);
 }

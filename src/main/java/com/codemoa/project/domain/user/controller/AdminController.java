@@ -51,6 +51,12 @@ public class AdminController {
 		adminService.unbanUser(userId);
 		return "redirect:users?userId=" + userId;
 	}
+	
+	@GetMapping("/deleteUser")
+	public String deleteUser(@RequestParam("userId") String userId) {
+		adminService.deleteUser(userId);
+		return "redirect:users";
+	}
 
 	@GetMapping("/banners")
 	public String adminBanners() {

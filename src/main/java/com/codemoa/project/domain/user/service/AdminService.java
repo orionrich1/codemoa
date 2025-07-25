@@ -39,4 +39,8 @@ public class AdminService {
 	public void unbanUser(String userId) {
 		adminMapper.unbanUser(userId);
 	}
+	
+	public void deleteUser(String userId) {
+		adminMapper.deleteUser(userId);
+	}
 }

@@ -6,6 +6,7 @@
 		SELECT * FROM user JOIN user_grade USING (grade_id) ORDER BY grade_name;
 	</select>
 	
+	<!-- 유저의 차단 기록을 가져오기 위해 Map 설정 -->
 	<resultMap id="UserDetailMap" type="UserDetailResponse">
 	    <id property="userId" column="user_id"/>
 	    <result property="name" column="name"/>
@@ -43,5 +44,9 @@
 	<update id="unbanUser">
 		UPDATE user SET unban_date=CURRENT_TIMESTAMP WHERE user_id=#{userId};
 	</update>
+	
+	<delete id="deleteUser">
+		DELETE FROM user WHERE user_id=#{userId};
+	</delete>
 
 </mapper>

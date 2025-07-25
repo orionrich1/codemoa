@@ -21,4 +21,18 @@ $(function() {
 			alert("차단되지 않은 사용자입니다.");
 		}
 	});
+
+	// 유저 상세 페이지 - 강제탈퇴 버튼
+	$("#deleteUserBtn").click(function() {
+		var userId = $("#userId").val();
+		var check1 = confirm("유저 " + userId + "를 강제로 탈퇴시키시겠습니까?");
+
+		if (check1) {
+			var check2 = confirm("이 행동은 되돌릴 수 없습니다.\n정말로 " + userId + "를 강제로 탈퇴시키시겠습니까?");
+			if (check2) {
+				location.href = "deleteUser?userId=" + userId;
+				alert(userId + "가 탈퇴처리 되었습니다.");
+			}
+		}
+	});
 });
