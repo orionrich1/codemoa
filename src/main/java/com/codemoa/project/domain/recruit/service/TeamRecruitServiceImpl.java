@@ -23,6 +23,11 @@ public class TeamRecruitServiceImpl implements TeamRecruitService {
     private final TeamRecruitMapper teamRecruitMapper;
 
     @Override
+    public void updateTeamRecruit(TeamRecruit teamRecruit) {
+    	teamRecruitMapper.updateTeamRecruit(teamRecruit);
+    }
+    
+    @Override
     public void insertTeamRecruit(TeamRecruit teamRecruit) {
     	teamRecruitMapper.insertteamRecruit(teamRecruit);
     }

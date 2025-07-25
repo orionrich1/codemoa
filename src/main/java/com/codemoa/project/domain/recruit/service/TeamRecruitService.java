@@ -7,6 +7,8 @@ import com.codemoa.project.domain.recruit.entity.TeamRecruit;
 
 public interface TeamRecruitService {
 
+	void updateTeamRecruit(TeamRecruit teamRecruit);
+	
     Map<String, Object> teamRecruitList(int pageNum, String type, String keyword);
 
     boolean userIdCheck(int recruitId, String userId);

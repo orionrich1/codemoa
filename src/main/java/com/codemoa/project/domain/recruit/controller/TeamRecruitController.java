@@ -22,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,6 +42,20 @@ import lombok.extern.slf4j.Slf4j;
 public class TeamRecruitController {
 	
 	private final String UPLOAD_DIR = System.getProperty("user.dir") +  "/uploads/files/";
+	
+	@GetMapping("/TeamRecruitUpdate")
+	public String showUpdateForm(@RequestParam("recruitId") int recruitId,Model model) {
+		TeamRecruit recruit = teamRecruitService.getTeamRecruit(recruitId);
+		model.addAttribute("teamRecruit", recruit);
+		return "views/recruit/teamRecruitUpdate";
+	}
+	
+	@PostMapping("/TeamRecruitUpdate")
+	public String updateTeamRecruit(@ModelAttribute TeamRecruit teamRecruit) {
+		teamRecruitService.updateTeamRecruit(teamRecruit);
+		return "redirect:/recruit/TeamRecruitDetail?recruitId=" + teamRecruit.getRecruitId();
+	}
+	
 	
 	@GetMapping("/files/{filename}")
 	public ResponseEntity<Resource> downloadFile(@PathVariable String filename) throws IOException{

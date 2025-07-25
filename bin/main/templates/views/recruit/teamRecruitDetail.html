@@ -109,9 +109,12 @@ layout:decorate="~{layouts/default_layout}">
 					</div>
 				</div>
 				
-			<div class="text-center my-4">
+			<div class="text-center my-4"
+			th: if="${session.loginId == teamRecruit.userId}">
 				<button type="button" class="btn btn-warning mx-2" id="detailUpdate">수정</button>
 				<button type="button" class="btn btn-danger mx-2" id="detailDelete">삭제</button>
+			</div>
+			<div class="text-center my-4">
 				<a href="TeamRecruitList" class="btn btn-primary mx-2">목록보기</a>
 			</div>
 		</div>
