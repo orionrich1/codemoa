@@ -8,11 +8,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import static org.springframework.security.config.Customizer.withDefaults;
+
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -21,18 +22,19 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(auth -> auth
-                // 1. (가장 구체적인 규칙) /admin/** 경로는 'ADMIN' 역할을 가진 사용자만 접근 가능
-//                .requestMatchers("/admin/**").hasRole("ADMIN")
+        // 1. CSRF 보호 설정: /api/** 경로는 비활성화, 나머지는 활성화
+        http.csrf(csrf -> csrf
+                .ignoringRequestMatchers("/api/**")
+        );
 
-                // 2. (로그인 필요한 규칙) /mypage/** 등 로그인이 필요한 경로는 인증된 사용자만
+        // 2. HTTP 요청에 대한 접근 권한 설정 (이하 동일)
+        http.authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/**", "/loginForm", "/login", "/css/**", "/js/**").permitAll()
                 .requestMatchers("/mypage/**").authenticated()
-                
-                // 3. (가장 마지막 규칙) 위에서 설정한 경로 외 나머지 모든 경로는 모두에게 허용
                 .anyRequest().permitAll()
         );
 
-        // 폼 로그인 및 로그아웃 설정은 기존과 동일합니다.
+        // 3. 폼 로그인 설정 (이하 동일)
         http.formLogin(form -> form
                 .loginPage("/loginForm")
                 .loginProcessingUrl("/login")
@@ -40,6 +42,7 @@ public class SecurityConfig {
                 .permitAll()
         );
 
+        // 4. 로그아웃 설정 (이하 동일)
         http.logout(logout -> logout
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/loginForm")
