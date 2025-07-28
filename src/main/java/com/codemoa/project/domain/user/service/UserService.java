@@ -1,5 +1,7 @@
 package com.codemoa.project.domain.user.service;
 
+import com.codemoa.project.domain.user.dto.request.UserFindRequest;
+import com.codemoa.project.domain.user.dto.request.UserPassUpdateRequest;
 import com.codemoa.project.domain.user.dto.request.UserSignUpRequest;
 import com.codemoa.project.domain.user.dto.response.UserResponse;
 import com.codemoa.project.domain.user.entity.LocalUser;
@@ -7,6 +9,7 @@ import com.codemoa.project.domain.user.entity.SnsUser;
 import com.codemoa.project.domain.user.entity.User;
 import com.codemoa.project.domain.user.entity.UserGrade;
 import com.codemoa.project.domain.user.mapper.SnsUserMapper;
+import com.codemoa.project.domain.user.mapper.UserMapper;
 import com.codemoa.project.domain.user.repository.LocalUserRepository;
 import com.codemoa.project.domain.user.repository.SnsUserRepository;
 import com.codemoa.project.domain.user.repository.UserGradeRepository;
@@ -15,6 +18,8 @@ import com.codemoa.project.domain.user.security.OAuth2UserLoginResult;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -30,7 +35,10 @@ public class UserService {
 	private final LocalUserRepository localUserRepository;
 	private final SnsUserRepository snsUserRepository;
 	private final UserGradeRepository userGradeRepository;
+	
 	private final PasswordEncoder passwordEncoder;
+	
+	private final UserMapper userMapper;
 	private final SnsUserMapper snsUserMapper;
 
 	// SNS 로그인
@@ -108,9 +116,30 @@ public class UserService {
 
         return newUser.getUserId();
     }
-
-
     
+	public List<User> findResult(UserFindRequest request) {
+    	List<User> user = new ArrayList<User>();
+    	String id = request.getUserId();
+    	String name = request.getUserName();
+    	String phone = request.getUserPhone();
+    	boolean isPassFind = !(request.getUserId() == null || request.getUserId().isBlank());
+    	
+    	if (!isPassFind) {
+    		user = userMapper.findId(name, phone);
+    	}
+    	else {
+    		User u = userMapper.findPass(id, name, phone);
+    		if (u != null) {
+    			user.add(userMapper.findPass(id, name, phone));
+    		}
+    	}
+    	return user;
+    }
+	
+	public void updatePass(UserPassUpdateRequest request) {
+		userMapper.updatePass(request.getUserId(), passwordEncoder.encode(request.getPass()));
+	}
+
     @Transactional(readOnly = true)
     public UserResponse getUserInfo(String userId) {
         User user = userRepository.findById(userId)

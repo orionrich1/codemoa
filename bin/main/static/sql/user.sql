@@ -88,14 +88,6 @@ VALUES ('oaeoae', '1234');
 
 select * from user;
 
-
-INSERT INTO ban_history (user_id, ban_day, ban_reason) VALUES ('oaeoae', 7,'도배');
-
-SELECT * FROM user u
-JOIN user_grade USING (grade_id)
-LEFT JOIN ban_history b ON u.user_id = b.user_id
-WHERE u.user_id='oaeoae';
-
 INSERT INTO user_grade (grade_id, grade_name, min_points) VALUES ('ADMIN', '관리자', 0);
 INSERT INTO user_grade (grade_id, grade_name, min_points) VALUES ('BRONZE', '브론즈', 0);
 INSERT INTO user_grade (grade_id, grade_name, min_points) VALUES ('SILVER', '실버', 1000);
