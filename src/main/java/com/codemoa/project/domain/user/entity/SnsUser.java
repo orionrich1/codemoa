@@ -14,7 +14,7 @@ public class SnsUser {
     @Column(name = "user_id")
     private String userId;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER)
     @MapsId
     @JoinColumn(name = "user_id")
     private User user;
@@ -25,8 +25,9 @@ public class SnsUser {
     @Column(name = "sns_id", nullable = false)
     private String snsId;
     
-    public SnsUser(User user, String snsType) {
+    public SnsUser(User user, String snsType, String snsId) {
         this.user = user;
         this.snsType = snsType;
+        this.snsId = snsId;
     }
 }

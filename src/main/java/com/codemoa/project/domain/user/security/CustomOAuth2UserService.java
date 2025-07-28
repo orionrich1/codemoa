@@ -2,27 +2,30 @@ package com.codemoa.project.domain.user.security;
 
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import com.codemoa.project.domain.user.entity.User;
 import com.codemoa.project.domain.user.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+// SNS 계정으로 로그인 하는 로직을 처리하는 클래스
+// user.service 패키지 안에 있는 UserDetailsServiceImpl 파일과 기능 자체는 유사함
 @RequiredArgsConstructor
 @Service
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
 	private final UserService userService;
-	private final HttpServletRequest request;
+	
+	@Autowired
+	private HttpServletRequest request;
 
 	// 결과와 유저 정보를 동시에 받아오기 위해 사용
 
@@ -42,10 +45,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 		} else if (user.getStatus() == OAuth2UserLoginResult.Status.NEED_SIGN) {
 			request.getSession().setAttribute("provider", provider);
 			request.getSession().setAttribute("providerId", user.getProviderId());
-
-			// 회원가입 페이지로 리다이렉트
-//			throw new OAuth2AuthenticationRedirectException("/signup/oauth");
-			return null;
+			 throw new OAuth2AuthenticationException(new OAuth2Error("need_signup"), "회원가입 필요");
 		} else {
 			throw new OAuth2AuthenticationException("SNS 인증 실패");
 		}

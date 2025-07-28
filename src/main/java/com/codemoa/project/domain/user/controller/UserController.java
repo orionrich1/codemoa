@@ -1,9 +1,9 @@
 package com.codemoa.project.domain.user.controller;
 
-import com.codemoa.project.domain.user.dto.request.UserLoginRequest;
 import com.codemoa.project.domain.user.dto.request.UserSignUpRequest;
-import com.codemoa.project.domain.user.dto.response.UserResponse;
 import com.codemoa.project.domain.user.service.UserService;
+
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -22,6 +22,14 @@ public class UserController {
     public String loginForm() {
         return "views/user/loginForm";
     }
+    
+    // SNS 계정으로 접속한 상태일 때, 연동 해제 요청
+    @GetMapping("/snsDisconnect")
+    public String snsDisconnect(HttpSession session){
+    	session.removeAttribute("provider"); 
+    	session.removeAttribute("providerId");
+    	return "redirect:/loginForm";
+    }
 
     @GetMapping("/joinForm")
     public String joinForm() {
@@ -29,8 +37,12 @@ public class UserController {
     }
 
     @PostMapping("/join")
-    public String join(UserSignUpRequest request) {
-        userService.signUp(request);
+    public String join(UserSignUpRequest request, HttpServletRequest httpRequest) {
+    	HttpSession session = httpRequest.getSession(false);
+        String snsProvider = (String) session.getAttribute("provider");
+        String snsId = (String) session.getAttribute("providerId");
+        
+        userService.signUp(request, snsProvider, snsId);
         return "redirect:/loginForm";
     }
 

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+// SNS 계정 접속을 시도했을 때, 결과값 반환용으로 사용하는 클래스
 @NoArgsConstructor
 @Getter
 @Setter

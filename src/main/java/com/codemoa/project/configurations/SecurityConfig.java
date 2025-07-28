@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.codemoa.project.domain.user.security.CustomLoginSuccessHandler;
 import com.codemoa.project.domain.user.security.CustomOAuth2UserService;
 
 @Configuration
@@ -21,6 +22,12 @@ public class SecurityConfig {
 	@Autowired
 	private CustomOAuth2UserService customOAuth2UserService;
 	
+    private final CustomLoginSuccessHandler customLoginSuccessHandler;
+
+    public SecurityConfig(@Lazy CustomLoginSuccessHandler customLoginSuccessHandler) {
+        this.customLoginSuccessHandler = customLoginSuccessHandler;
+    }
+    
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -43,18 +50,25 @@ public class SecurityConfig {
         http
         	.formLogin(form -> form
                 .loginPage("/loginForm")
-                .loginProcessingUrl("/login")
-                .defaultSuccessUrl("/")
+                .loginProcessingUrl("/login")                
+                // 성공 시 Handler 실행, 만약 SNS 계정이랑 연동된 상태면, 로그인한 계정과 SNS 계정을 연동함
+                .successHandler(customLoginSuccessHandler)
                 .permitAll()
-                
         	)
-        	// SNS 로그인
+        	// SNS 로그인 시 실행되는 메소드
         	.oauth2Login(oauth2 -> oauth2
     	        .loginPage("/loginForm") 
     	        .userInfoEndpoint(userInfo -> userInfo
     	            .userService(customOAuth2UserService) 
     	        )
-    	        .defaultSuccessUrl("/") 
+    	        .successHandler(customLoginSuccessHandler)
+    	        .failureHandler((request, response, exception) -> {
+    	            if (exception.getMessage().contains("회원가입 필요")) {
+    	                response.sendRedirect("/loginForm");
+    	            } else {
+    	                response.sendRedirect("/loginForm?error");
+    	            }
+    	        })
     	    );
         
         http.logout(logout -> logout
