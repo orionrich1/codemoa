@@ -1,4 +1,4 @@
-//종효
+
 package com.codemoa.project.domain.recruit.mapper;
 
 import java.util.List;
@@ -12,6 +12,8 @@ import com.codemoa.project.domain.recruit.entity.TeamRecruit;
 @Mapper
 public interface TeamRecruitMapper {
 
+	public void incrementViewCount(int recruitId);
+	
 	public void updateTeamRecruit(TeamRecruit teamRecruit);
 	
 	public String userIdCheck(int recruitId);

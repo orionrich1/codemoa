@@ -18,4 +18,6 @@ public interface TeamRecruitService {
     TeamRecruit getTeamRecruit(int recruitId);	
 	
 	void insertTeamRecruit(TeamRecruit teamRecruit);
+	
+	void increaseViewCount(int recruitId);
 }

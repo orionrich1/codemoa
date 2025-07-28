@@ -165,6 +165,8 @@ public class TeamRecruitController {
 	public String getTeamRecruit(Model model, 
 			@RequestParam("recruitId") int recruitId,
 			HttpSession session) {
+		teamRecruitService.increaseViewCount(recruitId);
+		
 		model.addAttribute("teamRecruit", teamRecruitService.getTeamRecruit(recruitId));
 		
 		String loginId = (String) session.getAttribute("loginId");

@@ -2,6 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.codemoa.project.domain.recruit.mapper.TeamRecruitMapper">
 
+<update id="incrementViewCount" parameterType="int">
+UPDATE recruitbbs
+SET view_count = view_count + 1
+WHERE recruit_id = #{recruitId}
+</update>
+
 <select id="userIdCheck" parameterType="int" resultType="string">
 SELECT user_id
 FROM recruitbbs
