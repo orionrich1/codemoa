@@ -67,15 +67,29 @@ layout:decorate="~{layouts/default_layout}">
 					<div class="card-body">
 						<div class="row">
 							<div class="col-md-6">
-	<!-- 체크박스 형태로 -->	<div><strong>모집 분류 :</strong> <span th:text="${teamRecruit.recruitType}"></span></div>
-	<!-- 날짜 지정 형태로 -->	<div><strong>모집 기간 :</strong> <span th:text="${teamRecruit.recruitPeriod}"></span></div>
-	<!-- 날짜 지정 형태로 -->	<div><strong>활동 기간 :</strong> <span th:text="${teamRecruit.activityPeriod}"></span></div>
+	<!-- 체크박스 형태로 -->	<div><strong>모집 분류 :</strong> 
+										<th:block th:switch="${teamRecruit.recruitType}">
+											<span th:case="'TEAM_RECRUIT'">팀원 모집</span>
+											<span th:case="'TEAM_JOIN'">팀 가입</span>
+											<span th:case="*">기타</span>
+										</th:block>
+									</div>
+									<div><Strong>모집 상태 : </Strong><span th:text="${teamRecruit.statusName}">모집중</span> </div>
 	<!-- 모집분류에서 팀원으로 선택시 잠김 -->	<div><strong>모집 인원 : </strong> <span th:text="${teamRecruit.totalMembers}"></span> 명 /
 					<strong>남은 인원: </strong><span th:text="${teamRecruit.remainingMembers}"> </span>명 
 					</div>
+	<!-- 날짜 지정 형태로 -->	<div><strong>모집 기간 : </strong> <span th:text="${teamRecruit.recruitPeriod}"></span></div>
+	<!-- 날짜 지정 형태로 -->	<div><strong>활동 기간 :</strong> <span th:text="${teamRecruit.activityPeriod}"></span></div>
 				</div>
 					<div class="col-md-6">
-					<div><strong>진행 방식 : </strong><span th:text="${teamRecruit.progressType}"></span></div>
+					<div><strong>진행 방식 : </strong>
+						<th:block th:switch="${teamRecruit.progressType}">
+							<span th:case="'ONLINE'">온라인</span>
+							<span th:case="'OFFLINE'">오프라인</span>
+							<span th:case="'MIXED'">혼합</span>
+							<span th:case="*">기타</span>
+						</th:block>
+					</div>
 					<div><strong>연락 방법 : </strong><span th:text="${teamRecruit.contact}"></span></div>
 					<div><strong>기술 스택 : </strong><span th:text="${teamRecruit.techStack}"></span></div>
 					<div><strong>지원 방법 : </strong><span th:text="${teamRecruit.applyGuide}"></span></div>
@@ -97,7 +111,7 @@ layout:decorate="~{layouts/default_layout}">
 						<div class="mb-3">
 							<strong>첨부파일 : </strong>
 							<th:block th:if="${teamRecruit.attachmentUrl != null}">
-								<a th:href="@{|/files/${teamRecruit.attachmentUrl}|}" class="text-primary">다운로드</a>
+								<a th:href="@{'/files/' + ${teamRecruit.attachmentUrl}}" class="text-primary">다운로드</a>
 							</th:block>
 							<th:block th:unless="${teamRecruit.attachmentUrl != null}">
 								첨부파일 없음
@@ -110,7 +124,7 @@ layout:decorate="~{layouts/default_layout}">
 				</div>
 				
 			<div class="text-center my-4"
-			th: if="${session.loginId == teamRecruit.userId}">
+			th:if="${loginId == teamRecruit.userId}">
 				<button type="button" class="btn btn-warning mx-2" id="detailUpdate">수정</button>
 				<button type="button" class="btn btn-danger mx-2" id="detailDelete">삭제</button>
 			</div>

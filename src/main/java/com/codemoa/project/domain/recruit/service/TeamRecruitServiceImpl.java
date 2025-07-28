@@ -29,17 +29,43 @@ public class TeamRecruitServiceImpl implements TeamRecruitService {
     
     @Override
     public void insertTeamRecruit(TeamRecruit teamRecruit) {
-    	teamRecruitMapper.insertteamRecruit(teamRecruit);
+    	teamRecruitMapper.insertTeamRecruit(teamRecruit);
     }
     
     @Override
     public Map<String, Object> teamRecruitList(int pageNum, String type, String keyword) {
         log.info("TeamRecruitList: teamRecruitList({}, {}, {})", pageNum, type, keyword);
-
+        log.info("teamRecruitList 호출 - type: '{}', keyword: '{}'", type, keyword);
+        
         int currentPage = pageNum;
         int startRow = (currentPage - 1) * PAGE_SIZE;
-        int listCount = teamRecruitMapper.countTeamRecruit(type, keyword);
-        List<TeamRecruit> teamRecruitList = teamRecruitMapper.TeamRecruitList(startRow, PAGE_SIZE, type, keyword);
+        
+        Map<String, Object> params = new HashMap<>();
+        params.put("startRow", startRow);
+        params.put("num", PAGE_SIZE);
+        params.put("type", type);
+        params.put("keyword", keyword);
+        
+        int listCount = teamRecruitMapper.countTeamRecruit(params);
+        List<TeamRecruit> teamRecruitList = teamRecruitMapper.TeamRecruitList(params);
+        
+        for (TeamRecruit tr : teamRecruitList) {
+        	if("TEAM_RECRUIT".equals(tr.getRecruitType())) {
+        		tr.setRecruitTypeName("팀원 모집");
+        	} else if ("TEAM_JOIN".equals(tr.getRecruitType())) {
+        		tr.setRecruitTypeName("참가 희망");
+        	} else{
+                tr.setRecruitTypeName("미정");
+        }
+        	if("RECRUITING".equals(tr.getStatus())) {
+        		tr.setStatusName("모집중");
+        		} else if ("COMPLETED".equals(tr.getStatus())) {
+        			tr.setStatusName("모집 완료");
+        		} else {
+        			tr.setStatusName("미정");
+        		}
+        	}
+        
         int pageCount = (int) Math.ceil((double) listCount / PAGE_SIZE);
         int startPage = (currentPage - 1) / PAGE_GROUP * PAGE_GROUP + 1;
         int endPage = startPage + PAGE_GROUP - 1;
@@ -67,7 +93,7 @@ public class TeamRecruitServiceImpl implements TeamRecruitService {
     @Override
     public void addTeamRecruit(TeamRecruit teamRecruit) {
         log.info("TeamRecruitServiceImpl: addTeamRecruit()");
-        teamRecruitMapper.insertteamRecruit(teamRecruit);
+        teamRecruitMapper.insertTeamRecruit(teamRecruit);
     }
 
     @Override

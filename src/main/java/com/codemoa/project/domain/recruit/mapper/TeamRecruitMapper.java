@@ -16,21 +16,13 @@ public interface TeamRecruitMapper {
 	
 	public String userIdCheck(int recruitId);
 
-	public void insertteamRecruit(TeamRecruit teamRecruit);
+	public void insertTeamRecruit(TeamRecruit teamRecruit);
 	
-	public List<TeamRecruit> TeamRecruitList(
-			@Param("startRow") int startRow, 
-			@Param("num") int num, 
-			@Param("type") String type,
-			@Param("keyword") String keyword
-			);
+	public List<TeamRecruit> TeamRecruitList(Map<String, Object> params);
 	
 	public int getTeamRecruitCount();
 	
-	public int countTeamRecruit(
-			@Param("keyword") String keyword,
-			@Param("type") String type
-			);
+	public int countTeamRecruit(Map<String, Object> params);
 	
 	public TeamRecruit getTeamRecruit(int recruitId);
 	

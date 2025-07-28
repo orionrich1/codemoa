@@ -8,8 +8,7 @@ FROM recruitbbs
 WHERE recruit_id = #{recruitId}
 </select>
 
-<insert id="insertTeamRecruit" 
-parameterType="com.codemoa.project.domain.recruit.entity.TeamRecruit">
+<insert id="insertTeamRecruit" parameterType="com.codemoa.project.domain.recruit.entity.TeamRecruit">
 INSERT INTO recruitbbs(
 user_id, 
 contest_title, 
@@ -38,7 +37,7 @@ VALUES(#{userId}, #{contestTitle}, #{recruitType}, #{recruitPeriod},
 </insert>
 
 <select id="getTeamRecruit" parameterType="int"
-resultType="TeamRecruitResultMap">
+resultMap="TeamRecruitResult">
 SELECT *
 FROM recruitbbs
 WHERE recruit_id = #{recruitId}
@@ -57,25 +56,26 @@ reg_date,
 view_count
 FROM recruitbbs
 WHERE 1=1
-	<if test="keyword != null and keyword !='' and type !=null and type !=''">
+	<if test="keyword != null and keyword.trim() !='' and type !=null and type.trim() !=''">
+		AND
 		<choose>
 			<when test="type == 'title'">
-				AND title LIKE CONCAT('%', #{keyword},'%')
+				title LIKE CONCAT('%', #{keyword},'%')
 			</when>
 			<when test="type == 'userId'">
-				AND user_id LIKE CONCAT('%', #{keyword},'%')
+				user_id LIKE CONCAT('%', #{keyword},'%')
 			</when>
 			<when test="type == 'content'">
-				AND content LIKE CONCAT('%', #{keyword},'%')
+				content LIKE CONCAT('%', #{keyword},'%')
 			</when>
 			<when test="type == 'recruitType'">
-				AND recruitType LIKE CONCAT('%', #{keyword},'%')
+				recruit_type LIKE CONCAT('%', #{keyword},'%')
 			</when>
 			<when test="type == 'status'">
-				AND status LIKE CONCAT('%', #{keyword},'%')
+				status LIKE CONCAT('%', #{keyword},'%')
 			</when>
 			<when test="type == 'techStack'">
-				AND techStack LIKE CONCAT('%', #{keyword},'%')
+				tech_stack LIKE CONCAT('%', #{keyword},'%')
 			</when>
 			<otherwise>
 			title Like CONCAT('%', #{keyword},'%')
@@ -84,40 +84,44 @@ WHERE 1=1
 	</if>
 
 ORDER BY recruit_id DESC
-LIMIT #{num} OFFSET, #{startRow}
+LIMIT #{num} OFFSET #{startRow}
 </select>
 
-<select id="getTeamRecruitCount" parameterType="map" resultType="int">
+<select id="countTeamRecruit" parameterType="map" resultType="int">
 SELECT
 COUNT(*)
 FROM recruitbbs
   where 1=1
-      <if test="keyword != null and keyword != '' and type !=null and type !=''">
+      <if test="keyword != null and keyword.trim() != '' and type !=null and type.trim() !=''">
+        AND
         <choose>
           <when test="type == 'title'">
-            AND title LIKE CONCAT('%', #{keyword}, '%')
+           title LIKE CONCAT('%', #{keyword}, '%')
           </when>
           <when test="type == 'userId'">
-            AND user_id LIKE CONCAT('%', #{keyword}, '%')
+           user_id LIKE CONCAT('%', #{keyword}, '%')
           </when>
           <when test="type == 'content'">
-            AND content LIKE CONCAT('%', #{keyword}, '%')
+            content LIKE CONCAT('%', #{keyword}, '%')
           </when>
            <when test="type == 'recruitType'">
-            AND recruitType LIKE CONCAT('%', #{keyword}, '%')
+            recruit_type LIKE CONCAT('%', #{keyword}, '%')
           </when>
            <when test="type == 'status'">
-            AND status LIKE CONCAT('%', #{keyword}, '%')
+            status LIKE CONCAT('%', #{keyword}, '%')
           </when>
            <when test="type == 'techStack'">
-            AND techStack LIKE CONCAT('%', #{keyword}, '%')
+            tech_stack LIKE CONCAT('%', #{keyword}, '%')
           </when>
+          <otherwise>
+          1=1
+          </otherwise>
         </choose>
       </if>
   </select>
 
 
-<resultMap id="TeamRecruitResultMap" type="com.codemoa.project.domain.recruit.entity.TeamRecruit">
+<resultMap id="TeamRecruitResult" type="com.codemoa.project.domain.recruit.entity.TeamRecruit">
     <id property="recruitId" column="recruit_id"/>
     <result property="userId" column="user_id"/>
     <result property="contestTitle" column="contest_title"/>

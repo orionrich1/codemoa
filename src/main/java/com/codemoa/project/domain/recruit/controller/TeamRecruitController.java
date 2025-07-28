@@ -1,4 +1,3 @@
-//종효
 package com.codemoa.project.domain.recruit.controller;
 
 import java.io.File;
@@ -34,6 +33,7 @@ import com.codemoa.project.domain.recruit.entity.TeamRecruit;
 import com.codemoa.project.domain.recruit.service.TeamRecruitService;
 
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -58,18 +58,20 @@ public class TeamRecruitController {
 	
 	
 	@GetMapping("/files/{filename}")
-	public ResponseEntity<Resource> downloadFile(@PathVariable String filename) throws IOException{
-		File file = new File(UPLOAD_DIR + filename);
-		if(!file.exists()) {
-			throw new IOException("파일을 찾을 수 없습니다 : " + filename);
-		}
-		Resource resource = new UrlResource(file.toURI());
-		String encodedFileName = URLEncoder.encode(file.getName(), "UTF-8").replaceAll("\\+", "%20");
+	public ResponseEntity<Resource> downloadFile(@PathVariable ("filename") String filename) throws IOException{
+		Path filePath = Paths.get("src/main/resources/static/files/" + filename);
 		
+		Resource resource = new UrlResource(filePath.toUri());
+		if(!resource.exists() || !resource.isReadable()) {
+			return ResponseEntity.notFound().build();
+		}
+		
+		String encodedFileName = URLEncoder.encode(resource.getFilename(), "UTF-8").replaceAll("\\+", "%20");
+
 		return ResponseEntity.ok()
-				.contentType(MediaType.APPLICATION_OCTET_STREAM)
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + encodedFileName + "\"")
-				.body(resource);
+		        .contentType(MediaType.APPLICATION_OCTET_STREAM)
+		        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + encodedFileName + "\"")
+		        .body(resource);
 	} 
 	
 
@@ -87,7 +89,12 @@ public class TeamRecruitController {
 	    //String loginUserId = (String) session.getAttribute("loginUserId");
 	    //teamRecruit.setUserId(loginUserId);
 		
-		log.info("팀 모집 등록 요청 title={}", teamRecruit.getTitle());
+		if("TEAM_JOIN".equals(teamRecruit.getRecruitType())) {
+			teamRecruit.setRemainingMembers(0);
+			if(teamRecruit.getStatus() == null || teamRecruit.getStatus().isEmpty()) {
+				teamRecruit.setStatus("CLOSED");
+			}			
+		}
 		
 		//파일 업로드 처리
 		 try {
@@ -142,21 +149,27 @@ public class TeamRecruitController {
 		}
 		TeamRecruit teamRecruit = teamRecruitService.getTeamRecruit(recruitId);
 		model.addAttribute("teamRecruit", teamRecruit);
-		return "views/updateForm";
+		return "views/recruit/updateForm";
 	}
 	
 		
-	@GetMapping("/showAddForm")
+	@GetMapping("/addTeamRecruit")
 	public String addTeamRecruit(Model model){
 		TeamRecruit recruit = new TeamRecruit();
 		recruit.setRecruitType("");
 		model.addAttribute("teamRecruit", recruit);
-		return "views/recruit/teamRecruitwriteForm";
+		return "views/recruit/teamRecruitWriteForm";
 	}
 	
 	@GetMapping("/TeamRecruitDetail")
-	public String getTeamRecruit(Model model, @RequestParam("recruitId") int recruitId) {
+	public String getTeamRecruit(Model model, 
+			@RequestParam("recruitId") int recruitId,
+			HttpSession session) {
 		model.addAttribute("teamRecruit", teamRecruitService.getTeamRecruit(recruitId));
+		
+		String loginId = (String) session.getAttribute("loginId");
+		model.addAttribute("loginId", loginId);
+		
 		return "views/recruit/teamRecruitDetail";
 	}
 	
@@ -165,11 +178,15 @@ public class TeamRecruitController {
 			@RequestParam(value = "pageNum", required=false, defaultValue="1") int pageNum,
 			@RequestParam(value = "type", required=false, defaultValue="") String type,
 			@RequestParam(value = "keyword", required=false, defaultValue="") String keyword
-			
 			) {
-		Map<String,Object> modelMap = teamRecruitService.teamRecruitList(pageNum, type, keyword);
+		if("null".equalsIgnoreCase(type)) type ="";
+		if("null".equalsIgnoreCase(keyword)) keyword = "";
 		
-		model.addAllAttributes(modelMap);
+		log.info("TeamRecruitList: teamRecruitList({}, {}, {})", pageNum, type, keyword);
+		model.addAllAttributes(teamRecruitService.teamRecruitList(pageNum, type.trim(), keyword.trim()));
+		
+		model.addAttribute("type", type);
+		model.addAttribute("keyword", keyword);
 		
 		return "views/recruit/teamRecruitList";
 	}

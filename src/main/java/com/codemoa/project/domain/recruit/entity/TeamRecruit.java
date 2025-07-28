@@ -1,4 +1,3 @@
-//종효
 package com.codemoa.project.domain.recruit.entity;
 
 import java.time.LocalDateTime;
@@ -33,8 +32,28 @@ public class TeamRecruit {
     private int viewCount;			//열람 횟수 기록
     private LocalDateTime regDate;		// 작성 시간
     private LocalDateTime updateDate;		//수정일
-
+    private String statusName;
+    private String recruitTypeName;
     // --- Getters and Setters ---
 
+    public String getRecruitTypeName() {
+    	if("TEAM_RECRUIT".equals(this.recruitType)) {
+    		return "팀원 모집";
+    	} else if("TEAM_JOIN".equals(this.recruitType)) {
+    		return "참가 희망";
+    	} else {
+    		return "미정";
+    	}
+    }
+    
+    public String getStatusName() {
+    	if("RECRUITING".equals(this.status)) {
+    		return "모집중";
+    	} else if("COMPLETED".equals(this.status)) {
+    		return "모집 완료";
+    	} else {
+    		return "미정";
+    	}
+    }
     
 }

@@ -38,10 +38,10 @@
 		//TEAM_JOIN 선택시 인원 입력 기능 잠금 적용 함수
 		function toggleMemberInputs(){
 			const hasJoin = recruitTypeHidden.value === 'TEAM_JOIN';
-			totalMembersInput.disabled = hasJoin;
+			
 			remainingMembersInput.disabled = hasJoin;
 			if(hasJoin){
-						totalMembersInput.value = '';
+			
 						remainingMembersInput.value = '';
 			}
 		}
