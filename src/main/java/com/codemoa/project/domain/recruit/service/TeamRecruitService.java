@@ -3,10 +3,14 @@ package com.codemoa.project.domain.recruit.service;
 
 import java.util.Map;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.codemoa.project.domain.recruit.entity.TeamRecruit;
 
 public interface TeamRecruitService {
 
+	void updateTeamRecruit(TeamRecruit teamRecruit, MultipartFile uploadFile) throws Exception;
+	
 	void updateTeamRecruit(TeamRecruit teamRecruit);
 	
     Map<String, Object> teamRecruitList(int pageNum, String type, String keyword);

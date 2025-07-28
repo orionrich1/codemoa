@@ -41,18 +41,46 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TeamRecruitController {
 	
-	private final String UPLOAD_DIR = System.getProperty("user.dir") +  "/uploads/files/";
+	private final String UPLOAD_DIR = Paths.get(System.getProperty("user.dir"), "src/main/resources/static/files").toString();
 	
-	@GetMapping("/TeamRecruitUpdate")
-	public String showUpdateForm(@RequestParam("recruitId") int recruitId,Model model) {
-		TeamRecruit recruit = teamRecruitService.getTeamRecruit(recruitId);
-		model.addAttribute("teamRecruit", recruit);
-		return "views/recruit/teamRecruitUpdate";
+	@GetMapping("/recruit/updateForm")
+	public String showUpdateForm(@RequestParam("recruitId") int recruitId, HttpSession session, Model model, HttpServletResponse response) throws IOException {
+	   
+		  // 로그인 체크 (추후 로그인 구현 완료 시 활성화)
+		/*
+		String loginUserId = (String) session.getAttribute("loginUserId");
+	    if(loginUserId == null) {
+	        response.sendRedirect("/login"); // 로그인 페이지로 리다이렉트
+	        return null;
+	    }
+
+	    boolean userIdCheck = teamRecruitService.userIdCheck(recruitId, loginUserId);
+	    if(!userIdCheck) {
+	        response.setContentType("text/html; charset=utf-8");
+	        PrintWriter out = response.getWriter();
+	        out.print("<script>alert('작성자가 일치하지 않습니다.'); history.back();</script>");
+	        out.flush();
+	        return null;
+	    }
+		 	*/
+	    TeamRecruit teamRecruit = teamRecruitService.getTeamRecruit(recruitId);
+	    model.addAttribute("teamRecruit", teamRecruit);
+	    return "views/recruit/teamRecruitUpdateForm";
 	}
 	
 	@PostMapping("/TeamRecruitUpdate")
-	public String updateTeamRecruit(@ModelAttribute TeamRecruit teamRecruit) {
-		teamRecruitService.updateTeamRecruit(teamRecruit);
+	public String updateTeamRecruit(
+			@ModelAttribute TeamRecruit teamRecruit,
+			@RequestParam(value = "attachmentFile", required = false) MultipartFile attachmentFile,
+			RedirectAttributes redirectAttrs	) {
+		try {
+			teamRecruitService.updateTeamRecruit(teamRecruit, attachmentFile);
+			redirectAttrs.addFlashAttribute("msg", "수정이 완료되었습니다.");
+		} catch (Exception e) {
+			log.error("수정 중 오류 발생", e);
+			redirectAttrs.addFlashAttribute("errorMsg", "수정중 오류가 발생되었습니다.");
+			return "redirect:/recruit/updateForm?recruitId=" + teamRecruit.getRecruitId();
+		}
 		return "redirect:/recruit/TeamRecruitDetail?recruitId=" + teamRecruit.getRecruitId();
 	}
 	
@@ -133,24 +161,6 @@ public class TeamRecruitController {
 			
 			)
 	*/
-	
-	@GetMapping("/updateForm")
-	public String updateTeamRecruit(Model model, 
-			HttpServletResponse response,
-			@RequestParam("recruitId") int recruitId, 
-			@RequestParam("userId") String userId) throws IOException {
-		boolean userIdCheck = teamRecruitService.userIdCheck(recruitId, userId);
-		if(!userIdCheck) {
-			response.setContentType("text/html; charset=utf-8");
-			PrintWriter out = response.getWriter();
-			out.print("<script>alert('작성자가 일치하지 않습니다.'); history.back();</script>");
-			out.flush();
-			return null;
-		}
-		TeamRecruit teamRecruit = teamRecruitService.getTeamRecruit(recruitId);
-		model.addAttribute("teamRecruit", teamRecruit);
-		return "views/recruit/updateForm";
-	}
 	
 		
 	@GetMapping("/addTeamRecruit")

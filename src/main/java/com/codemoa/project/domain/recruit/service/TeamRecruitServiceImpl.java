@@ -1,10 +1,13 @@
 package com.codemoa.project.domain.recruit.service;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.codemoa.project.domain.recruit.entity.TeamRecruit;
 import com.codemoa.project.domain.recruit.mapper.TeamRecruitMapper;
@@ -17,6 +20,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TeamRecruitServiceImpl implements TeamRecruitService {
 
+	@Value("${file.upload.dir}")
+	private String uploadDir;
+	
+	
     private static final int PAGE_SIZE = 10;
     private static final int PAGE_GROUP = 10;
 
@@ -28,9 +35,27 @@ public class TeamRecruitServiceImpl implements TeamRecruitService {
     }
     
     @Override
+    public void updateTeamRecruit(TeamRecruit teamRecruit, MultipartFile uploadFile) throws Exception {
+    	if (uploadFile != null && !uploadFile.isEmpty()) {
+    		String fileName = uploadFile.getOriginalFilename();
+    		
+    		String savePath = new File(uploadDir).getAbsolutePath() + "/";
+    		
+    		File folder = new File(savePath);
+    		if (!folder.exists()) folder.mkdirs();
+    		File dest = new File(savePath + fileName);
+    		uploadFile.transferTo(dest);
+    		
+    		teamRecruit.setAttachmentUrl(fileName);
+    	}
+    	teamRecruitMapper.updateTeamRecruit(teamRecruit);    
+   }
+    
+    @Override
     public void updateTeamRecruit(TeamRecruit teamRecruit) {
     	teamRecruitMapper.updateTeamRecruit(teamRecruit);
     }
+    
     
     @Override
     public void insertTeamRecruit(TeamRecruit teamRecruit) {
