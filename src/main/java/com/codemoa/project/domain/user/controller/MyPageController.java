@@ -11,6 +11,7 @@ import com.codemoa.project.domain.user.entity.User;
 import com.codemoa.project.domain.user.security.CustomOAuth2User;
 import com.codemoa.project.domain.user.security.CustomUserDetails;
 import com.codemoa.project.domain.user.service.MyPageService;
+import com.codemoa.project.domain.user.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MyPageController {
 	private final MyPageService myPageService;
+	private final UserService userService;
 
 	@GetMapping
 	public String toMain() {
@@ -33,9 +35,25 @@ public class MyPageController {
 		} else if (principalUser instanceof CustomOAuth2User) {
 			user = ((CustomOAuth2User) principalUser).getUser();
 		}
-		
-		model.addAttribute("myPageUser", myPageService.checkSnsLinked(user));		
-
+		model.addAttribute("myPageUser", myPageService.checkSnsLinked(user));
 		return "views/user/mypage/myPage";
+	}
+	
+	@GetMapping("/snsUnlink")
+	public String snsUnlink(@AuthenticationPrincipal Object principalUser) {
+		User user = null;
+		if (principalUser instanceof CustomUserDetails) {
+			user = ((CustomUserDetails) principalUser).getUser();
+		} else if (principalUser instanceof CustomOAuth2User) {
+			user = ((CustomOAuth2User) principalUser).getUser();
+		}
+		
+		// 세션 만료로 로그아웃 되었을 경우
+		if (user == null) {
+			return "redirect:/my-pages/";
+		}
+		
+		userService.unlinkSnsAccount(user.getUserId());
+		return "redirect:/my-pages/";
 	}
 }

@@ -57,7 +57,8 @@
 	     <div class="d-flex gap-2 my-4">
 	         <a href="/account/update" class="btn btn-primary">정보 수정</a>
 	         <a href="/account/delete" class="btn btn-danger">계정 탈퇴</a>
-	         <a th:if="${myPageUser.isSnsLinked == true}" href="/account/unlink-sns" class="btn btn-warning text-dark">SNS 연동 해제</a>
+	         <a th:if="${myPageUser.isSnsLinked == true}" href="/my-pages/snsUnlink"
+	         	class="btn btn-warning text-dark" id="snsUnlinkBtn">SNS 연동 해제</a>
 	     </div>
 	     <hr>
 	
@@ -67,21 +68,33 @@
 		    <div class="d-flex flex-column gap-3">
 		        <a href="/mypage/posts" class="activity-btn">
 		            <!-- 글 아이콘 (펜) -->
-
+					<i class="bi bi-pen me-2"></i>
 		            내가 쓴 글 목록
 		        </a>
 		        <a href="/mypage/scraps" class="activity-btn">
 		            <!-- 스크랩 아이콘 (별) -->
-
+					<i class="bi bi-star me-2"></i>
 		            내가 스크랩한 글 목록
 		        </a>
 		        <a href="/mypage/diary" class="activity-btn">
 		            <!-- 다이어리 아이콘 (노트) -->
-
+					<i class="bi bi-clipboard2 me-2"></i>
 		            개발 다이어리
 		        </a>
 		    </div>
 		</div>
 	 </div>
+	 
+	 <script>
+		document.addEventListener('DOMContentLoaded', function () {
+			document.querySelector("#snsUnlinkBtn").addEventListener('click', function(e){
+				var doUnlink = confirm("정말 해제하시겠습니까?");
+				if (!doUnlink){
+					e.preventDefault();
+					return false;
+				}
+			});
+		});
+	 </script>
 </div>
 </html>

@@ -75,6 +75,10 @@ public class UserService {
 		snsUserMapper.linkSnsAccount(userId, provider, providerId);
 	}
 	
+	public void unlinkSnsAccount(String userId) {
+		snsUserMapper.unlinkSnsAccount(userId);	
+	}
+	
     @Transactional
     public String signUp(UserSignUpRequest request, String snsProvider, String snsProviderId) {
         if (userRepository.existsById(request.getUserId())) {

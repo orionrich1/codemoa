@@ -51,7 +51,7 @@ public class SecurityConfig {
         	.formLogin(form -> form
                 .loginPage("/loginForm")
                 .loginProcessingUrl("/login")                
-                .defaultSuccessUrl("/")
+                .successHandler(customLoginSuccessHandler)
                 .permitAll()
         	)
         	// SNS 로그인 시 실행되는 메소드

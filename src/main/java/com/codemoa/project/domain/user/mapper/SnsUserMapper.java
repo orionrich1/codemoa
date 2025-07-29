@@ -11,4 +11,6 @@ public interface SnsUserMapper {
 		    @Param("provider") String provider,
 		    @Param("providerId") String providerId
 		);
+	
+	public void unlinkSnsAccount(String userId);
 }

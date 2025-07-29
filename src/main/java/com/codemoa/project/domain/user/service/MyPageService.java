@@ -25,10 +25,10 @@ public class MyPageService {
 		myData.setUser(user);
 		if (snsType != null && !snsType.isBlank()) {
 			myData.setSnsLinked(true);
-			
+
 			if (snsType.equals("google"))
 				myData.setSnsType("구글");
-			else if(snsType.equals("kakao"))
+			else if (snsType.equals("kakao"))
 				myData.setSnsType("카카오");
 		}
 
