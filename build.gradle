@@ -51,3 +51,7 @@ implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+configurations.all {
+    exclude group: 'commons-logging', module: 'commons-logging'
+}
