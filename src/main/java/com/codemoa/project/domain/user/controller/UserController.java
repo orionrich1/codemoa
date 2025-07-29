@@ -1,12 +1,19 @@
 package com.codemoa.project.domain.user.controller;
 
-import com.codemoa.project.domain.user.dto.request.UserLoginRequest;
+import com.codemoa.project.domain.user.dto.request.UserFindRequest;
+import com.codemoa.project.domain.user.dto.request.UserPassUpdateRequest;
 import com.codemoa.project.domain.user.dto.request.UserSignUpRequest;
-import com.codemoa.project.domain.user.dto.response.UserResponse;
+import com.codemoa.project.domain.user.entity.User;
 import com.codemoa.project.domain.user.service.UserService;
+
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +29,14 @@ public class UserController {
     public String loginForm() {
         return "views/user/loginForm";
     }
+    
+    // SNS 계정으로 접속한 상태일 때, 연동 해제 요청
+    @GetMapping("/snsDisconnect")
+    public String snsDisconnect(HttpSession session){
+    	session.removeAttribute("provider"); 
+    	session.removeAttribute("providerId");
+    	return "redirect:/loginForm";
+    }
 
     @GetMapping("/joinForm")
     public String joinForm() {
@@ -29,8 +44,14 @@ public class UserController {
     }
 
     @PostMapping("/join")
-    public String join(UserSignUpRequest request) {
-        userService.signUp(request);
+    public String join(UserSignUpRequest request, HttpServletRequest httpRequest) {
+    	HttpSession session = httpRequest.getSession(false);
+        String snsProvider = (String) session.getAttribute("provider");
+        String snsId = (String) session.getAttribute("providerId");
+        
+        userService.signUp(request, snsProvider, snsId);
+    	session.removeAttribute("provider"); 
+    	session.removeAttribute("providerId");
         return "redirect:/loginForm";
     }
 
@@ -53,6 +74,44 @@ public class UserController {
 	 * session.invalidate(); return "redirect:/loginForm"; }
 	 */
 
+    // 아이디 찾기
+    @GetMapping("/findId")
+    public String findId() {
+    	return "views/user/findId";
+    }
+    
+    // 비밀번호 찾기
+    @GetMapping("/findPass")
+    public String findPass() {
+    	return "views/user/findPass";
+    }
+    
+    // 찾기 결과
+    @PostMapping("/findResult")
+    public String findResult(UserFindRequest request, Model model){
+    	List<User> user = userService.findResult(request);
+    	boolean isFindId = request.getUserId() == null || request.getUserId().isBlank();
+    	
+    	if (isFindId) {
+    		if (user != null && !user.isEmpty())
+    			model.addAttribute("user", user);
+    	}
+    	else {
+    		if (user != null && !user.isEmpty())
+    			model.addAttribute("user", user.get(0));
+    	}
+    	model.addAttribute("isFindId", isFindId);
+    	
+    	return "views/user/findResult";
+    }
+    
+    // 비밀번호 재설정
+    @PostMapping("/updatePass")
+    public String updatePass(UserPassUpdateRequest request) {
+    	userService.updatePass(request);
+    	return "redirect:/loginForm";
+    }
+    
     @ExceptionHandler(IllegalArgumentException.class)
     public String handleException(IllegalArgumentException exception, RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("error", exception.getMessage());

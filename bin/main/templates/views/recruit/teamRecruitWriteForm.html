@@ -48,9 +48,23 @@
               <strong>모집 분류 :</strong>
               <input class="form-check-input recruitTypeChk" type="checkbox" value="TEAM_RECRUIT"> 팀원 구인
               <input class="form-check-input recruitTypeChk ms-2" type="checkbox" value="TEAM_JOIN"> 팀원 참가 희망
-            </div>
             <input type="hidden" th:field="*{recruitType}" id="recruitTypeHidden"/>
-
+			</div>
+			<div class="mt-3">
+			<label for="status" class="fw-bold">모집 상태 : </label>	
+			<select name="status" id="status" class="small-select">
+			  <option value="RECRUITING">모집중</option>
+			  <option value="COMPLETED">모집완료</option>
+			</select>
+            </div>
+            
+            <div class="mt-3">
+              <strong>모집 인원 :</strong>
+              <input type="number" th:field="*{totalMembers}" id="totalMembers" style="width:80px;"> 명 /
+              <strong>남은 인원:</strong>
+              <input type="number" th:field="*{remainingMembers}" id="remainingMembers" style="width:80px;">
+            </div>
+            
             <div class="mt-3">
               <strong>모집 기간 :</strong>
               <input type="date" id="recruitStartDate"> ~
@@ -65,12 +79,7 @@
             </div>
             <input type="hidden" th:field="*{activityPeriod}" id="activityPeriodHidden"/>
 
-            <div class="mt-3">
-              <strong>모집 인원 :</strong>
-              <input type="number" th:field="*{totalMembers}" id="totalMembers" style="width:80px;"> 명 /
-              <strong>남은 인원:</strong>
-              <input type="number" th:field="*{remainingMembers}" id="remainingMembers" style="width:80px;">
-            </div>
+            
           </div>
 
          <!-- 오른쪽 -->
@@ -122,7 +131,7 @@
       <!-- 버튼 -->
       <div class="text-end">
         <button type="submit" class="btn btn-primary">등록하기</button>
-        <a th:href="@{/recruit/list}" class="btn btn-secondary">취소</a>
+        <a th:href="TeamRecruitList" class="btn btn-secondary">취소</a>
       </div>
     </form>
   </div>

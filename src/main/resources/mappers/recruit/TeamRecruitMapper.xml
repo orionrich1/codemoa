@@ -2,14 +2,34 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.codemoa.project.domain.recruit.mapper.TeamRecruitMapper">
 
-<select id="userIdCheck">
-SELECT userId
+<update id="updateTeamRecruit" parameterType="com.codemoa.project.domain.recruit.entity.TeamRecruit">
+UPDATE recruitbbs
+SET
+	const_title = #{contestTitle},
+	recruit_type = #{recruitType},
+	recruit_period = #{recruitPeriod},
+	activity_period = #{activityPeriod},
+	progress_type = #{progressType},
+	status = #{status},
+	description = #{description},
+	attachment = #{attachment}
+	WHERE recruit_id = #{recruitId}
+	
+</update>
+
+<update id="incrementViewCount" parameterType="int">
+UPDATE recruitbbs
+SET view_count = view_count + 1
+WHERE recruit_id = #{recruitId}
+</update>
+
+<select id="userIdCheck" parameterType="int" resultType="string">
+SELECT user_id
 FROM recruitbbs
 WHERE recruit_id = #{recruitId}
 </select>
 
-<insert id="insertTeamRecruit" 
-parameterType="com.codemoa.project.domain.recruit.entity.TeamRecruit">
+<insert id="insertTeamRecruit" parameterType="com.codemoa.project.domain.recruit.entity.TeamRecruit">
 INSERT INTO recruitbbs(
 user_id, 
 contest_title, 
@@ -37,21 +57,92 @@ VALUES(#{userId}, #{contestTitle}, #{recruitType}, #{recruitPeriod},
 
 </insert>
 
-<select id="getTeamRecruit" 
-resultType="com.codemoa.project.domain.recruit.entity.TeamRecruit">
+<select id="getTeamRecruit" parameterType="int"
+resultMap="TeamRecruitResult">
 SELECT *
 FROM recruitbbs
 WHERE recruit_id = #{recruitId}
 </select>
 
-<select id="TeamRecruitList" 
+<select id="TeamRecruitList" parameterType="map" 
 resultType="com.codemoa.project.domain.recruit.entity.TeamRecruit">
-SELECT *
+SELECT 
+recruit_id,
+title,
+user_id,
+recruit_type,
+status,
+remaining_members,
+reg_date,
+view_count
 FROM recruitbbs
+WHERE 1=1
+	<if test="keyword != null and keyword.trim() !='' and type !=null and type.trim() !=''">
+		AND
+		<choose>
+			<when test="type == 'title'">
+				title LIKE CONCAT('%', #{keyword},'%')
+			</when>
+			<when test="type == 'userId'">
+				user_id LIKE CONCAT('%', #{keyword},'%')
+			</when>
+			<when test="type == 'content'">
+				content LIKE CONCAT('%', #{keyword},'%')
+			</when>
+			<when test="type == 'recruitType'">
+				recruit_type LIKE CONCAT('%', #{keyword},'%')
+			</when>
+			<when test="type == 'status'">
+				status LIKE CONCAT('%', #{keyword},'%')
+			</when>
+			<when test="type == 'techStack'">
+				tech_stack LIKE CONCAT('%', #{keyword},'%')
+			</when>
+			<otherwise>
+			title Like CONCAT('%', #{keyword},'%')
+			</otherwise>			
+		</choose>
+	</if>
+
 ORDER BY recruit_id DESC
+LIMIT #{num} OFFSET #{startRow}
 </select>
 
-<resultMap id="TeamRecruitResultMap" type="com.codemoa.project.domain.recruit.entity.TeamRecruit">
+<select id="countTeamRecruit" parameterType="map" resultType="int">
+SELECT
+COUNT(*)
+FROM recruitbbs
+  where 1=1
+      <if test="keyword != null and keyword.trim() != '' and type !=null and type.trim() !=''">
+        AND
+        <choose>
+          <when test="type == 'title'">
+           title LIKE CONCAT('%', #{keyword}, '%')
+          </when>
+          <when test="type == 'userId'">
+           user_id LIKE CONCAT('%', #{keyword}, '%')
+          </when>
+          <when test="type == 'content'">
+            content LIKE CONCAT('%', #{keyword}, '%')
+          </when>
+           <when test="type == 'recruitType'">
+            recruit_type LIKE CONCAT('%', #{keyword}, '%')
+          </when>
+           <when test="type == 'status'">
+            status LIKE CONCAT('%', #{keyword}, '%')
+          </when>
+           <when test="type == 'techStack'">
+            tech_stack LIKE CONCAT('%', #{keyword}, '%')
+          </when>
+          <otherwise>
+          1=1
+          </otherwise>
+        </choose>
+      </if>
+  </select>
+
+
+<resultMap id="TeamRecruitResult" type="com.codemoa.project.domain.recruit.entity.TeamRecruit">
     <id property="recruitId" column="recruit_id"/>
     <result property="userId" column="user_id"/>
     <result property="contestTitle" column="contest_title"/>

@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "snsUser")
+@Table(name = "sns_user")
 public class SnsUser {
 
     @Id
@@ -24,4 +24,10 @@ public class SnsUser {
 
     @Column(name = "sns_id", nullable = false)
     private String snsId;
+    
+    public SnsUser(User user, String snsType, String snsId) {
+        this.user = user;
+        this.snsType = snsType;
+        this.snsId = snsId;
+    }
 }

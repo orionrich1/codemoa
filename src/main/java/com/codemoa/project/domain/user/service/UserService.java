@@ -1,15 +1,28 @@
 package com.codemoa.project.domain.user.service;
 
-import com.codemoa.project.domain.user.dto.request.UserLoginRequest;
+import com.codemoa.project.domain.user.dto.request.UserFindRequest;
+import com.codemoa.project.domain.user.dto.request.UserPassUpdateRequest;
 import com.codemoa.project.domain.user.dto.request.UserSignUpRequest;
 import com.codemoa.project.domain.user.dto.response.UserResponse;
 import com.codemoa.project.domain.user.entity.LocalUser;
+import com.codemoa.project.domain.user.entity.SnsUser;
 import com.codemoa.project.domain.user.entity.User;
 import com.codemoa.project.domain.user.entity.UserGrade;
+import com.codemoa.project.domain.user.mapper.SnsUserMapper;
+import com.codemoa.project.domain.user.mapper.UserMapper;
 import com.codemoa.project.domain.user.repository.LocalUserRepository;
+import com.codemoa.project.domain.user.repository.SnsUserRepository;
 import com.codemoa.project.domain.user.repository.UserGradeRepository;
 import com.codemoa.project.domain.user.repository.UserRepository;
+import com.codemoa.project.domain.user.security.OAuth2UserLoginResult;
+
 import lombok.RequiredArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,24 +31,52 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserRepository userRepository;
-    private final LocalUserRepository localUserRepository;
-    private final UserGradeRepository userGradeRepository;
-    private final PasswordEncoder passwordEncoder;
+	private final UserRepository userRepository;
+	private final LocalUserRepository localUserRepository;
+	private final SnsUserRepository snsUserRepository;
+	private final UserGradeRepository userGradeRepository;
+	
+	private final PasswordEncoder passwordEncoder;
+	
+	private final UserMapper userMapper;
+	private final SnsUserMapper snsUserMapper;
 
-    @Transactional(readOnly = true)
-    public UserResponse login(UserLoginRequest request) {
-        LocalUser localUser = localUserRepository.findById(request.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("아이디 또는 비밀번호가 일치하지 않습니다."));
+	// SNS 로그인
+	@Transactional
+	public OAuth2UserLoginResult processOAuthUser(String provider, Map<String, Object> attributes) {
+		OAuth2UserLoginResult result = new OAuth2UserLoginResult();
+		String providerId = "";
 
-        if (!passwordEncoder.matches(request.getPass(), localUser.getPass())) {
-            throw new IllegalArgumentException("아이디 또는 비밀번호가 일치하지 않습니다.");
-        }
-        return new UserResponse(localUser.getUser());
-    }
+		if (provider.equals("google")) {
+			providerId = attributes.get("sub").toString();
+		} else if (provider.equals("kakao")) {
+			providerId = attributes.get("id").toString();			
+		} else {
+			result.setStatus(OAuth2UserLoginResult.Status.FAIL);
+			return result;
+		}
 
+		Optional<SnsUser> user = snsUserRepository.findBySnsId(providerId);
+		if (user.isPresent()) {
+		    result.setStatus(OAuth2UserLoginResult.Status.SUCCESS);
+		    result.setUser(user.get().getUser()); // 실제 User 객체로 변환
+		    result.setProviderId(providerId);
+		} else {
+		    result.setStatus(OAuth2UserLoginResult.Status.NEED_SIGN);
+		    result.setProviderId(providerId);
+		}
+		
+		return result;
+	}
+	
+	// SNS 계정과 연동한 상태로 로그인 시 DB에 등록
+	@Transactional
+	public void linkSnsAccount(String userId, String provider, String providerId) {
+		snsUserMapper.linkSnsAccount(userId, provider, providerId);
+	}
+	
     @Transactional
-    public String signUp(UserSignUpRequest request) {
+    public String signUp(UserSignUpRequest request, String snsProvider, String snsProviderId) {
         if (userRepository.existsById(request.getUserId())) {
             throw new IllegalArgumentException("이미 사용 중인 아이디입니다.");
         }
@@ -52,6 +93,8 @@ public class UserService {
                 0,
                 defaultGrade
         );
+
+        // SNS 관련 정보가 없으면 Local 회원가입만 진행
         // userRepository.save(newUser); // <-- 이 라인을 삭제하거나 주석 처리
 
         LocalUser newLocalUser = new LocalUser(
@@ -63,9 +106,40 @@ public class UserService {
         // 만약 LocalUser에 cascade 옵션이 있다면 User도 함께 저장됩니다.
         // 만약 cascade 옵션이 없다면, 아래의 해결책 2를 시도해야 합니다.
         localUserRepository.save(newLocalUser);
+        localUserRepository.flush();
+        
+        // 만약 SNS 관련 정보가 있다면 SNS과 연동되는 과정도 추가로 진행
+	    if (!(snsProvider == null || snsProvider.isBlank() ||
+	    		snsProviderId == null || snsProviderId.isBlank())) {
+	    	linkSnsAccount(newUser.getUserId(), snsProvider, snsProviderId);
+        }
 
         return newUser.getUserId();
     }
+    
+	public List<User> findResult(UserFindRequest request) {
+    	List<User> user = new ArrayList<User>();
+    	String id = request.getUserId();
+    	String name = request.getUserName();
+    	String phone = request.getUserPhone();
+    	boolean isPassFind = !(request.getUserId() == null || request.getUserId().isBlank());
+    	
+    	if (!isPassFind) {
+    		user = userMapper.findId(name, phone);
+    	}
+    	else {
+    		User u = userMapper.findPass(id, name, phone);
+    		if (u != null) {
+    			user.add(userMapper.findPass(id, name, phone));
+    		}
+    	}
+    	return user;
+    }
+	
+	public void updatePass(UserPassUpdateRequest request) {
+		userMapper.updatePass(request.getUserId(), passwordEncoder.encode(request.getPass()));
+	}
+
     @Transactional(readOnly = true)
     public UserResponse getUserInfo(String userId) {
         User user = userRepository.findById(userId)

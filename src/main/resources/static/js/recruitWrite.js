@@ -38,10 +38,10 @@
 		//TEAM_JOIN 선택시 인원 입력 기능 잠금 적용 함수
 		function toggleMemberInputs(){
 			const hasJoin = recruitTypeHidden.value === 'TEAM_JOIN';
-			totalMembersInput.disabled = hasJoin;
+			
 			remainingMembersInput.disabled = hasJoin;
 			if(hasJoin){
-						totalMembersInput.value = '';
+			
 						remainingMembersInput.value = '';
 			}
 		}
@@ -117,8 +117,27 @@
 			}
 		});
 	}	
+	
+	function validateMemberCounts(){
+		if(!totalMembersInput || !remainingMembersInput) return;
+		
+		function checkCounts(){
+			const total = parseInt(totalMembersInput.value || 0, 10);
+			const remaining = parseInt(remainingMembersInput.value || 0, 10);
+			
+			if(remaining > total){
+				alert("남은 모집 인원은 전체 모집 인원보다 많을 수 없습니다.");
+				remainingMembersInput.value = total;
+			}
+		}
+		totalMembersInput.addEventListener('input', checkCounts);
+		remainingMembersInput.addEventListener('input', checkCounts);
+	}
+	
 	preventNegative(totalMembersInput);
 	preventNegative(remainingMembersInput);
+	
+	validateMemberCounts();
 	
 	//기술 스택 태그 입력 (콤마 / Enter / blur)
 	const tagInput = $('#techStackInput');
@@ -228,6 +247,14 @@
 	
 	form.addEventListener('submit', function(e){
 		syncPeriods();
+		
+		const total = parseInt(totalMembersInput.value || 0,10);
+		const remaining = parseInt(remainingMembersInput.value || 0, 10);
+		if(remaining > total){
+			e.preventDefault();
+			alert("남은 인원이 현재 모집예정 인원보다 많습니다.");
+			return;
+		}
 		
 		if(recruitTypeHidden && !recruitTypeHidden.value){
 			e.preventDefault();
