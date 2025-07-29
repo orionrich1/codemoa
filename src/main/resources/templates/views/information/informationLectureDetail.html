@@ -45,6 +45,8 @@
 								<tr>
 									<th>글쓴이</th>
 									<td th:text="${lecture.userId}"></td>
+								</tr>
+								<tr>
 									<th>작성일</th>
 									<td>[[${#dates.format(lecture.regDate, 'yyyy-HH-dd HH:mm:ss')}]]</td>		
 								</tr>

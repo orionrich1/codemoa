@@ -94,7 +94,7 @@
 	</delete>
 
 	<insert id="addBook" parameterType="com.codemoa.project.domain.information.entity.Book">
-		insert into contest (user_id, title, publisher, reg_date, pub_date, isbn, rating, total_page_num,
+		insert into book (user_id, title, publisher, reg_date, pub_date, isbn, rating, total_page_num,
 			book_source, content, file1)
 		values( #{userId}, #{title}, #{publisher}, SYSDATE(), #{pubDate}, #{isbn}, #{rating}, #{totalPageNum},
 			#{bookSource}, #{content}, #{file1})

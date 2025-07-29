@@ -4,6 +4,8 @@ package com.codemoa.project.domain.information.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -256,12 +258,11 @@ public class InformationController {
 	}
 	
 	@PostMapping("/information/bookWrite")
-	public String addBook(Book book, @RequestParam(value = "addFile", required = false) MultipartFile multipartFile)
+	public String addBook(Book book, @RequestParam(value = "addFile", required = false) MultipartFile multipartFile,
+			@RequestParam("pub") String pub)
 			throws IOException {
-
-		System.out.println("originName : " + multipartFile.getOriginalFilename());  // originName : 다운로드.jpg
-		System.out.println("name : " + multipartFile.getName());					// name : addFile (뷰 writeForm의 name)
-		// 업로된 파일이 있으면
+	
+		book.setPubDate(Timestamp.valueOf(pub + " 00:00:00"));
 		if (multipartFile != null && !multipartFile.isEmpty()) {
 			// File 클래스는 파일과 디렉터리를 다루기 위한 클래스
 			File parent = new File(DEFAULT_PATH);
@@ -276,11 +277,6 @@ public class InformationController {
 			String saveName = uid.toString() + "." + extension;        // 994be78c-4c01-47ef-a678-0371093f6736.jpg 의 앞부분
 
 			File file = new File(parent.getAbsolutePath(), saveName);
-			// File 객체를 이용해 파일이 저장될 절대 경로 출력
-			log.info("file abs path : " + file.getAbsolutePath());
-// file abs path : D:\SpringBootStudy10\springbootclass-bbs05\src\main\resources\static\files\103d6f4d-16e6-4d6a-9a9d-d536be6e7ae1.jpg
-			log.info("file path : " + file.getPath());
-// file path : D:\SpringBootStudy10\springbootclass-bbs05\src\main\resources\static\files\103d6f4d-16e6-4d6a-9a9d-d536be6e7ae1.jpg
 			
 			// 업로드 되는 파일을 static/files 폴더에 복사한다.
 			multipartFile.transferTo(file);
@@ -400,9 +396,14 @@ public class InformationController {
 	}
 	
 	@PostMapping("/information/contestWrite")
-	public String addContest(Contest contest, @RequestParam(value = "addFile", required = false) MultipartFile multipartFile)
+	public String addContest(Contest contest, 
+			@RequestParam(value = "addFile", required = false) MultipartFile multipartFile,
+			@RequestParam("start") String start, @RequestParam("end") String end)
 			throws IOException {
-
+	    
+		contest.setStartDate(Timestamp.valueOf(LocalDateTime.parse(start)));
+		contest.setEndDate(Timestamp.valueOf(LocalDateTime.parse(end)));
+		
 		System.out.println("originName : " + multipartFile.getOriginalFilename());  // originName : 다운로드.jpg
 		System.out.println("name : " + multipartFile.getName());					// name : addFile (뷰 writeForm의 name)
 		// 업로된 파일이 있으면
@@ -420,11 +421,7 @@ public class InformationController {
 			String saveName = uid.toString() + "." + extension;        // 994be78c-4c01-47ef-a678-0371093f6736.jpg 의 앞부분
 
 			File file = new File(parent.getAbsolutePath(), saveName);
-			// File 객체를 이용해 파일이 저장될 절대 경로 출력
-			log.info("file abs path : " + file.getAbsolutePath());
-// file abs path : D:\SpringBootStudy10\springbootclass-bbs05\src\main\resources\static\files\103d6f4d-16e6-4d6a-9a9d-d536be6e7ae1.jpg
-			log.info("file path : " + file.getPath());
-// file path : D:\SpringBootStudy10\springbootclass-bbs05\src\main\resources\static\files\103d6f4d-16e6-4d6a-9a9d-d536be6e7ae1.jpg
+ 
 			
 			// 업로드 되는 파일을 static/files 폴더에 복사한다.
 			multipartFile.transferTo(file);
