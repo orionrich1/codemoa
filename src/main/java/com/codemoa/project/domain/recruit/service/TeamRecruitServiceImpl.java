@@ -30,6 +30,11 @@ public class TeamRecruitServiceImpl implements TeamRecruitService {
     private final TeamRecruitMapper teamRecruitMapper;
 
     @Override
+    public boolean deleteRecruit(int recruitId) {
+    	return teamRecruitMapper.deleteRecruit(recruitId) > 0;
+    }
+    
+    @Override
     public void increaseViewCount(int recruitId) {
     	teamRecruitMapper.incrementViewCount(recruitId);
     }
