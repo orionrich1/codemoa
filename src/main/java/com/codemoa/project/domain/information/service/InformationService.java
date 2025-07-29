@@ -120,6 +120,7 @@ public class InformationService {
 		// int listCount = boardDao.getBoardCount();
 		
 		int listCount = informationRecommendMapper.getBookCount(type, keyword);
+		log.info("listCount : " + listCount);
 		
 		// 총 페이지 갯수
 		int pageCount = listCount / PAGE_SIZE 

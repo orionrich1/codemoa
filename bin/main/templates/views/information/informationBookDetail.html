@@ -9,7 +9,7 @@
 		<div class="row my-5" id="global-content">
 			<div class="col-10 offset-1">
 				<form name="checkForm" id="checkForm">
-					<input type="hidden" name="no" id="no" th:value="${contest.contestNo}"/>
+					<input type="hidden" name="no" id="no" th:value="${book.bookNo}"/>
 					<input type="hidden" name="pass" id="rPass" />
 					<input type="hidden" name="pageNum" th:value="${pageNum}" />
 					<th:block th:if="${searchOption}">
@@ -28,26 +28,22 @@
 							<tbody>
 								<tr>
 									<th class="table-secondary">제 목</th>
-									<td colspan="3" th:text="${contest.title}">게시글 제목</td>		
+									<td colspan="3" th:text="${book.title}">게시글 제목</td>		
 								</tr>
 								
 								<tr>
-									<th class="table-secondary">주최기관</th>
-									<td colspan="3" th:text="${contest.hostOrganization}">주최기관</td>		
+									<th class="table-secondary">출판사</th>
+									<td colspan="3" th:text="${book.publisher}">출판사</td>		
 								</tr>
 								<tr>
-									<th class="table-secondary">시작일</th>
-									<td colspan="3" th:text="${contest.startDate}">시작일</td>		
-								</tr>
-								<tr>
-									<th class="table-secondary">마감일</th>
-									<td colspan="3" th:text="${contest.endDate}">마감일</td>		
+									<th class="table-secondary">출판일</th>
+									<td colspan="3" th:text="${book.pubDate}">출판일</td>		
 								</tr>
 								<tr>
 									<th>글쓴이</th>
-									<td th:text="${contest.userId}"></td>
+									<td th:text="${book.userId}"></td>
 									<th>작성일</th>
-									<td>[[${#dates.format(contest.regDate, 'yyyy-HH-dd HH:mm:ss')}]]</td>		
+									<td>[[${#dates.format(book.regDate, 'yyyy-HH-dd HH:mm:ss')}]]</td>		
 								</tr>
 								<tr>		
 									<th>비밀번호</th>
@@ -62,20 +58,20 @@
 									 -->
 								</tr>	
 								<tr>
-									<td colspan="4" style="white-space:pre">[[${contest.content}]]</td>
+									<td colspan="4" style="white-space:pre">[[${book.content}]]</td>
 								</tr>
 								<tr>
-									<td colspan="4">출처 : [[${contest.contestSource}]]</td>
+									<td colspan="4">출처 : [[${book.bookSource}]]</td>
 								</tr>
 								<tr>
-									<th:block th:if="${contest.file1}">
+									<th:block th:if="${book.file1}">
 										<td colspan="4">
-											업로드 이미지 : [[${contest.file1}]]
+											업로드 이미지 : [[${book.file1}]]
 											<!-- 업로드 이미지 : 62e1ce93-70ab-488c-9b45-a21d419d7883.png -->
-											<img th:src="@{/files/information/{img}(img=${contest.file1})}" alt="이미지를 찾을 수 없습니다.">
+											<img th:src="@{/files/information/{img}(img=${book.file1})}" alt="이미지를 찾을 수 없습니다.">
 										</td>
 									</th:block>
-									<th:block th:unless="${contest.file1}">
+									<th:block th:unless="${book.file1}">
 										<td colspan="4">업로드 된 이미지 없음</td>
 									</th:block>
 								</tr>
@@ -85,18 +81,18 @@
 				</div>
 				<div class="row my-3">
 					<div class="col text-center">
-						<input class="btn btn-warning" type="button" id="detailUpdate" value="수정하기"/>
-						&nbsp;&nbsp;<input class="btn btn-danger"  type="button" id="contestDetailDelete" value="삭제하기" />			
+						<input class="btn btn-warning" type="button" id="bookDetailUpdate" value="수정하기"/>
+						&nbsp;&nbsp;<input class="btn btn-danger"  type="button" id="bookDetailDelete" value="삭제하기" />			
 						&nbsp;&nbsp;
 						<!-- /* 일반 게시글 리스트에서 온 경우 */ -->
 						<th:block th:unless="searchOption">
 							<input class="btn btn-primary" type="button" value="목록보기"
-								th:onclick="@{|location.href='contestList?pageNum=${pageNum}'|}"/>
+								th:onclick="@{|location.href='bookList?pageNum=${pageNum}'|}"/>
 						</th:block>						
 						<!-- /* 검색 게시글 리스트에서 온 경우 */ -->
 						<th:block th:if="searchOption">
 							<input class="btn btn-primary" type="button" value="목록보기"
-								th:onclick="@{|location.href='contestList?pageNum=${pageNum}&type=${type}&keyword=${keyword}'|}"/>
+								th:onclick="@{|location.href='bookList?pageNum=${pageNum}&type=${type}&keyword=${keyword}'|}"/>
 						</th:block>						
 					</div>
 				</div>

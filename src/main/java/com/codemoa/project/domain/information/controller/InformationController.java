@@ -337,8 +337,8 @@ public class InformationController {
 
 		// 비밀번호 맞는지 확인
 		
-		Lecture lecture = informationService.getLecture(no);
-		model.addAttribute("contest", lecture);
+		Contest contest = informationService.getContest(no);
+		model.addAttribute("contest", contest);
 		model.addAttribute("pageNum", pageNum);
 
 		boolean searchOption = type.equals("null") || keyword.equals("null") ? false : true;
