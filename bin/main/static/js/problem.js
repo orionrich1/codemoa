@@ -35,7 +35,7 @@ $(function() {
 	});
 
 	// ProblemWriteForm, ProblemUpdateForm 페이지 유효성 검사
-	$("#writeForm, #updateForm").on("submit", function(e) {
+	$("#writeForm, #updateForm").on("submit", function() {
 		var title = $("#title");
 		var content = $("#content");
 		var category = $("#category");
@@ -67,9 +67,6 @@ function requestApi() {
 	var problemAnswer = $("#problemAnswer").text();
 	var userAnswer = $("#userAnswer").text();
 
-	const token = $("meta[name='_csrf']").attr("content");
-	const header = $("meta[name='_csrf_header']").attr("content");
-
 	var test = {
 		"problem": {
 			"category": problemCategory,
@@ -84,7 +81,7 @@ function requestApi() {
 
 	fetch('/problems/apiRequest', {
 		method: 'POST',
-		headers: { 'Content-Type': 'application/json', [header]: token },
+		headers: { 'Content-Type': 'application/json'},
 		body: JSON.stringify({
 			"problem": {
 				"category": problemCategory,
