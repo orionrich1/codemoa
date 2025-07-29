@@ -40,7 +40,7 @@ public class SecurityConfig {
                 .requestMatchers("/admin/**").hasRole("ADMIN")
 
                 // 2. (로그인 필요한 규칙) /mypage/** 등 로그인이 필요한 경로는 인증된 사용자만
-                .requestMatchers("/mypage/**").authenticated()
+                .requestMatchers("/my-pages/**").authenticated()
                 
                 // 3. (가장 마지막 규칙) 위에서 설정한 경로 외 나머지 모든 경로는 모두에게 허용
                 .anyRequest().permitAll()
@@ -51,8 +51,7 @@ public class SecurityConfig {
         	.formLogin(form -> form
                 .loginPage("/loginForm")
                 .loginProcessingUrl("/login")                
-                // 성공 시 Handler 실행, 만약 SNS 계정이랑 연동된 상태면, 로그인한 계정과 SNS 계정을 연동함
-                .successHandler(customLoginSuccessHandler)
+                .defaultSuccessUrl("/")
                 .permitAll()
         	)
         	// SNS 로그인 시 실행되는 메소드
@@ -61,6 +60,7 @@ public class SecurityConfig {
     	        .userInfoEndpoint(userInfo -> userInfo
     	            .userService(customOAuth2UserService) 
     	        )
+    	        // 성공 시 Handler 실행, 만약 SNS 계정이랑 연동된 상태면, 로그인한 계정과 SNS 계정을 연동함
     	        .successHandler(customLoginSuccessHandler)
     	        .failureHandler((request, response, exception) -> {
     	            if (exception.getMessage().contains("회원가입 필요")) {
