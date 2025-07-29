@@ -6,4 +6,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface EmploymentMapper {
 
+	List<Employment> findAll();
+	Emloyment findById(Long recruitNo);
 }
