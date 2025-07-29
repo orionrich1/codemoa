@@ -1,6 +1,6 @@
 $(function() {
 	// 게시 글 상세보기 "삭제하기" 버튼 이벤트
-	$("#detailDelete").on("click", function() {
+	$("#lectureDetailDelete").on("click", function() {
 		
 		// 사용자가 입력한 비번을 읽어온다.
 		let pass = $("#pass").val();
@@ -85,5 +85,26 @@ $(function() {
 			$("#content").focus();
 			return false;
 		}
+	});
+	
+	
+	
+	// 공모전 관련 
+	
+	// 게시 글 상세보기 "삭제하기" 버튼 이벤트
+	$("#contestDetailDelete").on("click", function() {
+		
+		// 사용자가 입력한 비번을 읽어온다.
+		let pass = $("#pass").val();
+		if(pass.length <= 0) { // 비번이 입력되지 않았으면
+			alert("비밀번호를 입력해 주세요");
+			return false;
+		}
+		
+		// 비번이 입력되었으면 - 데이터와 함께 서버로 요청을 보냄
+		$("#rPass").val(pass);
+		$("#checkForm").attr("action","contestDelete");
+		$("#checkForm").attr("method","post");
+		$("#checkForm").submit();
 	});
 });
