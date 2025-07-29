@@ -2,9 +2,9 @@
 	const $ =(sel) => document.querySelector(sel);
 	const $$ = (sel) => document.querySelectorAll(sel);
 	
-	const form =$('#recruitWriteForm');
+	const form =$('#recruitWriteForm') || $('#recruitUpdateForm');
 	if(! form){
-		console.warn(`recruitWrite.js: #recruitWriteForm no found. Script aborted.`);
+		console.warn(`recruitWrite.js: no valid form found. Script aborted.`);
 		return;
 	}
 	
@@ -172,9 +172,25 @@
 		renderTags();
 	}
 	function parseInputTags(str){
-		str.split(',').forEach(s=>addTag(s));
+		str.split(/[\s,]+/)
+			.map(s => s.replace(/#/g, '').trim().toLowerCase())
+			.filter(s => s.length > 0 && !tags.includes('#' + s))		
+			.forEach(s => addTag(s));
 	}
+	
+	if(tagHidden && tagHidden.value){
+		tags=[];
+		parseInputTags(tagHidden.value);
+	}
+	
+	
 	if(tagInput){
+		tagInput.addEventListener('keypress', function(e){
+			if(e.key === '#'){
+				e.preventDefault();
+			}
+		});
+		
 		tagInput.addEventListener('keydown', function(e){
 			if(e.key==='Enter'){
 				e.preventDefault();
@@ -186,6 +202,16 @@
 			parseInputTags(tagInput.value);
 			tagInput.value='';
 		});
+	}
+	function addTag(raw){
+		let trimmed = raw.trim().toLowerCase();
+		if(!trimmed) return;
+		if(!trimmed.startsWith('#')){
+			trimmed = '#' + trimmed;
+		}
+		if(tags.includes(trimmed)) return;
+		tags.push(trimmed);
+		renderTags();
 	}
 	
 	//----------------------
