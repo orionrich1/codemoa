@@ -3,6 +3,8 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.codemoa.project.domain.information.mapper.InformationRecommendMapper" >
+	
+	<!-- 강좌 영역 -->
 	<select id="getLecture">
 		select * from lecture where recommend_no = #{no}
 	</select>
@@ -50,14 +52,102 @@
 	</insert> 
 	
 	
-	
+	<!-- 도서 영역 -->
 		
 	<select id="getBook">
-		select * from book where recommend_no = #{no}
-	</select>
-	
-	<select id="getRecommendContest">
-		select * from recommendContest where recommend_no = #{no}
+		select * from book where book_no = #{no}
 	</select>
 
+	<select id="getBookList" parameterType="map">
+		select * from book
+		ORDER BY contest_no DESC
+		LIMIT #{startRow}, #{num}	
+	</select>
+	
+	<select id="getBookCount" resultType="int" parameterType="map">
+		select count(book_no) from book
+		<!-- CDATA -->
+		<where>
+			<if test="type == 'title'">
+				title like CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="type == 'writer'">
+				host_organization like CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="type == 'content'">
+				content like CONCAT('%', #{keyword}, '%')
+			</if>
+		</where>
+	</select>
+
+	<update id="updateBook" parameterType="com.codemoa.project.domain.information.entity.Book">
+		update Book
+		set title = #{title}, host_organization = #{hostOrganization}, 
+		start_date = #{startDate}, end_date = #{endDate}, 
+		content = #{content}, reg_date = SYSDATE(),
+		contest_source = #{contestSource}, file1 = #{file1}
+		where contest_no = #{contestNo}
+	</update>
+	
+	<delete id="deleteBook">
+		delete from contest where contest_no = #{no}
+	</delete>
+
+	<insert id="addBook" parameterType="com.codemoa.project.domain.information.entity.Book">
+		insert into contest (user_id, title, host_organization, reg_date, start_date, end_date, 
+			contest_source, content, file1)
+		values( #{userId}, #{title}, #{hostOrganization}, SYSDATE(), #{startDate}, #{endDate}, 
+			#{contestSource}, #{content}, #{file1})
+	</insert>
+	
+	
+	
+	<!-- 공모전 영역 -->
+	
+	<select id="getContest">
+		select * from contest where contest_no = #{no}
+	</select>
+
+	<select id="getContestList" parameterType="map">
+		select * from contest
+		ORDER BY contest_no DESC
+		LIMIT #{startRow}, #{num}	
+	</select>
+	
+	<select id="getContestCount" resultType="int" parameterType="map">
+		select count(contest_no) from contest
+		<!-- CDATA -->
+		<where>
+			<if test="type == 'title'">
+				title like CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="type == 'writer'">
+				host_organization like CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="type == 'content'">
+				content like CONCAT('%', #{keyword}, '%')
+			</if>
+		</where>
+	</select>
+
+	<update id="updateContest" parameterType="com.codemoa.project.domain.information.entity.Contest">
+		update contest
+		set title = #{title}, host_organization = #{hostOrganization}, 
+		start_date = #{startDate}, end_date = #{endDate}, 
+		content = #{content}, reg_date = SYSDATE(),
+		contest_source = #{contestSource}, file1 = #{file1}
+		where contest_no = #{contestNo}
+	</update>
+	
+	<delete id="deleteContest">
+		delete from contest where contest_no = #{no}
+	</delete>
+
+	<insert id="addContest" parameterType="com.codemoa.project.domain.information.entity.Contest">
+		insert into contest (user_id, title, host_organization, reg_date, start_date, end_date, 
+			contest_source, content, file1)
+		values( #{userId}, #{title}, #{hostOrganization}, SYSDATE(), #{startDate}, #{endDate}, 
+			#{contestSource}, #{content}, #{file1})
+	</insert>
+	
 </mapper>

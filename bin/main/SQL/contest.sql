@@ -6,7 +6,7 @@ use springboot;
 ## recommendList 테이블
 drop table if exists contest;
 CREATE TABLE IF NOT EXISTS contest (
-    recommend_no INTEGER AUTO_INCREMENT PRIMARY KEY,
+    contest_no INTEGER AUTO_INCREMENT PRIMARY KEY,
     user_id VARCHAR(20) NOT NULL,
     title VARCHAR(100) NOT NULL,
     host_organization VARCHAR(300),  
