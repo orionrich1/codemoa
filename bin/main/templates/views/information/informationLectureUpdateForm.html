@@ -11,23 +11,19 @@
 						<h2 class="fs-3 fw-bold">강좌 추천글 수정하기</h2>
 					</div>
 				</div>  
-				<form name="lectureUpdateForm" action="lectureUpdate" id="updateForm" 
-					class="row g-3 border-primary" method="post">
+				<form name="lectureUpdateForm" th:action="lectureUpdate" id="updateForm" 
+					class="row g-3 border-primary" method="post" enctype="multipart/form-data">
 					<input type="hidden" name="recommendNo" th:value="${lecture.recommendNo}">
-					<input type="hidden" name="pageNum" th:value="${pageNum}">
-					<th:block th:if="${searchOption}">
-						<input type="hidden" name="type" th:value="${type}" />
-						<input type="hidden" name="keyword" th:value="${keyword}" />
-					</th:block>
+
 					<div class="col-4 offset-md-2">
+						<!--  
 						<label for="writer" class="form-label">글쓴이</label>
 						<input type="text" class="form-control" name="writer" id="writer" 
 							placeholder="작성자를 입력해 주세요" th:value="${lecture.userId}" readonly>
+						-->
+						<p>작성자 : [[${lecture.userId}]]</p>
 					</div>
-					<div class="col-4 ">
-						<label for="pass" class="form-label">비밀번호</label>
-						<input type="password" class="form-control" name="pass" id="pass" >
-					</div>
+
 					<div class="col-8 offset-md-2">
 						<label for="title" class="form-label">제 목</label>
 						<input type="text" class="form-control" name="title"  id="title" th:value="${lecture.title}">
@@ -45,7 +41,7 @@
 						<input type="text" class="form-control" name="rating"  id="rating" th:value="${lecture.rating}">
 					</div>
 					<div class="col-8 offset-md-2">
-						<label for="content" class="form-label">내 용 1</label>
+						<label for="content" class="form-label">이런걸 배울 수 있어요 :</label>
 						<textarea class="form-control" name="content1" id="content" rows="10">[[${lecture.content1}]]</textarea>
 					</div>
 					<div class="col-8 offset-md-2">
@@ -53,22 +49,19 @@
 						<textarea class="form-control" name="content2" id="content" rows="10">[[${lecture.content2}]]</textarea>
 					</div>
 					<div class="col-8 offset-md-2">
+						<label for="addFile" class="form-label">업로드 할 이미지</label>
+						<input type="file" class="form-control" name="addFile" id="addFile" >
+					</div>
+					<div class="col-8 offset-md-2">
 						<label for="title" class="form-label">출 처</label>
 						<input type="text" class="form-control" name="lectureSource"  id="lectureSource" th:value="${lecture.lectureSource}">
-					</div>	
+					</div>
+					
 					<div class="col-8 offset-md-2 text-center mt-5">
 						<input type="submit" value="수정하기" class="btn btn-primary"/>
 							&nbsp;&nbsp;
-						<!-- /* 일반 게시글 리스트에서 온 경우 */ -->
-						<th:block th:unless="searchOption">
-							<input class="btn btn-primary" type="button" value="목록보기"
-								th:onclick="@{|location.href='lectureList?pageNum=${pageNum}'|}"/>
-						</th:block>						
-						<!-- /* 검색 게시글 리스트에서 온 경우 */ -->
-						<th:block th:if="searchOption">
-							<input class="btn btn-primary" type="button" value="목록보기"
-								th:onclick="@{|location.href='lectureList?pageNum=${pageNum}&type=${type}&keyword=${keyword}'|}"/>
-						</th:block>	
+						<input type="button" value="목록보기" 
+							onclick="location.href='lectureList'" class="btn btn-primary"/>
 					</div>	
 				</form>
 			</div>

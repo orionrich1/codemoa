@@ -55,8 +55,10 @@
 											<input class="form-control" type="password" name="pass" id="pass">
 										</div>
 									</td>
+									<!-- 
 									<th>추천수</th>
 									<td th:text="${lecture.recommendNum}"></td>
+									 -->
 								</tr>	
 								<tr>
 									<td colspan="4">
@@ -71,7 +73,16 @@
 									<td colspan="4">출처 : [[${lecture.lectureSource}]]</td>
 								</tr>
 								<tr>
-									<td colspan="4">업로드 이미지 : [[${lecture.file1}]]</td>
+									<th:block th:if="${lecture.file1}">
+										<td colspan="4">
+											업로드 이미지 : [[${lecture.file1}]]
+											<!-- 업로드 이미지 : 62e1ce93-70ab-488c-9b45-a21d419d7883.png -->
+											<img th:src="@{/files/information/{img}(img=${lecture.file1})}" alt="강의 이미지">
+										</td>
+									</th:block>
+									<th:block th:unless="${lecture.file1}">
+										<td colspan="4">업로드 된 이미지 없음</td>
+									</th:block>
 								</tr>
 							</tbody>
 						</table>

@@ -11,7 +11,7 @@
 						<h2 class="fs-3 fw-bold">강좌 추천글 쓰기</h2>
 					</div>
 				</div>  
-				<form name="lectureUpdateForm" action="lectureWrite" id="writeForm" 
+				<form name="lectureUpdateForm" th:action="lectureWrite" id="writeForm" 
 					class="row g-3 border-primary" method="post"
 					enctype="multipart/form-data">
 				
@@ -23,10 +23,6 @@
 						<input type="text" class="form-control" name="userId" id="writer" 
 							placeholder="작성자를 입력해 주세요" th:value="${lecture.userId}" readonly>
 						 -->
-					</div>
-					<div class="col-4 ">
-						<label for="pass" class="form-label">비밀번호</label>
-						<input type="password" class="form-control" name="pass" id="pass" >
 					</div>
 					<div class="col-8 offset-md-2">
 						<label for="title" class="form-label">제 목</label>
@@ -52,7 +48,7 @@
 						<label for="content" class="form-label">내 용 2</label>
 						<textarea class="form-control" name="content2" id="content" rows="10"></textarea>
 					</div>	
-					<div class="col-8 offset-md-2 text-center mt-5">
+					<div class="col-8 offset-md-2">
 						<label for="addFile" class="form-label">업로드 할 이미지</label>
 						<input type="file" class="form-control" name="addFile" id="addFile" >
 					</div>
