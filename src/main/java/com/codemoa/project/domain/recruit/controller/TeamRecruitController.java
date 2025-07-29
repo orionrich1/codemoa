@@ -153,6 +153,7 @@ public class TeamRecruitController {
 		return "views/recruit/teamRecruitDetail";
 	}
 	
+
 	@GetMapping("/TeamRecruitList")
 	public String TeamRecruitList(Model model) {
 		var list = teamRecruitService.teamRecruitList();
