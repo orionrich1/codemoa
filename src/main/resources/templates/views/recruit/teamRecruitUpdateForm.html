@@ -7,8 +7,11 @@
   <div class="container my-5" id="recruit-write-wrapper">
     <h2 class="text-center fw-bold mb-4">공모전 팀 모집 글 작성</h2>
 
-    <form th:action="@{/recruit/write}" th:object="${teamRecruit}"
-          method="post" enctype="multipart/form-data" id="recruitWriteForm">          
+    <form th:action="@{/recruit/update}" th:object="${teamRecruit}"
+          method="post" enctype="multipart/form-data" id="recruitUpdateForm">          
+
+		<!-- 글 Id hidden 전송  -->
+		<input type="hidden" th:field="*{recruitId}" />
 
       <!-- 공모전 URL 및 미리보기 -->
       <div class="border rounded p-4 mb-4">
@@ -125,13 +128,17 @@
         <div class="mb-3">
           <label class="fw-bold">첨부파일 :</label>
           <input type="file" class="form-control" name="attachmentFile">
+          <div th:if="${teamRecruit.attachmentUrl != null}">
+          현재 파일 : 
+          <a th:href="@{'/files/' + ${teamRecruit.attachmentUrl}}" target="_blank">다운로드</a>
         </div>
       </div>
+     </div>
 
       <!-- 버튼 -->
       <div class="text-end">
-        <button type="submit" class="btn btn-primary">등록하기</button>
-        <a th:href="TeamRecruitList" class="btn btn-secondary">취소</a>
+        <button type="submit" class="btn btn-primary">수정하기</button>
+        <a th:href="@{/TeamRecruitList}" class="btn btn-secondary">취소</a>
       </div>
     </form>
   </div>
