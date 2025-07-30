@@ -1,9 +1,13 @@
 package com.codemoa.project.domain.user.entity;
 
-import java.time.LocalDateTime;
+import com.codemoa.project.domain.community.entity.CommunityBoard; // 예시 경로
+import com.codemoa.project.domain.community.entity.Comment; // 예시 경로
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -29,7 +33,7 @@ public class User {
 
     @Column(name = "total_points")
     private Integer totalPoints;
-    
+
     @Column(name = "unban_date")
     private LocalDateTime unbanDate;
 
@@ -39,12 +43,21 @@ public class User {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "grade_id")
     private UserGrade userGrade;
-    
-    @Column(name = "ban_left_day") // DB 컬럼명은 ban_left_day로 지정됩니다.
+
+    @Column(name = "ban_left_day")
     private LocalDateTime banLeftDay;
-    
+
     @Column(name = "ban_reason")
     private String banReason;
+
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CommunityBoard> communityBoards = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+
+
 
     public User(String userId, String name, String nickname, String email, String mobile, Integer totalPoints, UserGrade userGrade) {
         this.userId = userId;
@@ -58,7 +71,7 @@ public class User {
 
     @PrePersist
     public void prePersist() {
-    	this.membershipDate = LocalDateTime.now();
-    	this.unbanDate = LocalDateTime.now();
+        this.membershipDate = LocalDateTime.now();
+        this.unbanDate = LocalDateTime.now();
     }
 }
