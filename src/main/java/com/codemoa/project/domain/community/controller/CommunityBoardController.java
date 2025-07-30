@@ -32,7 +32,7 @@ public class CommunityBoardController {
      * 게시글 단건 조회
      */
     @GetMapping("/{boardNo}")
-    public ResponseEntity<BoardDetailResponse> getBoard(@PathVariable Integer boardNo) {
+    public ResponseEntity<BoardDetailResponse> getBoard(@PathVariable("boardNo") Integer boardNo) {
         BoardDetailResponse response = communityBoardService.findById(boardNo);
         return ResponseEntity.ok(response);
     }
@@ -50,7 +50,7 @@ public class CommunityBoardController {
      * 게시글 수정
      */
     @PutMapping("/{boardNo}")
-    public ResponseEntity<Void> updateBoard(@PathVariable Integer boardNo, @RequestBody UpdateBoardRequest request) {
+    public ResponseEntity<Void> updateBoard(@PathVariable("boardNo") Integer boardNo, @RequestBody UpdateBoardRequest request) {
         // TODO: 수정 권한 확인 로직 추가 필요
         communityBoardService.update(boardNo, request);
         return ResponseEntity.ok().build();
@@ -60,7 +60,7 @@ public class CommunityBoardController {
      * 게시글 삭제
      */
     @DeleteMapping("/{boardNo}")
-    public ResponseEntity<Void> deleteBoard(@PathVariable Integer boardNo) {
+    public ResponseEntity<Void> deleteBoard(@PathVariable("boardNo") Integer boardNo) {
         // TODO: 삭제 권한 확인 로직 추가 필요
         communityBoardService.delete(boardNo);
         return ResponseEntity.ok().build();
