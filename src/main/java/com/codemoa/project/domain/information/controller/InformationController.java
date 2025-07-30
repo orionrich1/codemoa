@@ -213,8 +213,18 @@ public class InformationController {
 	public String updateBook(Book book, RedirectAttributes reAttrs, HttpServletResponse response, PrintWriter out,
 			@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
 			@RequestParam(value = "type", required = false, defaultValue = "null") String type,
-			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword) {
+			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword,
+			@RequestParam("pub") String pub,
+			@RequestParam(value = "addFile", required = false) MultipartFile multipartFile) throws IOException {
 
+		log.info(pub);
+		book.setPubDate(Timestamp.valueOf(pub + " 00:00:00"));
+		
+		String savedFileName = saveUploadedFile(multipartFile, DEFAULT_PATH);
+		
+	    if (savedFileName != null) {
+	        book.setFile1(savedFileName);
+	    }
 		// 비밀번호 맞는지 확인
 		
 		informationService.updateBook(book);
@@ -263,33 +273,14 @@ public class InformationController {
 			throws IOException {
 	
 		book.setPubDate(Timestamp.valueOf(pub + " 00:00:00"));
-		if (multipartFile != null && !multipartFile.isEmpty()) {
-			// File 클래스는 파일과 디렉터리를 다루기 위한 클래스
-			File parent = new File(DEFAULT_PATH);
+		
 
-			// 파일 업로드 위치에 폴더가 존재하지 않으면 폴더 생성
-			if (!parent.isDirectory() && !parent.exists()) {
-				parent.mkdirs();
-			}
-
-			UUID uid = UUID.randomUUID();
-			String extension = StringUtils.getFilenameExtension(multipartFile.getOriginalFilename());  // 다운로드.jpg 의 jpg
-			String saveName = uid.toString() + "." + extension;        // 994be78c-4c01-47ef-a678-0371093f6736.jpg 의 앞부분
-
-			File file = new File(parent.getAbsolutePath(), saveName);
-			
-			// 업로드 되는 파일을 static/files 폴더에 복사한다.
-			multipartFile.transferTo(file);
-
-			// 업로드된 파일 이름을 게시글의 첨부 파일로 설정한다.
-			book.setFile1(saveName);
-
-		} else {
-			// 파일이 업로드 되지 않으면 콘솔에 로그 출력
-			log.info("No file uploaded - 파일이 업로드 되지 않음");
-
-		}
-
+		String savedFileName = saveUploadedFile(multipartFile, DEFAULT_PATH);
+		
+	    if (savedFileName != null) {
+	        book.setFile1(savedFileName);
+	    }
+		
 		informationService.addBook(book);
 		// 게시글 쓰기가 완료되면 게시글 리스트로 리다이렉트 시킨다.
 		
@@ -351,9 +342,16 @@ public class InformationController {
 	public String updateContest(Contest contest, RedirectAttributes reAttrs, HttpServletResponse response, PrintWriter out,
 			@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
 			@RequestParam(value = "type", required = false, defaultValue = "null") String type,
-			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword) {
+			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword,
+			@RequestParam(value = "addFile", required = false) MultipartFile multipartFile) throws IOException {
 
 		// 비밀번호 맞는지 확인
+		
+		String savedFileName = saveUploadedFile(multipartFile, DEFAULT_PATH);
+		
+	    if (savedFileName != null) {
+	        contest.setFile1(savedFileName);
+	    }
 		
 		informationService.updateContest(contest);
 
@@ -406,34 +404,12 @@ public class InformationController {
 		
 		System.out.println("originName : " + multipartFile.getOriginalFilename());  // originName : 다운로드.jpg
 		System.out.println("name : " + multipartFile.getName());					// name : addFile (뷰 writeForm의 name)
-		// 업로된 파일이 있으면
-		if (multipartFile != null && !multipartFile.isEmpty()) {
-			// File 클래스는 파일과 디렉터리를 다루기 위한 클래스
-			File parent = new File(DEFAULT_PATH);
-
-			// 파일 업로드 위치에 폴더가 존재하지 않으면 폴더 생성
-			if (!parent.isDirectory() && !parent.exists()) {
-				parent.mkdirs();
-			}
-
-			UUID uid = UUID.randomUUID();
-			String extension = StringUtils.getFilenameExtension(multipartFile.getOriginalFilename());  // 다운로드.jpg 의 jpg
-			String saveName = uid.toString() + "." + extension;        // 994be78c-4c01-47ef-a678-0371093f6736.jpg 의 앞부분
-
-			File file = new File(parent.getAbsolutePath(), saveName);
- 
-			
-			// 업로드 되는 파일을 static/files 폴더에 복사한다.
-			multipartFile.transferTo(file);
-
-			// 업로드된 파일 이름을 게시글의 첨부 파일로 설정한다.
-			contest.setFile1(saveName);
-
-		} else {
-			// 파일이 업로드 되지 않으면 콘솔에 로그 출력
-			log.info("No file uploaded - 파일이 업로드 되지 않음");
-
-		}
+		
+		String savedFileName = saveUploadedFile(multipartFile, DEFAULT_PATH);
+		
+	    if (savedFileName != null) {
+	        contest.setFile1(savedFileName);
+	    }
 
 		informationService.addContest(contest);
 		// 게시글 쓰기가 완료되면 게시글 리스트로 리다이렉트 시킨다.

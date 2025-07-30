@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS contest (
     recommend_num INTEGER DEFAULT 0
 );
 
-insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content)
+insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content, file1)
 values('admin',
 '[KB국민은행] 제 7회 FUTURE FINANCE A.I. CHALLENGE', -- 제목
 'KB국민은행', -- 주최기관
@@ -72,10 +72,11 @@ www.kb-aichallenge.com
 
 KB국민은행 금융AI센터(P) 대리 노연희
 
-☎(02)2073-6685✉ yeonhee.roh@kbfg.com' -- 내용
+☎(02)2073-6685✉ yeonhee.roh@kbfg.com', -- 내용
+'8c31362f-cefe-45ce-a237-af934c9da8e4.jpg'
 );
 
-insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content)
+insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content, file1)
 values('admin',
 '[과기정보통부/KISIA] 제3회 KISIA 정보보호 개발자 해커톤', -- 제목
 '과학기술정보통신부/한국정보보호산업협회', -- 주최기관
@@ -110,10 +111,11 @@ now(), -- 등록일
 
 시상식  대회종료 후 당일 진행  * 총 상금 1,100만원 상당의 상금과 과학기술정보통신부상 등 총 5점의 상장
 
-□ 문의사항 infosecdev@cmcom.kr | 070-4849-2062' -- 내용
+□ 문의사항 infosecdev@cmcom.kr | 070-4849-2062', -- 내용
+'b7289e20-2d80-49a3-8902-f0fda6b2d222.png'
 );
 
-insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content)
+insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content, file1)
 values('admin',
 '[과학기술정보통신부] AI·디지털 논문공모전', -- 제목
 '과학기술정보통신부/한국지능정보사회진흥원, 한국정보방송통신대연합', -- 주최기관
@@ -153,10 +155,11 @@ AI와 일자리 변화, AI 알고리즘 편향성, AI 환각(할루시네이션)
 
 🟦 문의사항
 
-한국정보방송통신대연합 디지털정책협력본부(02-2132-2085, jaehoonko@kfict.or.kr)' -- 내용
+한국정보방송통신대연합 디지털정책협력본부(02-2132-2085, jaehoonko@kfict.or.kr)', -- 내용
+'7fafd4a9-d637-4098-b5e1-a49deb136f3a.png'
 );
 
-insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content)
+insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content, file1)
 values('admin',
 '[과학기술정보통신부] AI·디지털 네이티브 토론대회', -- 제목
 '과학기술정보통신부/한국지능정보사회진흥원, 한국정보방송통신대연합', -- 주최기관
@@ -218,10 +221,11 @@ AI·디지털 네이티브 토론대회
 
 🟦 문의사항
 
-한국정보방송통신대연합 디지털정책협력본부(02-2132-2085, jaehoonko@kfict.or.kr)' -- 내용
+한국정보방송통신대연합 디지털정책협력본부(02-2132-2085, jaehoonko@kfict.or.kr)', -- 내용
+'209c49a2-5d3c-4af6-a493-42b7baa1b620.png'
 );
 
-insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content)
+insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content, file1)
 values('admin',
 '[데이콘] 2025 동원 AI Challenge (~9/1)', -- 제목
 '동원그룹', -- 주최기관
@@ -271,10 +275,11 @@ https://dacon.io/competitions/official/236546/overview/description
 
 대회 홈페이지 내 규칙 탭 (https://dacon.io/competitions/official/236546/overview/rules) 참고하여
 
-대회 홈페이지 내 토론 탭 (https://dacon.io/competitions/official/236546/talkboard)에 문의' -- 내용
+대회 홈페이지 내 토론 탭 (https://dacon.io/competitions/official/236546/talkboard)에 문의', -- 내용
+'ec9fc934-465b-42a9-81fb-239c48571c58.png'
 );
 
-insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content)
+insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content, file1)
 values('admin',
 '[데이콘] 제 7회 대구 빅데이터 분석 경진대회(~8/29)', -- 제목
 '대구광역시/대구디지털혁신진흥원', -- 주최기관
@@ -356,10 +361,11 @@ https://dacon.io/competitions/official/236548/overview/description
 
 대회 홈페이지 내 규칙 탭 https://dacon.io/competitions/official/236548/overview/rules 참고하여
 
-대회 홈페이지 내 토론 탭 https://dacon.io/competitions/official/236548/talkboard 에 문의' -- 내용
+대회 홈페이지 내 토론 탭 https://dacon.io/competitions/official/236548/talkboard 에 문의', -- 내용
+'f43dd70c-e8c1-4fa8-a2ba-21e7f0236ac4.jpg'
 );
 
-insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content)
+insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content, file1)
 values('admin',
 'NC AI 제 1회 ‘VARCO 3D’ 인디게임 공모전', -- 제목
 'NC AI', -- 주최기관
@@ -409,10 +415,11 @@ VARCO 3D를 활용한 나만의 게임을 만들어보세요.
 NC AI 공식 홈페이지
 https://nc-ai.com/ko
 접수 신청 구글 폼 링크
-https://forms.gle/PDYySQdYBmz3e4cL9' -- 내용
+https://forms.gle/PDYySQdYBmz3e4cL9', -- 내용
+'1439d125-7345-4076-b794-44440b05900c.jpg'
 );
 
-insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content)
+insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content, file1)
 values('admin',
 '제3회 2025 네트워크 AI 해커톤', -- 제목
 '한국전자통신연구원 (ETRI) , 부산광역시, AiNET Forum', -- 주최기관
@@ -500,10 +507,11 @@ cs@aifactory.page
 
 ETRI 네트워크연구본부 :  jeonhs@etri.re.kr
 
-AI Network 포럼 사무국 : lim@osia.or.kr' -- 내용
+AI Network 포럼 사무국 : lim@osia.or.kr', -- 내용
+'47a75086-cd0c-4570-9278-7fa6918d1787.jpg'
 );
 
-insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content)
+insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content, file1)
 values('admin',
 '제 2회 부산글로벌허브도시 청년 해커톤 대회', -- 제목
 '부산광역시, KNN', -- 주최기관
@@ -629,10 +637,11 @@ KNN 사장상
 
 - 051-714-4674
 
-- hackathon@beople.co.kr' -- 내용
+- hackathon@beople.co.kr', -- 내용
+'01d771f4-4611-4019-beff-54b641dd355b.jpg'
 );
 
-insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content)
+insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content, file1)
 values('admin',
 '2025 사이버공격방어대회(Cyber Conflict Exercise 2025) 참가자 모집', -- 제목
 '국가정보원, 국가보안기술연구소', -- 주최기관
@@ -694,10 +703,11 @@ now(), -- 등록일
 
 공식 홈페이지 : https://cce.cstec.kr/
 
-국가정보원, 국가보안기술연구소' -- 내용
+국가정보원, 국가보안기술연구소', -- 내용
+'9c28ec53-eaaf-4141-818b-35e72b154f1f.png'
 );
 
-insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content)
+insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content, file1)
 values('admin',
 '리얼톤 | Realthon', -- 제목
 '쩜넷', -- 주최기관
@@ -741,10 +751,11 @@ Q. 팀빌딩은 어떻게 진행하나요?
 A. 팀을 미리 만들어서 신청해주셔도 좋고, 개인 참가 이후 진행되는 팀 빌딩 온/오프라인 세션에서 팀을 조직하셔도 됩니다! 팀 빌딩이 어려우신 경우 팀 빌딩을 원활히 하실 수 있도록 쩜넷 코어 멤버들이 지원해드릴 예정입니다!
 
 Q. 팀이 이미 있는데 팀 내용이 신청서에 없어요!
-A. 팀 빌딩 및 조직은 개인 참가 이후 따로 진행할 예정입니다. 일단 리얼톤에 참가할 모든 분들은 구글 폼 작성 부탁드립니다!' -- 내용
+A. 팀 빌딩 및 조직은 개인 참가 이후 따로 진행할 예정입니다. 일단 리얼톤에 참가할 모든 분들은 구글 폼 작성 부탁드립니다!', -- 내용
+'b6affb2b-5edd-4503-8c53-c5d56f6f614d.jpg'
 );
 
-insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content)
+insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content, file1)
 values('admin',
 '2025 금융 AI Challenge : 금융 AI 모델 경쟁(~8/29)', -- 제목
 '금융보안원', -- 주최기관
@@ -786,10 +797,11 @@ AI에 관심 있는 누구나
 
 대회 홈페이지 내 규칙 탭 https://dacon.io/competitions/official/236527/overview/rules 참고하여
 
-대회 홈페이지 내 토론 탭 https://dacon.io/competitions/official/236527/talkboard 에 문의' -- 내용
+대회 홈페이지 내 토론 탭 https://dacon.io/competitions/official/236527/talkboard 에 문의', -- 내용
+'0ee278f1-8c28-4bfe-be98-ad7795baee29.png'
 );
 
-insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content)
+insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content, file1)
 values('admin',
 '[데이콘] 2025 전력사용량 예측 AI 경진대회 (~8/25)', -- 제목
 '한국에너지공단', -- 주최기관
@@ -894,10 +906,11 @@ o 시상 내역 : 전체 10명(팀), 총상금 410만원, 통일부장관상
 
 o 문의 사항
 
-- 통일부 정보화담당관 02-2100-5746, 5992 / data@unikorea.go.kr' -- 내용
+- 통일부 정보화담당관 02-2100-5746, 5992 / data@unikorea.go.kr', -- 내용
+'533cd7c2-f5d0-4550-bddb-a64aa6914b4c.png'
 );
 
-insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content)
+insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content, file1)
 values('admin',
 '10분 게임 콘테스트 - 그때 그 게임편 -', -- 제목
 '인디 드라이브(만들래)', -- 주최기관
@@ -953,10 +966,11 @@ now(), -- 등록일
 - 3등 30만원
 
 더 자세한 내용은 아래 링크를 참고해주세요
-https://mandlemandle.com/article/e1c6e0' -- 내용
+https://mandlemandle.com/article/e1c6e0', -- 내용
+'f3300db8-6073-455a-8ce3-008f77df1cfa.png'
 );
 
-insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content)
+insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content, file1)
 values('admin',
 '넥슨 NYPC 코드배틀', -- 제목
 '넥슨코리아', -- 주최기관
@@ -964,10 +978,11 @@ now(), -- 등록일
 '2025-07-07 00:00:00', -- 시작일 '2025-07-23 00:00:00'
 '2025-08-18 23:59:59', -- 마감일
 'https://www.allforyoung.com/posts/67412', -- 출처
-'' -- 내용
+'', -- 내용
+'8a963ae8-563b-446d-8be6-54ac1cfb423c.png'
 );
 
-insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content)
+insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content, file1)
 values('admin',
 '[데이콘] 데이콘 x BDA 학습자 수료 예측 AI 경진대회 (~08/25)', -- 제목
 '데이콘', -- 주최기관
@@ -1003,10 +1018,11 @@ https://dacon.io/competitions/official/236519/overview/description
 
 대회 홈페이지 내 규칙 탭 https://dacon.io/competitions/official/236519/overview/rules 참고하여
 
-대회 홈페이지 내 토론 탭 https://dacon.io/competitions/official/236519/talkboard 에 문의' -- 내용
+대회 홈페이지 내 토론 탭 https://dacon.io/competitions/official/236519/talkboard 에 문의', -- 내용
+'8941b63f-6000-4bd4-9c80-c5c28dc7e952.png'
 );
 
-insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content)
+insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content, file1)
 values('admin',
 '제 5회 KOPIS 빅데이터 공모전 (~7/30)', -- 제목
 '문화체육관광부/예술경영지원센터', -- 주최기관
@@ -1066,10 +1082,11 @@ now(), -- 등록일
 - Tel : 070-7709-2350 (10:00~17:00)
 - E-mail : kopisbigdata@gmail.com
 
-' -- 내용
+', -- 내용
+'c15ad69e-b936-4b6e-93cc-d4f10f3c1754.jpg'
 );
 
-insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content)
+insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content, file1)
 values('admin',
 '2025 블레이버스 MVP 개발 해커톤: 시즌2', -- 제목
 '강동구청년해냄센터, 어치브모먼트(Blaybus)', -- 주최기관
@@ -1114,10 +1131,11 @@ now(), -- 등록일
 
 📢문의처
 - 인스타그램 @blaybus_
-- 카카오톡채널 https://pf.kakao.com/_BFxgNG' -- 내용
+- 카카오톡채널 https://pf.kakao.com/_BFxgNG', -- 내용
+'f496f1ea-2aa7-4de7-9219-d51f07a2a6be.png'
 );
 
-insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content)
+insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content, file1)
 values('admin',
 '퀄컴 Edge AI 개발자 해커톤', -- 제목
 '퀄컴 테크날러지스 Inc., 마이크로소프트 코리아', -- 주최기관
@@ -1226,10 +1244,11 @@ Snapdragon® X 시리즈 프로세서가 탑재된 Copilot+ PC에서 실행되�
 
 Snapdragon 및 Qualcomm 브랜드 제품은 Qualcomm Technologies, Inc. 및/또는 그 자회사의 제품입니다. 
 
-' -- 내용
+', -- 내용
+'7f42b7d0-2763-44a6-adbd-683f56fc77c2.png'
 );
 
-insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content)
+insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content, file1)
 values('admin',
 'NK이노베이션 해커톤 대회 참가자 모집 공고', -- 제목
 '부산외국어대학교, 나비미래연구소', -- 주최기관
@@ -1272,10 +1291,11 @@ NK이노베이션
 
 3. 문의처
 ◦(전 화) 010-3231-0996
-◦(E-mail) nkinnovation.group@gmail.com' -- 내용
+◦(E-mail) nkinnovation.group@gmail.com', -- 내용
+'b4ac1056-fa97-4aaa-a5b8-27b47ca614f1.png'
 );
 
-insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content)
+insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content, file1)
 values('admin',
 '2025년 천안시 데이터 분석 아이디어 경진대회', -- 제목
 '천안', -- 주최기관
@@ -1414,10 +1434,11 @@ now(), -- 등록일
 
 - 동일자료로 타 기관 대회에서 입상하였거나, 타인의 저작권 침해 시 지원이 취소됨
 
-- 본 공모전 진행 일정과 내용은 주관기관의 사정에 따라서 변경될 수 있음' -- 내용
+- 본 공모전 진행 일정과 내용은 주관기관의 사정에 따라서 변경될 수 있음', -- 내용
+'31ab8863-ec04-4fa9-901f-884d5a1d4fc7.jpg'
 );
 
-insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content)
+insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content, file1)
 values('admin',
 '[데이콘] 2025 Samsung Collegiate Programming Challenge : AI 챌린지 (~7/28)', -- 제목
 '삼성전자,삼성리서치', -- 주최기관
@@ -1454,10 +1475,11 @@ https://dacon.io/competitions/official/236500/overview/rules 참고하여
 
 대회 홈페이지 내 토론 탭
 
-https://dacon.io/competitions/official/236500/talkboard 에 문의' -- 내용
+https://dacon.io/competitions/official/236500/talkboard 에 문의', -- 내용
+'7c3f1ee2-266f-4514-a918-0e32abdf3573.jpg'
 );
 
-insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content)
+insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content, file1)
 values('admin',
 '[국립국어원] 2025년 인공지능(AI) 말평 경진대회 개최 (6/11 ~ 7/31)', -- 제목
 '국립국어원', -- 주최기관
@@ -1501,95 +1523,11 @@ https://kli.korean.go.kr/benchmark/taskBoardsOrdtm/manualList.do
 
 ▶ 기타
 
-유의사항 / 문의사항은 과제 게시판 내 문의 메뉴 사용' -- 내용
+유의사항 / 문의사항은 과제 게시판 내 문의 메뉴 사용', -- 내용
+'cbf3f4a0-1948-4e76-89f1-fb7d002b684d.png'
 );
 
-insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content)
-values('admin',
-'한양대와 함께하는 2025 전국 청소년 오픈 SW GAME 코딩대회 with 파이썬', -- 제목
-'한양대학교 ERICA, 한양대학교 ERICA 소프트웨어융합대학', -- 주최기관
-now(), -- 등록일
-'2025-06-02 00:00:00', -- 시작일 '2025-07-23 00:00:00'
-'2025-08-10 23:59:59', -- 마감일
-'https://www.allforyoung.com/posts/65978', -- 출처
-'🧑‍💻 모집 대상
-개인 또는 5인 이내 1팀
-
-전국 중·고등학생 또는 청소년 (14~19세)
-
-📝 참가자 제공 사항
-대회 필수 강의 및 자료 제공
-(참가자 전체 모집 주차 별 메일 발송 예정)
-
-파이썬 기초 강의
-
-발표 + 게임 전략집
-
-파이썬 게임 코딩 강의
-
-🎮 대회 주제
-자유 주제의 게임 개발
-
-*파이썬 활용 필수
-
-📅 참가 신청 기간
-1차 : 25. 6. 2 (월) ~ 25. 6. 22 (일)
-
-2차 : 25. 6. 23 (월) ~ 25. 7. 13 (일)
-
-3차 : 25. 7. 14 (월) ~ 25. 7. 27 (일)
-
-4차 : 25. 7. 28 (월) ~ 25. 8. 10 (일)
-
-🗂 최종 결과물 제출
-제출 기간: 2025. 8. 25 (월) ~ 2025. 9. 7 (일)
-
-제출 결과물:
-
-발표자료 (PPT)
-
-파이썬 게임 개발소스 (.py)
-
-발표 및 게임 시연 영상 1개 (3분)
-
-✅ 대회 제출 조건
-구분
-
-조건 내용
-
-개발 조건
-
-- 파이썬으로만 개발하며 개발 플랫폼은 자유
-- 제출 소스(.py)는 파이썬 통합 개발 환경(IDLE) 또는 파이참에서 실행 가능해야 함
-- 코딩에 이미지 사용시, 포함하여 함께 제출
-- [참고] 심사 시 파이썬, 파이참, pip 외의 프로그램은 설치하지 않음
-
-발표자료 조건
-
-- 발표 자료에 게임 소개를 포함할 것
-- 첫 페이지에는 라이브러리 설치(pip) 코드 추가(있을시)
-- 파이썬 개발소스에 대한 자세한 설명 필요
-(이해 안 되는 설명은 감점)
-
-발표영상 조건
-
-- 발표자료는 반드시 3분 이내
-- 앞부분에는 발표 자료 기반 음성으로 설명
-- 뒷부분에는 게임 시연 기반 음성으로 설명
-- 얼굴 공개 및 자막은 자유, 음성 설명이 없으면 감점
-
-🏆 시상 내역
-총 상금 250만원 및 한양대학교 ERICA 총장상 수여
-
-대상: 1팀 (상금 50만원)
-
-최우수상: 2팀 (각 25만원)
-
-우수상: 10팀 (각 15만원)
-※ 타 대회 수상 및 표절 적발 시 입상 제외됨' -- 내용
-);
-
-insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content)
+insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content, file1)
 values('admin',
 '제9회 개방형 클라우드 플랫폼(K-PaaS) 활용 공모전(~10/31)', -- 제목
 '과학기술정보통신부 / 한국지능정보사회진흥원', -- 주최기관
@@ -1679,7 +1617,8 @@ now(), -- 등록일
 개방형 클라우드 플랫폼 센터
 T. 02-6372-5001/ E. contest@k-paas.or.kr
 
-' -- 내용
+', -- 내용
+'3235f819-52aa-46bb-abfd-500245b72c66.jpg'
 );
 
 select * from contest;

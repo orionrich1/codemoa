@@ -11,7 +11,7 @@
 						<h2 class="fs-3 fw-bold">도서 추천글 수정하기</h2>
 					</div>
 				</div>  
-				<form name="lectureUpdateForm" action="bookUpdate" id="updateForm" 
+				<form name="bookUpdateForm" action="bookUpdate" id="updateForm" 
 					class="row g-3 border-primary" method="post" enctype="multipart/form-data">
 					<input type="hidden" name="bookNo" th:value="${book.bookNo}">
 
@@ -34,7 +34,7 @@
 					</div>
 					<div class="col-8 offset-md-2">
 						<label for="title" class="form-label">출판일</label>
-						<input type="date" class="form-control" name="pubDate"  id="pubDate" th:value="${book.pubDate}">
+						<input type="date" class="form-control" name="pub"  id="pub" th:value="${book.pubDate}">
 					</div>
 					<div class="col-8 offset-md-2">
 						<label for="title" class="form-label">별 점</label>
