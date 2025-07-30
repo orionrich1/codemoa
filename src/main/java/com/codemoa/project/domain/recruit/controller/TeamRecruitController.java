@@ -13,10 +13,12 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,6 +40,27 @@ import lombok.extern.slf4j.Slf4j;
 public class TeamRecruitController {
 	
 	private final String UPLOAD_DIR = Paths.get(System.getProperty("user.dir"), "src/main/resources/static/files").toString();
+	
+	@DeleteMapping("/recruit/{recruitId}")
+	public ResponseEntity<?> deleteRecruit(@PathVariable("recruitId") int recruitId, HttpSession session){
+		// 로그인 기능 구현 완료시 활성화
+		/*
+		 String loginId = (String) session.getAttribute("loginId");
+		 TeamRecruit teamRecruit = teamRecruitService.getRecruitById(recruitId);
+		 if (teamRecruit == null || !teamRecruit.getUserId().equals(loginId)){
+		 	return ResponseEntity.status(HttpStatus.FORBIDDEN).body("삭제 원한이 없습니다.");
+		 }
+		 */
+		
+		boolean result = teamRecruitService.deleteRecruit(recruitId);
+		if(result) {
+			return ResponseEntity.ok().body("삭제 완료");
+		} else {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("삭제 실패");
+		}
+		
+	}
+	
 	
 	@GetMapping("/recruit/updateForm")
 	public String showUpdateForm(@RequestParam("recruitId") int recruitId, HttpSession session, Model model, HttpServletResponse response) throws IOException {

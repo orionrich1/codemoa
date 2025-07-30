@@ -91,7 +91,7 @@
 				});
 				if(resp.ok){
 					alert('삭제가 완료되었습니다.');
-					window.location.href="/recruit/teamRecruitlist";
+					window.location.href="/TeamRecruitList";
 				} else{
 					alert('삭제 실패');
 				}

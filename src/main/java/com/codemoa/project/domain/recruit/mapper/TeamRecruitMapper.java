@@ -12,6 +12,8 @@ import com.codemoa.project.domain.recruit.entity.TeamRecruit;
 @Mapper
 public interface TeamRecruitMapper {
 
+	int deleteRecruit(int recruitId);
+	
 	public void incrementViewCount(int recruitId);
 	
 	public void updateTeamRecruit(TeamRecruit teamRecruit);

@@ -9,6 +9,8 @@ import com.codemoa.project.domain.recruit.entity.TeamRecruit;
 
 public interface TeamRecruitService {
 
+	public boolean deleteRecruit(int recruitId);
+	
 	void updateTeamRecruit(TeamRecruit teamRecruit, MultipartFile uploadFile) throws Exception;
 	
 	void updateTeamRecruit(TeamRecruit teamRecruit);
