@@ -29,6 +29,9 @@ public class User {
 
     @Column(name = "total_points")
     private Integer totalPoints;
+    
+    @Column(name = "unban_date")
+    private LocalDateTime unbanDate;
 
     @Column(name = "membership_date")
     private LocalDateTime membershipDate;

@@ -11,7 +11,7 @@ import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import com.codemoa.project.domain.user.service.UserService;
+import com.codemoa.project.domain.user.service.SnsUserService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
-	private final UserService userService;
+	private final SnsUserService snsUserService;
 	
 	@Autowired
 	private HttpServletRequest request;
@@ -38,7 +38,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 		Map<String, Object> attributes = oauth2User.getAttributes();
 
 		// 사용자 정보 매핑 및 가입 처리
-		OAuth2UserLoginResult user = userService.processOAuthUser(provider, attributes);
+		OAuth2UserLoginResult user = snsUserService.processOAuthUser(provider, attributes);
 
 		if (user.getStatus() == OAuth2UserLoginResult.Status.SUCCESS) {
 			return new CustomOAuth2User(user.getUser(), provider, user.getProviderId());

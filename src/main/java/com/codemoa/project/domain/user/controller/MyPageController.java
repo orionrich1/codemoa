@@ -11,7 +11,7 @@ import com.codemoa.project.domain.user.entity.User;
 import com.codemoa.project.domain.user.security.CustomOAuth2User;
 import com.codemoa.project.domain.user.security.CustomUserDetails;
 import com.codemoa.project.domain.user.service.MyPageService;
-import com.codemoa.project.domain.user.service.UserService;
+import com.codemoa.project.domain.user.service.SnsUserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MyPageController {
 	private final MyPageService myPageService;
-	private final UserService userService;
+	private final SnsUserService snsUserService;
 
 	@GetMapping
 	public String toMain() {
@@ -53,7 +53,7 @@ public class MyPageController {
 			return "redirect:/my-pages/";
 		}
 		
-		userService.unlinkSnsAccount(user.getUserId());
+		snsUserService.unlinkSnsAccount(user.getUserId());
 		return "redirect:/my-pages/";
 	}
 }

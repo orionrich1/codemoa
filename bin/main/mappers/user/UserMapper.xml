@@ -2,6 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.codemoa.project.domain.user.mapper.UserMapper">
+
+	<select id="getBanReason">
+		SELECT ban_reason FROM ban_history ORDER BY history_no DESC LIMIT 1;
+	</select>
+
 	<select id="findId" resultType="User">
 		SELECT * FROM user WHERE name=#{userName} AND mobile=#{userPhone};
 	</select>

@@ -9,7 +9,9 @@ import org.apache.ibatis.annotations.Param;
 import com.codemoa.project.domain.user.entity.User;
 
 @Mapper
-public interface UserMapper {
+public interface UserMapper {	
+	public String getBanReason(String userId);
+	
 	public List<User> findId(@Param("userName") String userName, @Param("userPhone") String userPhone);
 
 	public User findPass(@Param("userId") String userId, @Param("userName") String userName,

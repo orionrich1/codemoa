@@ -18,6 +18,7 @@ import com.codemoa.project.domain.user.security.OAuth2UserLoginResult;
 
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -33,51 +34,14 @@ public class UserService {
 
 	private final UserRepository userRepository;
 	private final LocalUserRepository localUserRepository;
-	private final SnsUserRepository snsUserRepository;
 	private final UserGradeRepository userGradeRepository;
 	
 	private final PasswordEncoder passwordEncoder;
 	
+	private final SnsUserService snsUserSerivce;
 	private final UserMapper userMapper;
-	private final SnsUserMapper snsUserMapper;
 
-	// SNS 로그인
-	@Transactional
-	public OAuth2UserLoginResult processOAuthUser(String provider, Map<String, Object> attributes) {
-		OAuth2UserLoginResult result = new OAuth2UserLoginResult();
-		String providerId = "";
 
-		if (provider.equals("google")) {
-			providerId = attributes.get("sub").toString();
-		} else if (provider.equals("kakao")) {
-			providerId = attributes.get("id").toString();			
-		} else {
-			result.setStatus(OAuth2UserLoginResult.Status.FAIL);
-			return result;
-		}
-
-		Optional<SnsUser> user = snsUserRepository.findBySnsId(providerId);
-		if (user.isPresent()) {
-		    result.setStatus(OAuth2UserLoginResult.Status.SUCCESS);
-		    result.setUser(user.get().getUser()); // 실제 User 객체로 변환
-		    result.setProviderId(providerId);
-		} else {
-		    result.setStatus(OAuth2UserLoginResult.Status.NEED_SIGN);
-		    result.setProviderId(providerId);
-		}
-		
-		return result;
-	}
-	
-	// SNS 계정과 연동한 상태로 로그인 시 DB에 등록
-	@Transactional
-	public void linkSnsAccount(String userId, String provider, String providerId) {
-		snsUserMapper.linkSnsAccount(userId, provider, providerId);
-	}
-	
-	public void unlinkSnsAccount(String userId) {
-		snsUserMapper.unlinkSnsAccount(userId);	
-	}
 	
     @Transactional
     public String signUp(UserSignUpRequest request, String snsProvider, String snsProviderId) {
@@ -115,10 +79,26 @@ public class UserService {
         // 만약 SNS 관련 정보가 있다면 SNS과 연동되는 과정도 추가로 진행
 	    if (!(snsProvider == null || snsProvider.isBlank() ||
 	    		snsProviderId == null || snsProviderId.isBlank())) {
-	    	linkSnsAccount(newUser.getUserId(), snsProvider, snsProviderId);
+	    	snsUserSerivce.linkSnsAccount(newUser.getUserId(), snsProvider, snsProviderId);
         }
 
         return newUser.getUserId();
+    }
+    
+    public boolean checkIsBan(User user) {
+    	LocalDateTime banLeftDay = user.getUnbanDate();
+    	LocalDateTime now = LocalDateTime.now();
+
+    	if (banLeftDay.isAfter(now)) {
+    		return true;
+    	}
+    	else {
+    		return false;
+    	}
+    }
+    
+    public String getBanReason(String userId) {
+    	return userMapper.getBanReason(userId);
     }
     
 	public List<User> findResult(UserFindRequest request) {
