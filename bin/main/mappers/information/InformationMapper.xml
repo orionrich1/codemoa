@@ -60,7 +60,7 @@
 
 	<select id="getBookList" parameterType="map">
 		select * from book
-		ORDER BY contest_no DESC
+		ORDER BY book_no DESC
 		LIMIT #{startRow}, #{num}	
 	</select>
 	
@@ -82,11 +82,11 @@
 
 	<update id="updateBook" parameterType="com.codemoa.project.domain.information.entity.Book">
 		update Book
-		set title = #{title}, host_organization = #{hostOrganization}, 
-		start_date = #{startDate}, end_date = #{endDate}, 
+		set title = #{title}, publisher = #{publisher}, 
+		pub_date = #{pubDate}, rating = #{rating}, 
 		content = #{content}, reg_date = SYSDATE(),
-		contest_source = #{contestSource}, file1 = #{file1}
-		where contest_no = #{contestNo}
+		book_source = #{bookSource}, file1 = #{file1}, isbn = #{isbn}
+		where book_no = #{bookNo}
 	</update>
 	
 	<delete id="deleteBook">
@@ -94,10 +94,10 @@
 	</delete>
 
 	<insert id="addBook" parameterType="com.codemoa.project.domain.information.entity.Book">
-		insert into contest (user_id, title, host_organization, reg_date, start_date, end_date, 
-			contest_source, content, file1)
-		values( #{userId}, #{title}, #{hostOrganization}, SYSDATE(), #{startDate}, #{endDate}, 
-			#{contestSource}, #{content}, #{file1})
+		insert into book (user_id, title, publisher, reg_date, pub_date, isbn, rating, total_page_num,
+			book_source, content, file1)
+		values( #{userId}, #{title}, #{publisher}, SYSDATE(), #{pubDate}, #{isbn}, #{rating}, #{totalPageNum},
+			#{bookSource}, #{content}, #{file1})
 	</insert>
 	
 	

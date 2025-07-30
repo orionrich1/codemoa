@@ -8,12 +8,12 @@
 			<div class="col">
 				<div class="row text-center mb-5">
 					<div class="col">
-						<h2 class="fs-3 fw-bold">강좌 추천글 수정하기</h2>
+						<h2 class="fs-3 fw-bold">공모전 추천글 수정하기</h2>
 					</div>
 				</div>  
-				<form name="lectureUpdateForm" action="lectureUpdate" id="updateForm" 
+				<form name="contestUpdateForm" action="contestUpdate" id="updateForm" 
 					class="row g-3 border-primary" method="post" enctype="multipart/form-data">
-					<input type="hidden" name="recommendNo" th:value="${lecture.recommendNo}">
+					<input type="hidden" name="contestNo" th:value="${contest.contestNo}">
 
 					<div class="col-4 offset-md-2">
 						<!--  
@@ -21,32 +21,28 @@
 						<input type="text" class="form-control" name="writer" id="writer" 
 							placeholder="작성자를 입력해 주세요" th:value="${lecture.userId}" readonly>
 						-->
-						<p>작성자 : [[${lecture.userId}]]</p>
+						<p>작성자 : [[${contest.userId}]]</p>
 					</div>
 
 					<div class="col-8 offset-md-2">
 						<label for="title" class="form-label">제 목</label>
-						<input type="text" class="form-control" name="title"  id="title" th:value="${lecture.title}">
+						<input type="text" class="form-control" name="title"  id="title" th:value="${contest.title}">
 					</div>
 					<div class="col-8 offset-md-2">
-						<label for="title" class="form-label">부제목</label>
-						<input type="text" class="form-control" name="subtitle"  id="subtitle" th:value="${lecture.subtitle}">
+						<label for="title" class="form-label">주최기관</label>
+						<input type="text" class="form-control" name="hostOrganization"  id="hostOrganization" th:value="${contest.hostOrganization}">
 					</div>
 					<div class="col-8 offset-md-2">
-						<label for="title" class="form-label">카테고리</label>
-						<input type="text" class="form-control" name="category"  id="category" th:value="${lecture.category}">
+						<label for="title" class="form-label">시작일</label>
+						<input type="text" class="form-control" name="startDate"  id="startDate" th:value="${contest.startDate}">
 					</div>
 					<div class="col-8 offset-md-2">
-						<label for="title" class="form-label">별 점</label>
-						<input type="text" class="form-control" name="rating"  id="rating" th:value="${lecture.rating}">
+						<label for="title" class="form-label">마감일</label>
+						<input type="text" class="form-control" name="endDate"  id="endDate" th:value="${contest.endDate}">
 					</div>
 					<div class="col-8 offset-md-2">
-						<label for="content" class="form-label">이런걸 배울 수 있어요 :</label>
-						<textarea class="form-control" name="content1" id="content" rows="10">[[${lecture.content1}]]</textarea>
-					</div>
-					<div class="col-8 offset-md-2">
-						<label for="content" class="form-label">내 용 2</label>
-						<textarea class="form-control" name="content2" id="content" rows="10">[[${lecture.content2}]]</textarea>
+						<label for="content" class="form-label">내 용 </label>
+						<textarea class="form-control" name="content" id="content" rows="10">[[${contest.content}]]</textarea>
 					</div>
 					<div class="col-8 offset-md-2">
 						<label for="addFile" class="form-label">업로드 할 이미지</label>
@@ -54,19 +50,19 @@
 					</div>
 					<div class="col-8 offset-md-2">
 						<label for="title" class="form-label">출 처</label>
-						<input type="text" class="form-control" name="lectureSource"  id="lectureSource" th:value="${lecture.lectureSource}">
+						<input type="text" class="form-control" name="contestSource"  id="contestSource" th:value="${contest.contestSource}">
 					</div>
 					
 					<div class="col-8 offset-md-2 text-center mt-5">
 						<input type="submit" value="수정하기" class="btn btn-primary"/>
 							&nbsp;&nbsp;
 						<input type="button" value="목록보기" 
-							onclick="location.href='lectureList'" class="btn btn-primary"/>
+							onclick="location.href='contestList'" class="btn btn-primary"/>
 					</div>	
 				</form>
 			</div>
 		</div>
 		
-	</th:block>
+	</th:block>s
 </html>
 		

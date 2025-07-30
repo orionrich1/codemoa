@@ -12,7 +12,7 @@
 						<h2 class="fs-3 fw-bold">게시글 리스트</h2>
 					</div>
 				</div>  		
-				<form name="searchForm" id="searchForm" th:action="boardList" 
+				<form name="searchForm" id="searchForm" action="boardList" 
 					class="row justify-content-center my-3">
 					<div class="col-auto">
 						<select name="type" class="form-select">
@@ -36,16 +36,16 @@
 					</div>
 					<div class="row">
 						<div class="col">
-							<a th:href="@{contestList}" class="btn btn-outline-success">리스트</a>
+							<a th:href="@{bookList}" class="btn btn-outline-success">리스트</a>
 						</div>
 						<div class="col text-end">
-							<a th:href="@{contestAdd}" class="btn btn-outline-success">글쓰기</a>
+							<a th:href="@{bookAdd}" class="btn btn-outline-success">글쓰기</a>
 						</div>
 					</div>
 				</th:block>		
 				<div class="row" th:if="${not searchOption}">
 					<div class="col text-end">
-						<a th:href="@{contestAdd}" class="btn btn-outline-success">글쓰기</a>
+						<a th:href="@{bookAdd}" class="btn btn-outline-success">글쓰기</a>
 					</div>
 				</div>
 				<div class="row my-3">  			
@@ -63,18 +63,18 @@
 							
 							<tbody>
 								<!-- 검색요청이면서 게시글이 있는 경우 링크에 type, keyword 추가 -->
-								<th:block th:if="${searchOption and not #lists.isEmpty(cList)}">
-									<tr th:each="contest, status: ${cList}">
-										<td>[[${contest.contestNo}]]</td>
-										<td><a th:href="@{contestDetail(no=${contest.contestNo}, pageNum=${currentPage},
+								<th:block th:if="${searchOption and not #lists.isEmpty(bList)}">
+									<tr th:each="book, status: ${bList}">
+										<td>[[${book.bookNo}]]</td>
+										<td><a th:href="@{bookDetail(no=${book.bookNo}, pageNum=${currentPage},
 											type=${type}, keyword=${keyword})}"
-										style="text-decoration: none;">[[${contest.title}]]</a></td>
-										<td th:text="${contest.userId}"></td>
-										<td>[[${#dates.format(contest.regDate, 'yyyy-MM-dd')}]]</td>
+										style="text-decoration: none;">[[${book.title}]]</a></td>
+										<td th:text="${book.userId}"></td>
+										<td>[[${#dates.format(book.regDate, 'yyyy-MM-dd')}]]</td>
 										<!-- <td th:text="${lecture.recommendNum}"></td> -->
 									</tr>
 								</th:block>
-								<th:block th:if="${searchOption and #lists.isEmpty(cList)}">
+								<th:block th:if="${searchOption and #lists.isEmpty(bList)}">
 									<!-- 검색요청이면서 게시글이 없는 경우 -->
 									<tr>
 										<!-- <td colspan="5">"[[${keyword}]]"가 포함된 게시 글이 존재하지 않습니다.</td> -->
@@ -83,17 +83,17 @@
 								</th:block>
 								
 								<!-- 일반 게시글 요청이면서 게시글이 있는 경우 -->
-								<th:block th:if="${not searchOption and not #lists.isEmpty(cList)}">
-									<tr th:each="contest, status: ${cList}">
-										<td>[[${contest.contestNo}]]</td>
-										<td><a th:href="@{contestDetail(no=${contest.contestNo}, pageNum=${currentPage})}"
-										style="text-decoration: none;">[[${contest.title}]]</a></td>
-										<td th:text="${contest.userId}"></td>
-										<td>[[${#dates.format(contest.regDate, 'yyyy-MM-dd')}]]</td>
+								<th:block th:if="${not searchOption and not #lists.isEmpty(bList)}">
+									<tr th:each="book, status: ${bList}">
+										<td>[[${book.bookNo}]]</td>
+										<td><a th:href="@{bookDetail(no=${book.bookNo}, pageNum=${currentPage})}"
+										style="text-decoration: none;">[[${book.title}]]</a></td>
+										<td th:text="${book.userId}"></td>
+										<td>[[${#dates.format(book.regDate, 'yyyy-MM-dd')}]]</td>
 										<!-- <td th:text="${lecture.recommendNum}"></td> -->
 									</tr>
 								</th:block>
-								<th:block th:if="${not searchOption and #lists.isEmpty(cList)}">
+								<th:block th:if="${not searchOption and #lists.isEmpty(bList)}">
 									<!-- 일반 게시글요청 이면서 게시글이 없는 경우-->
 									<tr>
 										<!-- <td colspan="5">게시 글이 존재하지 않음</td> -->
@@ -109,12 +109,12 @@
 				<div class="row">
 					<div class="col">
 						<!-- 검색 요청이면서 게시글이 존재할 경우 링크에 type, keyword -->
-						<nav th:if="${searchOption and not #lists.isEmpty(cList)}" aria-label="Page navigation example">
+						<nav th:if="${searchOption and not #lists.isEmpty(bList)}" aria-label="Page navigation example">
 							<ul class="pagination justify-content-center">
 							
 								<li class="page-item" th:if="${startPage > pageGroup}">
 									<!-- /* <a class="page-link" th:href="@{boardList(pageNum=${startPage-1})}">Pre</a> */ -->
-									<a class="page-link" th:href="@{|informationContestList?pageNum=${startPage-1}&type=${type}&keyword=${keyword}|}">Pre</a>
+									<a class="page-link" th:href="@{|informationBookList?pageNum=${startPage-1}&type=${type}&keyword=${keyword}|}">Pre</a>
 								</li>
 								 
 								<!-- /* <forEach var="i begin="${startPage}" end="${endPage}"> */-->
@@ -130,25 +130,25 @@
 								</li>
 								
 								<li class="page-item" th:if="${endPage < pageCount}">
-								 	<a class="page-link" th:href="@{|contestList?pageNum=${startPage+pageGroup}&type=${type}&keyword=${keyword}|}">Next</a>
+								 	<a class="page-link" th:href="@{|bookList?pageNum=${startPage+pageGroup}&type=${type}&keyword=${keyword}|}">Next</a>
 								</li>
 							  
 							</ul>
 						</nav>
 						<!-- 검색 요청이 아니면서 게시글이 존재할 경우 -->
-						<nav th:if="${not searchOption and not #lists.isEmpty(cList)}" aria-label="Page navigation example">
+						<nav th:if="${not searchOption and not #lists.isEmpty(bList)}" aria-label="Page navigation example">
 							<ul class="pagination justify-content-center">
 							
 								<li class="page-item" th:if="${startPage > pageGroup}">
 									<!-- /* <a class="page-link" th:href="@{boardList(pageNum=${startPage-1})}">Pre</a> */ -->
-									<a class="page-link" th:href="@{|contestList?pageNum=${startPage-1}|}">Pre</a>
+									<a class="page-link" th:href="@{|bookList?pageNum=${startPage-1}|}">Pre</a>
 								</li>
 								 
 								<!-- /* <forEach var="i begin="${startPage}" end="${endPage}"> */-->
 								<li th:each="num : ${#numbers.sequence(startPage, endPage)}"
 									th:classappend="${num == currentPage} ? 'active'" class="page-item">
 									<th:block th:if="${num != currentPage}">
-										<a class="page-link" th:href="@{|contestList?pageNum=${num}|}" th:text="${num}"></a>
+										<a class="page-link" th:href="@{|bookList?pageNum=${num}|}" th:text="${num}"></a>
 									</th:block>									
 									<th:block th:unless="${num != currentPage}">
 										<a class="page-link" th:text="${num}"></a>
@@ -157,7 +157,7 @@
 								</li>
 								
 								<li class="page-item" th:if="${endPage < pageCount}">
-								 	<a class="page-link" th:href="@{|contestList?pageNum=${startPage+pageGroup}|}">Next</a>
+								 	<a class="page-link" th:href="@{|bookList?pageNum=${startPage+pageGroup}|}">Next</a>
 								</li>
 							  
 							</ul>

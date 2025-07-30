@@ -8,12 +8,12 @@
 			<div class="col">
 				<div class="row text-center mb-5">
 					<div class="col">
-						<h2 class="fs-3 fw-bold">강좌 추천글 수정하기</h2>
+						<h2 class="fs-3 fw-bold">도서 추천글 수정하기</h2>
 					</div>
 				</div>  
-				<form name="lectureUpdateForm" action="lectureUpdate" id="updateForm" 
+				<form name="bookUpdateForm" action="bookUpdate" id="updateForm" 
 					class="row g-3 border-primary" method="post" enctype="multipart/form-data">
-					<input type="hidden" name="recommendNo" th:value="${lecture.recommendNo}">
+					<input type="hidden" name="bookNo" th:value="${book.bookNo}">
 
 					<div class="col-4 offset-md-2">
 						<!--  
@@ -21,32 +21,28 @@
 						<input type="text" class="form-control" name="writer" id="writer" 
 							placeholder="작성자를 입력해 주세요" th:value="${lecture.userId}" readonly>
 						-->
-						<p>작성자 : [[${lecture.userId}]]</p>
+						<p>작성자 : [[${book.userId}]]</p>
 					</div>
 
 					<div class="col-8 offset-md-2">
 						<label for="title" class="form-label">제 목</label>
-						<input type="text" class="form-control" name="title"  id="title" th:value="${lecture.title}">
+						<input type="text" class="form-control" name="title"  id="title" th:value="${book.title}">
 					</div>
 					<div class="col-8 offset-md-2">
-						<label for="title" class="form-label">부제목</label>
-						<input type="text" class="form-control" name="subtitle"  id="subtitle" th:value="${lecture.subtitle}">
+						<label for="title" class="form-label">출판사</label>
+						<input type="text" class="form-control" name="publisher"  id="publisher" th:value="${book.publisher}">
 					</div>
 					<div class="col-8 offset-md-2">
-						<label for="title" class="form-label">카테고리</label>
-						<input type="text" class="form-control" name="category"  id="category" th:value="${lecture.category}">
+						<label for="title" class="form-label">출판일</label>
+						<input type="date" class="form-control" name="pub"  id="pub" th:value="${book.pubDate}">
 					</div>
 					<div class="col-8 offset-md-2">
 						<label for="title" class="form-label">별 점</label>
-						<input type="text" class="form-control" name="rating"  id="rating" th:value="${lecture.rating}">
+						<input type="text" class="form-control" name="rating"  id="rating" th:value="${book.rating}">
 					</div>
 					<div class="col-8 offset-md-2">
-						<label for="content" class="form-label">이런걸 배울 수 있어요 :</label>
-						<textarea class="form-control" name="content1" id="content" rows="10">[[${lecture.content1}]]</textarea>
-					</div>
-					<div class="col-8 offset-md-2">
-						<label for="content" class="form-label">내 용 2</label>
-						<textarea class="form-control" name="content2" id="content" rows="10">[[${lecture.content2}]]</textarea>
+						<label for="content" class="form-label">내 용 </label>
+						<textarea class="form-control" name="content" id="content" rows="10">[[${book.content}]]</textarea>
 					</div>
 					<div class="col-8 offset-md-2">
 						<label for="addFile" class="form-label">업로드 할 이미지</label>
@@ -54,14 +50,21 @@
 					</div>
 					<div class="col-8 offset-md-2">
 						<label for="title" class="form-label">출 처</label>
-						<input type="text" class="form-control" name="lectureSource"  id="lectureSource" th:value="${lecture.lectureSource}">
+						<input type="text" class="form-control" name="bookSource"  id="bookSource" th:value="${book.bookSource}">
 					</div>
-					
+					<div class="col-8 offset-md-2">
+						<label for="title" class="form-label">전체 페이지 수</label>
+						<input type="text" class="form-control" name="totalPageNum"  id="totalPageNum" th:value="${book.totalPageNum}">
+					</div>
+					<div class="col-8 offset-md-2">
+						<label for="title" class="form-label">ISBN 번호</label>
+						<input type="text" class="form-control" name="isbn"  id="isbn" th:value="${book.isbn}">
+					</div>
 					<div class="col-8 offset-md-2 text-center mt-5">
 						<input type="submit" value="수정하기" class="btn btn-primary"/>
 							&nbsp;&nbsp;
 						<input type="button" value="목록보기" 
-							onclick="location.href='lectureList'" class="btn btn-primary"/>
+							onclick="location.href='bookList'" class="btn btn-primary"/>
 					</div>	
 				</form>
 			</div>
