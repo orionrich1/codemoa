@@ -94,5 +94,17 @@ public class CommunityBoardService {
         // 2. 리포지토리를 이용해 ID에 해당하는 게시글을 삭제합니다.
         communityBoardRepository.deleteById(boardNo);
     }
+    
+    @Transactional(readOnly = true)
+    public BoardDetailResponse findById(Integer boardNo) {
+        CommunityBoard board = communityBoardRepository.findById(boardNo)
+                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+
+        // CommentService를 이용해 댓글 목록을 가져옵니다.
+        List<CommentResponse> comments = commentService.findAll(boardNo);
+
+        // 새로운 생성자를 사용하여 BoardDetailResponse를 생성합니다.
+        return new BoardDetailResponse(board, comments);
+    }
 }
 
