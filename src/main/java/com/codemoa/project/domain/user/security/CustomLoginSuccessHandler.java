@@ -17,7 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-// SNS 계정과 연동된 상태에서 로그인을 할 경우 실행되는 핸들러
+// 로그인을 할 경우 실행되는 핸들러
 @Component
 public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
 
