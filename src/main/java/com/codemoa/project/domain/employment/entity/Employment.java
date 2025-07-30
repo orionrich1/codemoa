@@ -1,9 +1,5 @@
 package com.codemoa.project.domain.employment.entity;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-
-import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -14,23 +10,20 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "employment")
 public class Employment {
     
 	@Id
-	private Long recruitNo;	
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long recruitNo;			//채용 공고 고유번호
 	
-	private String insttNm;
-	private String recruitNm;
-	private String jobsCdNm;
-	private String recruitSeCd;
-	private String workRegion;
-	private String career;
-	private Timestamp receprionCloseDt;
-	private String employmentUrl;
-	private Boolean isScraped;
+	@Column(nullable = false)
+	private String title;			//공고 제목
 	
-	@CreationTimestamp
-	private Timestamp createdAt;
+	@Column(nullable = false)
+	private String company;			//회사 명
 	
+	private String location;
+	private String url;
 }
 	

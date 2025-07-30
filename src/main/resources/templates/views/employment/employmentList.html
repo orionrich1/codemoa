@@ -3,18 +3,10 @@
 xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 layout:decorate="~{layouts/default_layout}"
 >
+<table>
+	<thead>
+	<tr>
+</table>
 
-<head>
-	<title>채용 공고 리스트</title>
-</head>
 
-<body>
-	<h1>채용 공고</h1>
-	<div th:each="post : ${posts}">
-		<h3 th:text="${post.recruitNm}"></h3>
-		<p th:text="${post.insttNm}"></p>
-		<p th:text="${post.workRegion}"></p>
-		<a th:href="${post.employmentUrl}" target="blank">상세보기</a>
-	</div>
-</body>
 </html>

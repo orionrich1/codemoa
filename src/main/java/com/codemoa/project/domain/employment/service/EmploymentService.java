@@ -6,26 +6,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.codemoa.project.domain.employment.entity.Employment;
-import com.codemoa.project.domain.employment.mapper.EmploymentMapper;
+import com.codemoa.project.domain.employment.repository.EmploymentRepository;
 
 @Service
 public class EmploymentService {
 	
 	@Autowired 
-	private EmploymentMapper employmentMapper;
+	private EmploymentRepository employmentRepository;
 	
+	//전체 조회
 	public List<Employment> getAll(){
-		return employmentMapper.findAll();
+		return employmentRepository.findAll();
 	}
-	
+	//ID로 단건 조회
 	public Employment getById(Long recruitNo) {
-		return employmentMapper.findById(recruitNo);
+		return employmentRepository.findById(recruitNo).orElse(null);
 	}
-	
+	//저장(신규 or 수정)
 	public void insert(Employment employment) {
-		employmentMapper.insert(employment);
+		employmentRepository.save(employment);
 	}
+	//삭제
 	public void delete(Long recruitNo) {
-		employmentMapper.delete(recruitNo);
+		employmentRepository.deleteById(recruitNo);
 	}
 }

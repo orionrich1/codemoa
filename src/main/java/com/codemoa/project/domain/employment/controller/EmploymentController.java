@@ -17,16 +17,11 @@ public class EmploymentController {
 	@Autowired
 	private EmploymentService employmentService;
 	
-	@GetMapping("/list")
+	@GetMapping("/employmentList")
 	public String list(Model model) {
-		List<Employment> posts = employmentService.getAll();
-		model.addAttribute("posts", posts);
+		List<Employment> jobs = employmentService.getAll();
+		model.addAttribute("jobs", jobs);
 		return "views/employment/employmentList";
 	}
-	@GetMapping("/detail/{id}")
-	public String detail(@PathVariable("id") Long id, Model model) {
-		Employment post = employmentService.getById(id);
-		model.addAttribute("post", post);
-		return "views/employment/employmentDetail";
-	}
+	
 }
