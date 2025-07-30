@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS sns_user;
 DROP TABLE IF EXISTS ban_history;
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS user_grade;
+DROP TABLE IF EXISTS diary;
 
 
 
@@ -69,26 +70,29 @@ CREATE TABLE ban_history (
 ) COMMENT '회원 차단 기록';
 
 
+CREATE TABLE diary (
+  diary_no INT PRIMARY KEY AUTO_INCREMENT,  -- 직접 지정됨 (AUTO_INCREMENT 아님)
+  user_id VARCHAR(10) NOT NULL,
 
-INSERT INTO user_grade (grade_id, grade_name, min_points)
-SELECT 'GENERAL', '일반회원', 0
-WHERE NOT EXISTS (SELECT 1 FROM user_grade WHERE grade_id = 'GENERAL');
+  project_name VARCHAR(255),
+  git_url VARCHAR(1024),
+  git_version VARCHAR(100),
+  commits VARCHAR(1000),
+  history TEXT,
+  content TEXT,
+  reg_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
+  CONSTRAINT fk_diary_user
+    FOREIGN KEY (user_id)
+    REFERENCES user(user_id)
+    ON DELETE CASCADE
+);
 
-
--- 2단계: 'oaeoae' 사용자의 기본 정보 생성
-INSERT INTO user (user_id, name, nickname, email, total_points, grade_id, membership_date)
-VALUES ('oaeoae', '테스트계정', '오애오애', 'oaeoae@test.com', 0, 'GENERAL', NOW());
-
-
--- 3단계: 'oaeoae' 사용자의 비밀번호 '1234' 설정
--- 주의: 실제 프로젝트에서는 반드시 비밀번호를 암호화해서 저장해야 합니다.
-INSERT INTO local_user (user_id, pass)
-VALUES ('oaeoae', '1234'); 
-
-select * from user;
 
 INSERT INTO user_grade (grade_id, grade_name, min_points) VALUES ('ADMIN', '관리자', 0);
 INSERT INTO user_grade (grade_id, grade_name, min_points) VALUES ('BRONZE', '브론즈', 0);
 INSERT INTO user_grade (grade_id, grade_name, min_points) VALUES ('SILVER', '실버', 1000);
 INSERT INTO user_grade (grade_id, grade_name, min_points) VALUES ('GOLD', '골드', 5000);
+
+
+select * from user;
