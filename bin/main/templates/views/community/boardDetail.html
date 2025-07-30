@@ -3,13 +3,10 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/default_layout}">
 
-	<div layout:fragment="content">
-	    <style>
+<div layout:fragment="content">
+	<style>
         body {
             background-color: #f8f9fa;
-        }
-        .container {
-            margin-top: 30px;
         }
         .card {
             border: none;
@@ -36,15 +33,18 @@
         .btn-group .btn {
             margin-left: 5px;
         }
-        
+        .comment-card {
+            background-color: #f8f9fa;
+        }
+        .comment-form-card {
+             background-color: #f8f9fa;
+        }
     </style>
-    <!-- Main Content -->
+
     <div class="container my-5">
         <div class="card">
             <div class="card-header p-4">
-                <!-- 제목 -->
-                <h1 class="board-title mb-3" th:text="${board.title}">게시글 제목이 여기에 표시됩니다.</h1>
-                <!-- 작성자, 작성일 등 메타 정보 -->
+                <h1 class="board-title mb-3" th:text="${board.title}">게시글 제목</h1>
                 <div class="d-flex justify-content-between align-items-center board-meta">
                     <div>
                         <span class="fw-bold" th:text="${board.authorNickname}">작성자</span>
@@ -55,26 +55,96 @@
                 </div>
             </div>
             <div class="card-body p-4">
-                <!-- 본문 내용 -->
-                <div class="board-content" th:utext="${board.content}">
-                    게시글의 본문 내용이 여기에 들어갑니다.
-                </div>
+                <div class="board-content" th:utext="${board.content}">본문 내용</div>
             </div>
             <div class="card-footer bg-white p-3 d-flex justify-content-end">
-                <!-- 버튼 그룹 -->
                 <div class="btn-group">
-                    <a href="#" class="btn btn-outline-secondary">
-                        <i class="bi bi-pencil"></i> 수정
-                    </a>
-                    <a href="#" class="btn btn-outline-danger">
-                        <i class="bi bi-trash"></i> 삭제
-                    </a>
-                    <a href="/boards" class="btn btn-primary">
-                        <i class="bi bi-list-ul"></i> 목록으로
-                    </a>
+                    <a href="#" class="btn btn-outline-secondary"><i class="bi bi-pencil"></i> 수정</a>
+                    <a href="#" class="btn btn-outline-danger"><i class="bi bi-trash"></i> 삭제</a>
+                    <a href="/list" class="btn btn-primary"><i class="bi bi-list-ul"></i> 목록으로</a>
                 </div>
             </div>
         </div>
+
+        <div class="card mt-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-chat-dots-fill"></i> 댓글 <span th:text="${#lists.size(board.comments)}">0</span>개
+                </h5>
+            </div>
+            <div class="card-body">
+                <div th:if="${#lists.isEmpty(board.comments)}" class="text-center py-4 text-muted">
+                    등록된 댓글이 없습니다.
+                </div>
+                <ul class="list-group list-group-flush" th:unless="${#lists.isEmpty(board.comments)}">
+                    <li class="list-group-item px-0" th:each="comment : ${board.comments}">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <strong th:text="${comment.authorNickname}">작성자</strong>
+                                <small class="text-muted ms-2" th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}">작성일</small>
+                            </div>
+                        </div>
+                        <p class="mt-2 mb-0" th:text="${comment.content}">댓글 내용입니다.</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+        <div class="card mt-4 comment-form-card">
+            <div class="card-body">
+                <form id="commentForm">
+                    <div class="mb-3">
+                        <textarea class="form-control" id="commentContent" rows="3" placeholder="댓글을 입력하세요" required></textarea>
+                    </div>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-pencil-square"></i> 등록
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-	</div>
+</div>
+
+<th:block layout:fragment="script">
+<script th:inline="javascript">
+    document.getElementById('commentForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const boardNo = [[${board.boardNo}]];
+        const content = document.getElementById('commentContent').value;
+
+        if (!content || content.trim() === "") {
+            alert("댓글 내용을 입력해주세요.");
+            return;
+        }
+
+        const data = {
+            content: content
+        };
+
+        fetch(`/api/boards/${boardNo}/comments`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (response.ok) {
+                alert("댓글이 성공적으로 등록되었습니다.");
+                location.reload();
+            } else {
+                alert("댓글 등록에 실패했습니다.");
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert("오류가 발생했습니다.");
+        });
+    });
+</script>
+</th:block>
 </html>

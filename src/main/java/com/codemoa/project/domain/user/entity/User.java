@@ -39,6 +39,12 @@ public class User {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "grade_id")
     private UserGrade userGrade;
+    
+    @Column(name = "ban_left_day") // DB 컬럼명은 ban_left_day로 지정됩니다.
+    private LocalDateTime banLeftDay;
+    
+    @Column(name = "ban_reason")
+    private String banReason;
 
     public User(String userId, String name, String nickname, String email, String mobile, Integer totalPoints, UserGrade userGrade) {
         this.userId = userId;

@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -83,15 +84,15 @@ public class UserService {
     
     // 차단 당한 상태인지 확인
     public boolean checkIsBan(User user) {
-    	LocalDateTime banLeftDay = user.getUnbanDate();
-    	LocalDateTime now = LocalDateTime.now();
+        LocalDateTime banLeftDay = user.getBanLeftDay();
 
-    	if (banLeftDay.isAfter(now)) {
-    		return true;
-    	}
-    	else {
-    		return false;
-    	}
+        // 정지 기록이 없으면 정지 상태가 아님 (false)
+        if (banLeftDay == null) {
+            return false;
+        }
+
+        // 현재 시간이 정지 만료일 이전이면 정지 상태임 (true)
+        return LocalDateTime.now().isBefore(banLeftDay);
     }
     
     // 차단 사유 가져오기

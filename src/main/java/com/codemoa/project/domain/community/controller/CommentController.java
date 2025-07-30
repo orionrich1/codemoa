@@ -27,7 +27,7 @@ public class CommentController {
      */
     @PostMapping("/boards/{boardNo}/comments")
     public ResponseEntity<Void> createComment(
-            @PathVariable Integer boardNo,
+    		@PathVariable("boardNo") Integer boardNo,
             @RequestBody CreateCommentRequest request
     ) {
         // TODO: 로그인 기능 구현 후, 실제 사용자 ID를 가져와야 합니다.
