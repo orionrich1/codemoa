@@ -54,6 +54,7 @@ public class SecurityConfig {
                 .successHandler(customLoginSuccessHandler)
                 .permitAll()
         	)
+        	
         	// SNS 로그인 시 실행되는 메소드
         	.oauth2Login(oauth2 -> oauth2
     	        .loginPage("/loginForm") 

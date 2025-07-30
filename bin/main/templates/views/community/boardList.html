@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default_layout}">
+
+<div layout:fragment="content">
+
+	<style>
+.table>tbody>tr {
+	cursor: pointer;
+}
+
+.card {
+	border: none;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.card-header {
+	background-color: #fff;
+	border-bottom: 1px solid #eee;
+	padding: 1.5rem;
+}
+
+.category-badge {
+	font-size: 0.8em;
+	padding: 0.4em 0.7em;
+}
+.btn-custom {
+            background-color: #0d6efd;
+            color: white;
+        }
+        .btn-custom:hover {
+            background-color: #0b5ed7;
+            color: white;
+        }
+</style>
+
+
+
+
+	<!-- Main Content -->
+	<div class="container">
+		<div class="card">
+			<div class="card-header d-flex justify-content-between align-items-center">
+				<h1 class="h4 mb-0">커뮤니티 게시판</h1>
+				<a href="/boards/write" class="btn btn-custom"> <i class="bi bi-pencil-square"></i> 글쓰기
+				</a>
+			</div>
+			<div class="card-body">
+				<div class="table-responsive">
+					<table class="table table-hover align-middle">
+						<thead class="table-light">
+							<tr>
+								<th class="text-center d-none d-md-table-cell" style="width: 10%;">번호</th>
+								<th class="text-center" style="width: 15%;">카테고리</th>
+								<th>제목</th>
+								<th class="text-center" style="width: 15%;">작성자</th>
+								<th class="text-center d-none d-md-table-cell" style="width: 15%;">작성일</th>
+							</tr>
+						</thead>
+						<tbody>
+							<!-- Thymeleaf loop to display boards -->
+							<tr th:each="board : ${boards}" th:onclick="|location.href='@{/boards/{boardNo}(boardNo=${board.boardNo})}'|">
+								<td class="text-center d-none d-md-table-cell" th:text="${board.boardNo}">1</td>
+								<td class="text-center"><span class="badge rounded-pill text-bg-secondary category-badge" th:text="${board.category}">Java</span></td>
+								<td th:text="${board.title}">게시글 제목입니다.</td>
+								<td class="text-center" th:text="${board.authorNickname}">코드모아</td>
+								<td class="text-center d-none d-md-table-cell" th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd')}">2025-07-28</td>
+							</tr>
+							<!-- Sample row for when there's no data -->
+							<tr th:if="${#lists.isEmpty(boards)}">
+								<td colspan="5" class="text-center py-5">게시글이 없습니다.</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+			</div>
+			<div class="card-footer bg-white">
+				<!-- Pagination -->
+				<nav aria-label="Page navigation">
+					<ul class="pagination justify-content-center mb-0">
+						<li class="page-item disabled"><a class="page-link" href="#">이전</a></li>
+						<li class="page-item active"><a class="page-link" href="#">1</a></li>
+						<li class="page-item"><a class="page-link" href="#">2</a></li>
+						<li class="page-item"><a class="page-link" href="#">3</a></li>
+						<li class="page-item"><a class="page-link" href="#">다음</a></li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+	</div>
+</div>
+</html>
