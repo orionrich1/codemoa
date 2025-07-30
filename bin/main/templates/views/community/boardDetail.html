@@ -113,7 +113,7 @@
     document.getElementById('commentForm').addEventListener('submit', function(event) {
         event.preventDefault();
 
-        const boardNo = [[${board.boardNo}]];
+        const boardNo = /*[[${board.boardNo}]]*/ 0;
         const content = document.getElementById('commentContent').value;
 
         if (!content || content.trim() === "") {

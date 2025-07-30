@@ -5,12 +5,15 @@ import com.codemoa.project.domain.community.entity.Comment; // 예시 경로
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @Table(name = "user")
 public class User {
@@ -57,6 +60,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
+    
+    @Column(columnDefinition = "INT DEFAULT 0") // DB에 기본값 0 설정
+    private int point;
 
 
     public User(String userId, String name, String nickname, String email, String mobile, Integer totalPoints, UserGrade userGrade) {

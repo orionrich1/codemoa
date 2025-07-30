@@ -61,4 +61,8 @@ public class Comment {
         this.user = user;
         this.communityBoard = communityBoard;
     }
+    
+    public void adopt() {
+        this.isAdopted = true;
+    }
 }
