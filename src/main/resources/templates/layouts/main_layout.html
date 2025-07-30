@@ -12,13 +12,13 @@
     	<script th:src="@{js/member.js}"></script>
 	</head>
 	<body>
-		<div class="container">			
-			<!-- header -->
-			<div th:replace="~{fragments/header::header}"></div>
+		<div class="container">
+		
+		
+			
 			<!-- content -->
+			<div th:replace="~{fragments/header::header}"></div>
 			<div layout:fragment="content"></div>
-			<!-- footer -->
-			<div th:replace="~{fragments/footer::footer}"></div>
 		</div>
 		<script th:src="@{bootstrap/bootstrap.bundle.min.js}"></script>
 	</body>

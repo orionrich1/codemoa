@@ -2,6 +2,7 @@ package com.springbootstudy.bbs.domain;
 
 import java.sql.Timestamp;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,15 +12,12 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Board {
+public class Reply {	
 	private int no;
-	private String title;
-	private String writer;
-	private String content;
+	private int bbsNo;
+	private String replyContent;
+	private String replyWriter;
 	private Timestamp regDate;
-	private int readCount;
-	private String pass;
-	private String file1;
-	private int recommend;
-	private int thank;
 }
+
+

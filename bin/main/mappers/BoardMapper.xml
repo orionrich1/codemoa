@@ -2,7 +2,94 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0// EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.springbootstudy.bbs.mapper.BoardMapper">
-<select id="boardList" resultType="Board">
-SELECT * FROM springbbs ORDER BY no DESC
+
+<!-- FAQ no에 해당하는 게시글 하나를 가져오는 맵핑 구문 -->
+<select id="getBoard" resultType="Board">
+SELECT
+*
+FROM springbbs
+WHERE no = #{no}
 </select>
+
+<!-- FAQ 전체 게시글 수를 반환하는 맵핑 구문 -->
+<select id="getBoardCount">
+	SELECT
+		COUNT(no)
+	FROM springbbs
+</select>
+
+<!-- FAQ 한 페이지 출력할 게시글 리스트를 가져오는 맵핑 구문 -->
+<select id="boardList" parameterType="map" resultType="Board">
+SELECT
+no,
+title,
+writer,
+content,
+reg_date AS regDate,
+read_count AS readCount,
+pass,
+file1
+FROM springbbs
+ORDER BY no DESC
+LIMIT #{startRow}, #{num}
+</select>
+
+<!-- FAQ 조회수를 가져오는 맵핑 구문 -->
+<update id="incrementReadCount">
+	UPDATE springbbs
+		SET read_count = read_count + 1
+	WHERE no = #{no}
+</update>
+
+<select id="replyList" resultType="Reply">
+SELECT
+no,
+bbs_no AS bbsNo,
+reply_content AS replyContent,
+reply_writer AS replyWriter,
+reg_date AS regDate
+FROM reply
+WHERE bbs_no = #{no}
+ORDER BY no DESC
+</select>
+
+<!-- ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ -->
+
+<!-- Q&A no에 해당하는 게시글 하나를 가져오는 맵핑 구문 -->
+<select id="getBoard2" resultType="Board">
+SELECT
+*
+FROM springbbs2
+WHERE no = #{no}
+</select>
+
+<!-- Q&A 전체 게시글 수를 반환하는 맵핑 구문 -->
+<select id="getBoardCount2">
+	SELECT
+		COUNT(no)
+	FROM springbbs2
+</select>
+
+<!-- Q&A 한 페이지 출력할 게시글 리스트를 가져오는 맵핑 구문 -->
+<select id="boardList2" parameterType="map" resultType="Board">
+SELECT
+no,
+title,
+writer,
+content,
+reg_date AS regDate,
+read_count AS readCount,
+pass,
+file1
+FROM springbbs2
+ORDER BY no DESC
+LIMIT #{startRow}, #{num}
+</select>
+
+<!-- Q&A 조회수를 가져오는 맵핑 구문 -->
+<update id="incrementReadCount2">
+	UPDATE springbbs2
+		SET read_count = read_count + 1
+	WHERE no = #{no}
+</update>
 </mapper>
