@@ -52,7 +52,10 @@ public class SnsUserService {
 	// SNS 계정과 연동한 상태로 로그인 시 DB에 등록
 	@Transactional
 	public void linkSnsAccount(String userId, String provider, String providerId) {
-		snsUserMapper.linkSnsAccount(userId, provider, providerId);
+		SnsUser user = snsUserMapper.isLinkedAccount(userId);
+		if (user == null) {
+			snsUserMapper.linkSnsAccount(userId, provider, providerId);
+		}
 	}
 
 	public void unlinkSnsAccount(String userId) {

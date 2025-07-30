@@ -1,6 +1,7 @@
 //도영
 package com.codemoa.project.domain.problem.controller;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +18,7 @@ import com.codemoa.project.domain.problem.dto.request.CodeSubmitRequest;
 import com.codemoa.project.domain.problem.entity.Problem;
 import com.codemoa.project.domain.problem.service.AiSupportService;
 import com.codemoa.project.domain.problem.service.ProblemService;
-
+import com.codemoa.project.domain.user.security.CustomUserDetails;
 import com.google.genai.types.GenerateContentResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -66,11 +67,12 @@ public class ProblemController {
 	}
 
 	@PostMapping("/problemWrite")
-	public String problemWriteResult(Problem problem) {
+	public String problemWriteResult(Problem problem, @AuthenticationPrincipal CustomUserDetails principal) {
 		// 권한 체크
-		if (!checkAuth())
-			return "redirect:/problems/";
-
+		if (!checkAuth(principal))
+			return "redirect:/loginForm";
+		
+		problem.setUserId(principal.getUsername());
 		problemService.addProblem(problem);
 		return "redirect:/problems/";
 	}
@@ -82,20 +84,20 @@ public class ProblemController {
 	}
 
 	@PostMapping("/problemUpdate")
-	public String problemUpdateResult(Problem problem) {
+	public String problemUpdateResult(Problem problem, @AuthenticationPrincipal CustomUserDetails principal) {
 		// 권한 체크
-		if (!checkAuth())
-			return "redirect:/problems/";
+		if (!checkAuth(principal))
+			return "redirect:/loginForm";
 
 		problemService.updateProblem(problem);
 		return "redirect:/problems/";
 	}
 
 	@GetMapping("/problemDelete")
-	public String problemDelete(@RequestParam("no") int no) {
+	public String problemDelete(@RequestParam("no") int no, @AuthenticationPrincipal CustomUserDetails principal) {
 		// 권한 체크
-		if (!checkAuth())
-			return "redirect:/problems/";
+		if (!checkAuth(principal))
+			return "redirect:/loginForm";
 
 		problemService.deleteProblem(no);
 		return "redirect:/problems/";
@@ -113,8 +115,12 @@ public class ProblemController {
 		return map;
 	}
 
-	// 권한 체크 메소드, 아직 미완성
-	private boolean checkAuth() {
+	// 권한 체크 메소드
+	private boolean checkAuth(CustomUserDetails principal) {
+		if (principal == null
+				|| !principal.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"))) {
+			return false;
+		}
 		return true;
 	}
 }

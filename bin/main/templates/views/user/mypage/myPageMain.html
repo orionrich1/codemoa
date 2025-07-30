@@ -55,8 +55,8 @@
 	
 	     <!-- 계정 관련 버튼 -->
 	     <div class="d-flex gap-2 my-4">
-	         <a href="/account/update" class="btn btn-primary">정보 수정</a>
-	         <a href="/account/delete" class="btn btn-danger">계정 탈퇴</a>
+	         <a href="updateUserForm" class="btn btn-primary">정보 수정</a>
+	         <a href="deleteUser" class="btn btn-danger" id="deleteBtn">계정 탈퇴</a>
 	         <a th:if="${myPageUser.isSnsLinked == true}" href="/my-pages/snsUnlink"
 	         	class="btn btn-warning text-dark" id="snsUnlinkBtn">SNS 연동 해제</a>
 	     </div>
@@ -87,9 +87,20 @@
 	 
 	 <script>
 		document.addEventListener('DOMContentLoaded', function () {
-			document.querySelector("#snsUnlinkBtn").addEventListener('click', function(e){
-				var doUnlink = confirm("정말 해제하시겠습니까?");
-				if (!doUnlink){
+			var snsUnlinkbtn = document.querySelector("#snsUnlinkBtn");
+			if(snsUnlinkbtn){
+				snsUnlinkbtn.addEventListener('click', function(e){
+					var doUnlink = confirm("정말 해제하시겠습니까?");
+					if (!doUnlink){
+						e.preventDefault();
+						return false;
+					}
+				});
+			}
+			
+			document.querySelector("#deleteBtn").addEventListener('click', function(e){
+				var doDelete = confirm("정말 탈퇴하시겠습니까?\n이 결정은 되돌릴 수 없습니다.");
+				if (!doDelete){
 					e.preventDefault();
 					return false;
 				}

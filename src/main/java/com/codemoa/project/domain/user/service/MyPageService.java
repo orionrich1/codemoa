@@ -1,21 +1,23 @@
 // 도영
 package com.codemoa.project.domain.user.service;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import com.codemoa.project.domain.user.dto.request.UserPassUpdateRequest;
 import com.codemoa.project.domain.user.dto.response.MyPageResponse;
-import com.codemoa.project.domain.user.entity.SnsUser;
+import com.codemoa.project.domain.user.entity.LocalUser;
 import com.codemoa.project.domain.user.entity.User;
 import com.codemoa.project.domain.user.mapper.MyPageMapper;
-import com.codemoa.project.domain.user.mapper.SnsUserMapper;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class MyPageService {
+
+	private final UserService userService;
 	private final MyPageMapper myPageMapper;
-	private final SnsUserMapper snsUserMapper;
+	private final PasswordEncoder passwordEncoder;
 
 	public MyPageResponse checkSnsLinked(User user) {
 		MyPageResponse myData = new MyPageResponse();
@@ -33,5 +35,20 @@ public class MyPageService {
 		}
 
 		return myData;
+	}
+
+	public String checkPass(UserPassUpdateRequest request) {
+
+		String userId = request.getUserId();
+		LocalUser user = userService.getLocalUser(userId);
+		
+		String pass = request.getPass();
+		boolean match = passwordEncoder.matches(pass, user.getPass());
+
+		if (match) {
+			return "Matched";
+		} else {
+			return "UnMatched";
+		}
 	}
 }

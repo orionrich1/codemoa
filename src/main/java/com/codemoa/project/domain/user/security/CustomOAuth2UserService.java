@@ -41,7 +41,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 		OAuth2UserLoginResult user = snsUserService.processOAuthUser(provider, attributes);
 
 		if (user.getStatus() == OAuth2UserLoginResult.Status.SUCCESS) {
-			return new CustomOAuth2User(user.getUser(), provider, user.getProviderId());
+			return new CustomUserDetails(user.getUser(), provider, user.getProviderId());
 		} else if (user.getStatus() == OAuth2UserLoginResult.Status.NEED_SIGN) {
 			request.getSession().setAttribute("provider", provider);
 			request.getSession().setAttribute("providerId", user.getProviderId());

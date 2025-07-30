@@ -23,37 +23,45 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService userService;
+	private final UserService userService;
 
-    @GetMapping("/loginForm")
-    public String loginForm() {
-        return "views/user/loginForm";
-    }
-    
-    // SNS 계정으로 접속한 상태일 때, 연동 해제 요청
-    @GetMapping("/snsDisconnect")
-    public String snsDisconnect(HttpSession session){
-    	session.removeAttribute("provider"); 
-    	session.removeAttribute("providerId");
-    	return "redirect:/loginForm";
-    }
+	@GetMapping("/loginForm")
+	public String loginForm() {
+		return "views/user/loginForm";
+	}
 
-    @GetMapping("/joinForm")
-    public String joinForm() {
-        return "views/user/joinForm";
-    }
+	// SNS 계정으로 접속한 상태일 때, 연동 해제 요청
+	@GetMapping("/snsDisconnect")
+	public String snsDisconnect(HttpSession session) {
+		session.removeAttribute("provider");
+		session.removeAttribute("providerId");
+		return "redirect:/loginForm";
+	}
 
-    @PostMapping("/join")
-    public String join(UserSignUpRequest request, HttpServletRequest httpRequest) {
-    	HttpSession session = httpRequest.getSession(false);
-        String snsProvider = (String) session.getAttribute("provider");
-        String snsId = (String) session.getAttribute("providerId");
-        
-        userService.signUp(request, snsProvider, snsId);
-    	session.removeAttribute("provider"); 
-    	session.removeAttribute("providerId");
-        return "redirect:/loginForm";
-    }
+	@GetMapping("/joinForm")
+	public String joinForm() {
+		return "views/user/joinForm";
+	}
+
+	@PostMapping("/join")
+	public String join(UserSignUpRequest request, HttpServletRequest httpRequest) {
+		HttpSession session = httpRequest.getSession(false);
+		String snsProvider = "";
+		String snsId = "";
+
+		if (session != null) {
+			snsProvider = (String) session.getAttribute("provider");
+			snsId = (String) session.getAttribute("providerId");
+		}
+
+		userService.signUp(request, snsProvider, snsId);
+		
+		if (session != null) {
+			session.removeAttribute("provider");
+			session.removeAttribute("providerId");
+		}
+		return "redirect:/loginForm";
+	}
 
 //    @PostMapping("/login")
 //    public String login(UserLoginRequest request, HttpSession session, RedirectAttributes redirectAttributes) { // 파라미터로 RedirectAttributes 추가
@@ -68,55 +76,54 @@ public class UserController {
 //        }
 //    }
 
-    // 스프링 Security 기본 기능과 충돌할 수 있으므로 주석 처리
+	// 스프링 Security 기본 기능과 충돌할 수 있으므로 주석 처리
 	/*
 	 * @PostMapping("/logout") public String logout(HttpSession session) {
 	 * session.invalidate(); return "redirect:/loginForm"; }
 	 */
 
-    // 아이디 찾기
-    @GetMapping("/findId")
-    public String findId() {
-    	return "views/user/findId";
-    }
-    
-    // 비밀번호 찾기
-    @GetMapping("/findPass")
-    public String findPass() {
-    	return "views/user/findPass";
-    }
-    
-    // 찾기 결과
-    @PostMapping("/findResult")
-    public String findResult(UserFindRequest request, Model model){
-    	List<User> user = userService.findResult(request);
-    	boolean isFindId = request.getUserId() == null || request.getUserId().isBlank();
-    	
-    	if (isFindId) {
-    		if (user != null && !user.isEmpty())
-    			model.addAttribute("user", user);
-    	}
-    	else {
-    		if (user != null && !user.isEmpty())
-    			model.addAttribute("user", user.get(0));
-    	}
-    	model.addAttribute("isFindId", isFindId);
-    	
-    	return "views/user/findResult";
-    }
-    
-    // 비밀번호 재설정
-    @PostMapping("/updatePass")
-    public String updatePass(UserPassUpdateRequest request) {
-    	userService.updatePass(request);
-    	return "redirect:/loginForm";
-    }
-    
-    @ExceptionHandler(IllegalArgumentException.class)
-    public String handleException(IllegalArgumentException exception, RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("error", exception.getMessage());
-        // 어떤 예외가 발생했는지에 따라 리다이렉트 경로를 다르게 할 수 있습니다.
-        // 여기서는 간단하게 joinForm으로 통일합니다.
-        return "redirect:/joinForm";
-    }
+	// 아이디 찾기
+	@GetMapping("/findId")
+	public String findId() {
+		return "views/user/findId";
+	}
+
+	// 비밀번호 찾기
+	@GetMapping("/findPass")
+	public String findPass() {
+		return "views/user/findPass";
+	}
+
+	// 찾기 결과
+	@PostMapping("/findResult")
+	public String findResult(UserFindRequest request, Model model) {
+		List<User> user = userService.findResult(request);
+		boolean isFindId = request.getUserId() == null || request.getUserId().isBlank();
+
+		if (isFindId) {
+			if (user != null && !user.isEmpty())
+				model.addAttribute("user", user);
+		} else {
+			if (user != null && !user.isEmpty())
+				model.addAttribute("user", user.get(0));
+		}
+		model.addAttribute("isFindId", isFindId);
+
+		return "views/user/findResult";
+	}
+
+	// 비밀번호 재설정
+	@PostMapping("/updatePass")
+	public String updatePass(UserPassUpdateRequest request) {
+		userService.updatePass(request);
+		return "redirect:/loginForm";
+	}
+
+	@ExceptionHandler(IllegalArgumentException.class)
+	public String handleException(IllegalArgumentException exception, RedirectAttributes redirectAttributes) {
+		redirectAttributes.addFlashAttribute("error", exception.getMessage());
+		// 어떤 예외가 발생했는지에 따라 리다이렉트 경로를 다르게 할 수 있습니다.
+		// 여기서는 간단하게 joinForm으로 통일합니다.
+		return "redirect:/joinForm";
+	}
 }

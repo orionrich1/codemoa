@@ -52,6 +52,7 @@ public class User {
 
     @PrePersist
     public void prePersist() {
-        this.membershipDate = LocalDateTime.now();
+    	this.membershipDate = LocalDateTime.now();
+    	this.unbanDate = LocalDateTime.now();
     }
 }
