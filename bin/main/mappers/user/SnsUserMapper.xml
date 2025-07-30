@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.codemoa.project.domain.user.mapper.SnsUserMapper">
+
+	<select id="isLinkedAccount" resultType="SnsUser">
+		SELECT * FROM sns_user WHERE user_id=#{userId};
+	</select>
+
+	<insert id="linkSnsAccount">
+		INSERT INTO sns_user (user_id, sns_type, sns_id) VALUES (#{userId}, #{provider}, #{providerId});
+	</insert>
+	
+	<delete id="unlinkSnsAccount">
+		DELETE FROM sns_user WHERE user_id=#{userId}
+	</delete>
+</mapper>

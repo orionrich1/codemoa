@@ -16,30 +16,30 @@
 
 					<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">커뮤니티</a>
 						<ul class="dropdown-menu rounded-3">
-							<li><a class="dropdown-item" href="#">자유게시판</a></li>
+							<li><a class="dropdown-item" href="/list">자유게시판</a></li>
 							<li><hr class="dropdown-divider"></li>
 							<li><h6 class="dropdown-header">언어 게시판</h6></li>
-							<li><a class="dropdown-item" href="#">Java</a></li>
-							<li><a class="dropdown-item" href="#">Python</a></li>
-							<li><a class="dropdown-item" href="#">JavaScript</a></li>
-							<li><a class="dropdown-item" href="#">C#</a></li>
-							<li><a class="dropdown-item" href="#">Kotlin</a></li>
+							<li><a class="dropdown-item" href="/list">Java</a></li>
+							<li><a class="dropdown-item" href="/list">Python</a></li>
+							<li><a class="dropdown-item" href="/list">JavaScript</a></li>
+							<li><a class="dropdown-item" href="/list">C#</a></li>
+							<li><a class="dropdown-item" href="/list">Kotlin</a></li>
 							<li><hr class="dropdown-divider"></li>
-							<li><a class="dropdown-item" href="#">기타</a></li>
+							<li><a class="dropdown-item" href="/list">기타</a></li>
 						</ul></li>
 
 					<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">IT 정보</a>
 						<ul class="dropdown-menu rounded-3">
-							<li><a class="dropdown-item" href="#">도서 추천</a></li>
-							<li><a class="dropdown-item" href="#">강좌 추천</a></li>
+							<li><a class="dropdown-item" href="/information/bookList">도서 추천</a></li>
+							<li><a class="dropdown-item" href="/information/lectureList">강좌 추천</a></li>
 							<li><a class="dropdown-item" href="#">유용한 사이트</a></li>
-							<li><a class="dropdown-item" href="#">공모전 정보</a></li>
+							<li><a class="dropdown-item" href="/information/contestList">공모전 정보</a></li>
 						</ul></li>
 
 					<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">채용 & 팀</a>
 						<ul class="dropdown-menu rounded-3">
 							<li><a class="dropdown-item" href="#">채용 공고</a></li>
-							<li><a class="dropdown-item" href="#">팀원 모집</a></li>
+							<li><a class="dropdown-item" th:href="@{/TeamRecruitList}">팀원 모집</a></li>
 						</ul></li>
 
 					<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">고객센터</a>
@@ -73,8 +73,14 @@
 									<span class="fw-bold" sec:authentication="principal.user.nickname"></span>
 								</a>
 								<ul class="dropdown-menu dropdown-menu-end rounded-3">
-									<li><a class="dropdown-item" href="#"><i class="bi bi-person-circle me-2"></i>마이페이지</a></li>
+									<li><a class="dropdown-item" href="/my-pages"><i class="bi bi-person-circle me-2"></i>마이페이지</a></li>
 									<li><hr class="dropdown-divider"></li>
+									
+									<th:block sec:authorize="hasRole('ROLE_ADMIN')">
+										<li><a class="dropdown-item" href="/admin"><i class="bi bi-person-video me-2"></i>관리자페이지</a></li>
+										<li><hr class="dropdown-divider"></li>
+									</th:block>
+									
 									<li>
 										<form th:action="@{/logout}" method="post" class="d-inline">
 											<button type="submit" class="dropdown-item"><i class="bi bi-box-arrow-right me-2"></i>로그아웃</button>

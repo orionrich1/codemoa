@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}">
+
+<div layout:fragment="content">
+	<div class="container">
+		<div class="row justify-content-center align-items-center vh-100">
+			<div class="col-lg-5 col-md-7 col-sm-9">
+				<div class="card shadow-lg border-0 rounded-4">
+					<div class="card-body p-4 p-sm-5">
+
+						<th:block th:if="${user}">
+							<th:block th:if="${isFindId}">
+								<div class="text-center mb-4">
+									<i class="bi bi-search display-4 text-primary"></i>
+									<h3 class="fw-bold mt-2">아이디 찾기 결과</h3>
+								</div>
+
+								<th:block th:each="users : ${user}">
+									<div class="text-center my-4">
+										<p>[[${users.userId}]]</p>
+									</div>
+								</th:block>
+							</th:block>
+
+							<th:block th:unless="${isFindId}">
+								<div class="text-center mb-4">
+									<i class="bi bi-search display-4 text-primary"></i>
+									<h3 class="fw-bold mt-2">비밀번호 재설정</h3>
+								</div>
+
+					            <form action="/updatePass" method="POST">
+									<input type="hidden" name="userId" th:value="${user.userId}">
+					
+					                <div class="mb-3">
+					                    <label for="pass" class="form-label">비밀번호</label>
+					                    <div class="input-group">
+					                        <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
+					                        <input type="password" class="form-control" id="pass" name="pass" placeholder="비밀번호를 입력하세요" required>
+					                    </div>
+					                </div>
+					
+					                <div class="mb-4">
+					                    <label for="passConfirm" class="form-label">비밀번호 확인</label>
+					                    <div class="input-group">
+					                        <span class="input-group-text"><i class="fa-solid fa-check"></i></span>
+					                        <input type="password" class="form-control" id="passConfirm" name="passConfirm" placeholder="비밀번호를 다시 한번 입력하세요" required>
+					                    </div>
+					                </div>
+					
+					                <div class="d-grid mb-3">
+					                    <button type="submit" class="btn btn-primary fw-bold btn-lg">재설정하기</button>
+					                </div>
+					            </form>
+							</th:block>
+						</th:block>
+
+						<th:block th:unless="${user}">
+							<div class="text-center mb-4">
+								<i class="bi bi-search display-4 text-primary"></i>
+								<h3 class="fw-bold mt-2">찾기 결과</h3>
+							</div>
+
+							<div class="text-center mt-4">
+								<p class="text-muted">검색된 결과가 없습니다.</p>
+							</div>
+						</th:block>
+
+						<div class="d-grid mb-3">
+							<button class="btn btn-primary btn-lg fw-bold"
+								th:onclick="|location.href='@{/loginForm}'|">로그인 화면으로 돌아가기</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+</html>

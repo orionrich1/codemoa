@@ -14,7 +14,7 @@
 		</div>
 	</div>
 
-	<form id="problemForm" method="post" action="problemResult">
+	<form id="problemForm" method="post" th:action="@{problemResult}">
 		<input type="hidden" name="no" th:value="${problem.problemId}">
 		<div class="row mt-5">
 			<table class="table align-middle border border-bottom-0">
@@ -58,7 +58,7 @@
 			</div>
 		</div>
 
-		<!-- 권한 설정 필요 -->
+		<th:block sec:authorize="hasRole('ROLE_ADMIN')">
 		<div class="row text-center my-5">
 			<div class="col-6">
 				<input type="button" class="formBtns btn btn-warning" value="수정"
@@ -69,6 +69,7 @@
 					th:onclick="|location.href='@{problemDelete(no=${problem.problemId})}'|">
 			</div>
 		</div>
+		</th:block>
 	</form>
 	<script th:src="@{/js/problem.js}"></script>
 </div>

@@ -29,6 +29,9 @@ public class User {
 
     @Column(name = "total_points")
     private Integer totalPoints;
+    
+    @Column(name = "unban_date")
+    private LocalDateTime unbanDate;
 
     @Column(name = "membership_date")
     private LocalDateTime membershipDate;
@@ -49,6 +52,7 @@ public class User {
 
     @PrePersist
     public void prePersist() {
-        this.membershipDate = LocalDateTime.now();
+    	this.membershipDate = LocalDateTime.now();
+    	this.unbanDate = LocalDateTime.now();
     }
 }

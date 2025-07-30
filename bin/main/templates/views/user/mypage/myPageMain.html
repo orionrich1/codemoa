@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}">
+
+<div layout:fragment="content">
+	<!-- 임시 css 사용중 -->
+	<link rel="stylesheet" th:href="@{/css/mypage.css}" />
+	
+	<div class="container mt-5">
+		<h1 class="mb-4 fw-bold">마이 페이지</h1>
+
+	     <!-- 내 계정 정보 -->
+	     <h2 class="mb-4">내 계정 정보</h2>
+	     <table class="table table-bordered">
+	         <tbody>
+	             <tr>
+	                 <th>아이디</th>
+	                 <td th:text="${myPageUser.user.userId}">userId</td>
+	             </tr>
+	             <tr>
+	                 <th>이름</th>
+	                 <td th:text="${myPageUser.user.name}">name</td>
+	             </tr>
+	             <tr>
+	                 <th>닉네임</th>
+	                 <td th:text="${myPageUser.user.nickname}">nickname</td>
+	             </tr>
+	             <tr>
+	                 <th>전화번호</th>
+	                 <td th:text="${myPageUser.user.mobile}">mobile</td>
+	             </tr>
+	             <tr>
+	                 <th>이메일</th>
+	                 <td th:text="${myPageUser.user.email}">email</td>
+	             </tr>
+	             <tr>
+	                 <th>가입일</th>
+	                 <td th:text="${#temporals.format(myPageUser.user.membershipDate, 'yyyy/MM/dd HH:mm')}">membershipDate</td>
+	             </tr>
+	             <tr>
+	                 <th>보유 포인트</th>
+	                 <td th:text="${myPageUser.user.totalPoints}">totalPoints</td>
+	             </tr>
+	             <tr>
+	                 <th>등급</th>
+	                 <td th:text="${myPageUser.user.userGrade.gradeName}">userGrade</td>
+	             </tr>
+	             <tr th:if="${myPageUser.snsType}">
+	                 <th>SNS 연동된 계정 타입</th>
+	                 <td th:text="${myPageUser.snsType}">snsType</td>
+	             </tr>
+	         </tbody>
+	     </table>
+	
+	     <!-- 계정 관련 버튼 -->
+	     <div class="d-flex gap-2 my-4">
+	         <a href="updateUserForm" class="btn btn-primary">정보 수정</a>
+	         <a href="deleteUser" class="btn btn-danger" id="deleteBtn">계정 탈퇴</a>
+	         <a th:if="${myPageUser.isSnsLinked == true}" href="/my-pages/snsUnlink"
+	         	class="btn btn-warning text-dark" id="snsUnlinkBtn">SNS 연동 해제</a>
+	     </div>
+	     <hr>
+	
+	     <!-- 활동 이동 버튼 -->
+		<div class="mt-4">
+		    <h4 class="mb-3">활동 보기</h4>
+		    <div class="d-flex flex-column gap-3">
+		        <a href="/my-pages/posts" class="activity-btn">
+					<i class="bi bi-pen me-2"></i>
+		            내가 쓴 글 목록
+		        </a>
+		        <a href="/my-pages/scraps" class="activity-btn">
+					<i class="bi bi-star me-2"></i>
+		            내가 스크랩한 글 목록
+		        </a>
+		        <a href="/my-pages/diary" class="activity-btn">
+					<i class="bi bi-clipboard2 me-2"></i>
+		            개발 다이어리
+		        </a>
+		    </div>
+		</div>
+	 </div>
+	 
+	 <script>
+		document.addEventListener('DOMContentLoaded', function () {
+			var snsUnlinkbtn = document.querySelector("#snsUnlinkBtn");
+			if(snsUnlinkbtn){
+				snsUnlinkbtn.addEventListener('click', function(e){
+					var doUnlink = confirm("정말 해제하시겠습니까?");
+					if (!doUnlink){
+						e.preventDefault();
+						return false;
+					}
+				});
+			}
+			
+			document.querySelector("#deleteBtn").addEventListener('click', function(e){
+				var doDelete = confirm("정말 탈퇴하시겠습니까?\n이 결정은 되돌릴 수 없습니다.");
+				if (!doDelete){
+					e.preventDefault();
+					return false;
+				}
+			});
+		});
+	 </script>
+</div>
+</html>

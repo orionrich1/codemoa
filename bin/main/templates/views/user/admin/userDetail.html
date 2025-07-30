@@ -5,6 +5,9 @@
 
 <div layout:fragment="content">
 	<div class="py-4">
+		<div class="d-none">
+			<p id="isBan">[[${user.isBan}]]</p>
+		</div>
 		<div class="d-flex justify-content-between align-items-start mb-4">
 			<h1 class="h4 mb-0">유저 상세 정보</h1>
 		</div>
@@ -18,55 +21,139 @@
 				<div class="card-body">
 					<dl class="row mb-0">
 						<dt class="col-sm-3 col-lg-2 text-muted">유저 ID</dt>
-						<dd class="col-sm-9 col-lg-10" th:text="${user.userId}">user123</dd>
+						<dd class="col-sm-9 col-lg-10" th:text="${user.userId}"></dd>
 
 						<dt class="col-sm-3 col-lg-2 text-muted">이름</dt>
-						<dd class="col-sm-9 col-lg-10" th:text="${user.name}">홍길동</dd>
+						<dd class="col-sm-9 col-lg-10" th:text="${user.name}"></dd>
 
 						<dt class="col-sm-3 col-lg-2 text-muted">닉네임</dt>
-						<dd class="col-sm-9 col-lg-10" th:text="${user.nickname}">길동이</dd>
+						<dd class="col-sm-9 col-lg-10" th:text="${user.nickname}"></dd>
 
 						<dt class="col-sm-3 col-lg-2 text-muted">전화번호</dt>
-						<dd class="col-sm-9 col-lg-10" th:text="${user.mobile}">010-1234-5678</dd>
+						<dd class="col-sm-9 col-lg-10" th:text="${user.mobile}"></dd>
 
 						<dt class="col-sm-3 col-lg-2 text-muted">포인트</dt>
 						<dd class="col-sm-9 col-lg-10">
 							<span
-								th:text="${#numbers.formatInteger(user.totalPoints, 0, 'COMMA')}">1,500</span>
+								th:text="${#numbers.formatInteger(user.totalPoints, 0, 'COMMA')}"></span>
 							<span class="text-muted small">pt</span>
 						</dd>
 
 						<dt class="col-sm-3 col-lg-2 text-muted">가입일</dt>
 						<dd class="col-sm-9 col-lg-10"
-							th:text="${#temporals.format(user.membershipDate, 'yyyy-MM-dd HH:mm')}">2025-07-23
-							10:00</dd>
+							th:text="${#temporals.format(user.membershipDate, 'yyyy-MM-dd HH:mm')}"></dd>
 
 						<dt class="col-sm-3 col-lg-2 text-muted">등급</dt>
 						<dd class="col-sm-9 col-lg-10">
-							<span class="badge text-bg-secondary" th:text="${user.gradeName}">USER</span>
+							<span class="badge text-bg-secondary" th:text="${user.gradeName}"></span>
 						</dd>
 					</dl>
+					<div th:if="${user.gradeName != '관리자'}" class="row mt-3">
+						<button class="col-2 btn btn-warning m-2" id="banBtn"
+							data-bs-toggle="modal" data-bs-target="#banModal">차단</button>
+						<button class="col-2 btn btn-primary m-2" id="unBanBtn">차단해제</button>
+						<button class="col-2 btn btn-danger m-2" id="deleteUserBtn">강제탈퇴</button>
+					</div>
 				</div>
 			</div>
 
 			<div class="card shadow-sm mt-5">
-				<div class="card-header fw-semibold">차단 정보</div>
+				<div class="card-header fw-semibold">차단 내역</div>
 				<div class="card-body">
-					<th:block th:each="problem : ${problemList}">
-						<dl class="row mb-0">
-							<dt class="col-sm-3 col-lg-2 text-muted">유저 ID</dt>
-							<dd class="col-sm-9 col-lg-10" th:text="${user.userId}">user123</dd>
+					<dl class="banCardHead row mb-2">
+						<dt class="col-sm-3 col-lg-2 text-muted mt-2 mb-4">차단 해제 예정일</dt>
 
-							<dt class="col-sm-3 col-lg-2 text-muted">이름</dt>
-							<dd class="col-sm-9 col-lg-10" th:text="${user.name}">홍길동</dd>
+						<!-- 차단 상태일 경우 -->
+						<th:block th:if="${user.isBan}">
+							<dd class="col-sm-9 col-lg-10 mt-2 mb-4"
+								th:text="${#temporals.format(user.unbanDate, 'yyyy-MM-dd HH:mm')}"></dd>
 
-							<dt class="col-sm-3 col-lg-2 text-muted">닉네임</dt>
-							<dd class="col-sm-9 col-lg-10" th:text="${user.nickname}">길동이</dd>
-						</dl>
-					</th:block>
+							<th:block th:each="bans : ${user.banHistory}">
+								<hr>
+
+								<dt class="col-sm-3 col-lg-2 text-muted">차단일</dt>
+								<dd class="col-sm-9 col-lg-10"
+									th:text="${#temporals.format(bans.banDate, 'yyyy-MM-dd HH:mm')}"></dd>
+
+								<dt class="col-sm-3 col-lg-2 text-muted">차단된 일 수</dt>
+								<dd class="col-sm-9 col-lg-10">
+									<span th:text="${bans.banDays}"></span> <span
+										class="text-muted small">일</span>
+								</dd>
+
+								<dt class="col-sm-3 col-lg-2 text-muted">차단 사유</dt>
+								<dd class="col-sm-9 col-lg-10 mb-3" th:text="${bans.banReason}"></dd>
+							</th:block>
+						</th:block>
+
+						<!-- 차단 상태가 아닐 경우 -->
+						<th:block th:unless="${user.isBan}">
+							<dd class="col-sm-9 col-lg-10 mt-2 mb-4">-</dd>
+
+							<th:block
+								th:if="${user.banHistory != null && !#lists.isEmpty(user.banHistory)}"
+								th:each="bans : ${user.banHistory}">
+								<hr>
+
+								<dt class="col-sm-3 col-lg-2 text-muted">차단일</dt>
+								<dd class="col-sm-9 col-lg-10"
+									th:text="${#temporals.format(bans.banDate, 'yyyy-MM-dd HH:mm')}"></dd>
+
+								<dt class="col-sm-3 col-lg-2 text-muted">차단된 일 수</dt>
+								<dd class="col-sm-9 col-lg-10">
+									<span th:text="${bans.banDays}"></span> <span
+										class="text-muted small">일</span>
+								</dd>
+
+								<dt class="col-sm-3 col-lg-2 text-muted">차단 사유</dt>
+								<dd class="col-sm-9 col-lg-10 mb-3" th:text="${bans.banReason}"></dd>
+							</th:block>
+						</th:block>
+					</dl>
+				</div>
+			</div>
+		</div>
+		<div class="row my-4">
+			<button class="btn btn-danger p-3" th:onclick="|location.href='@{users}'|">돌아가기</button>
+		</div>
+	</div>
+
+	<!-- 차단 모달 -->
+	<div class="modal fade" id="banModal" tabindex="-1"
+		aria-labelledby="banModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header bg-danger text-white">
+					<h5 class="modal-title" id="banModalLabel">유저 차단</h5>
+					<button type="button" class="btn-close btn-close-white"
+						data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<form id="banForm" th:action="|@{banUser}|" method="post">
+						<input type="hidden" th:value="${user.userId}" name="userId"
+							id="userId"></input>
+
+						<div class="mb-3">
+							<label for="banDays" class="form-label">차단 일수</label> <input
+								type="number" class="form-control" name="banDays"
+								placeholder="예: 7" min="1" required>
+						</div>
+
+						<div class="mb-3">
+							<label for="banReason1" class="form-label">차단 사유</label> <input
+								type="text" class="form-control" name="banReason"
+								placeholder="예: 욕설 사용" required>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" form="banForm" class="btn btn-danger">차단</button>
+					<button type="button" class="btn btn-secondary"
+						data-bs-dismiss="modal">취소</button>
 				</div>
 			</div>
 		</div>
 	</div>
+	<script th:src="@{/js/admin/users.js}"></script>
 </div>
 </html>

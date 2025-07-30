@@ -1,12 +1,11 @@
 
 package com.codemoa.project.domain.user.dto.response;
 
-import com.codemoa.project.domain.user.entity.User;
-
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,10 +18,9 @@ public class UserDetailResponse {
 	private Integer totalPoints;
 	private LocalDateTime membershipDate;
 	private LocalDateTime unbanDate;
-
-	private LocalDateTime banDate;
-	private int banDay;
-	private String banReason;
+	private Boolean isBan;
+	
+	private List<UserBanHistory> banHistory;
 
 	private String gradeName;
 }

@@ -24,10 +24,6 @@ public class ProblemService {
 	}
 
 	public void addProblem(Problem problem) {
-		// 작성자 표기용 임시 아이디
-		if (problem.getUserId() == null) {
-			problem.setUserId("admin");
-		}
 		problemMapper.addProblem(problem);
 	}
 

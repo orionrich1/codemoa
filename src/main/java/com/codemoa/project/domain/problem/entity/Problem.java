@@ -3,7 +3,6 @@ package com.codemoa.project.domain.problem.entity;
 
 import java.time.LocalDateTime;
 
-import groovy.transform.ToString;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

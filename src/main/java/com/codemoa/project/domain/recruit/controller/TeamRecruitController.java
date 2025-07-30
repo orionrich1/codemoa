@@ -1,9 +1,6 @@
-//종효
 package com.codemoa.project.domain.recruit.controller;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.nio.file.Paths;
 import java.nio.file.Path;
@@ -16,12 +13,14 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,6 +31,7 @@ import com.codemoa.project.domain.recruit.entity.TeamRecruit;
 import com.codemoa.project.domain.recruit.service.TeamRecruitService;
 
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -39,28 +39,92 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TeamRecruitController {
 	
-	private final String UPLOAD_DIR = System.getProperty("user.dir") +  "/uploads/files/";
+	private final String UPLOAD_DIR = Paths.get(System.getProperty("user.dir"), "src/main/resources/static/files").toString();
+	
+	@DeleteMapping("/recruit/{recruitId}")
+	public ResponseEntity<?> deleteRecruit(@PathVariable("recruitId") int recruitId, HttpSession session){
+		// 로그인 기능 구현 완료시 활성화
+		/*
+		 String loginId = (String) session.getAttribute("loginId");
+		 TeamRecruit teamRecruit = teamRecruitService.getRecruitById(recruitId);
+		 if (teamRecruit == null || !teamRecruit.getUserId().equals(loginId)){
+		 	return ResponseEntity.status(HttpStatus.FORBIDDEN).body("삭제 원한이 없습니다.");
+		 }
+		 */
+		
+		boolean result = teamRecruitService.deleteRecruit(recruitId);
+		if(result) {
+			return ResponseEntity.ok().body("삭제 완료");
+		} else {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("삭제 실패");
+		}
+		
+	}
+	
+	
+	@GetMapping("/recruit/updateForm")
+	public String showUpdateForm(@RequestParam("recruitId") int recruitId, HttpSession session, Model model, HttpServletResponse response) throws IOException {
+	   
+		  // 로그인 체크 (추후 로그인 구현 완료 시 활성화)
+		/*
+		String loginUserId = (String) session.getAttribute("loginUserId");
+	    if(loginUserId == null) {
+	        response.sendRedirect("/login"); // 로그인 페이지로 리다이렉트
+	        return null;
+	    }
+
+	    boolean userIdCheck = teamRecruitService.userIdCheck(recruitId, loginUserId);
+	    if(!userIdCheck) {
+	        response.setContentType("text/html; charset=utf-8");
+	        PrintWriter out = response.getWriter();
+	        out.print("<script>alert('작성자가 일치하지 않습니다.'); history.back();</script>");
+	        out.flush();
+	        return null;
+	    }
+		 	*/
+	    TeamRecruit teamRecruit = teamRecruitService.getTeamRecruit(recruitId);
+	    model.addAttribute("teamRecruit", teamRecruit);
+	    return "views/recruit/teamRecruitUpdateForm";
+	}
+	
+	@PostMapping("/TeamRecruitUpdate")
+	public String updateTeamRecruit(
+			@ModelAttribute TeamRecruit teamRecruit,
+			@RequestParam(value = "attachmentFile", required = false) MultipartFile attachmentFile,
+			RedirectAttributes redirectAttrs	) {
+		try {
+			teamRecruitService.updateTeamRecruit(teamRecruit, attachmentFile);
+			redirectAttrs.addFlashAttribute("msg", "수정이 완료되었습니다.");
+		} catch (Exception e) {
+			log.error("수정 중 오류 발생", e);
+			redirectAttrs.addFlashAttribute("errorMsg", "수정중 오류가 발생되었습니다.");
+			return "redirect:/recruit/updateForm?recruitId=" + teamRecruit.getRecruitId();
+		}
+		return "redirect:/recruit/TeamRecruitDetail?recruitId=" + teamRecruit.getRecruitId();
+	}
+	
 	
 	@GetMapping("/files/{filename}")
-	public ResponseEntity<Resource> downloadFile(@PathVariable String filename) throws IOException{
-		File file = new File(UPLOAD_DIR + filename);
-		if(!file.exists()) {
-			throw new IOException("파일을 찾을 수 없습니다 : " + filename);
-		}
-		Resource resource = new UrlResource(file.toURI());
-		String encodedFileName = URLEncoder.encode(file.getName(), "UTF-8").replaceAll("\\+", "%20");
+	public ResponseEntity<Resource> downloadFile(@PathVariable ("filename") String filename) throws IOException{
+		Path filePath = Paths.get("src/main/resources/static/files/" + filename);
 		
+		Resource resource = new UrlResource(filePath.toUri());
+		if(!resource.exists() || !resource.isReadable()) {
+			return ResponseEntity.notFound().build();
+		}
+		
+		String encodedFileName = URLEncoder.encode(resource.getFilename(), "UTF-8").replaceAll("\\+", "%20");
+
 		return ResponseEntity.ok()
-				.contentType(MediaType.APPLICATION_OCTET_STREAM)
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + encodedFileName + "\"")
-				.body(resource);
+		        .contentType(MediaType.APPLICATION_OCTET_STREAM)
+		        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + encodedFileName + "\"")
+		        .body(resource);
 	} 
 	
 
 	@Autowired
 	private TeamRecruitService teamRecruitService;
 	
-	public String updateTeamRecruit;
 	
 	@PostMapping("/recruit/write")
 	public String writeRecruit(TeamRecruit teamRecruit, 
@@ -72,7 +136,12 @@ public class TeamRecruitController {
 	    //String loginUserId = (String) session.getAttribute("loginUserId");
 	    //teamRecruit.setUserId(loginUserId);
 		
-		log.info("팀 모집 등록 요청 title={}", teamRecruit.getTitle());
+		if("TEAM_JOIN".equals(teamRecruit.getRecruitType())) {
+			teamRecruit.setRemainingMembers(0);
+			if(teamRecruit.getStatus() == null || teamRecruit.getStatus().isEmpty()) {
+				teamRecruit.setStatus("CLOSED");
+			}			
+		}
 		
 		//파일 업로드 처리
 		 try {
@@ -112,54 +181,44 @@ public class TeamRecruitController {
 			)
 	*/
 	
-	@PostMapping("/updateForm")
-	public String updateTeamRecruit(Model model, 
-			HttpServletResponse response, 
-			PrintWriter out, 
-			@RequestParam("recruitId") int recruitId, 
-			@RequestParam("userId") String userId) {
-		boolean userIdCheck = teamRecruitService.userIdCheck(recruitId, userId);
-		if(! userIdCheck) {
-			response.setContentType("text/html: charset=utf-8");
-			out.print("<script>");
-			out.print("alert('작성자가 일치하지 않습니다.);");
-			out.print("history.back();");
-			out.print("</script>");
-			return null;
-		}
-		TeamRecruit teamRecruit = teamRecruitService.getTeamRecruit(recruitId);
-		model.addAttribute("teamRecruit", teamRecruit);
-		return "views/updateForm";
-	}
-	
-	@PostMapping("/addTeamRecruit")
-	public String addTeamRecruit(TeamRecruit teamRecruit) {
-		log.info("title : ", teamRecruit.getTitle());
-		teamRecruitService.addTeamRecruit(teamRecruit);
-		return "redirect:TeamRecruitList";
 		
-	}
-	
 	@GetMapping("/addTeamRecruit")
 	public String addTeamRecruit(Model model){
 		TeamRecruit recruit = new TeamRecruit();
 		recruit.setRecruitType("");
 		model.addAttribute("teamRecruit", recruit);
-		return "views/recruit/teamRecruitwriteForm";
+		return "views/recruit/teamRecruitWriteForm";
 	}
 	
 	@GetMapping("/TeamRecruitDetail")
-	public String getTeamRecruit(Model model, @RequestParam("recruitId") int recruitId) {
+	public String getTeamRecruit(Model model, 
+			@RequestParam("recruitId") int recruitId,
+			HttpSession session) {
+		teamRecruitService.increaseViewCount(recruitId);
+		
 		model.addAttribute("teamRecruit", teamRecruitService.getTeamRecruit(recruitId));
+		
+		String loginId = (String) session.getAttribute("loginId");
+		model.addAttribute("loginId", loginId);
+		
 		return "views/recruit/teamRecruitDetail";
 	}
 	
-	@GetMapping({"/", "/TeamRecruitList"})
-	public String TeamRecruitList(Model model) {
-		var list = teamRecruitService.teamRecruitList();
-		log.info("조회된 게시글 수 : {}", list.size());
-		model.addAttribute("bList", list);
+	@GetMapping("/TeamRecruitList")
+	public String TeamRecruitList(Model model, 
+			@RequestParam(value = "pageNum", required=false, defaultValue="1") int pageNum,
+			@RequestParam(value = "type", required=false, defaultValue="") String type,
+			@RequestParam(value = "keyword", required=false, defaultValue="") String keyword
+			) {
+		if("null".equalsIgnoreCase(type)) type ="";
+		if("null".equalsIgnoreCase(keyword)) keyword = "";
 		
+		log.info("TeamRecruitList: teamRecruitList({}, {}, {})", pageNum, type, keyword);
+		model.addAllAttributes(teamRecruitService.teamRecruitList(pageNum, type.trim(), keyword.trim()));
+		
+		model.addAttribute("type", type);
+		model.addAttribute("keyword", keyword);
+
 		return "views/recruit/teamRecruitList";
 	}
 }

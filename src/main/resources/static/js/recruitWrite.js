@@ -2,9 +2,9 @@
 	const $ =(sel) => document.querySelector(sel);
 	const $$ = (sel) => document.querySelectorAll(sel);
 	
-	const form =$('#recruitWriteForm');
+	const form =$('#recruitWriteForm') || $('#recruitUpdateForm');
 	if(! form){
-		console.warn(`recruitWrite.js: #recruitWriteForm no found. Script aborted.`);
+		console.warn(`recruitWrite.js: no valid form found. Script aborted.`);
 		return;
 	}
 	
@@ -38,10 +38,10 @@
 		//TEAM_JOIN 선택시 인원 입력 기능 잠금 적용 함수
 		function toggleMemberInputs(){
 			const hasJoin = recruitTypeHidden.value === 'TEAM_JOIN';
-			totalMembersInput.disabled = hasJoin;
+			
 			remainingMembersInput.disabled = hasJoin;
 			if(hasJoin){
-						totalMembersInput.value = '';
+			
 						remainingMembersInput.value = '';
 			}
 		}
@@ -117,8 +117,27 @@
 			}
 		});
 	}	
+	
+	function validateMemberCounts(){
+		if(!totalMembersInput || !remainingMembersInput) return;
+		
+		function checkCounts(){
+			const total = parseInt(totalMembersInput.value || 0, 10);
+			const remaining = parseInt(remainingMembersInput.value || 0, 10);
+			
+			if(remaining > total){
+				alert("남은 모집 인원은 전체 모집 인원보다 많을 수 없습니다.");
+				remainingMembersInput.value = total;
+			}
+		}
+		totalMembersInput.addEventListener('input', checkCounts);
+		remainingMembersInput.addEventListener('input', checkCounts);
+	}
+	
 	preventNegative(totalMembersInput);
 	preventNegative(remainingMembersInput);
+	
+	validateMemberCounts();
 	
 	//기술 스택 태그 입력 (콤마 / Enter / blur)
 	const tagInput = $('#techStackInput');
@@ -153,9 +172,25 @@
 		renderTags();
 	}
 	function parseInputTags(str){
-		str.split(',').forEach(s=>addTag(s));
+		str.split(/[\s,]+/)
+			.map(s => s.replace(/#/g, '').trim().toLowerCase())
+			.filter(s => s.length > 0 && !tags.includes('#' + s))		
+			.forEach(s => addTag(s));
 	}
+	
+	if(tagHidden && tagHidden.value){
+		tags=[];
+		parseInputTags(tagHidden.value);
+	}
+	
+	
 	if(tagInput){
+		tagInput.addEventListener('keypress', function(e){
+			if(e.key === '#'){
+				e.preventDefault();
+			}
+		});
+		
 		tagInput.addEventListener('keydown', function(e){
 			if(e.key==='Enter'){
 				e.preventDefault();
@@ -167,6 +202,16 @@
 			parseInputTags(tagInput.value);
 			tagInput.value='';
 		});
+	}
+	function addTag(raw){
+		let trimmed = raw.trim().toLowerCase();
+		if(!trimmed) return;
+		if(!trimmed.startsWith('#')){
+			trimmed = '#' + trimmed;
+		}
+		if(tags.includes(trimmed)) return;
+		tags.push(trimmed);
+		renderTags();
 	}
 	
 	//----------------------
@@ -228,6 +273,14 @@
 	
 	form.addEventListener('submit', function(e){
 		syncPeriods();
+		
+		const total = parseInt(totalMembersInput.value || 0,10);
+		const remaining = parseInt(remainingMembersInput.value || 0, 10);
+		if(remaining > total){
+			e.preventDefault();
+			alert("남은 인원이 현재 모집예정 인원보다 많습니다.");
+			return;
+		}
 		
 		if(recruitTypeHidden && !recruitTypeHidden.value){
 			e.preventDefault();

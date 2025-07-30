@@ -21,8 +21,6 @@
 						</div>
 	                        
 	                    <form id="loginForm" th:action="@{/login}" method="post">
-							<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-
 	                        <div class="form-floating mb-3">
 	                            <input type="text" name="username" class="form-control" id="floatingInput"  required>
 	                            <label for="floatingInput"><i class="bi bi-envelope me-2"></i>아이디</label>
@@ -40,21 +38,32 @@
 	                                    로그인 정보 저장
 	                                </label>
 	                            </div>
-	                            <a href="#" class="text-decoration-none">비밀번호 찾기</a>
+	                            <a href="findId" class="text-decoration-none ms-5">아이디 찾기</a>
+	                            <a href="findPass" class="text-decoration-none">비밀번호 찾기</a>
 	                        </div>
 	                            
 	                        <div class="d-grid mb-3">
 	                            <button class="btn btn-primary btn-lg fw-bold" type="submit">로그인</button>
 	                        </div>
 
-	                        <div class="text-center my-4">
-	                            <span class="text-muted small">또는 소셜 계정으로 로그인</span>
-	                        </div>
-
-	                        <div class="d-grid gap-2">
-	                            <a href="#" class="btn btn-light border"><i class="bi bi-google me-2"></i>Google 계정으로 로그인</a>
-	                            <a href="#" class="btn btn-warning text-dark"><i class="bi bi-chat-fill me-2"></i>Kakao 계정으로 로그인</a>
-	                        </div>
+							<th:block th:if="${session.provider == null or #strings.isEmpty(session.provider)}">
+		                        <div class="text-center my-4">
+		                            <span class="text-muted small">또는 소셜 계정으로 로그인</span>
+		                        </div>
+	
+		                        <div class="d-grid gap-2">
+		                            <a href="/oauth2/authorization/google" class="btn btn-light border"><i class="bi bi-google me-2"></i>Google 계정으로 로그인</a>
+		                            <a href="/oauth2/authorization/kakao" class="btn btn-warning text-dark"><i class="bi bi-chat-fill me-2"></i>Kakao 계정으로 로그인</a>
+		                        </div>
+	                        </th:block>
+	                        
+	                        <th:block th:if=${!#strings.isEmpty(session.provider)}>
+	                        	<div class="text-center my-4">
+		                            <p class="text-muted small">[[${session.provider}]] 계정과 연동되었습니다.</p>
+		                            <p class="text-muted small">로그인이나 회원가입을 진행해주세요.</p>
+		                            <a href="snsDisconnect" class="btn btn-warning text-dark">SNS 계정 로그아웃</a>
+		                        </div>
+	                        </th:block>
 	                    </form>
 
 	                    <div class="text-center mt-4">

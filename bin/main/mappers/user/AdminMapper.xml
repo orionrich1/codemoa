@@ -3,10 +3,50 @@
 
 <mapper namespace="com.codemoa.project.domain.user.mapper.AdminMapper">
 	<select id="getUserList" resultType="UserDetailResponse">
-		SELECT * FROM user JOIN user_grade USING (grade_id);
+		SELECT * FROM user JOIN user_grade USING (grade_id) ORDER BY grade_name;
 	</select>
 	
-	<select id="getUserDetail" resultType="UserDetailResponse">
-		SELECT * FROM user JOIN user_grade USING (grade_id) WHERE user_id=#{userId};
+	<!-- 유저의 차단 기록을 가져오기 위해 Map 설정 -->
+	<resultMap id="UserDetailMap" type="UserDetailResponse">
+	    <id property="userId" column="user_id"/>
+	    <result property="name" column="name"/>
+	    <result property="nickname" column="nickname"/>
+	    <result property="email" column="email"/>
+	    <result property="mobile" column="mobile"/>
+	    <result property="totalPoints" column="total_points"/>
+	    <result property="membershipDate" column="membership_date"/>
+	    <result property="unbanDate" column="unban_date"/>
+	    <result property="gradeName" column="grade_name"/>
+	
+	    <collection property="banHistory" ofType="UserBanHistory">
+	        <result property="banDate" column="ban_date"/>
+	        <result property="banDays" column="ban_days"/>
+	        <result property="banReason" column="ban_reason"/>
+	    </collection>
+	</resultMap>
+
+	<select id="getUserDetail" resultMap="UserDetailMap">
+		SELECT * FROM user u
+		JOIN user_grade USING (grade_id)
+		LEFT JOIN ban_history b ON u.user_id = b.user_id
+		WHERE u.user_id=#{id}
+		ORDER BY b.history_no DESC;
 	</select>
+	
+	<update id="banUserUpdate" parameterType="UserBanRequest">
+		UPDATE user SET unban_date=DATE_ADD(CURRENT_TIMESTAMP, INTERVAL #{banDays} DAY) WHERE user_id=#{userId};
+	</update>
+	
+	<insert id="banUserInsert" parameterType="UserBanRequest">
+		INSERT INTO ban_history (user_id, ban_days, ban_reason) VALUES (#{userId}, #{banDays}, #{banReason});
+	</insert>
+	
+	<update id="unbanUser">
+		UPDATE user SET unban_date=CURRENT_TIMESTAMP WHERE user_id=#{userId};
+	</update>
+	
+	<delete id="deleteUser">
+		DELETE FROM user WHERE user_id=#{userId};
+	</delete>
+
 </mapper>

@@ -1,48 +1,29 @@
-//종효
 package com.codemoa.project.domain.recruit.service;
 
-import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import java.util.Map;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.codemoa.project.domain.recruit.entity.TeamRecruit;
-import com.codemoa.project.domain.recruit.mapper.TeamRecruitMapper;
 
-import lombok.extern.slf4j.Slf4j;
+public interface TeamRecruitService {
 
-@Service
-@Slf4j
-public class TeamRecruitService {
+	public boolean deleteRecruit(int recruitId);
 	
-	@Autowired
-	private TeamRecruitMapper teamRecruitMapper;
+	void updateTeamRecruit(TeamRecruit teamRecruit, MultipartFile uploadFile) throws Exception;
 	
-	public boolean userIdCheck(int recruitId, String userId) {
-		log.info("TeamRecruitService: userIdCheck(int recruitId, String userId)");
-		boolean result =false;
-		
-		String dbUserId = teamRecruitMapper.userIdCheck(recruitId);
-		
-		if(dbUserId.equals(userId)) {
-			result = true;
-		}
-		return result;
-	}
+	void updateTeamRecruit(TeamRecruit teamRecruit);
 	
-	public void addTeamRecruit(TeamRecruit teamRecruit) {
-		log.info("TeamRecruitService: addTeamRecruit(teamRecruit)");
-		teamRecruitMapper.insertTeamRecruit(teamRecruit);
-	}
+    Map<String, Object> teamRecruitList(int pageNum, String type, String keyword);
+
+    boolean userIdCheck(int recruitId, String userId);
+
+    void addTeamRecruit(TeamRecruit teamRecruit);
+
+    TeamRecruit getTeamRecruit(int recruitId);	
 	
-	public TeamRecruit getTeamRecruit(int recruitId) {
-		log.info("TeamRecruitService: getTeamRecruit(int recruitId)");
-		return teamRecruitMapper.getTeamRecruit(recruitId);
-	}
+	void insertTeamRecruit(TeamRecruit teamRecruit);
 	
-	public List<TeamRecruit> teamRecruitList(){
-		log.info("TeamRecruitService: TeamRecruitList()");
-		
-		return teamRecruitMapper.TeamRecruitList();
-	}
+	void increaseViewCount(int recruitId);
 }
