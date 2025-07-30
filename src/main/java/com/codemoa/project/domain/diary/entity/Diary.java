@@ -1,34 +1,55 @@
 //도영
 package com.codemoa.project.domain.diary.entity;
 
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 
+import com.codemoa.project.domain.user.entity.User;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@Entity
+@Table(name = "diary")
 public class Diary {
 
-    private int diaryId;        // diary_id (PK)
-    private String userId;      // user_id (FK)
-    private String title;
-    private String content;
-    private LocalDateTime regDate;
-    private LocalDateTime updateDate;
+	@Id
+	@Column(name = "diary_no")
+	private Integer diaryNo;
 
-    // --- Getters and Setters ---
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id", nullable = false)
+	private User user;
 
-    public int getDiaryId() { return diaryId; }
-    public void setDiaryId(int diaryId) { this.diaryId = diaryId; }
+	@Column(name = "project_name", length = 255)
+	private String projectName;
 
-    public String getUserId() { return userId; }
-    public void setUserId(String userId) { this.userId = userId; }
+	@Column(name = "git_url", length = 1024)
+	private String gitUrl;
 
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
+	@Column(name = "git_version", length = 100)
+	private String gitVersion;
 
-    public String getContent() { return content; }
-    public void setContent(String content) { this.content = content; }
+	@Column(length = 1000)
+	private String commits;
 
-    public LocalDateTime getRegDate() { return regDate; }
-    public void setRegDate(LocalDateTime regDate) { this.regDate = regDate; }
+	@Column(columnDefinition = "TEXT")
+	private String history;
 
-    public LocalDateTime getUpdateDate() { return updateDate; }
-    public void setUpdateDate(LocalDateTime updateDate) { this.updateDate = updateDate; }
+	@Column(columnDefinition = "TEXT")
+	private String content;
+
+	@Column(name = "reg_date", nullable = false, updatable = false)
+	private LocalDateTime regDate;
+
+	@PrePersist
+	public void prePersist() {
+		if (regDate == null) {
+			regDate = LocalDateTime.now();
+		}
+	}
 }
