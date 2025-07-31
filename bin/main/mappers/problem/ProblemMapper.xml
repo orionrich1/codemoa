@@ -6,6 +6,24 @@
 		SELECT * FROM problems ORDER BY category, difficulty;
 	</select>
 	
+	<select id="searchProblemList" resultType="Problem">
+	    SELECT * FROM problems
+	    WHERE 1=1
+	    <if test="types != null and types.size() > 0">
+	        AND category IN
+	        <foreach collection="types" item="type" open="(" separator="," close=")">
+	            #{type}
+	        </foreach>
+	    </if>
+	    <if test="difficulties != null and difficulties.size() > 0">
+	        AND difficulty IN
+	        <foreach collection="difficulties" item="difficulty" open="(" separator="," close=")">
+	            #{difficulty}
+	        </foreach>
+	    </if>
+	    ORDER BY category, difficulty;
+	</select>
+	
 	<select id="getProblemDetail" resultType="Problem">
 		SELECT * FROM problems WHERE problem_id=#{no}
 	</select>

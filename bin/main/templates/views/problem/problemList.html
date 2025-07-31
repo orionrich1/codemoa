@@ -22,36 +22,34 @@
 				</div>
 			</div>
 
-			<div class="row">
-				<!-- 왼쪽 체크박스 3개 -->
-				<div class="col-6">
+			<div class="d-flex justify-content-between">
+				<div class="d-flex gap-3">
 					<div class="form-check">
-						<input class="form-check-input" type="checkbox" id="left1">
-						<label class="form-check-label" for="left1">왼쪽 1</label>
+						<input class="typeFilter form-check-input" type="checkbox" id="leftJAVA" value="1">
+						<label class="form-check-label" for="leftJAVA">JAVA</label>
 					</div>
 					<div class="form-check">
-						<input class="form-check-input" type="checkbox" id="left2">
-						<label class="form-check-label" for="left2">왼쪽 2</label>
-					</div>
+						<input class="typeFilter form-check-input" type="checkbox" id="leftJavascript" value="2">
+						<label class="form-check-label" for="leftJavascript">Javascript</label>
+					</div>	
 					<div class="form-check">
-						<input class="form-check-input" type="checkbox" id="left3">
-						<label class="form-check-label" for="left3">왼쪽 3</label>
+						<input class="typeFilter form-check-input" type="checkbox" id="leftPython" value="3">
+						<label class="form-check-label" for="leftPython">Python</label>
 					</div>
 				</div>
 
-				<!-- 오른쪽 체크박스 3개 -->
-				<div class="col-6">
+				<div class="d-flex gap-3">
 					<div class="form-check">
-						<input class="form-check-input" type="checkbox" id="right1">
-						<label class="form-check-label" for="right1">오른쪽 1</label>
+						<input class="difficultyFilter form-check-input" type="checkbox" id="rightHigh" value="1">
+						<label class="form-check-label" for="rightHigh">상</label>
 					</div>
 					<div class="form-check">
-						<input class="form-check-input" type="checkbox" id="right2">
-						<label class="form-check-label" for="right2">오른쪽 2</label>
+						<input class="difficultyFilter form-check-input" type="checkbox" id="rightMiddle" value="2">
+						<label class="form-check-label" for="rightMiddle">중</label>
 					</div>
 					<div class="form-check">
-						<input class="form-check-input" type="checkbox" id="right3">
-						<label class="form-check-label" for="right3">오른쪽 3</label>
+						<input class="difficultyFilter form-check-input" type="checkbox" id="rightLow" value="3">
+						<label class="form-check-label" for="rightLow">하</label>
 					</div>
 				</div>
 			</div>
@@ -66,7 +64,7 @@
 						<th>출제일</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody id="problemTableBody">
 					<th:block
 						th:if="${problemList != null && !#lists.isEmpty(problemList)}">
 						<th:block th:each="problem : ${problemList}">
@@ -91,5 +89,7 @@
 			</table>
 		</div>
 	</div>
+	
+	<script th:src="@{/js/problem.js}"></script>
 </div>
 </html>
