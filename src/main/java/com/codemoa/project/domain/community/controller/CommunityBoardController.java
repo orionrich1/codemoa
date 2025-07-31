@@ -1,4 +1,6 @@
 package com.codemoa.project.domain.community.controller;
+
+
 import com.codemoa.project.domain.community.dto.request.CreateBoardRequest;
 import com.codemoa.project.domain.community.dto.request.UpdateBoardRequest;
 import com.codemoa.project.domain.community.dto.response.BoardDetailResponse;
@@ -6,6 +8,7 @@ import com.codemoa.project.domain.community.dto.response.BoardListResponse;
 import com.codemoa.project.domain.community.service.CommunityBoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,9 +24,8 @@ public class CommunityBoardController {
      * 게시글 생성
      */
     @PostMapping
-    public ResponseEntity<Void> createBoard(@RequestBody CreateBoardRequest request) {
-        // TODO: 향후 Spring Security 등 로그인 기능이 구현되면, 실제 로그인한 사용자의 ID를 가져와야 합니다.
-        String currentUserId = "oaeoae12";
+    public ResponseEntity<Void> createBoard(@RequestBody CreateBoardRequest request, Authentication authentication) {
+        String currentUserId = authentication.getName();
         communityBoardService.create(request, currentUserId);
         return ResponseEntity.ok().build();
     }
@@ -50,9 +52,9 @@ public class CommunityBoardController {
      * 게시글 수정
      */
     @PutMapping("/{boardNo}")
-    public ResponseEntity<Void> updateBoard(@PathVariable("boardNo") Integer boardNo, @RequestBody UpdateBoardRequest request) {
-        // TODO: 수정 권한 확인 로직 추가 필요
-        communityBoardService.update(boardNo, request);
+    public ResponseEntity<Void> updateBoard(@PathVariable("boardNo") Integer boardNo, @RequestBody UpdateBoardRequest request, Authentication authentication) {
+        String currentUserId = authentication.getName();
+        communityBoardService.update(boardNo, request, currentUserId);
         return ResponseEntity.ok().build();
     }
 
@@ -60,9 +62,9 @@ public class CommunityBoardController {
      * 게시글 삭제
      */
     @DeleteMapping("/{boardNo}")
-    public ResponseEntity<Void> deleteBoard(@PathVariable("boardNo") Integer boardNo) {
-        // TODO: 삭제 권한 확인 로직 추가 필요
-        communityBoardService.delete(boardNo);
+    public ResponseEntity<Void> deleteBoard(@PathVariable("boardNo") Integer boardNo, Authentication authentication) {
+        String currentUserId = authentication.getName();
+        communityBoardService.delete(boardNo, currentUserId);
         return ResponseEntity.ok().build();
     }
 }

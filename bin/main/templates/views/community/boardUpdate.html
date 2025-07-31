@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default_layout}">
+
+<body>
+    <div layout:fragment="content">
+        <div class="container my-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <h2 class="mb-4 text-center">게시글 수정</h2>
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <form id="editForm">
+                                <div class="mb-3">
+                                    <label for="title" class="form-label fw-bold">제목</label>
+                                    <input type="text" class="form-control" id="title" name="title" th:value="${board.title}" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="category" class="form-label fw-bold">카테고리</label>
+                                    <input type="text" class="form-control" id="category" name="category" th:value="${board.category}" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="content" class="form-label fw-bold">내용</label>
+                                    <textarea id="content" name="content" th:text="${board.content}"></textarea>
+                                </div>
+                                <div class="d-flex justify-content-end mt-4">
+                                    <a th:href="@{/boards/{boardNo}(boardNo=${board.boardNo})}" class="btn btn-secondary me-2">취소</a>
+                                    <button type="submit" class="btn btn-primary">수정 완료</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block layout:fragment="script">
+        <script th:inline="javascript">
+            $(document).ready(function() {
+                $('#content').summernote({
+                    height: 350,
+                    minHeight: null,
+                    maxHeight: null,
+                    focus: true,
+                    lang: "ko-KR",
+                    toolbar: [
+                        ['style', ['style']],
+                        ['font', ['bold', 'underline', 'clear']],
+                        ['color', ['color']],
+                        ['para', ['ul', 'ol', 'paragraph']],
+                        ['table', ['table']],
+                        ['insert', ['link', 'picture', 'video']],
+                        ['view', ['fullscreen', 'codeview', 'help']]
+                    ]
+                });
+            });
+
+			const token = document.querySelector("meta[name='_csrf']")?.content;
+			const header = document.querySelector("meta[name='_csrf_header']")?.content;
+			const headers = { 'Content-Type': 'application/json' };
+			if (token && header) {
+				headers[header] = token;
+			}
+
+            const editForm = document.getElementById('editForm');
+            if (editForm) {
+                editForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+
+                    const boardNo = /*[[${board.boardNo}]]*/ 0;
+                    const title = document.getElementById('title').value;
+                    const content = $('#content').summernote('code');
+                    const category = document.getElementById('category').value;
+                    
+                    const data = {
+                        title: title,
+                        content: content,
+                        category: category
+                    };
+
+                    fetch(`/api/boards/${boardNo}`, {
+                        method: 'PUT',
+                        headers: headers,
+                        body: JSON.stringify(data)
+                    }).then(response => {
+                        if (response.ok) {
+                            alert('게시글이 성공적으로 수정되었습니다.');
+                            location.href = `/boards/${boardNo}`;
+                        } else {
+                            alert('수정에 실패했습니다. 입력 내용을 확인해주세요.');
+                        }
+                    }).catch(error => {
+                        console.error('Error:', error);
+                        alert('오류가 발생했습니다.');
+                    });
+                });
+            }
+        </script>
+    </th:block>
+</body>
+</html>
