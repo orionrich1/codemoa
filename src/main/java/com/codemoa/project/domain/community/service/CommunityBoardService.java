@@ -88,9 +88,14 @@ public class CommunityBoardService {
      * 게시글 수정
      */
     @Transactional
-    public void update(Integer boardNo, UpdateBoardRequest request) {
+    public void update(Integer boardNo, UpdateBoardRequest request, String currentUserId) { // <-- userId 추가
         CommunityBoard board = communityBoardRepository.findById(boardNo)
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+
+        if (!board.getUser().getUserId().equals(currentUserId)) {
+            throw new IllegalStateException("수정 권한이 없습니다.");
+        }
+
         board.update(request.getTitle(), request.getContent(), request.getCategory());
     }
 
@@ -98,7 +103,14 @@ public class CommunityBoardService {
      * 게시글 삭제
      */
     @Transactional
-    public void delete(Integer boardNo) {
+    public void delete(Integer boardNo, String currentUserId) { // <-- userId 추가
+        CommunityBoard board = communityBoardRepository.findById(boardNo)
+                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+        
+        if (!board.getUser().getUserId().equals(currentUserId)) {
+            throw new IllegalStateException("삭제 권한이 없습니다.");
+        }
+
         communityBoardRepository.deleteById(boardNo);
     }
     

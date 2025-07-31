@@ -23,14 +23,16 @@
 	font-size: 0.8em;
 	padding: 0.4em 0.7em;
 }
+
 .btn-custom {
-            background-color: #0d6efd;
-            color: white;
-        }
-        .btn-custom:hover {
-            background-color: #0b5ed7;
-            color: white;
-        }
+	background-color: #0d6efd;
+	color: white;
+}
+
+.btn-custom:hover {
+	background-color: #0b5ed7;
+	color: white;
+}
 </style>
 
 
@@ -61,7 +63,7 @@
 							<tr th:each="board : ${boards}" th:onclick="|location.href='@{/boards/{boardNo}(boardNo=${board.boardNo})}'|">
 								<td class="text-center d-none d-md-table-cell" th:text="${board.boardNo}">1</td>
 								<td class="text-center"><span class="badge rounded-pill text-bg-secondary category-badge" th:text="${board.category}">Java</span></td>
-								<td th:text="${board.title}">게시글 제목입니다.</td>
+								<td><span th:text="${board.title}">게시글 제목입니다.</span> <span class="badge bg-warning text-dark ms-2" th:if="${board.stakedPoints > 0}" th:text="|${board.stakedPoints}P|"> </span></td>
 								<td class="text-center" th:text="${board.authorNickname}">코드모아</td>
 								<td class="text-center d-none d-md-table-cell" th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd')}">2025-07-28</td>
 							</tr>

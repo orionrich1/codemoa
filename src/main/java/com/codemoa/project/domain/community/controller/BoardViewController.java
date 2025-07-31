@@ -4,6 +4,9 @@ import com.codemoa.project.domain.community.dto.response.BoardDetailResponse;
 import com.codemoa.project.domain.community.dto.response.BoardListResponse;
 import com.codemoa.project.domain.community.service.CommunityBoardService;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,5 +50,24 @@ public class BoardViewController {
 		// 게시글 작성 페이지로 이동
 		return "views/community/boardWrite"; // "views/community/boardWrite.html" 파일을 찾아서 반환합니다.
 	}
+    
+    /**
+     * 게시글 수정 페이지를 보여주는 메서드
+     */
+    @GetMapping("/boards/{boardNo}/edit")
+    public String boardEditForm(@PathVariable("boardNo") Integer boardNo, Model model) {
+        BoardDetailResponse board = communityBoardService.findById(boardNo);
+        
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUserId = authentication.getName();
+        if (!board.getAuthorId().equals(currentUserId)) {
+            return "redirect:/boards/" + boardNo; 
+        }
+
+        model.addAttribute("board", board);
+        
+        // 요청하신 대로 "boardUpdate"로 수정했습니다.
+        return "views/community/boardUpdate"; 
+    }
     
 }
