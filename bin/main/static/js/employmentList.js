@@ -41,3 +41,7 @@ function updateSubRegion(){
 		});
 	}
 }
+
+window.onload = function() {
+	updateSubRegion();
+};
