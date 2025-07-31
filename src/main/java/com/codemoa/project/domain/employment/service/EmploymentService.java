@@ -1,33 +1,36 @@
 package com.codemoa.project.domain.employment.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import com.codemoa.project.domain.employment.dto.response.EmploymentDto;
 import com.codemoa.project.domain.employment.entity.Employment;
 import com.codemoa.project.domain.employment.repository.EmploymentRepository;
 
 @Service
 public class EmploymentService {
 	
-	@Autowired 
-	private EmploymentRepository employmentRepository;
+	private final EmploymentRepository employmentRepository;
 	
-	//전체 조회
-	public List<Employment> getAll(){
-		return employmentRepository.findAll();
+	@Autowired
+	public EmploymentService(EmploymentRepository employmentRepository) {
+		this.employmentRepository = employmentRepository;
 	}
-	//ID로 단건 조회
-	public Employment getById(Long recruitNo) {
-		return employmentRepository.findById(recruitNo).orElse(null);
+	
+	public List<EmploymentDto> getAllEmployment(){
+		List<Employment> employmentList = employmentRepository.findAll(Sort.by(Sort.Direction.DESC, "recruitNo"));	
+		return employmentList.stream()
+				 	.map(EmploymentDto::fromEntity)
+					.collect(Collectors.toList());
 	}
-	//저장(신규 or 수정)
-	public void insert(Employment employment) {
-		employmentRepository.save(employment);
+	
+	public Page<EmploymentDto> getEmploymentWithFilters(String region, String subRegion, String keyword, Pageable pageable){
+		return employmentRepository.findByFilters(region, subRegion, keyword, pageable)
+				.map(EmploymentDto::fromEntity);
 	}
-	//삭제
-	public void delete(Long recruitNo) {
-		employmentRepository.deleteById(recruitNo);
-	}
+
 }
