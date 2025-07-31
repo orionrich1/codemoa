@@ -11,10 +11,10 @@ import lombok.NoArgsConstructor;
 public class UserGrade {
 
     @Id
-    @Column(name = "grade_id") // ERD의 컬럼명과 필드명을 매핑합니다.
+    @Column(name = "grade_id", nullable = false, length = 30)
     private String gradeId;
 
-    @Column(name = "grade_name", nullable = false)
+    @Column(name = "grade_name", nullable = false, length = 30)
     private String gradeName;
 
     @Column(name = "min_points", nullable = false)

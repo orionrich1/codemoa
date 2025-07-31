@@ -11,48 +11,49 @@ import lombok.NoArgsConstructor;
 @Table(name = "user")
 public class User {
 
-    @Id
-    @Column(name = "user_id")
-    private String userId;
+	@Id
+	@Column(name = "user_id", nullable = false, length = 10)
+	private String userId;
 
-    @Column(name = "name")
-    private String name;
+	@Column(name = "name", length = 10)
+	private String name;
 
-    @Column(name = "nickname")
-    private String nickname;
+	@Column(name = "nickname", unique = true, length = 10)
+	private String nickname;
 
-    @Column(name = "mobile")
-    private String mobile;
+	@Column(name = "mobile", length = 15)
+	private String mobile;
 
-    @Column(name = "email")
-    private String email;
+	@Column(name = "email", length = 100)
+	private String email;
 
-    @Column(name = "total_points")
-    private Integer totalPoints;
-    
-    @Column(name = "unban_date")
-    private LocalDateTime unbanDate;
+	@Column(name = "total_points", nullable = false)
+	private Integer totalPoints = 0;
 
-    @Column(name = "membership_date")
-    private LocalDateTime membershipDate;
+	@Column(name = "membership_date", nullable = false)
+	private LocalDateTime membershipDate;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "grade_id")
-    private UserGrade userGrade;
+	@Column(name = "unban_date", nullable = false)
+	private LocalDateTime unbanDate;
 
-    public User(String userId, String name, String nickname, String email, String mobile, Integer totalPoints, UserGrade userGrade) {
-        this.userId = userId;
-        this.name = name;
-        this.nickname = nickname;
-        this.email = email;
-        this.mobile = mobile;
-        this.totalPoints = totalPoints;
-        this.userGrade = userGrade;
-    }
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "grade_id", referencedColumnName = "grade_id", foreignKey = @ForeignKey(name = "fk_user_grade"))
+	private UserGrade userGrade;
 
-    @PrePersist
-    public void prePersist() {
-    	this.membershipDate = LocalDateTime.now();
-    	this.unbanDate = LocalDateTime.now();
-    }
+	public User(String userId, String name, String nickname, String email, String mobile, Integer totalPoints,
+			UserGrade userGrade) {
+		this.userId = userId;
+		this.name = name;
+		this.nickname = nickname;
+		this.email = email;
+		this.mobile = mobile;
+		this.totalPoints = totalPoints;
+		this.userGrade = userGrade;
+	}
+
+	@PrePersist
+	public void prePersist() {
+		this.membershipDate = LocalDateTime.now();
+		this.unbanDate = LocalDateTime.now();
+	}
 }
