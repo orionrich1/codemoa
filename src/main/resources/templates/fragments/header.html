@@ -1,3 +1,4 @@
+<!-- header.html -->
 <div th:fragment="header" xmlns:th="http://www.thymeleaf.org"
      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 	<nav class="navbar navbar-expand-lg navbar-light bg-light py-3 shadow-sm">
@@ -16,17 +17,17 @@
 
 					<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">커뮤니티</a>
 						<ul class="dropdown-menu rounded-3">
-							<li><a class="dropdown-item" href="/list">자유게시판</a></li>
+							<li><a class="dropdown-item" th:href="@{/community/free}">자유게시판</a></li>
 							<li><hr class="dropdown-divider"></li>
 							<li><h6 class="dropdown-header">언어 게시판</h6></li>
 							<li><a class="dropdown-item" href="/chatroom">채팅방</a></li>
-							<li><a class="dropdown-item" href="/list">Java</a></li>
-							<li><a class="dropdown-item" href="/list">Python</a></li>
-							<li><a class="dropdown-item" href="/list">JavaScript</a></li>
-							<li><a class="dropdown-item" href="/list">C#</a></li>
-							<li><a class="dropdown-item" href="/list">Kotlin</a></li>
+							<li><a class="dropdown-item" th:href="@{/community/Java}">Java</a></li>
+							<li><a class="dropdown-item" th:href="@{/community/Python}">Python</a></li>
+							<li><a class="dropdown-item" th:href="@{/community/JavaScript}">JavaScript</a></li>
+							<li><a class="dropdown-item" th:href="@{/community/C#}">C#</a></li>
+							<li><a class="dropdown-item" th:href="@{/community/Kotlin}">Kotlin</a></li>
 							<li><hr class="dropdown-divider"></li>
-							<li><a class="dropdown-item" href="/list">기타</a></li>
+							<li><a class="dropdown-item" th:href="@{/community/etc}">기타</a></li>
 						</ul></li>
 
 					<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">IT 정보</a>

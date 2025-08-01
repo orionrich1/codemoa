@@ -1,3 +1,4 @@
+// src/main/java/com/codemoa/project/domain/user/entity/UserGrade.java
 package com.codemoa.project.domain.user.entity;
 
 import jakarta.persistence.*;
@@ -7,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "user_grade") // ERD의 테이블명과 클래스명을 맞춰줍니다.
+@Table(name = "user_grade")
 public class UserGrade {
 
     @Id
@@ -19,4 +20,13 @@ public class UserGrade {
 
     @Column(name = "min_points", nullable = false)
     private Integer minPoints;
+
+    /**
+     * DataInitializer에서 테스트용 등급을 생성하기 위해 추가된 생성자입니다.
+     */
+    public UserGrade(String gradeId, String gradeName, Integer minPoints) {
+        this.gradeId = gradeId;
+        this.gradeName = gradeName;
+        this.minPoints = minPoints;
+    }
 }

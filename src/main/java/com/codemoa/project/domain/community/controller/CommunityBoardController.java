@@ -1,5 +1,5 @@
+// CommunityBoardController.java
 package com.codemoa.project.domain.community.controller;
-
 
 import com.codemoa.project.domain.community.dto.request.CreateBoardRequest;
 import com.codemoa.project.domain.community.dto.request.UpdateBoardRequest;
@@ -7,11 +7,12 @@ import com.codemoa.project.domain.community.dto.response.BoardDetailResponse;
 import com.codemoa.project.domain.community.dto.response.BoardListResponse;
 import com.codemoa.project.domain.community.service.CommunityBoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,11 +41,16 @@ public class CommunityBoardController {
     }
 
     /**
-     * 게시글 전체 목록 조회
+     * 게시글 전체 목록 페이징 조회 (API)
+     * [수정] 서비스의 findAll 메서드에 맞게 검색/필터링 파라미터를 추가했습니다.
      */
     @GetMapping
-    public ResponseEntity<List<BoardListResponse>> getBoardList() {
-        List<BoardListResponse> response = communityBoardService.findAll();
+    public ResponseEntity<Page<BoardListResponse>> getBoardList(
+            @RequestParam(value = "category", required = false, defaultValue = "all") String category,
+            @RequestParam(value = "searchType", required = false, defaultValue = "title_content") String searchType,
+            @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+            @PageableDefault(size = 10) Pageable pageable) {
+        Page<BoardListResponse> response = communityBoardService.findAll(category, searchType, keyword, pageable);
         return ResponseEntity.ok(response);
     }
 
