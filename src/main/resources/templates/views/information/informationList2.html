@@ -13,7 +13,7 @@
 			<div id="spot">
 				<div class="layout">
 					<div class="in">
-						<h3 class="tit">Lectures</h3>
+						<h3 class="tit">Contests</h3>
 						<div class="t_wrap">
 							<div id="lnb">
 								<ul id="depthMenu">
@@ -40,24 +40,24 @@
 							<div class="swiper mySwiper">
 								<div class="swiper-wrapper">
 							
-									<th:block th:each="lecture: ${lList}">
+									<th:block th:each="contest: ${cList}">
 										<div class="swiper-slide">
 											<div class="swiper-area">
 												<div class="cover">
 													<div class="cover-content">
-														<img th:src="@{/files/information/{img}(img=${lecture.file1})}" alt="이미지를 찾을 수 없습니다.">
+														<img th:src="@{/files/information/{img}(img=${contest.file1})}" alt="이미지를 찾을 수 없습니다.">
 														<div class="texts">
-															<strong>[[${lecture.title}]]</strong>
+															<strong>[[${contest.title}]]</strong>
 															<div>
-																<p>등록일 : [[${lecture.regDate}]]</p>
-																<p>작성자 : [[${lecture.userId}]]</p>
+																<p>등록일 : [[${contest.regDate}]]</p>
+																<p>작성자 : [[${contest.userId}]]</p>
 															</div>
 														</div>
-														<a th:href="@{/information/lectureDetail(no=${lecture.recommendNo})}">
+														<a th:href="@{/information/lectureDetail(no=${contest.contestNo})}">
 															<div class="cover-item">
 																<div class="cover-text">
 																	<span class="cover-label"></span>
-																	[[${lecture.subtitle}]]
+																	[[${contest.content}]]
 																</div>
 															</div>
 														</a>
@@ -80,19 +80,19 @@
 			<div class="row">
 				<div class="col">
 					<!-- 검색 요청이면서 게시글이 존재할 경우 링크에 type, keyword -->
-					<nav th:if="${searchOption and not #lists.isEmpty(lList)}" aria-label="Page navigation example">
+					<nav th:if="${searchOption and not #lists.isEmpty(cList)}" aria-label="Page navigation example">
 						<ul class="pagination justify-content-center">
 						
 							<li class="page-item" th:if="${startPage > pageGroup}">
 								<!-- /* <a class="page-link" th:href="@{boardList(pageNum=${startPage-1})}">Pre</a> */ -->
-								<a class="page-link" th:href="@{|lecture?pageNum=${startPage-1}&type=${type}&keyword=${keyword}|}">Pre</a>
+								<a class="page-link" th:href="@{|contest?pageNum=${startPage-1}&type=${type}&keyword=${keyword}|}">Pre</a>
 							</li>
 							 
 							<!-- /* <forEach var="i begin="${startPage}" end="${endPage}"> */-->
 							<li th:each="num : ${#numbers.sequence(startPage, endPage)}"
 								th:classappend="${num == currentPage} ? 'active'" class="page-item">
 								<th:block th:if="${num != currentPage}">
-									<a class="page-link" th:href="@{|lecture?pageNum=${num}&type=${type}&keyword=${keyword}|}" th:text="${num}"></a>
+									<a class="page-link" th:href="@{|contest?pageNum=${num}&type=${type}&keyword=${keyword}|}" th:text="${num}"></a>
 								</th:block>									
 								<th:block th:unless="${num != currentPage}">
 									<a class="page-link" th:text="${num}"></a>
@@ -101,25 +101,25 @@
 							</li>
 							
 							<li class="page-item" th:if="${endPage < pageCount}">
-							 	<a class="page-link" th:href="@{|lecture?pageNum=${startPage+pageGroup}&type=${type}&keyword=${keyword}|}">Next</a>
+							 	<a class="page-link" th:href="@{|contest?pageNum=${startPage+pageGroup}&type=${type}&keyword=${keyword}|}">Next</a>
 							</li>
 						  
 						</ul>
 					</nav>
 					<!-- 검색 요청이 아니면서 게시글이 존재할 경우 -->
-					<nav th:if="${not searchOption and not #lists.isEmpty(lList)}" aria-label="Page navigation example">
+					<nav th:if="${not searchOption and not #lists.isEmpty(cList)}" aria-label="Page navigation example">
 						<ul class="pagination justify-content-center">
 						
 							<li class="page-item" th:if="${startPage > pageGroup}">
 								<!-- /* <a class="page-link" th:href="@{boardList(pageNum=${startPage-1})}">Pre</a> */ -->
-								<a class="page-link" th:href="@{|lecture?pageNum=${startPage-1}|}">Pre</a>
+								<a class="page-link" th:href="@{|contest?pageNum=${startPage-1}|}">Pre</a>
 							</li>
 							 
 							<!-- /* <forEach var="i begin="${startPage}" end="${endPage}"> */-->
 							<li th:each="num : ${#numbers.sequence(startPage, endPage)}"
 								th:classappend="${num == currentPage} ? 'active'" class="page-item">
 								<th:block th:if="${num != currentPage}">
-									<a class="page-link" th:href="@{|lecture?pageNum=${num}|}" th:text="${num}"></a>
+									<a class="page-link" th:href="@{|contest?pageNum=${num}|}" th:text="${num}"></a>
 								</th:block>									
 								<th:block th:unless="${num != currentPage}">
 									<a class="page-link" th:text="${num}"></a>
@@ -128,7 +128,7 @@
 							</li>
 							
 							<li class="page-item" th:if="${endPage < pageCount}">
-							 	<a class="page-link" th:href="@{|lecture?pageNum=${startPage+pageGroup}|}">Next</a>
+							 	<a class="page-link" th:href="@{|contest?pageNum=${startPage+pageGroup}|}">Next</a>
 							</li>
 						  
 						</ul>

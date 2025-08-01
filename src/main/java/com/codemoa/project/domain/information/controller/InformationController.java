@@ -56,14 +56,34 @@ public class InformationController {
 		return "views/information/informationMain";
 	}
 	
-	@GetMapping("/information/listMain")
-	public String informationList(Model model,
+	@GetMapping("/information/lecture")
+	public String lectureList(Model model,
 			@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
 			@RequestParam(value = "type", required = false, defaultValue = "null") String type,
 			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword) {
 		
 		model.addAllAttributes(informationService.lectureList(pageNum, type, keyword, 8, 10));
 		return "views/information/informationList";
+	}
+	
+	@GetMapping("/information/book")
+	public String bookList(Model model,
+			@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+			@RequestParam(value = "type", required = false, defaultValue = "null") String type,
+			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword) {
+		
+		model.addAllAttributes(informationService.bookList(pageNum, type, keyword, 8, 10));
+		return "views/information/informationList3";
+	}
+	
+	@GetMapping("/information/contest")
+	public String contestList(Model model,
+			@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+			@RequestParam(value = "type", required = false, defaultValue = "null") String type,
+			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword) {
+		
+		model.addAllAttributes(informationService.contestList(pageNum, type, keyword, 8, 10));
+		return "views/information/informationList2";
 	}
 	
 	// lecture 관련

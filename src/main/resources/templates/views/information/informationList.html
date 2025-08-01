@@ -13,7 +13,7 @@
 			<div id="spot">
 				<div class="layout">
 					<div class="in">
-						<h3 class="tit">Contents</h3>
+						<h3 class="tit">Lectures</h3>
 						<div class="t_wrap">
 							<div id="lnb">
 								<ul id="depthMenu">
@@ -85,14 +85,14 @@
 						
 							<li class="page-item" th:if="${startPage > pageGroup}">
 								<!-- /* <a class="page-link" th:href="@{boardList(pageNum=${startPage-1})}">Pre</a> */ -->
-								<a class="page-link" th:href="@{|listMain?pageNum=${startPage-1}&type=${type}&keyword=${keyword}|}">Pre</a>
+								<a class="page-link" th:href="@{|lecture?pageNum=${startPage-1}&type=${type}&keyword=${keyword}|}">Pre</a>
 							</li>
 							 
 							<!-- /* <forEach var="i begin="${startPage}" end="${endPage}"> */-->
 							<li th:each="num : ${#numbers.sequence(startPage, endPage)}"
 								th:classappend="${num == currentPage} ? 'active'" class="page-item">
 								<th:block th:if="${num != currentPage}">
-									<a class="page-link" th:href="@{|listMain?pageNum=${num}&type=${type}&keyword=${keyword}|}" th:text="${num}"></a>
+									<a class="page-link" th:href="@{|lecture?pageNum=${num}&type=${type}&keyword=${keyword}|}" th:text="${num}"></a>
 								</th:block>									
 								<th:block th:unless="${num != currentPage}">
 									<a class="page-link" th:text="${num}"></a>
@@ -101,7 +101,7 @@
 							</li>
 							
 							<li class="page-item" th:if="${endPage < pageCount}">
-							 	<a class="page-link" th:href="@{|listMain?pageNum=${startPage+pageGroup}&type=${type}&keyword=${keyword}|}">Next</a>
+							 	<a class="page-link" th:href="@{|lecture?pageNum=${startPage+pageGroup}&type=${type}&keyword=${keyword}|}">Next</a>
 							</li>
 						  
 						</ul>
@@ -112,14 +112,14 @@
 						
 							<li class="page-item" th:if="${startPage > pageGroup}">
 								<!-- /* <a class="page-link" th:href="@{boardList(pageNum=${startPage-1})}">Pre</a> */ -->
-								<a class="page-link" th:href="@{|listMain?pageNum=${startPage-1}|}">Pre</a>
+								<a class="page-link" th:href="@{|lecture?pageNum=${startPage-1}|}">Pre</a>
 							</li>
 							 
 							<!-- /* <forEach var="i begin="${startPage}" end="${endPage}"> */-->
 							<li th:each="num : ${#numbers.sequence(startPage, endPage)}"
 								th:classappend="${num == currentPage} ? 'active'" class="page-item">
 								<th:block th:if="${num != currentPage}">
-									<a class="page-link" th:href="@{|listMain?pageNum=${num}|}" th:text="${num}"></a>
+									<a class="page-link" th:href="@{|lecture?pageNum=${num}|}" th:text="${num}"></a>
 								</th:block>									
 								<th:block th:unless="${num != currentPage}">
 									<a class="page-link" th:text="${num}"></a>
@@ -128,7 +128,7 @@
 							</li>
 							
 							<li class="page-item" th:if="${endPage < pageCount}">
-							 	<a class="page-link" th:href="@{|listMain?pageNum=${startPage+pageGroup}|}">Next</a>
+							 	<a class="page-link" th:href="@{|lecture?pageNum=${startPage+pageGroup}|}">Next</a>
 							</li>
 						  
 						</ul>
