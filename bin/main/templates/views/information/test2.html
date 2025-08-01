@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Custom Horizontal Slider with Scrollbar</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: sans-serif;
+      overflow: hidden;
+    }
+
+    .slider-container {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .slider {
+      display: flex;
+      width: 300vw;
+      height: 100%;
+      transition: transform 0.1s ease-out;
+      cursor: grab;
+    }
+
+    .slide {
+      width: 100vw;
+      height: 100%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4em;
+      color: white;
+    }
+
+    .slide:nth-child(1) { background: #3498db; }
+    .slide:nth-child(2) { background: #e67e22; }
+    .slide:nth-child(3) { background: #2ecc71; }
+
+    .progress-container {
+      position: absolute;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      height: 8px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: white;
+      width: 0%;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="slider-container">
+    <div class="slider" id="slider">
+      <div class="slide">1</div>
+      <div class="slide">2</div>
+      <div class="slide">3</div>
+    </div>
+    <div class="progress-container" id="progressContainer">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+  </div>
+
+  <script>
+    const slider = document.getElementById('slider');
+    const progressContainer = document.getElementById('progressContainer');
+    const progressBar = document.getElementById('progressBar');
+    const totalSlides = 3;
+    const maxTranslate = -1 * (totalSlides - 1) * window.innerWidth;
+
+    let isDragging = false;
+    let startX;
+    let startTranslate;
+
+    function setTranslate(x) {
+      x = Math.max(Math.min(0, x), maxTranslate);
+      slider.style.transform = `translateX(${x}px)`;
+      updateProgressFromTranslate(x);
+    }
+
+    function getTranslateX() {
+      const style = window.getComputedStyle(slider);
+      const matrix = new DOMMatrixReadOnly(style.transform);
+      return matrix.m41;
+    }
+
+    function updateProgressFromTranslate(x) {
+      const percent = Math.abs(x / maxTranslate) * 100;
+      progressBar.style.width = `${percent}%`;
+    }
+
+    // 슬라이더 드래그
+    slider.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      startX = e.pageX;
+      startTranslate = getTranslateX();
+      slider.style.cursor = 'grabbing';
+    });
+
+    slider.addEventListener('mouseup', () => {
+      isDragging = false;
+      slider.style.cursor = 'grab';
+    });
+
+    slider.addEventListener('mouseleave', () => {
+      isDragging = false;
+      slider.style.cursor = 'grab';
+    });
+
+    slider.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      const delta = e.pageX - startX;
+      setTranslate(startTranslate + delta);
+    });
+
+    // 터치 이벤트
+    slider.addEventListener('touchstart', (e) => {
+      isDragging = true;
+      startX = e.touches[0].pageX;
+      startTranslate = getTranslateX();
+    });
+
+    slider.addEventListener('touchend', () => {
+      isDragging = false;
+    });
+
+    slider.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+      const delta = e.touches[0].pageX - startX;
+      setTranslate(startTranslate + delta);
+    });
+
+    // 프로그레스 바 클릭 → 슬라이드 위치 이동
+    progressContainer.addEventListener('click', (e) => {
+      const rect = progressContainer.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const percent = clickX / rect.width;
+      const newTranslate = percent * maxTranslate;
+      setTranslate(newTranslate);
+    });
+
+    // 프로그레스 바 드래그
+    let barDragging = false;
+
+    progressContainer.addEventListener('mousedown', (e) => {
+      barDragging = true;
+      moveBarTo(e.clientX);
+    });
+
+    document.addEventListener('mouseup', () => {
+      barDragging = false;
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!barDragging) return;
+      moveBarTo(e.clientX);
+    });
+
+    function moveBarTo(clientX) {
+      const rect = progressContainer.getBoundingClientRect();
+      const x = Math.max(0, Math.min(rect.width, clientX - rect.left));
+      const percent = x / rect.width;
+      const newTranslate = percent * maxTranslate;
+      setTranslate(newTranslate);
+    }
+
+    // 초기 상태 설정
+    setTranslate(0);
+  </script>
+</body>
+</html>

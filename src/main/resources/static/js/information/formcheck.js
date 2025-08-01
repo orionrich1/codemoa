@@ -16,6 +16,7 @@ $(function() {
 		$("#checkForm").submit();
 	});
 	
+	
 	// 게시 글 상세보기 "수정버튼" 이벤트
 	$("#detailUpdate").on("click", function() {
 		
@@ -32,6 +33,7 @@ $(function() {
 		$("#checkForm").attr("method","post");
 		$("#checkForm").submit();
 	});
+	
 	
 	// 게시글 쓰기 폼 유효성 검사
 	$("#writeForm").on("submit", function() {
@@ -59,6 +61,7 @@ $(function() {
 			return false;
 		}
 	});
+	
 	
 	// 게시글 수정 폼 유효성 검사
 	$("#updateForm").on("submit", function() {
