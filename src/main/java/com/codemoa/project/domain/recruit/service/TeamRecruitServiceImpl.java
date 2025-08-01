@@ -38,7 +38,7 @@ public class TeamRecruitServiceImpl implements TeamRecruitService {
     public void increaseViewCount(int recruitId) {
     	teamRecruitMapper.incrementViewCount(recruitId);
     }
-    
+     
     @Override
     public void updateTeamRecruit(TeamRecruit teamRecruit, MultipartFile uploadFile) throws Exception {
     	if (uploadFile != null && !uploadFile.isEmpty()) {

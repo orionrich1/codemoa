@@ -45,17 +45,22 @@ public class TeamRecruitController {
 	
 	private final String UPLOAD_DIR = Paths.get(System.getProperty("user.dir"), "src/main/resources/static/files").toString();
 	
+	@Autowired
+	private TeamRecruitService teamRecruitService;
+	
+	private String getLoginUserId(HttpSession session) {
+	    return (String) session.getAttribute("loginId");
+	}
+	
+	
 	@DeleteMapping("/recruit/{recruitId}")
 	public ResponseEntity<?> deleteRecruit(@PathVariable("recruitId") int recruitId, HttpSession session){
-		// 로그인 기능 구현 완료시 활성화
-		/*
+	
 		 String loginId = (String) session.getAttribute("loginId");
-		 TeamRecruit teamRecruit = teamRecruitService.getRecruitById(recruitId);
+		 TeamRecruit teamRecruit = teamRecruitService.getTeamRecruit(recruitId);
 		 if (teamRecruit == null || !teamRecruit.getUserId().equals(loginId)){
 		 	return ResponseEntity.status(HttpStatus.FORBIDDEN).body("삭제 원한이 없습니다.");
 		 }
-		 */
-		
 		boolean result = teamRecruitService.deleteRecruit(recruitId);
 		if(result) {
 			return ResponseEntity.ok().body("삭제 완료");
@@ -69,15 +74,13 @@ public class TeamRecruitController {
 	@GetMapping("/recruit/updateForm")
 	public String showUpdateForm(@RequestParam("recruitId") int recruitId, HttpSession session, Model model, HttpServletResponse response) throws IOException {
 	   
-		  // 로그인 체크 (추후 로그인 구현 완료 시 활성화)
-		/*
-		String loginUserId = (String) session.getAttribute("loginUserId");
-	    if(loginUserId == null) {
+		String loginId = (String) session.getAttribute("loginId");
+	    if(loginId == null) {
 	        response.sendRedirect("/login"); // 로그인 페이지로 리다이렉트
 	        return null;
 	    }
 
-	    boolean userIdCheck = teamRecruitService.userIdCheck(recruitId, loginUserId);
+	    boolean userIdCheck = teamRecruitService.userIdCheck(recruitId, loginId);
 	    if(!userIdCheck) {
 	        response.setContentType("text/html; charset=utf-8");
 	        PrintWriter out = response.getWriter();
@@ -85,7 +88,7 @@ public class TeamRecruitController {
 	        out.flush();
 	        return null;
 	    }
-		 	*/
+		 	
 	    TeamRecruit teamRecruit = teamRecruitService.getTeamRecruit(recruitId);
 	    model.addAttribute("teamRecruit", teamRecruit);
 	    return "views/recruit/teamRecruitUpdateForm";
@@ -126,19 +129,21 @@ public class TeamRecruitController {
 	} 
 	
 
-	@Autowired
-	private TeamRecruitService teamRecruitService;
-	
+
 	
 	@PostMapping("/recruit/write")
 	public String writeRecruit(TeamRecruit teamRecruit, 
 			@RequestParam(value = "attachmentFile", required = false) MultipartFile attachmentFile,
-			RedirectAttributes redirectAttrs) {
+			RedirectAttributes redirectAttrs, HttpSession session) {
 		log.info("팀 모집 등록 요청 title={}", teamRecruit.getTitle());
 		
-		teamRecruit.setUserId("testUser"); // 로그인 완성 후 세션에서 가져오도록 수정 필요
-	    //String loginUserId = (String) session.getAttribute("loginUserId");
-	    //teamRecruit.setUserId(loginUserId);
+		
+	    String loginId = getLoginUserId(session);
+	    if(loginId == null) {
+	    	redirectAttrs.addFlashAttribute("errorMsg", "로그인이 필요합니다.");
+	    	return "redirect:/loginForm";
+	    }
+	    teamRecruit.setUserId(loginId);
 		
 		if("TEAM_JOIN".equals(teamRecruit.getRecruitType())) {
 			teamRecruit.setRemainingMembers(0);
@@ -172,19 +177,7 @@ public class TeamRecruitController {
 		    teamRecruitService.addTeamRecruit(teamRecruit);
 		    redirectAttrs.addFlashAttribute("msg", "등록이 완료되었습니다.");
 		    return "redirect:/TeamRecruitList";
-		}
-	
-	/*
-	@PostMapping("/delete")
-	public String deleteTeamRecruit(RedirectAttribute reAttrs,
-			HttpServletResponse response, PrintWriter out,
-			@RequestParam("recruitId") int recruitId, @RequestParam("userId") String userId,
-			@RequestParam("value="pageNum", defaultValue="1" ) int pageNum){"
-					+ "}
-			
-			)
-	*/
-	
+		}	
 		
 	@GetMapping("/addTeamRecruit")
 	public String addTeamRecruit(Model model){
