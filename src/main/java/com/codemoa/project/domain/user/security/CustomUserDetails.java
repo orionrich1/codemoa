@@ -1,9 +1,7 @@
 package com.codemoa.project.domain.user.security;
 
 import com.codemoa.project.domain.user.entity.User;
-
 import lombok.Getter;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -45,7 +43,6 @@ public class CustomUserDetails implements OAuth2User, UserDetails {
 		this.providerId = providerId;
 	}
 
-	// 로그인 후 사용자 정보를 가져오기 위한 Getter
 	public User getUser() {
 		return user;
 	}
@@ -55,11 +52,14 @@ public class CustomUserDetails implements OAuth2User, UserDetails {
 		return null;
 	}
 
+	// ▼▼▼▼▼ [수정된 부분] ▼▼▼▼▼
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// UserGrade에서 권한 정보를 가져옵니다.
-		return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getUserGrade().getGradeId()));
+		// UserGrade Enum의 이름을 기반으로 권한을 생성합니다. (예: "ROLE_BRONZE")
+		// user.getUserGrade().getGradeId() -> user.getGrade().name()
+		return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getGrade().name()));
 	}
+	// ▲▲▲▲▲ [수정된 부분] ▲▲▲▲▲
 
 	@Override
 	public String getPassword() {
@@ -71,7 +71,6 @@ public class CustomUserDetails implements OAuth2User, UserDetails {
 		return user.getUserId();
 	}
 
-	// 계정 만료, 잠금, 자격 증명 만료, 활성화 여부는 필요에 따라 구현합니다. (기본값 true)
 	@Override
 	public boolean isAccountNonExpired() {
 		return true;

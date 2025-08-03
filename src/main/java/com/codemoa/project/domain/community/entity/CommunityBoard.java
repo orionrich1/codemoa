@@ -1,12 +1,8 @@
-//윤식
 package com.codemoa.project.domain.community.entity;
 
 import java.time.LocalDateTime;
-
 import org.hibernate.annotations.CreationTimestamp;
-
 import com.codemoa.project.domain.user.entity.User;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -57,22 +53,21 @@ public class CommunityBoard {
     @Column(nullable = false)
     private String category;
 
+    // ▼▼▼ [수정됨] @Column에 name 속성 추가 ▼▼▼
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "post_type", nullable = false)
     private PostType postType;
 
     @Column(name = "staked_points")
     private Integer stakedPoints;
 
-    // ▼▼▼▼▼ [수정됨] isAdopted -> isResolved 로 이름 변경 ▼▼▼▼▼
-    @Column(name = "is_resolved") 
+    @Column(name = "is_resolved")
     private boolean isResolved;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    // ▼▼▼▼▼ [수정됨] 빌더의 파라미터 및 할당 부분 변경 ▼▼▼▼▼
     @Builder
     public CommunityBoard(User user, String title, String content, int recommend, String file1,
                           String category, PostType postType, Integer stakedPoints, boolean isResolved) {
@@ -84,11 +79,9 @@ public class CommunityBoard {
         this.category = category;
         this.postType = postType;
         this.stakedPoints = stakedPoints;
-        this.isResolved = isResolved; // isAdopted -> isResolved
+        this.isResolved = isResolved;
     }
     
-    
- // ==================== 생성 로직 (정적 팩토리 메서드) ====================
     public static CommunityBoard create(User user, String title, String content, String category, PostType postType, Integer stakedPoints) {
         CommunityBoard board = new CommunityBoard();
         board.user = user;
@@ -97,19 +90,17 @@ public class CommunityBoard {
         board.category = category;
         board.postType = postType;
         board.stakedPoints = (stakedPoints == null) ? 0 : stakedPoints;
-        board.isResolved = false; // isAdopted -> isResolved
+        board.isResolved = false;
         board.recommend = 0;
         return board;
     }
 
-    // ==================== 수정 로직 (인스턴스 메서드) ====================
     public void update(String title, String content, String category) {
         this.title = title;
         this.content = content;
         this.category = category;
     }
     
-    // ▼▼▼▼▼ [수정됨] 이제 이 메서드는 정상 동작합니다 ▼▼▼▼▼
     public void resolve() {
         this.isResolved = true;
     }

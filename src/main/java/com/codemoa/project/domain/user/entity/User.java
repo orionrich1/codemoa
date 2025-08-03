@@ -43,9 +43,12 @@ public class User {
     @Column(name = "unban_date", nullable = false)
     private LocalDateTime unbanDate;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "grade_id", referencedColumnName = "grade_id", foreignKey = @ForeignKey(name = "fk_user_grade"))
-    private UserGrade userGrade;
+    // ▼▼▼▼▼ [수정된 부분 시작] ▼▼▼▼▼
+    @Enumerated(EnumType.STRING) // DB에 Enum 이름을 문자열로 저장
+    @Column(name = "grade", nullable = false)
+    private UserGrade grade;
+    // ▲▲▲▲▲ [수정된 부분 끝] ▲▲▲▲▲
+
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CommunityBoard> communityBoards = new ArrayList<>();
@@ -53,15 +56,15 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
-    // 생성자에서 totalPoints 초기화
-    public User(String userId, String name, String nickname, String email, String mobile, UserGrade userGrade) {
+    // 생성자에서 grade 초기화
+    public User(String userId, String name, String nickname, String email, String mobile, UserGrade grade) {
         this.userId = userId;
         this.name = name;
         this.nickname = nickname;
         this.email = email;
         this.mobile = mobile;
-        this.totalPoints = 0; // 새로 가입 시 포인트는 0으로 시작
-        this.userGrade = userGrade;
+        this.totalPoints = 0;
+        this.grade = grade; // 필드명 변경에 따른 수정
     }
 
     @PrePersist
@@ -70,16 +73,10 @@ public class User {
         this.unbanDate = LocalDateTime.now();
     }
     
-    // ▼▼▼▼▼ [신규 추가된 메서드] ▼▼▼▼▼
-    /**
-     * 사용자에게 포인트를 더해주는 편의 메서드
-     * @param points 추가할 포인트
-     */
     public void addPoints(int points) {
         if (this.totalPoints == null) {
             this.totalPoints = 0;
         }
         this.totalPoints += points;
     }
-    // ▲▲▲▲▲ [신규 추가된 메서드] ▲▲▲▲▲
 }

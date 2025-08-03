@@ -9,15 +9,14 @@ import com.codemoa.project.domain.community.entity.Comment;
 import com.codemoa.project.domain.community.entity.CommunityBoard;
 import com.codemoa.project.domain.community.repository.CommentRepository;
 import com.codemoa.project.domain.community.repository.CommunityBoardRepository;
-import com.codemoa.project.domain.user.entity.PointEventType; // 신규 import
+import com.codemoa.project.domain.user.entity.PointEventType;
 import com.codemoa.project.domain.user.entity.User;
 import com.codemoa.project.domain.user.repository.UserRepository;
 import com.codemoa.project.domain.user.service.UserService;
-
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
-import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -32,7 +31,6 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class CommunityBoardService {
 
     private final CommunityBoardRepository communityBoardRepository;
@@ -41,9 +39,22 @@ public class CommunityBoardService {
     private final CommentRepository commentRepository;
     private final UserService userService;
 
-    // ... (findAll, search 등 다른 메서드는 기존과 동일) ...
+    // @Lazy를 사용하기 위해 @RequiredArgsConstructor를 지우고 생성자를 직접 작성
+    public CommunityBoardService(
+            CommunityBoardRepository communityBoardRepository,
+            UserRepository userRepository,
+            @Lazy CommentService commentService, // 순환 참조를 해결하기 위해 @Lazy 추가
+            CommentRepository commentRepository,
+            UserService userService) {
+        this.communityBoardRepository = communityBoardRepository;
+        this.userRepository = userRepository;
+        this.commentService = commentService;
+        this.commentRepository = commentRepository;
+        this.userService = userService;
+    }
+
     private static final List<String> MAIN_CATEGORIES = Arrays.asList("Java", "Python", "JavaScript", "C#", "Kotlin");
-    
+
     @Transactional(readOnly = true)
     public Page<BoardListResponse> findAll(String category, String searchType, String keyword, Pageable pageable) {
         Pageable sortedByBoardNoDesc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "boardNo"));
@@ -51,7 +62,7 @@ public class CommunityBoardService {
         Page<CommunityBoard> boardPage = communityBoardRepository.findAll(spec, sortedByBoardNoDesc);
         return boardPage.map(BoardListResponse::new);
     }
-    
+
     private Specification<CommunityBoard> search(String category, String searchType, String keyword) {
         return (root, query, criteriaBuilder) -> {
             query.distinct(true);
@@ -66,7 +77,7 @@ public class CommunityBoardService {
             } else if (StringUtils.hasText(category) && !"all".equalsIgnoreCase(category)) {
                 predicates.add(criteriaBuilder.equal(root.get("category"), category));
             }
-            
+
             // 검색어 처리
             if (StringUtils.hasText(keyword)) {
                 switch (searchType) {
@@ -91,7 +102,7 @@ public class CommunityBoardService {
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
-    
+
     @Transactional
     public void create(CreateBoardRequest request, String userId) {
         User user = userRepository.findByUserId(userId)
@@ -101,18 +112,15 @@ public class CommunityBoardService {
         CommunityBoard.PostType postType = (pointsToStake > 0) ? CommunityBoard.PostType.QUESTION : CommunityBoard.PostType.NORMAL;
 
         if (postType == CommunityBoard.PostType.QUESTION) {
-            // ▼▼▼ [수정됨] getPoint() -> getTotalPoints() ▼▼▼
             if (user.getTotalPoints() < 1000) {
                 throw new IllegalStateException("포인트가 1000점 이상이어야 질문 글을 작성할 수 있습니다.");
             }
             if (pointsToStake > 100) {
                 throw new IllegalArgumentException("최대 100 포인트까지 걸 수 있습니다.");
             }
-            // ▼▼▼ [수정됨] getPoint() -> getTotalPoints() ▼▼▼
             if (user.getTotalPoints() < pointsToStake) {
                 throw new IllegalStateException("보유 포인트가 부족합니다.");
             }
-            // ▼▼▼ [수정됨] 포인트 차감 로직 변경 ▼▼▼
             user.setTotalPoints(user.getTotalPoints() - pointsToStake);
         }
 
@@ -126,7 +134,6 @@ public class CommunityBoardService {
         );
         communityBoardRepository.save(board);
 
-        // ▼▼▼ [신규 기능 추가] 게시글 작성 포인트 지급 ▼▼▼
         userService.addPointsForEvent(userId, PointEventType.CREATE_POST);
     }
 
@@ -137,7 +144,7 @@ public class CommunityBoardService {
         List<CommentResponse> comments = commentService.findAll(boardNo);
         return new BoardDetailResponse(board, comments);
     }
-    
+
     @Transactional
     public void update(Integer boardNo, UpdateBoardRequest request, String currentUserId) {
         CommunityBoard board = communityBoardRepository.findById(boardNo)
@@ -182,7 +189,6 @@ public class CommunityBoardService {
         comment.adopt();
 
         int points = board.getStakedPoints();
-        // ▼▼▼ [수정됨] setPoint() -> addPoints() ▼▼▼
         answerer.addPoints(points);
     }
 }

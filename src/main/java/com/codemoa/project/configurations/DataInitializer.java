@@ -4,7 +4,6 @@ import com.codemoa.project.domain.community.entity.CommunityBoard;
 import com.codemoa.project.domain.community.repository.CommunityBoardRepository;
 import com.codemoa.project.domain.user.entity.User;
 import com.codemoa.project.domain.user.entity.UserGrade;
-import com.codemoa.project.domain.user.repository.UserGradeRepository;
 import com.codemoa.project.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -23,49 +22,37 @@ public class DataInitializer implements CommandLineRunner {
 
     private final CommunityBoardRepository communityBoardRepository;
     private final UserRepository userRepository;
-    private final UserGradeRepository userGradeRepository;
+    // ▼▼▼ [수정됨] UserGradeRepository 필드 삭제 ▼▼▼
+    // private final UserGradeRepository userGradeRepository;
 
     @Override
     @Transactional
     public void run(String... args) throws Exception {
-        // --- 현재 프로필이 'dev'일 때만 실행되도록 하는 로직 (선택 사항) ---
-        // String activeProfile = System.getProperty("spring.profiles.active");
-        // if (!"dev".equals(activeProfile)) {
-        //     return;
-        // }
-
         long boardCount = communityBoardRepository.count();
         if (boardCount >= 110) {
             System.out.println("이미 충분한 게시물 데이터가 존재합니다. (" + boardCount + "개)");
             return;
         }
 
-        // 1. 테스트용 사용자 등급 생성 또는 조회
-        UserGrade testGrade = userGradeRepository.findById("BRONZE")
-                .orElseGet(() -> {
-                    // UserGrade 엔티티에 해당 생성자가 필요합니다.
-                    UserGrade newGrade = new UserGrade("BRONZE", "브론즈", 0);
-                    return userGradeRepository.save(newGrade);
-                });
+        // ▼▼▼ [수정됨] UserGradeRepository를 사용하던 코드 블록 전체 삭제 ▼▼▼
+        // UserGrade를 DB에서 찾거나 생성할 필요 없이 Enum을 직접 사용합니다.
 
         // 2. 테스트용 사용자 생성 또는 조회
         User testUser = userRepository.findByUserId("testuser")
                 .orElseGet(() -> {
-                    // 수정된 생성자 호출 (중간에 0 제거)
-                    User newUser = new User("testuser", "테스트유저", "테스터", "test@test.com", "010-1234-5678", testGrade);
-                    // setPoint() 대신 setTotalPoints() 사용
-                    newUser.setTotalPoints(5000); // 질문 글 작성을 위한 충분한 포인트 설정
+                    // ▼▼▼ [수정됨] UserGrade.BRONZE Enum을 직접 사용 ▼▼▼
+                    User newUser = new User("testuser", "테스트유저", "테스터", "test@test.com", "010-1234-5678", UserGrade.BRONZE);
+                    newUser.setTotalPoints(5000);
                     return userRepository.save(newUser);
                 });
 
-        // 3. 110개의 테스트 게시물 생성
+        // 3. 110개의 테스트 게시물 생성 (기존과 동일)
         System.out.println("테스트용 게시물 데이터 생성을 시작합니다.");
         int postsToCreate = 110 - (int) boardCount;
         String[] categories = {"Java", "Spring", "Python", "JavaScript", "자유"};
 
         IntStream.rangeClosed(1, postsToCreate).forEach(i -> {
             String category = categories[i % categories.length];
-            // 10번에 한 번씩, '자유' 카테고리가 아닐 때 질문 포인트를 겁니다.
             int stakedPoints = (i % 10 == 0 && !"자유".equals(category)) ? 10 * ((i/10) % 5 + 1) : 0;
             CommunityBoard.PostType postType = stakedPoints > 0 ? CommunityBoard.PostType.QUESTION : CommunityBoard.PostType.NORMAL;
 

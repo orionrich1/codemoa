@@ -13,7 +13,6 @@ import com.codemoa.project.domain.user.entity.UserGrade;
 import com.codemoa.project.domain.user.mapper.UserMapper;
 import com.codemoa.project.domain.user.repository.LocalUserRepository;
 import com.codemoa.project.domain.user.repository.PointLogRepository;
-import com.codemoa.project.domain.user.repository.UserGradeRepository;
 import com.codemoa.project.domain.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -34,7 +33,8 @@ public class UserService {
 
 	private final UserRepository userRepository;
 	private final LocalUserRepository localUserRepository;
-	private final UserGradeRepository userGradeRepository;
+	// ▼▼▼ [수정됨] UserGradeRepository 필드 완전 삭제 ▼▼▼
+	// private final UserGradeRepository userGradeRepository;
 
 	private final PasswordEncoder passwordEncoder;
 	private final PointLogRepository pointLogRepository;
@@ -48,23 +48,14 @@ public class UserService {
 			throw new IllegalArgumentException("이미 사용 중인 아이디입니다.");
 		}
 
-		UserGrade defaultGrade = userGradeRepository.findById("BRONZE")
-				.orElseThrow(() -> new RuntimeException("DB 확인 필요: 기본 등급(BRONZE) 없음"));
-
+		// ▼▼▼ [수정됨] DB에서 등급을 조회하는 대신, UserGrade.BRONZE Enum을 직접 사용합니다. ▼▼▼
 		User newUser = new User(request.getUserId(), request.getName(), request.getNickname(), request.getEmail(),
-				request.getMobile(), defaultGrade); // 중간에 있던 , 0 을 제거
-		// SNS 관련 정보가 없으면 Local 회원가입만 진행
-		// userRepository.save(newUser); // <-- 이 라인을 삭제하거나 주석 처리
+				request.getMobile(), UserGrade.BRONZE);
 
 		LocalUser newLocalUser = new LocalUser(newUser, passwordEncoder.encode(request.getPass()));
-
-		// LocalUser만 저장합니다.
-		// 만약 LocalUser에 cascade 옵션이 있다면 User도 함께 저장됩니다.
-		// 만약 cascade 옵션이 없다면, 아래의 해결책 2를 시도해야 합니다.
 		localUserRepository.save(newLocalUser);
 		localUserRepository.flush();
 
-		// 만약 SNS 관련 정보가 있다면 SNS과 연동되는 과정도 추가로 진행
 		if (!(snsProvider == null || snsProvider.isBlank() || snsProviderId == null || snsProviderId.isBlank())) {
 			snsUserSerivce.linkSnsAccount(newUser.getUserId(), snsProvider, snsProviderId);
 		}
@@ -82,7 +73,6 @@ public class UserService {
 		} else {
 			return false;
 		}
-
 	}
 
 	// 차단 사유 가져오기
@@ -140,26 +130,22 @@ public class UserService {
 		return new UserResponse(user);
 	}
 	
-	
 	@Transactional
 	public void addPointsForEvent(String userId, PointEventType eventType) {
 	    Optional<User> optionalUser = userRepository.findByUserId(userId);
 	    if (optionalUser.isEmpty()) {
-	        // 사용자가 존재하지 않으면 아무 작업도 하지 않음
 	        return;
 	    }
 	    User user = optionalUser.get();
 
-	    // --- 일일 로그인 포인트 중복 지급 방지 ---
 	    if (eventType == PointEventType.DAILY_LOGIN) {
-	        LocalDateTime startOfDay = LocalDate.now().atStartOfDay(); // 오늘 날짜의 0시 0분
+	        LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
 	        boolean alreadyAwarded = pointLogRepository.existsByUserAndEventTypeAndCreatedAtAfter(user, eventType, startOfDay);
 	        if (alreadyAwarded) {
-	            return; // 이미 오늘 로그인 포인트를 받았으면 종료
+	            return;
 	        }
 	    }
 
-	    // 1. 포인트 로그 생성
 	    PointLog newPointLog = PointLog.builder()
 	            .user(user)
 	            .eventType(eventType)
@@ -168,7 +154,6 @@ public class UserService {
 	            .build();
 	    pointLogRepository.save(newPointLog);
 
-	    // 2. 사용자 총 포인트 업데이트
 	    user.addPoints(eventType.getPoints());
 	    userRepository.save(user);
 	}
