@@ -51,8 +51,10 @@ public class DataInitializer implements CommandLineRunner {
         // 2. 테스트용 사용자 생성 또는 조회
         User testUser = userRepository.findByUserId("testuser")
                 .orElseGet(() -> {
-                    User newUser = new User("testuser", "테스트유저", "테스터", "test@test.com", "010-1234-5678", 0, testGrade);
-                    newUser.setPoint(5000); // 질문 글 작성을 위한 충분한 포인트 설정
+                    // 수정된 생성자 호출 (중간에 0 제거)
+                    User newUser = new User("testuser", "테스트유저", "테스터", "test@test.com", "010-1234-5678", testGrade);
+                    // setPoint() 대신 setTotalPoints() 사용
+                    newUser.setTotalPoints(5000); // 질문 글 작성을 위한 충분한 포인트 설정
                     return userRepository.save(newUser);
                 });
 

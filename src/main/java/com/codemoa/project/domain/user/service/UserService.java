@@ -6,18 +6,23 @@ import com.codemoa.project.domain.user.dto.request.UserSignUpRequest;
 import com.codemoa.project.domain.user.dto.request.UserUpdateRequest;
 import com.codemoa.project.domain.user.dto.response.UserResponse;
 import com.codemoa.project.domain.user.entity.LocalUser;
+import com.codemoa.project.domain.user.entity.PointEventType;
+import com.codemoa.project.domain.user.entity.PointLog;
 import com.codemoa.project.domain.user.entity.User;
 import com.codemoa.project.domain.user.entity.UserGrade;
 import com.codemoa.project.domain.user.mapper.UserMapper;
 import com.codemoa.project.domain.user.repository.LocalUserRepository;
+import com.codemoa.project.domain.user.repository.PointLogRepository;
 import com.codemoa.project.domain.user.repository.UserGradeRepository;
 import com.codemoa.project.domain.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -32,7 +37,7 @@ public class UserService {
 	private final UserGradeRepository userGradeRepository;
 
 	private final PasswordEncoder passwordEncoder;
-
+	private final PointLogRepository pointLogRepository;
 	private final SnsUserService snsUserSerivce;
 	private final UserMapper userMapper;
 
@@ -47,8 +52,7 @@ public class UserService {
 				.orElseThrow(() -> new RuntimeException("DB 확인 필요: 기본 등급(BRONZE) 없음"));
 
 		User newUser = new User(request.getUserId(), request.getName(), request.getNickname(), request.getEmail(),
-				request.getMobile(), 0, defaultGrade);
-
+				request.getMobile(), defaultGrade); // 중간에 있던 , 0 을 제거
 		// SNS 관련 정보가 없으면 Local 회원가입만 진행
 		// userRepository.save(newUser); // <-- 이 라인을 삭제하거나 주석 처리
 
@@ -134,5 +138,38 @@ public class UserService {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다. id=" + userId));
 		return new UserResponse(user);
+	}
+	
+	
+	@Transactional
+	public void addPointsForEvent(String userId, PointEventType eventType) {
+	    Optional<User> optionalUser = userRepository.findByUserId(userId);
+	    if (optionalUser.isEmpty()) {
+	        // 사용자가 존재하지 않으면 아무 작업도 하지 않음
+	        return;
+	    }
+	    User user = optionalUser.get();
+
+	    // --- 일일 로그인 포인트 중복 지급 방지 ---
+	    if (eventType == PointEventType.DAILY_LOGIN) {
+	        LocalDateTime startOfDay = LocalDate.now().atStartOfDay(); // 오늘 날짜의 0시 0분
+	        boolean alreadyAwarded = pointLogRepository.existsByUserAndEventTypeAndCreatedAtAfter(user, eventType, startOfDay);
+	        if (alreadyAwarded) {
+	            return; // 이미 오늘 로그인 포인트를 받았으면 종료
+	        }
+	    }
+
+	    // 1. 포인트 로그 생성
+	    PointLog newPointLog = PointLog.builder()
+	            .user(user)
+	            .eventType(eventType)
+	            .points(eventType.getPoints())
+	            .description(eventType.getDescription())
+	            .build();
+	    pointLogRepository.save(newPointLog);
+
+	    // 2. 사용자 총 포인트 업데이트
+	    user.addPoints(eventType.getPoints());
+	    userRepository.save(user);
 	}
 }

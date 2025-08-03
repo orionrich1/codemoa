@@ -1,54 +1,41 @@
 package com.codemoa.project.domain.user.entity;
 
-import java.time.LocalDateTime;
-
-import org.hibernate.annotations.CreationTimestamp;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import lombok.AccessLevel;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "point_log")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class PointLog {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "point_log_id")
-    private Integer pointLogId; // 포인트 로그의 고유 ID
-
-    @Column(nullable = false , name = "change_amount")
-    private Integer changeAmount; // 변동된 포인트 (+/-)
-
-    @Column(nullable = false)
-    private String reason; // 변동 사유 (예: "게시글 작성", "답변 채택")
-
-    @CreationTimestamp
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt; // 로그 생성 시각
-
-    // --- 연관 관계 ---
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id") // 이 로그의 주인인 User를 참조
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @Builder
-    public PointLog(Integer changeAmount, String reason, User user) {
-        this.changeAmount = changeAmount;
-        this.reason = reason;
-        this.user = user;
+    private int points; // 지급 또는 사용된 포인트
+
+    private String description; // 포인트 변경 사유
+
+
+    @Enumerated(EnumType.STRING) // Enum의 이름을 DB에 문자열로 저장
+    @Column(nullable = false)
+    private PointEventType eventType; // 포인트 이벤트 종류
+
+    @Column(nullable = false)
+    private LocalDateTime createdAt; // 포인트 로그 생성 시각
+
+    @PrePersist // 엔티티가 저장되기 전에 자동으로 실행
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now();
     }
 }
