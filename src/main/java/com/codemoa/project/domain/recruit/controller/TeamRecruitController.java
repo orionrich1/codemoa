@@ -91,7 +91,7 @@ public class TeamRecruitController {
 	    return "views/recruit/teamRecruitUpdateForm";
 	}
 	
-	@PostMapping("/TeamRecruitUpdate")
+	@PostMapping("/teamRecruitUpdate")
 	public String updateTeamRecruit(
 			@ModelAttribute TeamRecruit teamRecruit,
 			@RequestParam(value = "attachmentFile", required = false) MultipartFile attachmentFile,
@@ -184,7 +184,7 @@ public class TeamRecruitController {
 		return "views/recruit/teamRecruitWriteForm";
 	}
 	
-	@GetMapping("/TeamRecruitDetail")
+	@GetMapping("/teamRecruitDetail")
 	public String getTeamRecruit(Model model, 
 			@RequestParam("recruitId") int recruitId,
 			HttpSession session) {
@@ -198,7 +198,7 @@ public class TeamRecruitController {
 		return "views/recruit/teamRecruitDetail";
 	}
 	
-	@GetMapping("/TeamRecruitList")
+	@GetMapping("/teamRecruitList")
 	public String TeamRecruitList(Model model, 
 			@RequestParam(value = "pageNum", required=false, defaultValue="1") int pageNum,
 			@RequestParam(value = "type", required=false, defaultValue="") String type,
