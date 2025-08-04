@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}">
+
+<div layout:fragment="content">
+	<!-- 임시 css 사용중 -->
+	<link rel="stylesheet" th:href="@{/css/mypage/diary.css}" />
+
+  <!-- 프로젝트 개요 -->
+    <div class="mb-4">
+        <h2 th:text="${project.name}">프로젝트 이름</h2>
+        <span class="badge"
+              th:classappend="' bg-' + (${project.status} == '계획' ? 'primary' : (${project.status} == '진행중' ? 'success' : 'secondary'))"
+              th:text="${project.status}">진행중</span>
+        <p class="mt-2" th:text="${project.description}">프로젝트 설명</p>
+        <small class="text-muted" th:text="${#temporals.format(project.createdAt, 'yyyy-MM-dd HH:mm')}">2025-08-01 10:15</small>
+    </div>
+
+    <div class="row">
+        <!-- 체크리스트 -->
+        <div class="col-md-6 mb-4">
+            <h5>체크리스트</h5>
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center"
+                    th:each="item : ${checklist}">
+                    <span>
+                        <input class="form-check-input me-2" type="checkbox"
+                               th:checked="${item.isDone}" disabled />
+                        <span th:text="${item.content}">작업 내용</span>
+                    </span>
+					<span class="badge rounded-pill"
+					      th:switch="${item.priority}">
+					  <span th:case="1" class="priority-high">우선순위</span>
+					  <span th:case="2" class="priority-medium">우선순위</span>
+					  <span th:case="* "class="priority-low">우선순위</span>
+					</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 작업 일지 -->
+        <div class="col-md-6 mb-4">
+            <h5>작업 일지</h5>
+            <div th:each="diary : ${diaries}" class="card mb-2">
+                <div class="card-body">
+                    <h6 class="card-title mb-1" th:text="${diary.workDate}">2025-08-01</h6>
+                    <p class="card-text ellipsis" th:title="${diary.content}"
+                       th:text="${#strings.abbreviate(diary.content, 100)}">
+                        일지 내용 요약...
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

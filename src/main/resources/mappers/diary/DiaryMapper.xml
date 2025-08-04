@@ -3,6 +3,18 @@
 <mapper namespace="com.codemoa.project.domain.diary.mapper.DiaryMapper">
 
 	<select id="getProjectList" resultType="Project">
-		SELECT * FROM project WHERE user_id=#{userID}
+		SELECT * FROM project WHERE user_id=#{userID} ORDER BY project_id DESC
+	</select>
+	
+	<select id="getProjectDetail" resultType="Project">
+		SELECT * FROM project WHERE project_id=#{projectId}
+	</select>
+	
+	<select id="getProjectCheckList" resultType="ProjectChecklist">
+		SELECT * FROM project_checklist WHERE project_id=#{projectId}
+	</select>
+	
+	<select id="getProjectdiaries" resultType="ProjectDiary">
+		SELECT * FROM project_diary WHERE project_id=#{projectId}
 	</select>
 </mapper>

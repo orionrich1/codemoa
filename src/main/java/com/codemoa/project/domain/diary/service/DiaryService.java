@@ -6,16 +6,30 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.codemoa.project.domain.diary.entity.Project;
+import com.codemoa.project.domain.diary.entity.ProjectChecklist;
+import com.codemoa.project.domain.diary.entity.ProjectDiary;
 import com.codemoa.project.domain.diary.mapper.DiaryMapper;
-
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class DiaryService {
+
 	private final DiaryMapper diaryMapper;
-	
-	public List<Project> getProjectList(String userId){
+
+	public List<Project> getProjectList(String userId) {
 		return diaryMapper.getProjectList(userId);
+	}
+
+	public Project getProjectDetail(Integer projectId) {
+		return diaryMapper.getProjectDetail(projectId);
+	}
+
+	public List<ProjectChecklist> getProjectCheckList(Integer projectId) {
+		return diaryMapper.getProjectCheckList(projectId);
+	}
+
+	public List<ProjectDiary> getProjectdiaries(Integer projectId) {
+		return diaryMapper.getProjectdiaries(projectId);
 	}
 }

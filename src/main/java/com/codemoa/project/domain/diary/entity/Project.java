@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
@@ -19,10 +18,10 @@ public class Project {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "project_id", nullable = false, length = 10)
     private Integer projectId;
 
-    @Column(nullable = false, length = 50)
+    @Column(name = "user_id", nullable = false, length = 10)
     private String userId;
 
     @Column(nullable = false, length = 100)
@@ -38,12 +37,11 @@ public class Project {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    // 양방향 매핑 예시 (선택)
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProjectChecklist> checklists;
-
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProjectDiary> diaries;
-
-    // Getter, Setter 생략
+	@Override
+	public String toString() {
+		return "Project [projectId=" + projectId + ", userId=" + userId + ", name=" + name + ", description="
+				+ description + ", status=" + status + ", createdAt=" + createdAt + "]";
+	}
+    
+    
 }

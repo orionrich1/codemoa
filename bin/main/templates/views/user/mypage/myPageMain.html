@@ -81,7 +81,9 @@
 		    </div>
 		</div>
 	 </div>
-	 
+	 <script th:inline="javascript" th:if="${errorMessage != null}">
+	 	alert('[[${errorMessage}]]');
+	 </script>
 	 <script>
 		document.addEventListener('DOMContentLoaded', function () {
 			var snsUnlinkbtn = document.querySelector("#snsUnlinkBtn");
