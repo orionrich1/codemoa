@@ -60,6 +60,9 @@ public class SecurityConfig {
 
                 // 마이페이지는 로그인이 필요합니다.
                 .requestMatchers("/my-pages/**").authenticated()
+                
+                // 랭킹페이지는 로그인이 필요합니다.
+                .requestMatchers("/ranking**").authenticated()
 
                 // 글쓰기, 수정, 삭제 등 데이터 변경 API는 로그인이 필요합니다.
                 .requestMatchers(HttpMethod.POST, "/api/boards", "/api/boards/*/comments", "/api/comments/*/adopt").authenticated()
