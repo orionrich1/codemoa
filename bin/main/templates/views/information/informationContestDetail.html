@@ -7,7 +7,7 @@
 		
 		<script th:src="@{/js/information/formcheck.js}"></script>
 		<div class="row my-5" id="global-content">
-			<div class="col-10 offset-1">
+			<div class="col-10">
 				<form name="checkForm" id="checkForm">
 					<input type="hidden" name="no" id="no" th:value="${contest.contestNo}"/>
 					<input type="hidden" name="pass" id="rPass" />
@@ -32,7 +32,7 @@
 								</tr>
 								
 								<tr>
-									<th class="table-secondary">주최기관</th>
+									<th class="table-secondary" style="width: 180px;">주최기관</th>
 									<td colspan="3" th:text="${contest.hostOrganization}">주최기관</td>		
 								</tr>
 								<tr>
@@ -62,7 +62,7 @@
 									 -->
 								</tr>	
 								<tr>
-									<td colspan="4" style="white-space:pre">[[${contest.content}]]</td>
+									<td colspan="4" style="white-space: pre-wrap; max-width: 400px; word-wrap: break-word;">[[${contest.content}]]</td>
 								</tr>
 								<tr>
 									<td colspan="4">출처 : [[${contest.contestSource}]]</td>
@@ -70,9 +70,9 @@
 								<tr>
 									<th:block th:if="${contest.file1}">
 										<td colspan="4">
-											업로드 이미지 : [[${contest.file1}]]
-											<!-- 업로드 이미지 : 62e1ce93-70ab-488c-9b45-a21d419d7883.png -->
-											<img th:src="@{/files/information/{img}(img=${contest.file1})}" alt="이미지를 찾을 수 없습니다.">
+											<div style="display: flex; justify-content: center; align-items: center;">
+												<img th:src="@{/files/information/{img}(img=${contest.file1})}" alt="이미지를 찾을 수 없습니다." style="max-width: 100%;">
+											</div>
 										</td>
 									</th:block>
 									<th:block th:unless="${contest.file1}">

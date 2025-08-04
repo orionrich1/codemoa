@@ -34,33 +34,33 @@ public class InformationService {
 	}
 	
 	// 한 페이지에 해당하는 게시 글 리스트 요청을 처리하는 메서드
-	public Map<String, Object> lectureList(int pageNum, String type, String keyword) {
+	public Map<String, Object> lectureList(int pageNum, String type, String keyword, int pageSize, int pageGrop) {
 		log.info("BoardService : boardLsit(int pageNum, String type, String keyword)");
 		
 		// 현재 페이지
 		int currentPage = pageNum;
 		
 		// 1페이지 = 0   2페이지 = 10  3페이지 = 20
-		int startRow = (currentPage - 1) * PAGE_SIZE; 
+		int startRow = (currentPage - 1) * pageSize; 
 		
 		// 전체 페이지 수 계산 = 전체 게시 글의 수 / 페이지 당 게시 글 수
 		// int listCount = boardDao.getBoardCount();
 		int listCount = informationRecommendMapper.getLectureCount(type, keyword);
 		
 		// 총 페이지 갯수
-		int pageCount = listCount / PAGE_SIZE 
-				+ (listCount % PAGE_SIZE == 0? 0 : 1);
+		int pageCount = listCount / pageSize 
+				+ (listCount % pageSize == 0? 0 : 1);
 		
-		int startPage = (currentPage / PAGE_GROUP) * PAGE_GROUP + 1 
-				- (currentPage % PAGE_GROUP == 0? PAGE_GROUP : 0);
+		int startPage = (currentPage / pageGrop) * pageGrop + 1 
+				- (currentPage % pageGrop == 0? pageGrop : 0);
 		
-		int endPage = startPage + PAGE_GROUP -1;
+		int endPage = startPage + pageGrop -1;
 		
 		if(endPage > pageCount) {
 			endPage = pageCount;
 		}
 		
-		List<Lecture> lList = informationRecommendMapper.getlectureList(startRow, PAGE_SIZE, type, keyword);
+		List<Lecture> lList = informationRecommendMapper.getlectureList(startRow, pageSize, type, keyword);
 		
 		Map<String, Object> modelMap = new HashMap<>();
 		modelMap.put("lList", lList);
@@ -68,7 +68,7 @@ public class InformationService {
 		modelMap.put("startPage", startPage);
 		modelMap.put("endPage", endPage);
 		modelMap.put("currentPage", currentPage);
-		modelMap.put("pageGroup", PAGE_GROUP);
+		modelMap.put("pageGroup", pageGrop);
 		modelMap.put("listCount", listCount);
 		
 		boolean searchOption = type.equals("null")||keyword.equals("null") ? false : true;
@@ -107,35 +107,27 @@ public class InformationService {
 	}
 	
 	// 한 페이지에 해당하는 게시 글 리스트 요청을 처리하는 메서드
-	public Map<String, Object> bookList(int pageNum, String type, String keyword) {
+	public Map<String, Object> bookList(int pageNum, String type, String keyword, int pageSize, int pageGrop) {
 		log.info("BoardService : boardLsit(int pageNum, String type, String keyword)");
 		
-		// 현재 페이지
 		int currentPage = pageNum;
-		
-		// 1페이지 = 0   2페이지 = 10  3페이지 = 20
-		int startRow = (currentPage - 1) * PAGE_SIZE; 
-		
-		// 전체 페이지 수 계산 = 전체 게시 글의 수 / 페이지 당 게시 글 수
-		// int listCount = boardDao.getBoardCount();
-		
+		int startRow = (currentPage - 1) * pageSize; 
 		int listCount = informationRecommendMapper.getBookCount(type, keyword);
 		log.info("listCount : " + listCount);
 		
-		// 총 페이지 갯수
-		int pageCount = listCount / PAGE_SIZE 
-				+ (listCount % PAGE_SIZE == 0? 0 : 1);
+		int pageCount = listCount / pageSize 
+				+ (listCount % pageSize == 0? 0 : 1);
 		
-		int startPage = (currentPage / PAGE_GROUP) * PAGE_GROUP + 1 
-				- (currentPage % PAGE_GROUP == 0? PAGE_GROUP : 0);
+		int startPage = (currentPage / pageGrop) * pageGrop + 1 
+				- (currentPage % pageGrop == 0? pageGrop : 0);
 		
-		int endPage = startPage + PAGE_GROUP -1;
+		int endPage = startPage + pageGrop -1;
 		
 		if(endPage > pageCount) {
 			endPage = pageCount;
 		}
 		
-		List<Book> bList = informationRecommendMapper.getBookList(startRow, PAGE_SIZE, type, keyword);
+		List<Book> bList = informationRecommendMapper.getBookList(startRow, pageSize, type, keyword);
 		
 		Map<String, Object> modelMap = new HashMap<>();
 		modelMap.put("bList", bList);
@@ -143,7 +135,7 @@ public class InformationService {
 		modelMap.put("startPage", startPage);
 		modelMap.put("endPage", endPage);
 		modelMap.put("currentPage", currentPage);
-		modelMap.put("pageGroup", PAGE_GROUP);
+		modelMap.put("pageGroup", pageGrop);
 		modelMap.put("listCount", listCount);
 		
 		boolean searchOption = type.equals("null")||keyword.equals("null") ? false : true;
@@ -158,7 +150,6 @@ public class InformationService {
 	
 	@Transactional
 	public void updateBook(Book book) {
-		// log.info(contest.getTitle());
 		informationRecommendMapper.updateBook(book);
 	}
 	
@@ -179,35 +170,28 @@ public class InformationService {
 	}
 	
 	// 한 페이지에 해당하는 게시 글 리스트 요청을 처리하는 메서드
-	public Map<String, Object> contestList(int pageNum, String type, String keyword) {
+	public Map<String, Object> contestList(int pageNum, String type, String keyword, int pageSize, int pageGrop) {
 		log.info("BoardService : boardLsit(int pageNum, String type, String keyword)");
-		
-		// 현재 페이지
+
 		int currentPage = pageNum;
-		
-		// 1페이지 = 0   2페이지 = 10  3페이지 = 20
-		int startRow = (currentPage - 1) * PAGE_SIZE; 
-		
-		// 전체 페이지 수 계산 = 전체 게시 글의 수 / 페이지 당 게시 글 수
-		// int listCount = boardDao.getBoardCount();
-		
+		int startRow = (currentPage - 1) * pageSize; 
 		int listCount = informationRecommendMapper.getContestCount(type, keyword);
+		
 		log.info("contestCount : " + listCount);
 		
-		// 총 페이지 갯수
-		int pageCount = listCount / PAGE_SIZE 
-				+ (listCount % PAGE_SIZE == 0? 0 : 1);
+		int pageCount = listCount / pageSize 
+				+ (listCount % pageSize == 0? 0 : 1);
 		
-		int startPage = (currentPage / PAGE_GROUP) * PAGE_GROUP + 1 
-				- (currentPage % PAGE_GROUP == 0? PAGE_GROUP : 0);
+		int startPage = (currentPage / pageGrop) * pageGrop + 1 
+				- (currentPage % pageGrop == 0? pageGrop : 0);
 		
-		int endPage = startPage + PAGE_GROUP -1;
+		int endPage = startPage + pageGrop -1;
 		
 		if(endPage > pageCount) {
 			endPage = pageCount;
 		}
 		
-		List<Contest> cList = informationRecommendMapper.getContestList(startRow, PAGE_SIZE, type, keyword);
+		List<Contest> cList = informationRecommendMapper.getContestList(startRow, pageSize, type, keyword);
 		
 		Map<String, Object> modelMap = new HashMap<>();
 		modelMap.put("cList", cList);
@@ -215,7 +199,7 @@ public class InformationService {
 		modelMap.put("startPage", startPage);
 		modelMap.put("endPage", endPage);
 		modelMap.put("currentPage", currentPage);
-		modelMap.put("pageGroup", PAGE_GROUP);
+		modelMap.put("pageGroup", pageGrop);
 		modelMap.put("listCount", listCount);
 		
 		boolean searchOption = type.equals("null")||keyword.equals("null") ? false : true;
