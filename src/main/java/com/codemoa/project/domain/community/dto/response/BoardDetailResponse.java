@@ -13,19 +13,24 @@ public class BoardDetailResponse {
     private final String title;
     private final String content;
     private final String category;
-    private final String authorNickname; // 작성자 닉네임
+    private final String authorId;
+    private final String authorNickname;
     private final LocalDateTime createdAt;
-    private final List<CommentResponse> comments; // 댓글 목록 필드
+    private final List<CommentResponse> comments;
+    private final Integer stakedPoints;
+    private final boolean isResolved; 
 
-    // 아래 생성자 하나만 남겨주세요.
+    // 생성자를 수정하여 댓글 목록을 받도록 합니다.
     public BoardDetailResponse(CommunityBoard board, List<CommentResponse> comments) {
         this.boardNo = board.getBoardNo();
         this.title = board.getTitle();
         this.content = board.getContent();
         this.category = board.getCategory();
         this.authorNickname = board.getUser().getNickname();
-
+        this.authorId = board.getUser().getUserId();
         this.createdAt = board.getCreatedAt();
-        this.comments = comments; // this.comments로 명확하게 지정
+        this.comments = comments;
+        this.stakedPoints = board.getStakedPoints();
+        this.isResolved = board.isResolved(); 
     }
 }

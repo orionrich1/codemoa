@@ -22,6 +22,37 @@
 				</div>
 			</div>
 
+			<div class="d-flex justify-content-between">
+				<div class="d-flex gap-3">
+					<div class="form-check">
+						<input class="typeFilter form-check-input" type="checkbox" id="leftJAVA" value="1">
+						<label class="form-check-label" for="leftJAVA">JAVA</label>
+					</div>
+					<div class="form-check">
+						<input class="typeFilter form-check-input" type="checkbox" id="leftJavascript" value="2">
+						<label class="form-check-label" for="leftJavascript">Javascript</label>
+					</div>	
+					<div class="form-check">
+						<input class="typeFilter form-check-input" type="checkbox" id="leftPython" value="3">
+						<label class="form-check-label" for="leftPython">Python</label>
+					</div>
+				</div>
+
+				<div class="d-flex gap-3">
+					<div class="form-check">
+						<input class="difficultyFilter form-check-input" type="checkbox" id="rightHigh" value="1">
+						<label class="form-check-label" for="rightHigh">상</label>
+					</div>
+					<div class="form-check">
+						<input class="difficultyFilter form-check-input" type="checkbox" id="rightMiddle" value="2">
+						<label class="form-check-label" for="rightMiddle">중</label>
+					</div>
+					<div class="form-check">
+						<input class="difficultyFilter form-check-input" type="checkbox" id="rightLow" value="3">
+						<label class="form-check-label" for="rightLow">하</label>
+					</div>
+				</div>
+			</div>
 
 			<table class="table text-center my-3 align-middle">
 				<thead>
@@ -33,7 +64,7 @@
 						<th>출제일</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody id="problemTableBody">
 					<th:block
 						th:if="${problemList != null && !#lists.isEmpty(problemList)}">
 						<th:block th:each="problem : ${problemList}">
@@ -58,5 +89,7 @@
 			</table>
 		</div>
 	</div>
+	
+	<script th:src="@{/js/problem.js}"></script>
 </div>
 </html>

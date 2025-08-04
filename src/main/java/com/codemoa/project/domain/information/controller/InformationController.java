@@ -36,16 +36,55 @@ public class InformationController {
 	@Autowired
 	private InformationService informationService;
 	
+	@GetMapping("/test")
+	public String test() {
+		return "views/information/test";
+	}
+	
+	@GetMapping("/test2")
+	public String test2() {
+		return "views/information/test2";
+	}
+	
 	@GetMapping("/information")
 	public String informationMain(Model model,
 			@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
 			@RequestParam(value = "type", required = false, defaultValue = "null") String type,
 			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword) {
 		
-		model.addAllAttributes(informationService.lectureList(pageNum, type, keyword));
+		model.addAllAttributes(informationService.lectureList(pageNum, type, keyword, 100, 10));
 		return "views/information/informationMain";
 	}
 	
+	@GetMapping("/information/lecture")
+	public String lectureList(Model model,
+			@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+			@RequestParam(value = "type", required = false, defaultValue = "null") String type,
+			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword) {
+		
+		model.addAllAttributes(informationService.lectureList(pageNum, type, keyword, 8, 10));
+		return "views/information/informationList";
+	}
+	
+	@GetMapping("/information/book")
+	public String bookList(Model model,
+			@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+			@RequestParam(value = "type", required = false, defaultValue = "null") String type,
+			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword) {
+		
+		model.addAllAttributes(informationService.bookList(pageNum, type, keyword, 8, 10));
+		return "views/information/informationList3";
+	}
+	
+	@GetMapping("/information/contest")
+	public String contestList(Model model,
+			@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+			@RequestParam(value = "type", required = false, defaultValue = "null") String type,
+			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword) {
+		
+		model.addAllAttributes(informationService.contestList(pageNum, type, keyword, 8, 10));
+		return "views/information/informationList2";
+	}
 	
 	// lecture 관련
 	
@@ -55,7 +94,7 @@ public class InformationController {
 			@RequestParam(value = "type", required = false, defaultValue = "null") String type,
 			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword) {
 		
-		model.addAllAttributes(informationService.lectureList(pageNum, type, keyword));
+		model.addAllAttributes(informationService.lectureList(pageNum, type, keyword, 10, 10));
 		
 		return "views/information/informationLectureList";
 	}
@@ -169,7 +208,7 @@ public class InformationController {
 			@RequestParam(value = "type", required = false, defaultValue = "null") String type,
 			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword) {
 		
-		model.addAllAttributes(informationService.bookList(pageNum, type, keyword));
+		model.addAllAttributes(informationService.bookList(pageNum, type, keyword, 10, 10));
 		
 		return "views/information/informationBookList";
 	}
@@ -298,7 +337,7 @@ public class InformationController {
 			@RequestParam(value = "type", required = false, defaultValue = "null") String type,
 			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword) {
 		
-		model.addAllAttributes(informationService.contestList(pageNum, type, keyword));
+		model.addAllAttributes(informationService.contestList(pageNum, type, keyword, 10, 10));
 		
 		return "views/information/informationContestList";
 	}
@@ -343,8 +382,12 @@ public class InformationController {
 			@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
 			@RequestParam(value = "type", required = false, defaultValue = "null") String type,
 			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword,
-			@RequestParam(value = "addFile", required = false) MultipartFile multipartFile) throws IOException {
+			@RequestParam(value = "addFile", required = false) MultipartFile multipartFile,
+			@RequestParam("start") String start, @RequestParam("end") String end) throws IOException {
 
+		contest.setStartDate(Timestamp.valueOf(LocalDateTime.parse(start)));
+		contest.setEndDate(Timestamp.valueOf(LocalDateTime.parse(end)));
+		
 		// 비밀번호 맞는지 확인
 		
 		String savedFileName = saveUploadedFile(multipartFile, DEFAULT_PATH);

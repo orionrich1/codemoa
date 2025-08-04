@@ -27,8 +27,13 @@
 					</div>
 
                     <div id="pointsDiv" class="mb-3" style="display: none;">
-                        <label for="stakedPoints" class="form-label">질문 포인트 (100점 이하)</label>
-                        <input type="number" class="form-control" id="stakedPoints" name="stakedPoints" placeholder="걸고 싶은 포인트를 입력하세요 (보유 포인트 1000점 이상)">
+                        <label for="stakedPoints" class="form-label">질문 포인트</label>
+                        <select class="form-select" id="stakedPoints" name="stakedPoints">
+                            <option value="10">10 포인트</option>
+                            <option value="30">30 포인트</option>
+                            <option value="50">50 포인트</option>
+                            <option value="100">100 포인트</option>
+                        </select>
                     </div>
                     <div class="mb-3">
 						<label for="title" class="form-label">제목</label> 
@@ -54,15 +59,29 @@
 <th:block layout:fragment="script">
     <script>
         $(document).ready(function() {
-            $('#summernote').summernote({ /* ... summernote 옵션 생략 ... */ });
+            $('#summernote').summernote({
+                dialogsInBody: true,
+                placeholder: '내용을 입력하세요',
+                tabsize: 2,
+                height: 300,
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'underline', 'clear']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture', 'video']],
+                    ['view', ['fullscreen', 'codeview', 'help']]
+                ]
+            });
         });
     </script>
     
     <script>
-        // 카테고리 변경 시 포인트 입력창 보이기/숨기기
+        // 카테고리 변경 시 포인트 드롭다운 보이기/숨기기
         document.getElementById('category').addEventListener('change', function() {
             const pointsDiv = document.getElementById('pointsDiv');
-            if (this.value === '자유') {
+            if (this.value === '자유' || this.value === '') {
                 pointsDiv.style.display = 'none';
             } else {
                 pointsDiv.style.display = 'block';
@@ -79,33 +98,41 @@
             const title = document.getElementById('title').value;
             const category = document.getElementById('category').value;
             const content = document.getElementById('content').value;
+            
+            // 선택된 포인트 값을 가져옴
             const stakedPoints = document.getElementById('stakedPoints').value;
+            const categoryIsQuestion = document.getElementById('category').value !== '자유';
 
-            // ... 유효성 검사 생략 ...
+            // ... 유효성 검사 (생략) ...
 
-            // 서버로 보낼 JSON 데이터 생성 (stakedPoints 추가)
+            // 서버로 보낼 JSON 데이터 생성
             const data = {
                 title: title,
                 category: category,
                 content: content,
-                stakedPoints: stakedPoints ? parseInt(stakedPoints, 10) : 0
+                // 질문 카테고리일 때만 포인트 값을 보내고, 아닐 경우 0을 보냄
+                stakedPoints: categoryIsQuestion ? parseInt(stakedPoints, 10) : 0
             };
 
             // fetch API를 사용하여 서버에 POST 요청
-            fetch('/api/boards', { /* ... fetch 로직 생략 ... */ })
+            fetch('/api/boards', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
             .then(response => {
                 if (response.ok) {
                     alert("게시글이 성공적으로 등록되었습니다.");
-                    location.href = '/list';
+                    location.href = '/list'; // 성공 시 목록 페이지로 이동
                 } else {
                     // 서버로부터 받은 에러 메시지를 alert 창에 표시
                     response.text().then(text => {
-                         // JSON 형태의 에러 메시지라면 파싱하여 사용
                          try {
                              const err = JSON.parse(text);
-                             alert("게시글 등록 실패: " + err.message);
+                             alert("게시글 등록 실패: " + (err.message || "알 수 없는 오류"));
                          } catch (e) {
-                             // JSON이 아닌 일반 텍스트 에러
                              alert("게시글 등록 실패: " + text);
                          }
                     });

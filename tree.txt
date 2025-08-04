@@ -1,0 +1,1138 @@
+폴더 PATH의 목록입니다.
+볼륨 일련 번호는 8CF6-D19F입니다.
+C:.
+│  .classpath
+│  .gitattributes
+│  .gitignore
+│  .project
+│  build.gradle
+│  gradlew
+│  gradlew.bat
+│  HELP.md
+│  README.md
+│  settings.gradle
+│  tree.txt
+│  
+├─.gradle
+│  ├─8.14.2
+│  │  │  gc.properties
+│  │  │  
+│  │  ├─checksums
+│  │  │      checksums.lock
+│  │  │      md5-checksums.bin
+│  │  │      sha1-checksums.bin
+│  │  │      
+│  │  ├─executionHistory
+│  │  │      executionHistory.lock
+│  │  │      
+│  │  ├─expanded
+│  │  ├─fileChanges
+│  │  │      last-build.bin
+│  │  │      
+│  │  ├─fileHashes
+│  │  │      fileHashes.lock
+│  │  │      
+│  │  └─vcsMetadata
+│  ├─buildOutputCleanup
+│  │      buildOutputCleanup.lock
+│  │      cache.properties
+│  │      
+│  └─vcs-1
+│          gc.properties
+│          
+├─.settings
+│      org.eclipse.buildship.core.prefs
+│      org.eclipse.core.resources.prefs
+│      org.springframework.ide.eclipse.prefs
+│      
+├─bin
+│  ├─main
+│  │  │  application.properties
+│  │  │  
+│  │  ├─com
+│  │  │  └─codemoa
+│  │  │      └─project
+│  │  │          │  FinalProjectApplication.class
+│  │  │          │  
+│  │  │          ├─ajax
+│  │  │          ├─configurations
+│  │  │          │      DataInitializer.class
+│  │  │          │      SecurityConfig.class
+│  │  │          │      TomcatFileUploadConfig.class
+│  │  │          │      WebConfig.class
+│  │  │          │      WebSocketConfig.class
+│  │  │          │      
+│  │  │          ├─controller
+│  │  │          ├─domain
+│  │  │          │  ├─chat
+│  │  │          │  │  ├─controller
+│  │  │          │  │  │      ChatController.class
+│  │  │          │  │  │      ChatRoomController.class
+│  │  │          │  │  │      
+│  │  │          │  │  ├─dto
+│  │  │          │  │  │  ├─request
+│  │  │          │  │  │  │      ChatMessageRequest.class
+│  │  │          │  │  │  │      
+│  │  │          │  │  │  └─response
+│  │  │          │  │  │          ChatMessageResponse.class
+│  │  │          │  │  │          ChatRoomResponse.class
+│  │  │          │  │  │          
+│  │  │          │  │  ├─entity
+│  │  │          │  │  │      ChatMessage.class
+│  │  │          │  │  │      
+│  │  │          │  │  ├─handler
+│  │  │          │  │  │      ChatHandler.class
+│  │  │          │  │  │      
+│  │  │          │  │  ├─mapper
+│  │  │          │  │  │      ChatMapper.class
+│  │  │          │  │  │      
+│  │  │          │  │  └─service
+│  │  │          │  │          ChatService.class
+│  │  │          │  │          
+│  │  │          │  ├─community
+│  │  │          │  │  ├─controller
+│  │  │          │  │  │      BoardViewController.class
+│  │  │          │  │  │      CommentController.class
+│  │  │          │  │  │      CommunityBoardController.class
+│  │  │          │  │  │      
+│  │  │          │  │  ├─dto
+│  │  │          │  │  │  ├─request
+│  │  │          │  │  │  │      CreateBoardRequest.class
+│  │  │          │  │  │  │      CreateCommentRequest.class
+│  │  │          │  │  │  │      UpdateBoardRequest.class
+│  │  │          │  │  │  │      
+│  │  │          │  │  │  └─response
+│  │  │          │  │  │          BoardDetailResponse.class
+│  │  │          │  │  │          BoardListResponse.class
+│  │  │          │  │  │          CommentResponse.class
+│  │  │          │  │  │          
+│  │  │          │  │  ├─entity
+│  │  │          │  │  │      Comment$CommentBuilder.class
+│  │  │          │  │  │      Comment.class
+│  │  │          │  │  │      CommunityBoard$CommunityBoardBuilder.class
+│  │  │          │  │  │      CommunityBoard$PostType.class
+│  │  │          │  │  │      CommunityBoard.class
+│  │  │          │  │  │      
+│  │  │          │  │  ├─repository
+│  │  │          │  │  │      CommentRepository.class
+│  │  │          │  │  │      CommunityBoardRepository.class
+│  │  │          │  │  │      
+│  │  │          │  │  └─service
+│  │  │          │  │          CommentService.class
+│  │  │          │  │          CommunityBoardService.class
+│  │  │          │  │          
+│  │  │          │  ├─diary
+│  │  │          │  │  ├─controller
+│  │  │          │  │  │      DiaryController.class
+│  │  │          │  │  │      
+│  │  │          │  │  ├─dto
+│  │  │          │  │  │  ├─request
+│  │  │          │  │  │  │      DiaryCreateRequest.class
+│  │  │          │  │  │  │      
+│  │  │          │  │  │  └─response
+│  │  │          │  │  │          DiaryResponse.class
+│  │  │          │  │  │          
+│  │  │          │  │  ├─entity
+│  │  │          │  │  │      Diary.class
+│  │  │          │  │  │      
+│  │  │          │  │  ├─mapper
+│  │  │          │  │  │      DiaryMapper.class
+│  │  │          │  │  │      
+│  │  │          │  │  └─service
+│  │  │          │  │          DiaryService.class
+│  │  │          │  │          
+│  │  │          │  ├─employment
+│  │  │          │  │  ├─controller
+│  │  │          │  │  │      EmploymentController.class
+│  │  │          │  │  │      
+│  │  │          │  │  ├─dto
+│  │  │          │  │  │  └─response
+│  │  │          │  │  │          EmploymentDto.class
+│  │  │          │  │  │          
+│  │  │          │  │  ├─entity
+│  │  │          │  │  │      Employment.class
+│  │  │          │  │  │      
+│  │  │          │  │  ├─repository
+│  │  │          │  │  │      EmploymentRepository.class
+│  │  │          │  │  │      
+│  │  │          │  │  └─service
+│  │  │          │  │          EmploymentApiService.class
+│  │  │          │  │          EmploymentService.class
+│  │  │          │  │          
+│  │  │          │  ├─exception
+│  │  │          │  │      ErrorResponse.class
+│  │  │          │  │      GlobalExceptionHandler.class
+│  │  │          │  │      
+│  │  │          │  ├─information
+│  │  │          │  │  ├─controller
+│  │  │          │  │  │      InformationController.class
+│  │  │          │  │  │      
+│  │  │          │  │  ├─dto
+│  │  │          │  │  │  ├─request
+│  │  │          │  │  │  │      InfoCreateRequest.class
+│  │  │          │  │  │  │      
+│  │  │          │  │  │  └─response
+│  │  │          │  │  │          InfoDetailResponse.class
+│  │  │          │  │  │          
+│  │  │          │  │  ├─entity
+│  │  │          │  │  │      Book.class
+│  │  │          │  │  │      Contest.class
+│  │  │          │  │  │      Lecture.class
+│  │  │          │  │  │      
+│  │  │          │  │  ├─mapper
+│  │  │          │  │  │      InformationRecommendMapper.class
+│  │  │          │  │  │      
+│  │  │          │  │  └─service
+│  │  │          │  │          InformationService.class
+│  │  │          │  │          
+│  │  │          │  ├─main
+│  │  │          │  │  └─controller
+│  │  │          │  │          MainController.class
+│  │  │          │  │          
+│  │  │          │  ├─playlist
+│  │  │          │  │  ├─controller
+│  │  │          │  │  │      PlaylistController.class
+│  │  │          │  │  │      
+│  │  │          │  │  ├─dto
+│  │  │          │  │  │  └─response
+│  │  │          │  │  │          PlaylistResponse.class
+│  │  │          │  │  │          
+│  │  │          │  │  ├─entity
+│  │  │          │  │  │      Playlist.class
+│  │  │          │  │  │      
+│  │  │          │  │  ├─mapper
+│  │  │          │  │  │      PlaylistMapper.class
+│  │  │          │  │  │      
+│  │  │          │  │  └─service
+│  │  │          │  │          PlaylistService.class
+│  │  │          │  │          
+│  │  │          │  ├─problem
+│  │  │          │  │  ├─controller
+│  │  │          │  │  │      ProblemController.class
+│  │  │          │  │  │      ProblemRestController.class
+│  │  │          │  │  │      
+│  │  │          │  │  ├─dto
+│  │  │          │  │  │  ├─request
+│  │  │          │  │  │  │      CodeSubmitRequest.class
+│  │  │          │  │  │  │      SearchListRequest.class
+│  │  │          │  │  │  │      
+│  │  │          │  │  │  └─response
+│  │  │          │  │  │          CodeSubmitResultResponse.class
+│  │  │          │  │  │          ProblemDetailResponse.class
+│  │  │          │  │  │          ProblemListResponse.class
+│  │  │          │  │  │          
+│  │  │          │  │  ├─entity
+│  │  │          │  │  │      Problem.class
+│  │  │          │  │  │      
+│  │  │          │  │  ├─mapper
+│  │  │          │  │  │      ProblemMapper.class
+│  │  │          │  │  │      
+│  │  │          │  │  └─service
+│  │  │          │  │          AiSupportService.class
+│  │  │          │  │          ProblemService.class
+│  │  │          │  │          
+│  │  │          │  ├─ranking
+│  │  │          │  │  ├─controller
+│  │  │          │  │  │      RankingController.class
+│  │  │          │  │  │      
+│  │  │          │  │  ├─dto
+│  │  │          │  │  │  └─response
+│  │  │          │  │  │          UserRankingResponse.class
+│  │  │          │  │  │          
+│  │  │          │  │  └─service
+│  │  │          │  │          RankingService.class
+│  │  │          │  │          
+│  │  │          │  ├─recruit
+│  │  │          │  │  ├─controller
+│  │  │          │  │  │      JsoupTest.class
+│  │  │          │  │  │      OgPreviewController.class
+│  │  │          │  │  │      TeamRecruitController.class
+│  │  │          │  │  │      
+│  │  │          │  │  ├─dto
+│  │  │          │  │  │  └─response
+│  │  │          │  │  │          OgPreviewResponse$OgPreviewResponseBuilder.class
+│  │  │          │  │  │          OgPreviewResponse.class
+│  │  │          │  │  │          TeamRecruitDetailResponse.class
+│  │  │          │  │  │          
+│  │  │          │  │  ├─entity
+│  │  │          │  │  │      TeamRecruit.class
+│  │  │          │  │  │      
+│  │  │          │  │  ├─mapper
+│  │  │          │  │  │      TeamRecruitMapper.class
+│  │  │          │  │  │      
+│  │  │          │  │  └─service
+│  │  │          │  │          OgPreviewService.class
+│  │  │          │  │          TeamRecruitService.class
+│  │  │          │  │          TeamRecruitServiceImpl.class
+│  │  │          │  │          
+│  │  │          │  └─user
+│  │  │          │      ├─controller
+│  │  │          │      │      AdminController.class
+│  │  │          │      │      MyPageController.class
+│  │  │          │      │      UserController.class
+│  │  │          │      │      
+│  │  │          │      ├─dto
+│  │  │          │      │  ├─request
+│  │  │          │      │  │      UserBanRequest.class
+│  │  │          │      │  │      UserFindRequest.class
+│  │  │          │      │  │      UserLoginRequest.class
+│  │  │          │      │  │      UserPassUpdateRequest.class
+│  │  │          │      │  │      UserSignUpRequest.class
+│  │  │          │      │  │      UserUpdateRequest.class
+│  │  │          │      │  │      
+│  │  │          │      │  └─response
+│  │  │          │      │          MyPageResponse.class
+│  │  │          │      │          UserBanHistory.class
+│  │  │          │      │          UserDetailResponse.class
+│  │  │          │      │          UserResponse.class
+│  │  │          │      │          UserSessionResponse.class
+│  │  │          │      │          
+│  │  │          │      ├─entity
+│  │  │          │      │      LocalUser.class
+│  │  │          │      │      PointLog$PointLogBuilder.class
+│  │  │          │      │      PointLog.class
+│  │  │          │      │      SnsUser.class
+│  │  │          │      │      User.class
+│  │  │          │      │      UserGrade.class
+│  │  │          │      │      
+│  │  │          │      ├─mapper
+│  │  │          │      │      AdminMapper.class
+│  │  │          │      │      MyPageMapper.class
+│  │  │          │      │      SnsUserMapper.class
+│  │  │          │      │      UserMapper.class
+│  │  │          │      │      
+│  │  │          │      ├─repository
+│  │  │          │      │      LocalUserRepository.class
+│  │  │          │      │      PointLogRepository.class
+│  │  │          │      │      SnsUserRepository.class
+│  │  │          │      │      UserGradeRepository.class
+│  │  │          │      │      UserRepository.class
+│  │  │          │      │      
+│  │  │          │      ├─security
+│  │  │          │      │      CustomLoginSuccessHandler.class
+│  │  │          │      │      CustomOAuth2UserService.class
+│  │  │          │      │      CustomUserDetails.class
+│  │  │          │      │      OAuth2UserLoginResult$Status.class
+│  │  │          │      │      OAuth2UserLoginResult.class
+│  │  │          │      │      
+│  │  │          │      └─service
+│  │  │          │              AdminService.class
+│  │  │          │              MyPageService.class
+│  │  │          │              SnsUserService.class
+│  │  │          │              UserDetailsServiceImpl.class
+│  │  │          │              UserService.class
+│  │  │          │              
+│  │  │          ├─interceptor
+│  │  │          ├─mapper
+│  │  │          └─service
+│  │  ├─mappers
+│  │  │  ├─chat
+│  │  │  │      ChatMapper.xml
+│  │  │  │      
+│  │  │  ├─community
+│  │  │  │      AnswerMapper.xml
+│  │  │  │      FreeBoardMapper.xml
+│  │  │  │      QuestionMapper.xml
+│  │  │  │      ReplyMapper.xml
+│  │  │  │      
+│  │  │  ├─diary
+│  │  │  │      DiaryMapper.xml
+│  │  │  │      
+│  │  │  ├─employment
+│  │  │  │      EmploymentMapper.xml
+│  │  │  │      
+│  │  │  ├─information
+│  │  │  │      InformationMapper.xml
+│  │  │  │      
+│  │  │  ├─playlist
+│  │  │  │      PlaylistMapper.xml
+│  │  │  │      
+│  │  │  ├─problem
+│  │  │  │      ProblemMapper.xml
+│  │  │  │      
+│  │  │  ├─recruit
+│  │  │  │      TeamRecruitMapper.xml
+│  │  │  │      
+│  │  │  └─user
+│  │  │          AdminMapper.xml
+│  │  │          MyPageMapper.xml
+│  │  │          SnsUserMapper.xml
+│  │  │          UserMapper.xml
+│  │  │          
+│  │  ├─static
+│  │  │  ├─bootstrap
+│  │  │  │      bootstrap.bundle.min.js
+│  │  │  │      bootstrap.css
+│  │  │  │      bootstrap.min.css
+│  │  │  │      
+│  │  │  ├─css
+│  │  │  │  │  common.css
+│  │  │  │  │  main.css
+│  │  │  │  │  mypage.css
+│  │  │  │  │  problem.css
+│  │  │  │  │  
+│  │  │  │  ├─admin
+│  │  │  │  │      users.css
+│  │  │  │  │      
+│  │  │  │  └─information
+│  │  │  │          layout.css
+│  │  │  │          layout2.css
+│  │  │  │          layout3.css
+│  │  │  │          main.css
+│  │  │  │          swiper.css
+│  │  │  │          
+│  │  │  ├─files
+│  │  │  │  │  60cfb9eb-d273-4088-bc45-8b0e2d30865d.png
+│  │  │  │  │  e3e100c1-7712-48d3-9d75-51e2d04dc8d7.png
+│  │  │  │  │  스크린샷 2025-02-19 114424.png
+│  │  │  │  │  
+│  │  │  │  └─information
+│  │  │  │          01d771f4-4611-4019-beff-54b641dd355b.jpg
+│  │  │  │          03e06614-1474-4b82-807d-fc2b8dd91854.jpg
+│  │  │  │          06f851e7-4f07-48db-a26c-5a14aa3182de.png
+│  │  │  │          089cc453-c2fd-43a2-8ed4-5b9d757dd0b1.jpg
+│  │  │  │          0ad272fb-0d47-4911-835d-b1e5cd2ee0d7.avif
+│  │  │  │          0d55a4a0-005a-4c70-af07-182b71019da5.jpg
+│  │  │  │          0ee278f1-8c28-4bfe-be98-ad7795baee29.png
+│  │  │  │          1439d125-7345-4076-b794-44440b05900c.jpg
+│  │  │  │          177ee1bf-c81b-48e4-947d-dd42d18d9207.jpg
+│  │  │  │          1836effb-7a5e-4bab-82d5-2d0d9ca3667d.jpg
+│  │  │  │          194a9a9a-a4d3-496e-988f-cb72593b6b6c.jpg
+│  │  │  │          19a80b5b-f6ad-45f6-ab34-45a641551721.jpg
+│  │  │  │          209c49a2-5d3c-4af6-a493-42b7baa1b620.png
+│  │  │  │          246b5b6a-24a4-4737-b57d-fb553957f641.png
+│  │  │  │          31ab8863-ec04-4fa9-901f-884d5a1d4fc7.jpg
+│  │  │  │          3235f819-52aa-46bb-abfd-500245b72c66.jpg
+│  │  │  │          42107ccb-750c-4c28-aafa-781c3afbcd29.avif
+│  │  │  │          44a659c0-4463-4231-bccf-211cafa78e84.png
+│  │  │  │          47a75086-cd0c-4570-9278-7fa6918d1787.jpg
+│  │  │  │          4d7b529f-6ca1-4073-aa66-a252e65c7143.jpg
+│  │  │  │          503b0c59-87bb-4c9f-b41f-a2cbe31120f3.png
+│  │  │  │          50a57970-edf7-4792-97a6-13b433fa35bf.jpg
+│  │  │  │          5328c305-1670-4317-a46c-56b7b9f0941c.jpg
+│  │  │  │          533cd7c2-f5d0-4550-bddb-a64aa6914b4c.png
+│  │  │  │          5ab056d0-9459-4b7f-9d2f-9bfbc723ea12.avif
+│  │  │  │          6223b5f3-7528-43d1-bcbf-25b069b6d4bb.png
+│  │  │  │          64f2eba3-7903-4a58-9ddb-ce49cec88c39.jpg
+│  │  │  │          70657b0c-f3e1-4eee-9e15-dd1074f857f1.jpg
+│  │  │  │          72e1a3d0-6e17-46c9-86c2-a4cd962701e2.jpg
+│  │  │  │          7a83fb39-70a7-49ed-b27a-2b12b401fa9d.avif
+│  │  │  │          7adb43d2-d3f2-4fd9-b62c-2736d93d79b3.jpg
+│  │  │  │          7c3f1ee2-266f-4514-a918-0e32abdf3573.jpg
+│  │  │  │          7cc01cb7-c0b9-4448-b44b-f1d39036bd00.png
+│  │  │  │          7f42b7d0-2763-44a6-adbd-683f56fc77c2.png
+│  │  │  │          7fafd4a9-d637-4098-b5e1-a49deb136f3a.png
+│  │  │  │          83b280c7-a6cb-4bb9-990d-feec9ec832a0.jpg
+│  │  │  │          85d21eeb-c83d-47e6-a0d1-01ba818036ae.jpg
+│  │  │  │          85eaf253-51c4-461a-970f-5d3458d93f93.jpg
+│  │  │  │          8941b63f-6000-4bd4-9c80-c5c28dc7e952.png
+│  │  │  │          89c589db-e7d5-46fb-a12e-9157452cdabf.jpg
+│  │  │  │          8a963ae8-563b-446d-8be6-54ac1cfb423c.png
+│  │  │  │          8c31362f-cefe-45ce-a237-af934c9da8e4.jpg
+│  │  │  │          8f09506e-867b-4919-bad3-a910b6953b03.jpg
+│  │  │  │          8f302a3f-fa3c-45af-be12-8bd595cfe07d.avif
+│  │  │  │          919033f1-a23d-4069-9706-f7a86b444d7d.jpg
+│  │  │  │          95b72e9f-3978-43f5-966b-f07fa5f41f74.jpg
+│  │  │  │          994fccc5-c23e-4ea9-a722-dd6eb147d90d.avif
+│  │  │  │          99eb7d39-57dd-4cbb-908b-4af2b3d10c7d.jpg
+│  │  │  │          9c28ec53-eaaf-4141-818b-35e72b154f1f.png
+│  │  │  │          a26b53b8-b9d9-4166-842c-0f0bcd42b4f3.avif
+│  │  │  │          a6bfa276-f609-4ddb-877a-5c1227c3a602.jpg
+│  │  │  │          a6f6a6ae-298f-4aa0-a5de-358691f4b760.cover
+│  │  │  │          a89dd91a-9d60-4e45-93e7-87967412332a.jpg
+│  │  │  │          abd5b1aa-455b-44e9-8df8-ca20242eac37.png
+│  │  │  │          accb1812-c44b-4469-b19e-1ba558e29e4d.jpg
+│  │  │  │          b3cd4109-7c67-4c12-8551-c2bfb152d631.avif
+│  │  │  │          b4ac1056-fa97-4aaa-a5b8-27b47ca614f1.png
+│  │  │  │          b6affb2b-5edd-4503-8c53-c5d56f6f614d.jpg
+│  │  │  │          b7289e20-2d80-49a3-8902-f0fda6b2d222.png
+│  │  │  │          befe9b44-d47c-48bf-8896-ed6fd4cce9d7.jpg
+│  │  │  │          c15ad69e-b936-4b6e-93cc-d4f10f3c1754.jpg
+│  │  │  │          c7ce5e92-e46f-4467-b53a-18a8da567332.avif
+│  │  │  │          cbf3f4a0-1948-4e76-89f1-fb7d002b684d.png
+│  │  │  │          cfe4dba8-13dd-4e3d-bbf9-218b21c70ed6.png
+│  │  │  │          da4f2843-dd94-43c4-87e1-e6d5d36759ca.jpg
+│  │  │  │          dfb41d9e-0996-4cfb-b7e0-83f9a88d752b.jpg
+│  │  │  │          e113512b-391e-4540-bb1e-82e5fa6c3c32.jpg
+│  │  │  │          e66815fc-67ae-411b-963a-b760ea067c8d.jpg
+│  │  │  │          e6c7142f-99a3-4580-8a1b-394b0a92bb0a.jpg
+│  │  │  │          e9f13bea-2dab-42f0-9ede-8897e6fe49a9.jpg
+│  │  │  │          ec9fc934-465b-42a9-81fb-239c48571c58.png
+│  │  │  │          ef417ee7-b703-4154-bfa2-53fdb1989f70.jpg
+│  │  │  │          f05c4379-91d7-4f8a-a11b-0f05dda7bb0b.png
+│  │  │  │          f3300db8-6073-455a-8ce3-008f77df1cfa.png
+│  │  │  │          f394ec7e-36e9-4996-a3b2-3e354d979cb4.avif
+│  │  │  │          f43dd70c-e8c1-4fa8-a2ba-21e7f0236ac4.jpg
+│  │  │  │          f496f1ea-2aa7-4de7-9219-d51f07a2a6be.png
+│  │  │  │          f4bd71a5-ec70-43fe-ab23-3bbfa768ee8e.avif
+│  │  │  │          f543a8b6-77cd-44c9-8837-cf106e46633e.jpg
+│  │  │  │          f9d3ef97-46b5-43fd-abab-1338ddb994b7.avif
+│  │  │  │          fb0de13c-a321-4eed-9029-0cc199409a7d.jpg
+│  │  │  │          
+│  │  │  ├─images
+│  │  │  ├─js
+│  │  │  │  │  employmentList.js
+│  │  │  │  │  jquery-3.7.1.min.js
+│  │  │  │  │  mypage.js
+│  │  │  │  │  problem.js
+│  │  │  │  │  recruitDetail.js
+│  │  │  │  │  recruitWrite.js
+│  │  │  │  │  
+│  │  │  │  ├─admin
+│  │  │  │  │      users.js
+│  │  │  │  │      
+│  │  │  │  └─information
+│  │  │  │          formcheck.js
+│  │  │  │          
+│  │  │  └─sql
+│  │  │          cascade.sql
+│  │  │          contest.sql
+│  │  │          employment.sql
+│  │  │          problem.sql
+│  │  │          recommendBook.sql
+│  │  │          recommendLecture.sql
+│  │  │          teamRecruit.sql
+│  │  │          user.sql
+│  │  │          
+│  │  └─templates
+│  │      ├─fragments
+│  │      │      footer.html
+│  │      │      header.html
+│  │      │      
+│  │      ├─layouts
+│  │      │      default_layout.html
+│  │      │      
+│  │      └─views
+│  │          ├─admin
+│  │          │      dashboard.html
+│  │          │      
+│  │          ├─chat
+│  │          │      chatList.html
+│  │          │      chatRoom.html
+│  │          │      
+│  │          ├─community
+│  │          │      boardDetail.html
+│  │          │      boardList.html
+│  │          │      boardUpdate.html
+│  │          │      boardWrite.html
+│  │          │      
+│  │          ├─diary
+│  │          │      diaryList.html
+│  │          │      
+│  │          ├─employment
+│  │          │      employmentList.html
+│  │          │      
+│  │          ├─information
+│  │          │      informationBookDetail.html
+│  │          │      informationBookList.html
+│  │          │      informationBookUpdateForm.html
+│  │          │      informationBookWriteForm.html
+│  │          │      informationContestDetail.html
+│  │          │      informationContestList.html
+│  │          │      informationContestUpdateForm.html
+│  │          │      informationContestWriteForm.html
+│  │          │      informationLectureDetail.html
+│  │          │      informationLectureList.html
+│  │          │      informationLectureUpdateForm.html
+│  │          │      informationLectureWriteForm.html
+│  │          │      informationMain.html
+│  │          │      informationMainDefault.html
+│  │          │      
+│  │          ├─main
+│  │          │      index.html
+│  │          │      
+│  │          ├─playlist
+│  │          │      playlist-list.html
+│  │          │      
+│  │          ├─problem
+│  │          │      problemDetail.html
+│  │          │      problemList.html
+│  │          │      problemResult.html
+│  │          │      problemUpdateForm.html
+│  │          │      problemWriteForm.html
+│  │          │      
+│  │          ├─ranking
+│  │          │      rankingList.html
+│  │          │      
+│  │          ├─recruit
+│  │          │      teamRecruitDetail.html
+│  │          │      teamRecruitList.html
+│  │          │      teamRecruitUpdateForm.html
+│  │          │      teamRecruitWriteForm.html
+│  │          │      
+│  │          └─user
+│  │              │  findId.html
+│  │              │  findPass.html
+│  │              │  findResult.html
+│  │              │  joinForm.html
+│  │              │  loginForm.html
+│  │              │  updateForm.html
+│  │              │  
+│  │              ├─admin
+│  │              │      banners.html
+│  │              │      contents.html
+│  │              │      main.html
+│  │              │      userDetail.html
+│  │              │      users.html
+│  │              │      
+│  │              └─mypage
+│  │                      myPageMain.html
+│  │                      myPosts.html
+│  │                      myScraps.html
+│  │                      updateForm.html
+│  │                      
+│  └─test
+│      └─com
+│          └─example
+│              └─demo
+│                      FinalProjectApplicationTests.class
+│                      
+├─gradle
+│  └─wrapper
+│          gradle-wrapper.jar
+│          gradle-wrapper.properties
+│          
+├─src
+│  ├─main
+│  │  ├─java
+│  │  │  └─com
+│  │  │      └─codemoa
+│  │  │          └─project
+│  │  │              │  FinalProjectApplication.java
+│  │  │              │  
+│  │  │              ├─ajax
+│  │  │              ├─configurations
+│  │  │              │      DataInitializer.java
+│  │  │              │      SecurityConfig.java
+│  │  │              │      TomcatFileUploadConfig.java
+│  │  │              │      WebConfig.java
+│  │  │              │      WebSocketConfig.java
+│  │  │              │      
+│  │  │              ├─controller
+│  │  │              ├─domain
+│  │  │              │  ├─chat
+│  │  │              │  │  ├─controller
+│  │  │              │  │  │      ChatController.java
+│  │  │              │  │  │      ChatRoomController.java
+│  │  │              │  │  │      
+│  │  │              │  │  ├─dto
+│  │  │              │  │  │  ├─request
+│  │  │              │  │  │  │      ChatMessageRequest.java
+│  │  │              │  │  │  │      
+│  │  │              │  │  │  └─response
+│  │  │              │  │  │          ChatMessageResponse.java
+│  │  │              │  │  │          ChatRoomResponse.java
+│  │  │              │  │  │          
+│  │  │              │  │  ├─entity
+│  │  │              │  │  │      ChatMessage.java
+│  │  │              │  │  │      
+│  │  │              │  │  ├─handler
+│  │  │              │  │  │      ChatHandler.java
+│  │  │              │  │  │      
+│  │  │              │  │  ├─mapper
+│  │  │              │  │  │      ChatMapper.java
+│  │  │              │  │  │      
+│  │  │              │  │  └─service
+│  │  │              │  │          ChatService.java
+│  │  │              │  │          
+│  │  │              │  ├─community
+│  │  │              │  │  ├─controller
+│  │  │              │  │  │      BoardViewController.java
+│  │  │              │  │  │      CommentController.java
+│  │  │              │  │  │      CommunityBoardController.java
+│  │  │              │  │  │      
+│  │  │              │  │  ├─dto
+│  │  │              │  │  │  ├─request
+│  │  │              │  │  │  │      CreateBoardRequest.java
+│  │  │              │  │  │  │      CreateCommentRequest.java
+│  │  │              │  │  │  │      UpdateBoardRequest.java
+│  │  │              │  │  │  │      
+│  │  │              │  │  │  └─response
+│  │  │              │  │  │          BoardDetailResponse.java
+│  │  │              │  │  │          BoardListResponse.java
+│  │  │              │  │  │          CommentResponse.java
+│  │  │              │  │  │          
+│  │  │              │  │  ├─entity
+│  │  │              │  │  │      Comment.java
+│  │  │              │  │  │      CommunityBoard.java
+│  │  │              │  │  │      
+│  │  │              │  │  ├─repository
+│  │  │              │  │  │      CommentRepository.java
+│  │  │              │  │  │      CommunityBoardRepository.java
+│  │  │              │  │  │      
+│  │  │              │  │  └─service
+│  │  │              │  │          CommentService.java
+│  │  │              │  │          CommunityBoardService.java
+│  │  │              │  │          
+│  │  │              │  ├─diary
+│  │  │              │  │  ├─controller
+│  │  │              │  │  │      DiaryController.java
+│  │  │              │  │  │      
+│  │  │              │  │  ├─dto
+│  │  │              │  │  │  ├─request
+│  │  │              │  │  │  │      DiaryCreateRequest.java
+│  │  │              │  │  │  │      
+│  │  │              │  │  │  └─response
+│  │  │              │  │  │          DiaryResponse.java
+│  │  │              │  │  │          
+│  │  │              │  │  ├─entity
+│  │  │              │  │  │      Diary.java
+│  │  │              │  │  │      
+│  │  │              │  │  ├─mapper
+│  │  │              │  │  │      DiaryMapper.java
+│  │  │              │  │  │      
+│  │  │              │  │  └─service
+│  │  │              │  │          DiaryService.java
+│  │  │              │  │          
+│  │  │              │  ├─employment
+│  │  │              │  │  ├─controller
+│  │  │              │  │  │      EmploymentController.java
+│  │  │              │  │  │      
+│  │  │              │  │  ├─dto
+│  │  │              │  │  │  └─response
+│  │  │              │  │  │          EmploymentDto.java
+│  │  │              │  │  │          
+│  │  │              │  │  ├─entity
+│  │  │              │  │  │      Employment.java
+│  │  │              │  │  │      
+│  │  │              │  │  ├─repository
+│  │  │              │  │  │      EmploymentRepository.java
+│  │  │              │  │  │      
+│  │  │              │  │  └─service
+│  │  │              │  │          EmploymentApiService.java
+│  │  │              │  │          EmploymentService.java
+│  │  │              │  │          
+│  │  │              │  ├─exception
+│  │  │              │  │      ErrorResponse.java
+│  │  │              │  │      GlobalExceptionHandler.java
+│  │  │              │  │      
+│  │  │              │  ├─information
+│  │  │              │  │  ├─controller
+│  │  │              │  │  │      InformationController.java
+│  │  │              │  │  │      
+│  │  │              │  │  ├─dto
+│  │  │              │  │  │  ├─request
+│  │  │              │  │  │  │      InfoCreateRequest.java
+│  │  │              │  │  │  │      
+│  │  │              │  │  │  └─response
+│  │  │              │  │  │          InfoDetailResponse.java
+│  │  │              │  │  │          
+│  │  │              │  │  ├─entity
+│  │  │              │  │  │      Book.java
+│  │  │              │  │  │      Contest.java
+│  │  │              │  │  │      Lecture.java
+│  │  │              │  │  │      
+│  │  │              │  │  ├─mapper
+│  │  │              │  │  │      InformationRecommendMapper.java
+│  │  │              │  │  │      
+│  │  │              │  │  └─service
+│  │  │              │  │          InformationService.java
+│  │  │              │  │          
+│  │  │              │  ├─main
+│  │  │              │  │  └─controller
+│  │  │              │  │          MainController.java
+│  │  │              │  │          
+│  │  │              │  ├─playlist
+│  │  │              │  │  ├─controller
+│  │  │              │  │  │      PlaylistController.java
+│  │  │              │  │  │      
+│  │  │              │  │  ├─dto
+│  │  │              │  │  │  └─response
+│  │  │              │  │  │          PlaylistResponse.java
+│  │  │              │  │  │          
+│  │  │              │  │  ├─entity
+│  │  │              │  │  │      Playlist.java
+│  │  │              │  │  │      
+│  │  │              │  │  ├─mapper
+│  │  │              │  │  │      PlaylistMapper.java
+│  │  │              │  │  │      
+│  │  │              │  │  └─service
+│  │  │              │  │          PlaylistService.java
+│  │  │              │  │          
+│  │  │              │  ├─problem
+│  │  │              │  │  ├─controller
+│  │  │              │  │  │      ProblemController.java
+│  │  │              │  │  │      ProblemRestController.java
+│  │  │              │  │  │      
+│  │  │              │  │  ├─dto
+│  │  │              │  │  │  ├─request
+│  │  │              │  │  │  │      CodeSubmitRequest.java
+│  │  │              │  │  │  │      SearchListRequest.java
+│  │  │              │  │  │  │      
+│  │  │              │  │  │  └─response
+│  │  │              │  │  │          CodeSubmitResultResponse.java
+│  │  │              │  │  │          ProblemDetailResponse.java
+│  │  │              │  │  │          ProblemListResponse.java
+│  │  │              │  │  │          
+│  │  │              │  │  ├─entity
+│  │  │              │  │  │      Problem.java
+│  │  │              │  │  │      
+│  │  │              │  │  ├─mapper
+│  │  │              │  │  │      ProblemMapper.java
+│  │  │              │  │  │      
+│  │  │              │  │  └─service
+│  │  │              │  │          AiSupportService.java
+│  │  │              │  │          ProblemService.java
+│  │  │              │  │          
+│  │  │              │  ├─ranking
+│  │  │              │  │  ├─controller
+│  │  │              │  │  │      RankingController.java
+│  │  │              │  │  │      
+│  │  │              │  │  ├─dto
+│  │  │              │  │  │  └─response
+│  │  │              │  │  │          UserRankingResponse.java
+│  │  │              │  │  │          
+│  │  │              │  │  └─service
+│  │  │              │  │          RankingService.java
+│  │  │              │  │          
+│  │  │              │  ├─recruit
+│  │  │              │  │  ├─controller
+│  │  │              │  │  │      JsoupTest.java
+│  │  │              │  │  │      OgPreviewController.java
+│  │  │              │  │  │      TeamRecruitController.java
+│  │  │              │  │  │      
+│  │  │              │  │  ├─dto
+│  │  │              │  │  │  └─response
+│  │  │              │  │  │          OgPreviewResponse.java
+│  │  │              │  │  │          TeamRecruitDetailResponse.java
+│  │  │              │  │  │          
+│  │  │              │  │  ├─entity
+│  │  │              │  │  │      TeamRecruit.java
+│  │  │              │  │  │      
+│  │  │              │  │  ├─mapper
+│  │  │              │  │  │      TeamRecruitMapper.java
+│  │  │              │  │  │      
+│  │  │              │  │  └─service
+│  │  │              │  │          OgPreviewService.java
+│  │  │              │  │          TeamRecruitService.java
+│  │  │              │  │          TeamRecruitServiceImpl.java
+│  │  │              │  │          
+│  │  │              │  └─user
+│  │  │              │      ├─controller
+│  │  │              │      │      AdminController.java
+│  │  │              │      │      MyPageController.java
+│  │  │              │      │      UserController.java
+│  │  │              │      │      
+│  │  │              │      ├─dto
+│  │  │              │      │  ├─request
+│  │  │              │      │  │      UserBanRequest.java
+│  │  │              │      │  │      UserFindRequest.java
+│  │  │              │      │  │      UserLoginRequest.java
+│  │  │              │      │  │      UserPassUpdateRequest.java
+│  │  │              │      │  │      UserSignUpRequest.java
+│  │  │              │      │  │      UserUpdateRequest.java
+│  │  │              │      │  │      
+│  │  │              │      │  └─response
+│  │  │              │      │          MyPageResponse.java
+│  │  │              │      │          UserBanHistory.java
+│  │  │              │      │          UserDetailResponse.java
+│  │  │              │      │          UserResponse.java
+│  │  │              │      │          UserSessionResponse.java
+│  │  │              │      │          
+│  │  │              │      ├─entity
+│  │  │              │      │      LocalUser.java
+│  │  │              │      │      PointLog.java
+│  │  │              │      │      SnsUser.java
+│  │  │              │      │      User.java
+│  │  │              │      │      UserGrade.java
+│  │  │              │      │      
+│  │  │              │      ├─mapper
+│  │  │              │      │      AdminMapper.java
+│  │  │              │      │      MyPageMapper.java
+│  │  │              │      │      SnsUserMapper.java
+│  │  │              │      │      UserMapper.java
+│  │  │              │      │      
+│  │  │              │      ├─repository
+│  │  │              │      │      LocalUserRepository.java
+│  │  │              │      │      PointLogRepository.java
+│  │  │              │      │      SnsUserRepository.java
+│  │  │              │      │      UserGradeRepository.java
+│  │  │              │      │      UserRepository.java
+│  │  │              │      │      
+│  │  │              │      ├─security
+│  │  │              │      │      CustomLoginSuccessHandler.java
+│  │  │              │      │      CustomOAuth2UserService.java
+│  │  │              │      │      CustomUserDetails.java
+│  │  │              │      │      OAuth2UserLoginResult.java
+│  │  │              │      │      
+│  │  │              │      └─service
+│  │  │              │              AdminService.java
+│  │  │              │              MyPageService.java
+│  │  │              │              SnsUserService.java
+│  │  │              │              UserDetailsServiceImpl.java
+│  │  │              │              UserService.java
+│  │  │              │              
+│  │  │              ├─interceptor
+│  │  │              ├─mapper
+│  │  │              └─service
+│  │  └─resources
+│  │      │  application.properties
+│  │      │  
+│  │      ├─mappers
+│  │      │  ├─chat
+│  │      │  │      ChatMapper.xml
+│  │      │  │      
+│  │      │  ├─community
+│  │      │  │      AnswerMapper.xml
+│  │      │  │      FreeBoardMapper.xml
+│  │      │  │      QuestionMapper.xml
+│  │      │  │      ReplyMapper.xml
+│  │      │  │      
+│  │      │  ├─diary
+│  │      │  │      DiaryMapper.xml
+│  │      │  │      
+│  │      │  ├─employment
+│  │      │  │      EmploymentMapper.xml
+│  │      │  │      
+│  │      │  ├─information
+│  │      │  │      InformationMapper.xml
+│  │      │  │      
+│  │      │  ├─playlist
+│  │      │  │      PlaylistMapper.xml
+│  │      │  │      
+│  │      │  ├─problem
+│  │      │  │      ProblemMapper.xml
+│  │      │  │      
+│  │      │  ├─recruit
+│  │      │  │      TeamRecruitMapper.xml
+│  │      │  │      
+│  │      │  └─user
+│  │      │          AdminMapper.xml
+│  │      │          MyPageMapper.xml
+│  │      │          SnsUserMapper.xml
+│  │      │          UserMapper.xml
+│  │      │          
+│  │      ├─static
+│  │      │  ├─bootstrap
+│  │      │  │      bootstrap.bundle.min.js
+│  │      │  │      bootstrap.css
+│  │      │  │      bootstrap.min.css
+│  │      │  │      
+│  │      │  ├─css
+│  │      │  │  │  common.css
+│  │      │  │  │  main.css
+│  │      │  │  │  mypage.css
+│  │      │  │  │  problem.css
+│  │      │  │  │  
+│  │      │  │  ├─admin
+│  │      │  │  │      users.css
+│  │      │  │  │      
+│  │      │  │  └─information
+│  │      │  │          layout.css
+│  │      │  │          layout2.css
+│  │      │  │          layout3.css
+│  │      │  │          main.css
+│  │      │  │          swiper.css
+│  │      │  │          
+│  │      │  ├─files
+│  │      │  │  │  60cfb9eb-d273-4088-bc45-8b0e2d30865d.png
+│  │      │  │  │  e3e100c1-7712-48d3-9d75-51e2d04dc8d7.png
+│  │      │  │  │  스크린샷 2025-02-19 114424.png
+│  │      │  │  │  
+│  │      │  │  └─information
+│  │      │  │          01d771f4-4611-4019-beff-54b641dd355b.jpg
+│  │      │  │          03e06614-1474-4b82-807d-fc2b8dd91854.jpg
+│  │      │  │          06f851e7-4f07-48db-a26c-5a14aa3182de.png
+│  │      │  │          089cc453-c2fd-43a2-8ed4-5b9d757dd0b1.jpg
+│  │      │  │          0ad272fb-0d47-4911-835d-b1e5cd2ee0d7.avif
+│  │      │  │          0d55a4a0-005a-4c70-af07-182b71019da5.jpg
+│  │      │  │          0ee278f1-8c28-4bfe-be98-ad7795baee29.png
+│  │      │  │          1439d125-7345-4076-b794-44440b05900c.jpg
+│  │      │  │          177ee1bf-c81b-48e4-947d-dd42d18d9207.jpg
+│  │      │  │          1836effb-7a5e-4bab-82d5-2d0d9ca3667d.jpg
+│  │      │  │          194a9a9a-a4d3-496e-988f-cb72593b6b6c.jpg
+│  │      │  │          19a80b5b-f6ad-45f6-ab34-45a641551721.jpg
+│  │      │  │          209c49a2-5d3c-4af6-a493-42b7baa1b620.png
+│  │      │  │          246b5b6a-24a4-4737-b57d-fb553957f641.png
+│  │      │  │          31ab8863-ec04-4fa9-901f-884d5a1d4fc7.jpg
+│  │      │  │          3235f819-52aa-46bb-abfd-500245b72c66.jpg
+│  │      │  │          42107ccb-750c-4c28-aafa-781c3afbcd29.avif
+│  │      │  │          44a659c0-4463-4231-bccf-211cafa78e84.png
+│  │      │  │          47a75086-cd0c-4570-9278-7fa6918d1787.jpg
+│  │      │  │          4d7b529f-6ca1-4073-aa66-a252e65c7143.jpg
+│  │      │  │          503b0c59-87bb-4c9f-b41f-a2cbe31120f3.png
+│  │      │  │          50a57970-edf7-4792-97a6-13b433fa35bf.jpg
+│  │      │  │          5328c305-1670-4317-a46c-56b7b9f0941c.jpg
+│  │      │  │          533cd7c2-f5d0-4550-bddb-a64aa6914b4c.png
+│  │      │  │          5ab056d0-9459-4b7f-9d2f-9bfbc723ea12.avif
+│  │      │  │          6223b5f3-7528-43d1-bcbf-25b069b6d4bb.png
+│  │      │  │          64f2eba3-7903-4a58-9ddb-ce49cec88c39.jpg
+│  │      │  │          70657b0c-f3e1-4eee-9e15-dd1074f857f1.jpg
+│  │      │  │          72e1a3d0-6e17-46c9-86c2-a4cd962701e2.jpg
+│  │      │  │          7a83fb39-70a7-49ed-b27a-2b12b401fa9d.avif
+│  │      │  │          7adb43d2-d3f2-4fd9-b62c-2736d93d79b3.jpg
+│  │      │  │          7c3f1ee2-266f-4514-a918-0e32abdf3573.jpg
+│  │      │  │          7cc01cb7-c0b9-4448-b44b-f1d39036bd00.png
+│  │      │  │          7f42b7d0-2763-44a6-adbd-683f56fc77c2.png
+│  │      │  │          7fafd4a9-d637-4098-b5e1-a49deb136f3a.png
+│  │      │  │          83b280c7-a6cb-4bb9-990d-feec9ec832a0.jpg
+│  │      │  │          85d21eeb-c83d-47e6-a0d1-01ba818036ae.jpg
+│  │      │  │          85eaf253-51c4-461a-970f-5d3458d93f93.jpg
+│  │      │  │          8941b63f-6000-4bd4-9c80-c5c28dc7e952.png
+│  │      │  │          89c589db-e7d5-46fb-a12e-9157452cdabf.jpg
+│  │      │  │          8a963ae8-563b-446d-8be6-54ac1cfb423c.png
+│  │      │  │          8c31362f-cefe-45ce-a237-af934c9da8e4.jpg
+│  │      │  │          8f09506e-867b-4919-bad3-a910b6953b03.jpg
+│  │      │  │          8f302a3f-fa3c-45af-be12-8bd595cfe07d.avif
+│  │      │  │          919033f1-a23d-4069-9706-f7a86b444d7d.jpg
+│  │      │  │          95b72e9f-3978-43f5-966b-f07fa5f41f74.jpg
+│  │      │  │          994fccc5-c23e-4ea9-a722-dd6eb147d90d.avif
+│  │      │  │          99eb7d39-57dd-4cbb-908b-4af2b3d10c7d.jpg
+│  │      │  │          9c28ec53-eaaf-4141-818b-35e72b154f1f.png
+│  │      │  │          a26b53b8-b9d9-4166-842c-0f0bcd42b4f3.avif
+│  │      │  │          a6bfa276-f609-4ddb-877a-5c1227c3a602.jpg
+│  │      │  │          a6f6a6ae-298f-4aa0-a5de-358691f4b760.cover
+│  │      │  │          a89dd91a-9d60-4e45-93e7-87967412332a.jpg
+│  │      │  │          abd5b1aa-455b-44e9-8df8-ca20242eac37.png
+│  │      │  │          accb1812-c44b-4469-b19e-1ba558e29e4d.jpg
+│  │      │  │          b3cd4109-7c67-4c12-8551-c2bfb152d631.avif
+│  │      │  │          b4ac1056-fa97-4aaa-a5b8-27b47ca614f1.png
+│  │      │  │          b6affb2b-5edd-4503-8c53-c5d56f6f614d.jpg
+│  │      │  │          b7289e20-2d80-49a3-8902-f0fda6b2d222.png
+│  │      │  │          befe9b44-d47c-48bf-8896-ed6fd4cce9d7.jpg
+│  │      │  │          c15ad69e-b936-4b6e-93cc-d4f10f3c1754.jpg
+│  │      │  │          c7ce5e92-e46f-4467-b53a-18a8da567332.avif
+│  │      │  │          cbf3f4a0-1948-4e76-89f1-fb7d002b684d.png
+│  │      │  │          cfe4dba8-13dd-4e3d-bbf9-218b21c70ed6.png
+│  │      │  │          da4f2843-dd94-43c4-87e1-e6d5d36759ca.jpg
+│  │      │  │          dfb41d9e-0996-4cfb-b7e0-83f9a88d752b.jpg
+│  │      │  │          e113512b-391e-4540-bb1e-82e5fa6c3c32.jpg
+│  │      │  │          e66815fc-67ae-411b-963a-b760ea067c8d.jpg
+│  │      │  │          e6c7142f-99a3-4580-8a1b-394b0a92bb0a.jpg
+│  │      │  │          e9f13bea-2dab-42f0-9ede-8897e6fe49a9.jpg
+│  │      │  │          ec9fc934-465b-42a9-81fb-239c48571c58.png
+│  │      │  │          ef417ee7-b703-4154-bfa2-53fdb1989f70.jpg
+│  │      │  │          f05c4379-91d7-4f8a-a11b-0f05dda7bb0b.png
+│  │      │  │          f3300db8-6073-455a-8ce3-008f77df1cfa.png
+│  │      │  │          f394ec7e-36e9-4996-a3b2-3e354d979cb4.avif
+│  │      │  │          f43dd70c-e8c1-4fa8-a2ba-21e7f0236ac4.jpg
+│  │      │  │          f496f1ea-2aa7-4de7-9219-d51f07a2a6be.png
+│  │      │  │          f4bd71a5-ec70-43fe-ab23-3bbfa768ee8e.avif
+│  │      │  │          f543a8b6-77cd-44c9-8837-cf106e46633e.jpg
+│  │      │  │          f9d3ef97-46b5-43fd-abab-1338ddb994b7.avif
+│  │      │  │          fb0de13c-a321-4eed-9029-0cc199409a7d.jpg
+│  │      │  │          
+│  │      │  ├─images
+│  │      │  ├─js
+│  │      │  │  │  employmentList.js
+│  │      │  │  │  jquery-3.7.1.min.js
+│  │      │  │  │  mypage.js
+│  │      │  │  │  problem.js
+│  │      │  │  │  recruitDetail.js
+│  │      │  │  │  recruitWrite.js
+│  │      │  │  │  
+│  │      │  │  ├─admin
+│  │      │  │  │      users.js
+│  │      │  │  │      
+│  │      │  │  └─information
+│  │      │  │          formcheck.js
+│  │      │  │          
+│  │      │  └─sql
+│  │      │          cascade.sql
+│  │      │          contest.sql
+│  │      │          employment.sql
+│  │      │          problem.sql
+│  │      │          recommendBook.sql
+│  │      │          recommendLecture.sql
+│  │      │          teamRecruit.sql
+│  │      │          user.sql
+│  │      │          
+│  │      └─templates
+│  │          ├─fragments
+│  │          │      footer.html
+│  │          │      header.html
+│  │          │      
+│  │          ├─layouts
+│  │          │      default_layout.html
+│  │          │      
+│  │          └─views
+│  │              ├─admin
+│  │              │      dashboard.html
+│  │              │      
+│  │              ├─chat
+│  │              │      chatList.html
+│  │              │      chatRoom.html
+│  │              │      
+│  │              ├─community
+│  │              │      boardDetail.html
+│  │              │      boardList.html
+│  │              │      boardUpdate.html
+│  │              │      boardWrite.html
+│  │              │      
+│  │              ├─diary
+│  │              │      diaryList.html
+│  │              │      
+│  │              ├─employment
+│  │              │      employmentList.html
+│  │              │      
+│  │              ├─information
+│  │              │      informationBookDetail.html
+│  │              │      informationBookList.html
+│  │              │      informationBookUpdateForm.html
+│  │              │      informationBookWriteForm.html
+│  │              │      informationContestDetail.html
+│  │              │      informationContestList.html
+│  │              │      informationContestUpdateForm.html
+│  │              │      informationContestWriteForm.html
+│  │              │      informationLectureDetail.html
+│  │              │      informationLectureList.html
+│  │              │      informationLectureUpdateForm.html
+│  │              │      informationLectureWriteForm.html
+│  │              │      informationMain.html
+│  │              │      informationMainDefault.html
+│  │              │      
+│  │              ├─main
+│  │              │      index.html
+│  │              │      
+│  │              ├─playlist
+│  │              │      playlist-list.html
+│  │              │      
+│  │              ├─problem
+│  │              │      problemDetail.html
+│  │              │      problemList.html
+│  │              │      problemResult.html
+│  │              │      problemUpdateForm.html
+│  │              │      problemWriteForm.html
+│  │              │      
+│  │              ├─ranking
+│  │              │      rankingList.html
+│  │              │      
+│  │              ├─recruit
+│  │              │      teamRecruitDetail.html
+│  │              │      teamRecruitList.html
+│  │              │      teamRecruitUpdateForm.html
+│  │              │      teamRecruitWriteForm.html
+│  │              │      
+│  │              └─user
+│  │                  │  findId.html
+│  │                  │  findPass.html
+│  │                  │  findResult.html
+│  │                  │  joinForm.html
+│  │                  │  loginForm.html
+│  │                  │  updateForm.html
+│  │                  │  
+│  │                  ├─admin
+│  │                  │      banners.html
+│  │                  │      contents.html
+│  │                  │      main.html
+│  │                  │      userDetail.html
+│  │                  │      users.html
+│  │                  │      
+│  │                  └─mypage
+│  │                          myPageMain.html
+│  │                          myPosts.html
+│  │                          myScraps.html
+│  │                          updateForm.html
+│  │                          
+│  └─test
+│      └─java
+│          └─com
+│              └─example
+│                  └─demo
+│                          FinalProjectApplicationTests.java
+│                          
+└─uploads
+    └─files
+            5c5d1783-18e1-4704-8445-a3447a617eb4.png
+            eb2fb28a-b764-4660-aa0c-5e646e1f4647.avif
+            

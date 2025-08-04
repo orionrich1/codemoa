@@ -2,26 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.codemoa.project.domain.employment.mapper.EmploymentMapper">
 
-<select id="findAll" resultType="employment">
+<select id="findAll" resultType="com.codemoa.project.domain.employment.entity.Employment">
 	SELECT * FROM employment
 </select>
 
-<select id="findById" parameterType="long" resultType="employment">
+<select id="findById" parameterType="long" resultType="com.codemoa.project.domain.employment.entity.Employment">
 SELECT * FROM emplyment 
 WHERE recruit_no = #{recruitNo}
 </select>
 
-<insert id="insert" parameterType="employment">
-INSERT INTO employment(
-recruit_no, instt_nm, recruit_nm, jobs_cd_nm, recruit se_cd, 
-work_region, career, receprion_closes_dt, employment_url, is_scraped, created_at
-)
-VALUES(
-#{recruitNo},#{insttNm},#{recruitNm},#{jobsCdNm},
-#{recruitSeCd},#{workRegion},#{career},#{receprionCloseDt},
-#{employmentUrl},#{isScraped},#{createdAt} 
-)
-</insert>
+<insert id="insert" parameterType="com.codemoa.project.domain.employment.entity.Employment">
+    INSERT INTO employment (
+      recruit_no, instt_nm, recruit_nm, jobs_cd_nm, recruit_se_cd,
+      work_region, career, receprion_closes_dt, employment_url, is_scraped, created_at
+    ) VALUES (
+      #{recruitNo}, #{insttNm}, #{recruitNm}, #{jobsCdNm}, #{recruitSeCd},
+      #{workRegion}, #{career}, #{receprionCloseDt}, #{employmentUrl}, #{isScraped}, #{createdAt}
+    )
+  </insert>
 
 <delete id="delete" parameterType="long">
 DELETE FROM employment 

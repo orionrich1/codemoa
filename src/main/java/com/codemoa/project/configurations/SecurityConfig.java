@@ -1,12 +1,14 @@
 package com.codemoa.project.configurations;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -33,35 +35,56 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * 정적 리소스(CSS, JS)들은 Spring Security 필터를 거치지 않도록 설정합니다.
+     * 이 설정은 부트스트랩 깨짐 현상을 가장 확실하게 방지합니다.
+     */
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring()
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(auth -> auth
-                // 1. (가장 구체적인 규칙) /admin/** 경로는 'ADMIN' 역할을 가진 사용자만 접근 가능
+        http
+            // CSRF 보호 비활성화
+            .csrf(csrf -> csrf.disable())
+
+            // HTTP 요청 권한 설정
+            .authorizeHttpRequests(auth -> auth
+                // 1. [핵심 변경] 보호가 필요한 경로들을 먼저 정의합니다.
+                
+                // 관리자 페이지는 'ADMIN' 역할이 필요합니다.
                 .requestMatchers("/admin/**").hasRole("ADMIN")
 
-                // 2. (로그인 필요한 규칙) /mypage/** 등 로그인이 필요한 경로는 인증된 사용자만
+                // 마이페이지는 로그인이 필요합니다.
                 .requestMatchers("/my-pages/**").authenticated()
                 
-                // 3. (가장 마지막 규칙) 위에서 설정한 경로 외 나머지 모든 경로는 모두에게 허용
-                .anyRequest().permitAll()
-        );
+                // 랭킹페이지는 로그인이 필요합니다.
+                .requestMatchers("/ranking**").authenticated()
 
-        // 폼 로그인 및 로그아웃 설정은 기존과 동일합니다.
-        http
-        	.formLogin(form -> form
+                // 글쓰기, 수정, 삭제 등 데이터 변경 API는 로그인이 필요합니다.
+                .requestMatchers(HttpMethod.POST, "/api/boards", "/api/boards/*/comments", "/api/comments/*/adopt").authenticated()
+                .requestMatchers(HttpMethod.PUT, "/api/boards/**").authenticated()
+                .requestMatchers(HttpMethod.DELETE, "/api/boards/**").authenticated()
+
+                // 2. [핵심 변경] 위에서 정의한 제한 외 "나머지는 모두 허용"합니다.
+                .anyRequest().permitAll()
+            )
+            
+            // 폼 로그인 및 SNS 로그인 설정 (기존과 동일)
+            .formLogin(form -> form
                 .loginPage("/loginForm")
                 .loginProcessingUrl("/login")                
                 .successHandler(customLoginSuccessHandler)
                 .permitAll()
-        	)
-        	
-        	// SNS 로그인 시 실행되는 메소드
+            )
         	.oauth2Login(oauth2 -> oauth2
     	        .loginPage("/loginForm") 
     	        .userInfoEndpoint(userInfo -> userInfo
     	            .userService(customOAuth2UserService) 
     	        )
-    	        // 성공 시 Handler 실행, 만약 SNS 계정이랑 연동된 상태면, 로그인한 계정과 SNS 계정을 연동함
     	        .successHandler(customLoginSuccessHandler)
     	        .failureHandler((request, response, exception) -> {
     	            if (exception.getMessage().contains("회원가입 필요")) {
@@ -70,17 +93,14 @@ public class SecurityConfig {
     	                response.sendRedirect("/loginForm?error");
     	            }
     	        })
-    	    );
+    	    )
         
-        http.logout(logout -> logout
+            // 로그아웃 설정 (기존과 동일)
+            .logout(logout -> logout
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/loginForm")
                 .invalidateHttpSession(true)
-        );
-
-        // 403 권한에러 해결
-        http.csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"));
-        http.csrf(csrf -> csrf.disable());
+            );
 
         return http.build();
     }

@@ -123,8 +123,8 @@ layout:decorate="~{layouts/default_layout}">
 					</div>
 				</div>
 				
-			<!-- 로그인 기능 구현후 주석 해제 <div class="text-center my-4"
-			th:if="${loginId == teamRecruit.userId}"> -->
+		<div class="text-center my-4"
+			th:if="${loginId == teamRecruit.userId}">
 			<div class="text-center my-4">
 				<a th:href="@{'/recruit/updateForm'(recruitId=${teamRecruit.recruitId})}" class="btn btn-warning mx-2">수정</a>
 				<button type="button" class="btn btn-danger mx-2" id="detailDelete">삭제</button>

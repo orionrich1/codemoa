@@ -110,7 +110,7 @@
 
 	<select id="getContestList" parameterType="map">
 		select * from contest
-		ORDER BY contest_no DESC
+		ORDER BY recommend_no DESC
 		LIMIT #{startRow}, #{num}	
 	</select>
 	

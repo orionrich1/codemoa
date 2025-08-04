@@ -13,16 +13,15 @@ import lombok.NoArgsConstructor;
 public class LocalUser {
 
     @Id
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false, length = 10, columnDefinition = "VARCHAR(10) COMMENT '사용자 ID (PK, FK)'")
     private String userId;
 
-    // ✅ 이 부분을 수정하세요! (cascade = CascadeType.ALL 추가)
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @MapsId
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id", foreignKey = @ForeignKey(name = "fk_local_user_user"))
     private User user;
 
-    @Column(name = "pass")
+    @Column(name = "pass", nullable = false, length = 100, columnDefinition = "VARCHAR(100) COMMENT '비밀번호 (암호화된 값)'")
     private String pass;
     
     public LocalUser(User user, String pass) {

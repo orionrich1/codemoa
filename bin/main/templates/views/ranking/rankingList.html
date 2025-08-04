@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+
+<div layout:fragment="content">
+    <div class="container my-4">
+
+        <div class="text-center mb-5">
+            <h1 class="fw-bold">🏆 명예의 전당</h1>
+            <p class="text-muted">CodeMoa의 성장에 기여해주신 분들을 소개합니다.</p>
+        </div>
+
+        <div th:if="${rankingData.myRankingInfo != null}" class="row justify-content-center mb-5">
+            <div class="col-lg-8">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <i class="bi bi-person-fill me-2"></i><strong>내 랭킹 정보</strong>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h5 class="card-title fw-bold" th:text="${rankingData.myRankingInfo.currentGradeName}">현재 등급</h5>
+                                <p class="card-text text-muted mb-0" th:text="|현재 누적 포인트: ${#numbers.formatInteger(rankingData.myRankingInfo.totalPoints, 3, 'COMMA')} P|">현재 누적 포인트</p>
+                            </div>
+                            <div class="text-end" th:if="${rankingData.myRankingInfo.nextGradeName != '최고 등급'}">
+                                <span class="badge bg-success fs-6" th:text="|다음 등급: ${rankingData.myRankingInfo.nextGradeName}|">다음 등급</span>
+                            </div>
+                        </div>
+
+                        <div th:if="${rankingData.myRankingInfo.nextGradeName != '최고 등급'}">
+                            <div class="progress" style="height: 25px;">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar"
+                                     th:with="progress=${(rankingData.myRankingInfo.nextGradeMinPoints - rankingData.myRankingInfo.currentGradeMinPoints == 0) ? 100 : ((rankingData.myRankingInfo.totalPoints - rankingData.myRankingInfo.currentGradeMinPoints) * 100.0) / (rankingData.myRankingInfo.nextGradeMinPoints - rankingData.myRankingInfo.currentGradeMinPoints)}"
+                                     th:style="|width: ${progress}%;|"
+                                     th:aria-valuenow="${progress}"
+                                     aria-valuemin="0" aria-valuemax="100"
+                                     th:text="|${#numbers.formatDecimal(progress, 1, 1)}%|">
+                                </div>
+                            </div>
+                            <div class="text-end mt-1 text-muted small"
+                                 th:text="|다음 등급까지 ${#numbers.formatInteger(rankingData.myRankingInfo.pointsNeededForNextGrade, 3, 'COMMA')} P 남음|">
+                                다음 등급까지 남은 포인트
+                            </div>
+                        </div>
+                        
+                        <div th:if="${rankingData.myRankingInfo.nextGradeName == '최고 등급'}" class="text-center p-3 bg-light rounded">
+                            <span class="fw-bold text-success">🎉 최고 등급을 달성하셨습니다! 축하합니다!</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <i class="bi bi-award-fill me-2"></i><strong>주간 명예의 전당 TOP 10</strong>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle text-center">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col">순위</th>
+                                <th scope="col">닉네임</th>
+                                <th scope="col">등급</th>
+                                <th scope="col">주간 획득 포인트</th>
+                                <th scope="col">누적 포인트</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="user : ${rankingData.weeklyTop10}">
+                                <td class="fw-bold" th:text="${user.rank}">1</td>
+                                <td th:text="${user.nickname}">Nickname</td>
+                                <td><span class="badge" th:text="${user.gradeName}"
+                                          th:classappend="${#strings.toLowerCase(user.gradeName) == '브론즈' ? 'bg-secondary' : (#strings.toLowerCase(user.gradeName) == '실버' ? 'bg-info' : 'bg-warning text-dark')}">Grade</span>
+                                </td>
+                                <td class="text-primary fw-bold" th:text="|+ ${#numbers.formatInteger(user.weeklyPoints, 3, 'COMMA')} P|">+1,234 P</td>
+                                <td class="text-muted" th:text="|${#numbers.formatInteger(user.totalPoints, 3, 'COMMA')} P|">12,345 P</td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(rankingData.weeklyTop10)}">
+                                <td colspan="5" class="text-center p-4 text-muted">아직 주간 랭킹 데이터가 없습니다.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mt-5">
+            <div class="card-header">
+                <i class="bi bi-question-circle-fill me-2"></i><strong>포인트는 어떻게 얻나요?</strong>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        회원가입
+                        <span class="badge bg-primary rounded-pill">1000 P</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        일일 로그인 (하루 1회)
+                        <span class="badge bg-primary rounded-pill">100 P</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        게시글 작성
+                        <span class="badge bg-primary rounded-pill">15 P</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        댓글 작성
+                        <span class="badge bg-primary rounded-pill">5 P</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        질문 게시판 답변 채택
+                        <span class="badge bg-success rounded-pill">질문자가 건 포인트</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+</html>

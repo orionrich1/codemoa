@@ -1,88 +1,97 @@
+<!-- boardList.html -->
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default_layout}">
 
 <div layout:fragment="content">
 
 	<style>
-.table>tbody>tr {
-	cursor: pointer;
-}
-
-.card {
-	border: none;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-}
-
-.card-header {
-	background-color: #fff;
-	border-bottom: 1px solid #eee;
-	padding: 1.5rem;
-}
-
-.category-badge {
-	font-size: 0.8em;
-	padding: 0.4em 0.7em;
-}
-.btn-custom {
-            background-color: #0d6efd;
-            color: white;
-        }
-        .btn-custom:hover {
-            background-color: #0b5ed7;
-            color: white;
-        }
-</style>
-
-
-
+		.table>tbody>tr { cursor: pointer; }
+		.card { border: none; box-shadow: 0 4px 8px rgba(0,0,0,0.05); }
+		.card-header { background-color: #fff; border-bottom: 1px solid #eee; padding: 1.5rem; }
+		.category-badge { font-size: 0.8em; padding: 0.4em 0.7em; }
+		.btn-custom { background-color: #0d6efd; color: white; }
+		.btn-custom:hover { background-color: #0b5ed7; color: white; }
+		.pagination .page-item.active .page-link { background-color: #0d6efd; border-color: #0d6efd; }
+		.pagination .page-link { color: #0d6efd; }
+		.pagination .page-item.disabled .page-link { color: #6c757d; }
+	</style>
 
 	<!-- Main Content -->
-	<div class="container">
+	<div class="container my-5">
 		<div class="card">
 			<div class="card-header d-flex justify-content-between align-items-center">
-				<h1 class="h4 mb-0">커뮤니티 게시판</h1>
-				<a href="/boards/write" class="btn btn-custom"> <i class="bi bi-pencil-square"></i> 글쓰기
-				</a>
+				<h1 class="h4 mb-0" th:text="${categoryName}">게시판</h1>
+				<a href="/boards/write" class="btn btn-custom"> <i class="bi bi-pencil-square"></i> 글쓰기 </a>
 			</div>
 			<div class="card-body">
 				<div class="table-responsive">
 					<table class="table table-hover align-middle">
 						<thead class="table-light">
-							<tr>
-								<th class="text-center d-none d-md-table-cell" style="width: 10%;">번호</th>
-								<th class="text-center" style="width: 15%;">카테고리</th>
-								<th>제목</th>
-								<th class="text-center" style="width: 15%;">작성자</th>
-								<th class="text-center d-none d-md-table-cell" style="width: 15%;">작성일</th>
-							</tr>
+						<tr>
+							<th class="text-center d-none d-md-table-cell" style="width: 10%;">번호</th>
+							<th class="text-center" style="width: 15%;">카테고리</th>
+							<th>제목</th>
+							<th class="text-center" style="width: 15%;">작성자</th>
+							<th class="text-center d-none d-md-table-cell" style="width: 15%;">작성일</th>
+						</tr>
 						</thead>
 						<tbody>
-							<!-- Thymeleaf loop to display boards -->
-							<tr th:each="board : ${boards}" th:onclick="|location.href='@{/boards/{boardNo}(boardNo=${board.boardNo})}'|">
-								<td class="text-center d-none d-md-table-cell" th:text="${board.boardNo}">1</td>
-								<td class="text-center"><span class="badge rounded-pill text-bg-secondary category-badge" th:text="${board.category}">Java</span></td>
-								<td th:text="${board.title}">게시글 제목입니다.</td>
-								<td class="text-center" th:text="${board.authorNickname}">코드모아</td>
-								<td class="text-center d-none d-md-table-cell" th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd')}">2025-07-28</td>
-							</tr>
-							<!-- Sample row for when there's no data -->
-							<tr th:if="${#lists.isEmpty(boards)}">
-								<td colspan="5" class="text-center py-5">게시글이 없습니다.</td>
-							</tr>
+						<tr th:each="board : ${boards.content}" th:onclick="|location.href='@{/boards/{boardNo}(boardNo=${board.boardNo})}'|">
+							<td class="text-center d-none d-md-table-cell" th:text="${board.boardNo}">1</td>
+							<td class="text-center"><span class="badge rounded-pill text-bg-secondary category-badge" th:text="${board.category}">Java</span></td>
+							<td>
+								<span th:text="${board.title}">게시글 제목입니다.</span>
+								<span class="badge bg-warning text-dark ms-2" th:if="${board.stakedPoints > 0}" th:text="|${board.stakedPoints}P|"> </span>
+							</td>
+							<td class="text-center" th:text="${board.authorNickname}">코드모아</td>
+							<td class="text-center d-none d-md-table-cell" th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd')}">2025-07-28</td>
+						</tr>
+						<tr th:if="${boards.empty}">
+							<td colspan="5" class="text-center py-5">조회된 게시글이 없습니다.</td>
+						</tr>
 						</tbody>
 					</table>
 				</div>
-
 			</div>
-			<div class="card-footer bg-white">
+
+			<!-- 검색 폼 -->
+			<div class="card-body border-top">
+				<form th:action="@{/community/{category}(category=${category})}" method="get" class="d-flex justify-content-center">
+					<div class="col-auto">
+						<select name="searchType" class="form-select">
+							<option value="title_content" th:selected="${searchType == 'title_content'}">제목+내용</option>
+							<option value="title" th:selected="${searchType == 'title'}">제목</option>
+							<option value="content" th:selected="${searchType == 'content'}">내용</option>
+							<option value="author" th:selected="${searchType == 'author'}">작성자</option>
+						</select>
+					</div>
+					<div class="col-auto mx-2">
+						<input type="text" name="keyword" class="form-control" style="width: 250px;" th:value="${keyword}" placeholder="검색어를 입력하세요">
+					</div>
+					<div class="col-auto">
+						<button type="submit" class="btn btn-dark">검색</button>
+					</div>
+				</form>
+			</div>
+
+			<div class="card-footer bg-white" th:if="${!boards.empty}">
 				<!-- Pagination -->
 				<nav aria-label="Page navigation">
 					<ul class="pagination justify-content-center mb-0">
-						<li class="page-item disabled"><a class="page-link" href="#">이전</a></li>
-						<li class="page-item active"><a class="page-link" href="#">1</a></li>
-						<li class="page-item"><a class="page-link" href="#">2</a></li>
-						<li class="page-item"><a class="page-link" href="#">3</a></li>
-						<li class="page-item"><a class="page-link" href="#">다음</a></li>
+						<!-- 이전 블록 링크 -->
+						<li class="page-item" th:classappend="${startPage == 1} ? 'disabled'">
+							<a class="page-link" th:href="@{/community/{category}(category=${category}, page=${startPage - 2}, searchType=${searchType}, keyword=${keyword})}">이전</a>
+						</li>
+
+						<!-- 페이지 번호 링크 -->
+						<li class="page-item" th:each="page: ${#numbers.sequence(startPage, endPage)}" th:classappend="${page == nowPage} ? 'active'">
+							<a class="page-link" th:text="${page}" th:href="@{/community/{category}(category=${category}, page=${page - 1}, searchType=${searchType}, keyword=${keyword})}"></a>
+						</li>
+
+						<!-- 다음 블록 링크 -->
+						<li class="page-item" th:classappend="${endPage >= boards.totalPages} ? 'disabled'">
+							<a class="page-link" th:href="@{/community/{category}(category=${category}, page=${endPage}, searchType=${searchType}, keyword=${keyword})}">다음</a>
+						</li>
 					</ul>
 				</nav>
 			</div>

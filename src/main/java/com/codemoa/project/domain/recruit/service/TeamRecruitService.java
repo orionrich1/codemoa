@@ -8,6 +8,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.codemoa.project.domain.recruit.entity.TeamRecruit;
 
 public interface TeamRecruitService {
+	
+	
 
 	public boolean deleteRecruit(int recruitId);
 	

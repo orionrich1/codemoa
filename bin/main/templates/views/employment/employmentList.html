@@ -8,13 +8,19 @@ layout:decorate="~{layouts/default_layout}"
 	<title>채용 공고 리스트</title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 </head>
+<style>
+.hover-shadow:hover{
+box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+transition: box-shadow 0.3s ease-in-out;
+}
+</style>
 
-<body>
+<div layout:fragment="content">
 	<div class="container mt-5">
 		<h1 class="mb-4 fw-bold">채용 공고 목록</h1>
 		
 		<!--  필터 / 검색영역 -->
-		<form method="get" th:action="@{/employment/empolymentList}">
+		<form method="get" th:action="@{/employmentList}">
 			<div class="row mb-4">
 				<div class="col-md-3">
 				<select id="region" name="region" class="form-select" onchange="updateSubRegion()">
@@ -25,14 +31,14 @@ layout:decorate="~{layouts/default_layout}"
 					<option value="인천">인천</option>
 					<option value="대구">대구</option>
 					<option value="광주">광주</option>
-					<option value="광주">대전</option>
-					<option value="광주">울산</option>
+					<option value="대전">대전</option>
+					<option value="울산">울산</option>
 				</select>
 			</div>
 			
 			<!-- 구/군 -->
-			<div class="col-mb-3">
-				 <select id="subRegion" name="subRegion" class="form-select">
+			<div class="col-md-3">
+				 <select id="subRegion" name="subRegion" class="form-select mt-2">
                     <option value="">구/군 선택</option>
                 </select>
 			</div>
@@ -45,39 +51,46 @@ layout:decorate="~{layouts/default_layout}"
             <div class="col-md-2">
                 <button type="submit" class="btn btn-primary w-100">검색</button>
             </div>
-        </div>
-    </form>
+       	 	</div>
+   		 </form>
 	
 	<!--  채용 공고 리스트  -->
-	<div class="row row-cols-1 row-cols-md-3 g-4">
-		<div class="col" th:each="post : ${employmentList}">
-			<div class="card h-100">
-				<div class="card-body">
-					<h5 class="job-card-title" th:text="${post.title}">채용 제목</h5>
-					<p class="job-meta" th:text="'기업명 : ' + ${post.company}">기업명</p>
-					<p class="job-meta" th:text="'근무지 : ' + ${post.location}">서울 강남구</p>
-					<p class="job-meta" th:text="'마감일 : ' + ${post.deadline}">~ 2025.08.15</p>
-				</div>
-				<div class="card-footer text-end">
-					<a class="btn btn-outline-primary btn-sm"
-						th:href="${post.url}" target="_blank"> 상세 보기</a>
-				</div>
-			</div>
+		<div class="row row-cols-1 row-cols-md-3 g-4">
+		    <div class="col" th:each="post : ${employmentList}">
+		        <div class="card h-100 shadow-sm hover-shadow" style="cursor:pointer;"
+				             th:onclick="'window.open(\'' + ${post.url} + '\', \'_blank\')'">
+		            <div class="card-body">
+		                <h5 class="card-title" th:text="${post.title}">채용 제목</h5>
+		                <p class="card-text mb-1" th:text="'기업명 : ' + ${post.company}">기업명</p>
+		                <p class="card-text mb-1" th:text="'근무지 : ' + ${post.location}">근무지</p>
+		                <p class="card-text text-muted" th:text="'마감일 : ' + ${post.deadline}">마감일</p>
+		            </div>
+		        </div>
+		    </div>
 		</div>
 	</div>
-	
+		<a href="/employment/crawl">공고 가져오기 (크롤링)</a>
 	<!-- 페이징 처리 -->
-	<div class="row mt-5">
-		<div class="col text-center">
-			<nav>
-				<ur class="pagination justify-content-center">
-					<li class="page-item" th:classappend="${page.currentPage ==1} ? 'disabled'">
-						<a class="page-link" th:href="@{/employmentList(page=${page.currentPage -1})}">이전</a>
-					</li>
-				</ur>
-			</nav>
+			<div class="row mt-5">
+				<div class="col text-center">
+					<nav>
+						<ul class="pagination justify-content-center">
+						    <li class="page-item" th:classappend="${page.currentPage == 1} ? 'disabled'">
+						        <a class="page-link" th:href="@{/employmentList(page=${page.currentPage - 1})}">이전</a>
+						    </li>
+						    <li class="page-item" th:each="i : ${#numbers.sequence(1, page.totalPages)}"
+						        th:classappend="${i == page.currentPage} ? 'active'">
+						        <a class="page-link" th:href="@{/employmentList(page=${i})}" th:text="${i}">1</a>
+						    </li>
+						    <li class="page-item" th:classappend="${page.currentPage == page.totalPages} ? 'disabled'">
+						        <a class="page-link" th:href="@{/employmentList(page=${page.currentPage + 1})}">다음</a>
+						    </li>
+						</ul>
+					</nav>
+				</div>
+			</div>	
 		</div>
 	</div>
-	</div>
-</body>
+	<!-- script 구문 -->
+	<script src="/js/employmentList.js" defer></script>	
 </html>

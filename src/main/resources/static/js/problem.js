@@ -1,4 +1,18 @@
+let typeFilterSelected = [0, 0, 0];
+let difficultyFilterSelected = [0, 0, 0];
+
 $(function() {
+
+	$(".typeFilter").on("change", function() {
+		typeFilterSelected[$(this).val() - 1] = $(this).is(':checked') ? 1 : 0;
+		requestList();
+	});
+
+	$(".difficultyFilter").on("change", function() {
+		difficultyFilterSelected[$(this).val() - 1] = $(this).is(':checked') ? 1 : 0;
+		requestList();
+	});
+
 	// ProblemDetail 페이지 유효성 검사
 	$("#problemForm").on("submit", function() {
 		var answer = $("#answer").val();
@@ -60,6 +74,51 @@ $(function() {
 	});
 });
 
+function requestList() {
+	$.ajax({
+		url: '/problems/listUpdate',     // 백엔드 URL
+		type: 'POST',
+		contentType: 'application/json',
+		data: JSON.stringify({
+			'type': typeFilterSelected,
+			'difficulty': difficultyFilterSelected
+		}),
+		success: function(res) {
+			refreshList(res.result);
+		},
+		error: function(err) {
+			console.error("게시글 로드 실패", err);
+		}
+	});
+}
+
+function refreshList(problemList) {
+	const tbody = $('#problemTableBody');
+	tbody.empty(); // 기존 행 제거
+
+	if (problemList.length === 0) {
+		tbody.append(`
+	    <tr>
+	      <td colspan="5">문제가 존재하지 않습니다. 관리자에게 문의해주세요.</td>
+	    </tr>
+	  `);
+		return;
+	}
+
+	problemList.forEach(problem => {
+		const row = `
+	    <tr class="problems" style="cursor: pointer;" onclick="location.href='problemDetail?problemId=${problem.problemId}'">
+	      <td>${problem.category}</td>
+	      <td>${problem.title}</td>
+	      <td>${problem.difficulty}</td>
+	      <td>${problem.userId}</td>
+	      <td>${new Date(problem.regDate).toISOString().slice(0, 10)}</td>
+	    </tr>
+	  `;
+		tbody.append(row);
+	});
+}
+
 function requestApi() {
 	var problemCategory = $("#problemCategory").text();
 	var problemTitle = $("#problemTitle").text();
@@ -81,7 +140,7 @@ function requestApi() {
 
 	fetch('/problems/apiRequest', {
 		method: 'POST',
-		headers: { 'Content-Type': 'application/json'},
+		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({
 			"problem": {
 				"category": problemCategory,

@@ -7,7 +7,7 @@
 	<th:block layout:fragment="content">
 		<script th:src="@{/js/information/formcheck.js}"></script>
 		<div class="row my-5" id="global-content">
-			<div class="col-10 offset-1">
+			<div class="col-10 ms-n1">
 				<form name="checkForm" id="checkForm">
 					<input type="hidden" name="no" id="no" th:value="${lecture.recommendNo}"/>
 					<input type="hidden" name="pass" id="rPass" />
@@ -31,7 +31,7 @@
 									<td colspan="3" th:text="${lecture.title}">게시글 제목</td>		
 								</tr>
 								<tr>
-									<th class="table-secondary">부제목</th>
+									<th class="table-secondary" style="width: 180px;">부제목</th>
 									<td colspan="3" th:text="${lecture.subtitle}">게시글 부제목</td>		
 								</tr>
 								<tr>
@@ -65,11 +65,11 @@
 								<tr>
 									<td colspan="4">
 										<h4>이런걸 배울 수 있어요 : </h4>
-										<span style="white-space:pre">[[${lecture.content1}]]</span>
+										<span style="white-space: pre-wrap; max-width: 400px; word-wrap: break-word;">[[${lecture.content1}]]</span>
 									</td>
 								</tr>
 								<tr>
-									<td colspan="4" style="white-space:pre">[[${lecture.content2}]]</td>
+									<td colspan="4" style="white-space: pre-wrap; max-width: 400px; word-wrap: break-word;">[[${lecture.content2}]]</td>
 								</tr>
 								<tr>
 									<td colspan="4">출처 : [[${lecture.lectureSource}]]</td>
@@ -77,9 +77,10 @@
 								<tr>
 									<th:block th:if="${lecture.file1}">
 										<td colspan="4">
-											업로드 이미지 : [[${lecture.file1}]]
+											
 											<!-- 업로드 이미지 : 62e1ce93-70ab-488c-9b45-a21d419d7883.png -->
-											<img th:src="@{/files/information/{img}(img=${lecture.file1})}" alt="이미지를 찾을 수 없습니다.">
+											<img th:src="@{/files/information/{img}(img=${lecture.file1})}" alt="이미지를 찾을 수 없습니다."
+												style="width: 100%; height: auto;">
 										</td>
 									</th:block>
 									<th:block th:unless="${lecture.file1}">

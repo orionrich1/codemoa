@@ -1,0 +1,156 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}">
+	
+	<th:block layout:fragment="content">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>  
+		
+		<th:block>
+			<link th:href="@{/css/information/listLayout3.css}" rel="stylesheet" />
+		</th:block>
+		
+		<main id="container" tabindex="0">
+			<div id="spot">
+				<div class="layout">
+					<div class="in">
+						<h3 class="tit">Lectures</h3>
+						<div class="t_wrap">
+							<div id="lnb">
+								<ul id="depthMenu">
+								<!-- 	<li class="active"><a href="#"><span>2depth</span></a></li>
+									<li><a href="#"><span>2depth</span></a></li>
+									<li><a href="#"><span>2depth</span></a></li> -->
+								<li class="active"><a href="javascript:goMenu(&#39;/reqst/combine/eCombineList.do&#39;,&#39;null&#39;);"><span>Contents</span></a></li></ul>
+							</div>
+							<ul class="navi">
+								<!-- <li><a href="#">HOME</a></li>
+								<li><a href="#">2depth</a></li>
+								<li><a href="#">3depth</a></li> -->
+							<li><a href="https://library.nih.go.kr/spec/main.do">HOME</a></li><li><a href="https://library.nih.go.kr/spec/reqst/combine/eCombineList.do?#">통합검색</a></li><li><a href="https://library.nih.go.kr/spec/reqst/combine/eCombineList.do?#">Contents</a></li></ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div id="content" style="min-height: 267px;">
+				<div class="layout">
+					<div class="bod-list-body">
+						<ul class="bod-gallery-list">
+							
+							<div class="swiper mySwiper">
+								<div class="swiper-wrapper">
+							
+									<th:block th:each="lecture: ${lList}">
+										<div class="swiper-slide">
+											<div class="swiper-area">
+												<div class="cover">
+													<div class="cover-content">
+														<img th:src="@{/files/information/{img}(img=${lecture.file1})}" alt="이미지를 찾을 수 없습니다.">
+														<div class="texts">
+															<strong>[[${lecture.title}]]</strong>
+															<div>
+																<p>등록일 : [[${lecture.regDate}]]</p>
+																<p>작성자 : [[${lecture.userId}]]</p>
+															</div>
+														</div>
+														<a th:href="@{/information/lectureDetail(no=${lecture.recommendNo})}">
+															<div class="cover-item">
+																<div class="cover-text">
+																	<span class="cover-label"></span>
+																	[[${lecture.subtitle}]]
+																</div>
+															</div>
+														</a>
+													</div>
+											
+												</div>
+											</div>
+										</div>
+									</th:block>
+									
+								</div>
+							</div>
+									
+						</ul>
+					</div>
+				</div>
+			</div>
+			
+			<!-- 패이지 네이션 -->
+			<div class="row">
+				<div class="col">
+					<!-- 검색 요청이면서 게시글이 존재할 경우 링크에 type, keyword -->
+					<nav th:if="${searchOption and not #lists.isEmpty(lList)}" aria-label="Page navigation example">
+						<ul class="pagination justify-content-center">
+						
+							<li class="page-item" th:if="${startPage > pageGroup}">
+								<!-- /* <a class="page-link" th:href="@{boardList(pageNum=${startPage-1})}">Pre</a> */ -->
+								<a class="page-link" th:href="@{|lecture?pageNum=${startPage-1}&type=${type}&keyword=${keyword}|}">Pre</a>
+							</li>
+							 
+							<!-- /* <forEach var="i begin="${startPage}" end="${endPage}"> */-->
+							<li th:each="num : ${#numbers.sequence(startPage, endPage)}"
+								th:classappend="${num == currentPage} ? 'active'" class="page-item">
+								<th:block th:if="${num != currentPage}">
+									<a class="page-link" th:href="@{|lecture?pageNum=${num}&type=${type}&keyword=${keyword}|}" th:text="${num}"></a>
+								</th:block>									
+								<th:block th:unless="${num != currentPage}">
+									<a class="page-link" th:text="${num}"></a>
+								</th:block>									
+								
+							</li>
+							
+							<li class="page-item" th:if="${endPage < pageCount}">
+							 	<a class="page-link" th:href="@{|lecture?pageNum=${startPage+pageGroup}&type=${type}&keyword=${keyword}|}">Next</a>
+							</li>
+						  
+						</ul>
+					</nav>
+					<!-- 검색 요청이 아니면서 게시글이 존재할 경우 -->
+					<nav th:if="${not searchOption and not #lists.isEmpty(lList)}" aria-label="Page navigation example">
+						<ul class="pagination justify-content-center">
+						
+							<li class="page-item" th:if="${startPage > pageGroup}">
+								<!-- /* <a class="page-link" th:href="@{boardList(pageNum=${startPage-1})}">Pre</a> */ -->
+								<a class="page-link" th:href="@{|lecture?pageNum=${startPage-1}|}">Pre</a>
+							</li>
+							 
+							<!-- /* <forEach var="i begin="${startPage}" end="${endPage}"> */-->
+							<li th:each="num : ${#numbers.sequence(startPage, endPage)}"
+								th:classappend="${num == currentPage} ? 'active'" class="page-item">
+								<th:block th:if="${num != currentPage}">
+									<a class="page-link" th:href="@{|lecture?pageNum=${num}|}" th:text="${num}"></a>
+								</th:block>									
+								<th:block th:unless="${num != currentPage}">
+									<a class="page-link" th:text="${num}"></a>
+								</th:block>									
+								
+							</li>
+							
+							<li class="page-item" th:if="${endPage < pageCount}">
+							 	<a class="page-link" th:href="@{|lecture?pageNum=${startPage+pageGroup}|}">Next</a>
+							</li>
+						  
+						</ul>
+					</nav>
+				</div>
+			</div>
+			
+		</main>
+	</th:block>
+</html>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+	
+	const swiper = new Swiper(".mySwiper", {
+		slidesPerView: 4, // (가로)한 줄에 4개의 슬라이드가 보임
+	  	grid: {
+	    	rows: 2,
+	   		fill: "row",
+	  	},
+	  	spaceBetween: 20,
+	});
+		  
+
+</script>
