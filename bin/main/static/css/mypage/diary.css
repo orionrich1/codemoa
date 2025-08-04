@@ -1,0 +1,66 @@
+@charset "UTF-8";
+
+.project-card {
+	position: relative;
+	width: 320px;
+	margin-bottom: 20px;
+	transition: background-color 0.3s ease;
+}
+
+.project-card:hover {
+	background-color: #f2f3f4;
+	cursor: pointer;
+}
+
+.project-id {
+	position: absolute;
+	left: 10px;
+	top: 10px;
+	font-weight: 600;
+	color: #555;
+	font-size: 0.85rem;
+}
+
+.project-top {
+	padding-left: 50px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.project-name {
+	font-weight: 700;
+	font-size: 1.25rem;
+}
+
+.status {
+	font-weight: 600;
+	font-size: 0.9rem;
+}
+
+.status-계획 {
+	color: #0d6efd; /* Bootstrap primary */
+}
+
+.status-진행중 {
+	color: #198754; /* Bootstrap success */
+}
+
+.status-종료 {
+	color: #6c757d; /* Bootstrap secondary */
+}
+
+.project-description {
+	padding-left: 50px;
+	margin-top: 10px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.project-created {
+	padding-left: 50px;
+	margin-top: 8px;
+	font-size: 0.8rem;
+	color: #666;
+}

@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.codemoa.project.domain.diary.entity.Diary;
+import com.codemoa.project.domain.diary.entity.Project;
 
 @Mapper
 public interface DiaryMapper {
-	public List<Diary> getDiaryList(String userId);
+	public List<Project> getProjectList(String userId);
 }

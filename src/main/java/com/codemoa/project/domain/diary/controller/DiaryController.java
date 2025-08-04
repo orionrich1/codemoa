@@ -26,7 +26,7 @@ public class DiaryController {
 
 	@GetMapping("/")
 	public String myPage(Model model, @AuthenticationPrincipal CustomUserDetails principal) {
-		model.addAttribute("diaryList", diaryService.getDiaryList(principal.getUsername()));
-		return "views/diary/diaryList";
+		model.addAttribute("projects", diaryService.getProjectList(principal.getUsername()));
+		return "views/diary/projectList";
 	}
 }

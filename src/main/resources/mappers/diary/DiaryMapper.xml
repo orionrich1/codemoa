@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.codemoa.project.domain.diary.mapper.DiaryMapper">
 
-	<select id="getDiaryList" resultType="Diary">
-		SELECT * FROM diary WHERE user_id=#{userID}
+	<select id="getProjectList" resultType="Project">
+		SELECT * FROM project WHERE user_id=#{userID}
 	</select>
 </mapper>

@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.codemoa.project.domain.diary.entity.Diary;
+import com.codemoa.project.domain.diary.entity.Project;
 import com.codemoa.project.domain.diary.mapper.DiaryMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 public class DiaryService {
 	private final DiaryMapper diaryMapper;
 	
-	public List<Diary> getDiaryList(String userId){
-		return diaryMapper.getDiaryList(userId);
+	public List<Project> getProjectList(String userId){
+		return diaryMapper.getProjectList(userId);
 	}
 }
