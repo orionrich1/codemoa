@@ -16,14 +16,12 @@ public interface EmploymentRepository extends JpaRepository<Employment, Long> {
 	boolean existsByUrl(String url);
 	
 	
-	@Query("SELECT e FROM Employment e WHERE" +
-			"(:region IS NULL OR e.region = :region) AND " +
-			"(:subRegion IS NULL OR e.subRegion = :subRegion) AND " +
-			"(:keyword IS NULL OR e.title LIKE %:keyword%)")
-	Page<Employment> findByFilters(@Param("region") String region,
-				@Param("subRegion") String subRegion,
-				@Param("keyword") String keyword,
-				Pageable pageable);
+	@Query("SELECT e FROM Employment e WHERE " +
+		       "(:type IS NULL OR e.type LIKE %:type%) AND " +
+		       "(:keyword IS NULL OR e.title LIKE %:keyword%)")
+		Page<Employment> findByFilters(@Param("type") String type,
+		                               @Param("keyword") String keyword,
+		                               Pageable pageable);
 }
 
 

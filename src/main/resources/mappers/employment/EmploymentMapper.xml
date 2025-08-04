@@ -1,29 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.codemoa.project.domain.employment.mapper.EmploymentMapper">
-
 <select id="findAll" resultType="com.codemoa.project.domain.employment.entity.Employment">
-	SELECT * FROM employment
-</select>
+    SELECT * FROM employment
+  </select>
 
-<select id="findById" parameterType="long" resultType="com.codemoa.project.domain.employment.entity.Employment">
-SELECT * FROM emplyment 
-WHERE recruit_no = #{recruitNo}
-</select>
+  <select id="findById" parameterType="long" resultType="com.codemoa.project.domain.employment.entity.Employment">
+    SELECT * FROM employment
+    WHERE recruit_no = #{recruitNo}
+  </select>
 
-<insert id="insert" parameterType="com.codemoa.project.domain.employment.entity.Employment">
+  <select id="findByFilters" parameterType="map" resultType="com.codemoa.project.domain.employment.entity.Employment">
+    SELECT * FROM employment
+    WHERE 1=1
+    <if test="region != null and region != ''">
+      AND region = #{region}
+    </if>
+    <if test="subRegion != null and subRegion != ''">
+      AND sub_region = #{subRegion}
+    </if>
+    <if test="keyword != null and keyword != ''">
+      AND (
+        company LIKE CONCAT('%', #{keyword}, '%')
+        OR title LIKE CONCAT('%', #{keyword}, '%')
+        OR region LIKE CONCAT('%', #{keyword}, '%')
+        OR sub_region LIKE CONCAT('%', #{keyword}, '%')
+      )
+    </if>
+    ORDER BY recruit_no DESC
+  </select>
+
+  <insert id="insert" parameterType="com.codemoa.project.domain.employment.entity.Employment">
     INSERT INTO employment (
-      recruit_no, instt_nm, recruit_nm, jobs_cd_nm, recruit_se_cd,
-      work_region, career, receprion_closes_dt, employment_url, is_scraped, created_at
+      wanted_auth_no, title, company, region, sub_region, reg_dt, close_dt, url, type, start_date, end_date
     ) VALUES (
-      #{recruitNo}, #{insttNm}, #{recruitNm}, #{jobsCdNm}, #{recruitSeCd},
-      #{workRegion}, #{career}, #{receprionCloseDt}, #{employmentUrl}, #{isScraped}, #{createdAt}
+      #{wantedAuthNo}, #{title}, #{company}, #{region}, #{subRegion}, #{regDt}, #{closeDt}, #{url}, #{type}, #{startDate}, #{endDate}
     )
   </insert>
 
-<delete id="delete" parameterType="long">
-DELETE FROM employment 
-WHERE recruit_no =#{recruitNo}
-</delete>
+  <delete id="delete" parameterType="long">
+    DELETE FROM employment
+    WHERE recruit_no = #{recruitNo}
+  </delete>
 
 </mapper>
