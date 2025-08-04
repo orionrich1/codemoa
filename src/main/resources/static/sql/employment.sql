@@ -12,7 +12,8 @@ CREATE TABLE employment (
     url VARCHAR(768) NOT NULL UNIQUE,
     type VARCHAR(255),                -- nullable = true
     start_date VARCHAR(20),           -- nullable = true
-    end_date VARCHAR(20)   
+    end_date VARCHAR(20),   
+    source VARCHAR(255) DEFAULT '정보 없음'
 );
 
 select * from employment;

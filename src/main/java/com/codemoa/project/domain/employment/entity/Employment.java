@@ -50,4 +50,7 @@ public class Employment {
     
     @Column(name = "end_date", nullable = true)
     private String endDate;  // empWantedEndt (마감일 대체용 필드, 필요하면 사용)
+    
+    @Column(nullable = false)
+    private String source;  //"일반" or "공채 속보"
 }
