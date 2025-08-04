@@ -49,15 +49,17 @@
 														<div class="texts">
 															<strong>[[${contest.title}]]</strong>
 															<div>
-																<p>등록일 : [[${contest.regDate}]]</p>
-																<p>작성자 : [[${contest.userId}]]</p>
+																<p>기한 : [[${#dates.format(contest.startDate, 'yyyy-HH-dd')}]] ~ [[${#dates.format(contest.endDate, 'yyyy-HH-dd HH:mm')}]]</p>
+																<p>주최기관 : [[${contest.hostOrganization}]]</p>
 															</div>
 														</div>
 														<a th:href="@{/information/lectureDetail(no=${contest.contestNo})}">
 															<div class="cover-item">
 																<div class="cover-text">
-																	<span class="cover-label"></span>
-																	[[${contest.content}]]
+																	<span class="cover-label">
+																		<p>작성자 : [[${contest.userId}]]</p>
+																		<p>등록일 : [[${contest.regDate}]]</p>
+																	</span>
 																</div>
 															</div>
 														</a>

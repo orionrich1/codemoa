@@ -15,20 +15,16 @@ li {list-style: none;}
 #container{}
 #container #spot{
 	position: relative; height: 18.125rem;
-	-webkit-transition: all 0.2s linear; transition: all 0.2s linear;
 }
 #container #spot .layout{height: 100%;}
 #container #spot .layout .in{
 	display: flex; flex-wrap: wrap; align-items: center; position: relative; height: 100%; padding-top: 3.75rem;
-	-webkit-transition: all 0.2s linear; transition: all 0.2s linear;
 }
 #container #spot .layout .in .tit{
 	display: block; position: relative; width: 100%; padding-bottom: 1rem; text-align: center; font-size: 2.5rem; font-weight: 600; color: #000;
-	-webkit-transition: all 0.2s linear; transition: all 0.2s linear;
 }
 #container #spot .layout .in .tit:before{
 	content: ""; display: block; position: absolute; bottom: 0; left: 50%; width: 1.875rem; height: 0.3125rem; background-color: #413C7F;
-	-webkit-transform: translateX(-50%); transform: translateX(-50%);
 }
 #container #spot .layout .in .t_wrap{display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; position: absolute; top: 0; left: 0; width: 100%; background-color: #413C7F;}
 #container #spot .layout .in .t_wrap:before{content: ""; display: block; position: absolute; top: 0; right: 100%; width: 1000vw; height: 100%; background-color: #413C7F;}
@@ -37,37 +33,30 @@ li {list-style: none;}
 #container #spot .layout .in .t_wrap #lnb >ul{display: table; table-layout: fixed; height: 3.75rem;}
 #container #spot .layout .in .t_wrap #lnb >ul >li{
 	display: table-cell; height: 100%; width: 15.625rem; vertical-align: middle;
-	-webkit-transition: all 0.2s linear; transition: all 0.2s linear;
 }
 #container #spot .layout .in .t_wrap #lnb >ul >li >a{
-	display: flex; align-items: center; justify-content: center; height: 100%; padding: 0.5rem 1rem; text-align: center; color: #fff; background-color: transparent;
-	-webkit-transition: all 0.2s linear; transition: all 0.2s linear;
+	display: flex; align-items: center; justify-content: center; height: 100%; padding: 0.5rem 1rem; text-align: center; 
+	color: #fff; background-color: transparent;
 }
 #container #spot .layout .in .t_wrap #lnb >ul >li >a:hover,
 #container #spot .layout .in .t_wrap #lnb >ul >li.active >a{background-color: rgba(0, 0, 0, 0.30);}
 #container #spot .layout .in .t_wrap .navi{display: flex; flex-wrap: wrap; align-items: center;}
 #container #spot .layout .in .t_wrap .navi li{
 	margin-left: 0.25rem; line-height: 3.2rem;
-	-webkit-transition: all 0.2s linear; transition: all 0.2s linear;
 }
 #container #spot .layout .in .t_wrap .navi li:first-child{margin-left: 0;}
 #container #spot .layout .in .t_wrap .navi li:not(:first-child):before{
-	content: ""; display: inline-block; width: 1.5rem; height: 1.5rem; margin-right: 0.25rem; vertical-align: middle; background: url(../images/common/i_navi02.svg) no-repeat center center; background-size: 100% auto;
-	-webkit-transition: all 0.2s linear; transition: all 0.2s linear;
+	content: ""; display: inline-block; width: 1.5rem; height: 1.5rem; margin-right: 0.25rem; 
+	vertical-align: middle; background-size: 100% auto;
 }
 #container #spot .layout .in .t_wrap .navi li a{
 	display: inline-block; font-size: 1rem; line-height: 1.5rem; font-weight: 400; color: #fff;
-	-webkit-transition: all 0.2s linear; transition: all 0.2s linear;
 }
 #container #spot .layout .in .t_wrap .navi li a:hover{text-decoration: underline; text-underline-position: under;}
 #container #spot .layout .in .t_wrap .navi li:first-child a{
-	width: 1.5rem; height: 1.5rem; text-indent: -9999px; background: url(../images/common/i_navi.svg) no-repeat center center; background-size: 100% auto;
-	-webkit-transition: all 0.2s linear; transition: all 0.2s linear;
+	width: 1.5rem; height: 1.5rem; text-indent: -9999px; background-size: 100% auto;
 }
-#container #content{
-	padding-bottom: 6.25rem;
-	-webkit-transition: all 0.2s linear; transition: all 0.2s linear;
-}
+#container #content{padding-bottom: 6.25rem;}
 #container #content #txts{position: relative; }
 
 
@@ -165,7 +154,6 @@ li {list-style: none;}
     /* ------ */
     z-index: 1;
     transition: all 0.3s ease;
-    /* ------ */
 }
 
 .swiper .swiper-slide .swiper-area .texts p {
@@ -259,7 +247,6 @@ li {list-style: none;}
 	 box-sizing: border-box;
 	 overflow-wrap: break-word;  
 	 word-break: break-word;
-	 /* ------- */
 }
 
 #section02 .in [data-skin="tab"] .cont .swiper .swiper-slide .swiper-area .cover-item {

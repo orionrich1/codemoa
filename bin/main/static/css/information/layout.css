@@ -611,7 +611,6 @@ form, div, p, span, ul, li, dl, dt, textarea, h1, h2, h3, h4 {
 
 #section02 .in [data-skin="tab"] .cont .swiper .btn_wrap .swiper-button-next{
 	background-image: url(../images/main/sec02_img01.svg);
-	-webkit-transform: rotate(180deg); transform: rotate(180deg);
 }
 
 #section02 .in [data-skin="tab"] .cont .swiper .btn_wrap .more_btn {
@@ -707,7 +706,9 @@ form, div, p, span, ul, li, dl, dt, textarea, h1, h2, h3, h4 {
 */
 /* ---------------------- 추가 부분  ---------------------- */
 
-
+.more_button {
+  pointer-events: none; /* 클릭 이벤트 제거 */
+}
 
 /*
 .swiper-pagination {

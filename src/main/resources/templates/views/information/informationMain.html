@@ -136,9 +136,12 @@
 </html>
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
+	document.querySelector('.more_button').addEventListener('click', function(e) {
+		e.preventDefault(); // 페이지 위로 스크롤되는 기본 동작 제거
+	});
 	
 	const swiper = new Swiper(".mySwiper", {
-		slidesPerView: 2, // 한 줄에 3개의 슬라이드가 보임
+		slidesPerView: 3, // 한 줄에 3개의 슬라이드가 보임
 	  	grid: {
 	    	rows: 2,
 	   		fill: "row",
