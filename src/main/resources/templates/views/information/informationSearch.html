@@ -55,10 +55,12 @@
 																	<img th:src="@{/files/information/{img}(img=${lecture.file1})}" alt="이미지를 찾을 수 없습니다.">
 																	<div class="texts">
 																		<strong>[[${lecture.title}]]</strong>
-																		<div>
-																			<p>등록일 : [[${lecture.regDate}]]</p>
-																			<p>작성자 : [[${lecture.userId}]]</p>
-																		</div>
+																		<span>
+																			<i data-color="2">등록일</i> [[${#dates.format(lecture.regDate, 'yyyy-HH-dd')}]]
+																		</span>
+																		<span>
+																			<i data-color="1">작성자</i> [[${lecture.userId}]]
+																		</span>
 																	</div>
 																	<a th:href="@{/information/lectureDetail(no=${lecture.recommendNo}, pageNum=${currentPage})}">
 																		<div class="cover-item">
@@ -85,10 +87,12 @@
 																	<img th:src="@{/files/information/{img}(img=${contest.file1})}" alt="이미지를 찾을 수 없습니다.">
 																	<div class="texts">
 																		<strong>[[${contest.title}]]</strong>
-																		<div>
-																			<p>기한 : [[${#dates.format(contest.startDate, 'yyyy-HH-dd')}]] ~ [[${#dates.format(contest.endDate, 'yyyy-HH-dd HH:mm')}]]</p>
-																			<p>주최기관 : [[${contest.hostOrganization}]]</p>
-																		</div>
+																		<span>
+																			<i data-color="2">기한</i> [[${#dates.format(contest.startDate, 'yyyy-HH-dd')}]] ~ [[${#dates.format(contest.endDate, 'yyyy-HH-dd HH:mm')}]]
+																		</span>
+																		<span>
+																			<i data-color="1">주최기관</i> [[${contest.hostOrganization}]]
+																		</span>
 																	</div>
 																	<a th:href="@{/information/contestDetail(no=${contest.contestNo}, pageNum=${currentPage})}">
 																		<div class="cover-item">
@@ -117,10 +121,12 @@
 																	<img th:src="@{/files/information/{img}(img=${book.file1})}" alt="이미지를 찾을 수 없습니다.">
 																	<div class="texts">
 																		<strong>[[${book.title}]]</strong>
-																		<div>
-																			<p>등록일 : [[${book.regDate}]]</p>
-																			<p>작성자 : [[${book.userId}]]</p>
-																		</div>
+																		<span>
+																			<i data-color="2">출판일</i> [[${#dates.format(book.pubDate, 'yyyy-MM-dd')}]]
+																		</span>
+																		<span>
+																			<i data-color="1">평점</i> [[${book.rating}]]
+																		</span>
 																	</div>
 																	<a th:href="@{/information/bookDetail(no=${book.bookNo}, pageNum=${currentPage})}">
 																		<div class="cover-item">
@@ -174,7 +180,7 @@
 <script>
 	
 const swiper = new Swiper(".mySwiper", {
-	slidesPerView: 3, // 한 줄에 3개의 슬라이드가 보임
+	slidesPerView: 4, // 한 줄에 4개의 슬라이드가 보임
   	grid: {
     	rows: 2,
    		fill: "row",

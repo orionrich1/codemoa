@@ -93,10 +93,12 @@
 															<img th:src="@{/files/information/{img}(img=${lecture.file1})}" alt="이미지를 찾을 수 없습니다.">
 															<div class="texts">
 																<strong>[[${lecture.title}]]</strong>
-																<div>
-																	<p>등록일 : [[${lecture.regDate}]]</p>
-																	<p>작성자 : [[${lecture.userId}]]</p>
-																</div>
+																<span>
+																	<i data-color="2">등록일</i> [[${#dates.format(lecture.regDate, 'yyyy-HH-dd')}]]
+																</span>
+																<span>
+																	<i data-color="1">작성자</i> [[${lecture.userId}]]
+																</span>
 															</div>
 															<a th:href="@{/information/lectureDetail(no=${lecture.recommendNo})}">
 																<div class="cover-item">
