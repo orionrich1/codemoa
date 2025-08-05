@@ -1,30 +1,42 @@
-//도영
 package com.codemoa.project.domain.chat.entity;
 
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
+@Getter
+@Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChatMessage {
 
-    private int chatId;         // chat_id (PK)
-    private String roomId;      // 채팅방을 구분하기 위한 ID
-    private String userId;      // user_id (FK, 메시지 보낸 사람)
-    private String message;     // 메시지 내용
-    private LocalDateTime regDate;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    // --- Getters and Setters ---
+    private String roomId;
+    private String sender; // 메시지 보낸 사람 (닉네임 또는 식별자)
 
-    public int getChatId() { return chatId; }
-    public void setChatId(int chatId) { this.chatId = chatId; }
+    @Column(columnDefinition = "TEXT")
+    private String message;
 
-    public String getRoomId() { return roomId; }
-    public void setRoomId(String roomId) { this.roomId = roomId; }
+    private LocalDateTime sentAt;
 
-    public String getUserId() { return userId; }
-    public void setUserId(String userId) { this.userId = userId; }
+    @Enumerated(EnumType.STRING)
+    private MessageType type;
 
-    public String getMessage() { return message; }
-    public void setMessage(String message) { this.message = message; }
+    public enum MessageType {
+        ENTER, TALK, QUIT
+    }
 
-    public LocalDateTime getRegDate() { return regDate; }
-    public void setRegDate(LocalDateTime regDate) { this.regDate = regDate; }
+    @Builder
+    public ChatMessage(MessageType type, String roomId, String sender, String message, LocalDateTime sentAt) {
+        this.type = type;
+        this.roomId = roomId;
+        this.sender = sender;
+        this.message = message;
+        this.sentAt = sentAt;
+    }
 }
