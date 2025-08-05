@@ -24,12 +24,11 @@ public class ProjectChecklist {
 	@Column(nullable = false, length = 255)
 	private String content;
 
-	@Column(nullable = false)
-	private Boolean isDone = false;
+	private Boolean done;
 
 	@Column(nullable = false)
 	private Integer priority = 3;
 
 	@Column(nullable = false, updatable = false)
-	private LocalDateTime createdAt = LocalDateTime.now();
+	private LocalDateTime createdAt = LocalDateTime.now();	
 }

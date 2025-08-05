@@ -11,10 +11,39 @@
 	</select>
 	
 	<select id="getProjectCheckList" resultType="ProjectChecklist">
-		SELECT * FROM project_checklist WHERE project_id=#{projectId}
+	    SELECT checklist_id,
+	           project_id,
+	           content,
+	           is_done AS done,
+	           priority,
+	           created_at
+	    FROM project_checklist
+	    WHERE project_id = #{projectId}
+	    ORDER BY checklist_id
 	</select>
 	
 	<select id="getProjectdiaries" resultType="ProjectDiary">
 		SELECT * FROM project_diary WHERE project_id=#{projectId}
 	</select>
+	
+	<insert id="addChecklist" parameterType="ChecklistCreateRequest" 
+	useGeneratedKeys="true" keyProperty="checklistId">
+		INSERT INTO project_checklist (project_id, content, is_done, priority) 
+		VALUES (#{projectId}, #{content}, 0, #{priority});
+    </insert>
+    
+    <select id="getNewProjectCheckList" parameterType="ProjectChecklist">
+	    SELECT checklist_id,
+	           project_id,
+	           content,
+	           is_done AS done,
+	           priority,
+	           created_at
+	    FROM project_checklist
+	    WHERE checklist_id = #{checklist_id}
+    </select>
+	
+	<update id="updateChecklist" parameterType="UpdateChecklistRequest">
+		UPDATE project_checklist SET is_done=#{done} WHERE checklist_id=#{no}
+	</update>
 </mapper>

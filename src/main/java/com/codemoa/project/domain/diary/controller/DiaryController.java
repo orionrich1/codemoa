@@ -2,7 +2,6 @@
 package com.codemoa.project.domain.diary.controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;

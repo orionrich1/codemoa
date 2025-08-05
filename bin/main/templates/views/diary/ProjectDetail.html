@@ -25,10 +25,10 @@
                 <li class="list-group-item d-flex justify-content-between align-items-center"
                     th:each="item : ${checklist}">
                     <span>
-                        <input class="form-check-input me-2" type="checkbox"
-                               th:checked="${item.isDone}" disabled />
+                        <input class="checkListBox form-check-input me-2" type="checkbox"
+                               th:checked="${item.done}" th:data-no="${item.checklistId}"/>
                         <span th:text="${item.content}">작업 내용</span>
-                    </span>
+                    </span>	
 					<span class="badge rounded-pill"
 					      th:switch="${item.priority}">
 					  <span th:case="1" class="priority-high">우선순위</span>
@@ -36,7 +36,25 @@
 					  <span th:case="* "class="priority-low">우선순위</span>
 					</span>
                 </li>
+                
+		        <li class="list-group-item checklist-add" data-bs-toggle="collapse" data-bs-target="#checklistForm">
+		            <div class="text-center" style="font-size: 1.5rem; color: #888;">＋</div>
+		        </li>
             </ul>
+            
+			<div class="collapse" id="checklistForm">
+			    <div class="card card-body">
+			        <form id="checklistAddForm" class="d-flex gap-2" th:data-id="${project.projectId}">
+			            <input type="text" name="content" id="newContent" class="form-control" placeholder="할 일 입력" required />
+			            <select name="priority" id="newPriority" class="form-select" style="width: 120px;">
+			                <option value="1">높음</option>
+			                <option value="2">중간</option>
+			                <option value="3">낮음</option>
+			            </select>
+			            <button type="submit" class="btn btn-success">추가</button>
+			        </form>
+			    </div>
+			</div>
         </div>
 
         <!-- 작업 일지 -->
@@ -53,5 +71,6 @@
             </div>
         </div>
     </div>
+    <script th:src="@{/js/mypage/diary.js}"></script>
 </div>
 </html>

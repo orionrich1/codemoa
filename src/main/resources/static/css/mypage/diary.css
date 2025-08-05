@@ -111,3 +111,17 @@
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
+
+.checklist-add {
+    border: 2px dashed #ccc;
+    background-color: #f8f9fa;
+    text-align: center;
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.checklist-add:hover {
+    background-color: #e9ecef;
+    border-color: #999;
+}
