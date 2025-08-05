@@ -1,4 +1,3 @@
-<!-- boardList.html -->
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default_layout}">
 
@@ -16,7 +15,6 @@
 		.pagination .page-item.disabled .page-link { color: #6c757d; }
 	</style>
 
-	<!-- Main Content -->
 	<div class="container my-5">
 		<div class="card">
 			<div class="card-header d-flex justify-content-between align-items-center">
@@ -43,7 +41,11 @@
 								<span th:text="${board.title}">게시글 제목입니다.</span>
 								<span class="badge bg-warning text-dark ms-2" th:if="${board.stakedPoints > 0}" th:text="|${board.stakedPoints}P|"> </span>
 							</td>
-							<td class="text-center" th:text="${board.authorNickname}">코드모아</td>
+							<td class="text-center">
+								<div class="d-flex justify-content-center">
+									<div th:replace="~{fragments/_userProfile :: userProfile(nickname=${board.authorNickname}, iconName=${board.authorGradeIconName})}"></div>
+								</div>
+							</td>
 							<td class="text-center d-none d-md-table-cell" th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd')}">2025-07-28</td>
 						</tr>
 						<tr th:if="${boards.empty}">
@@ -54,7 +56,6 @@
 				</div>
 			</div>
 
-			<!-- 검색 폼 -->
 			<div class="card-body border-top">
 				<form th:action="@{/community/{category}(category=${category})}" method="get" class="d-flex justify-content-center">
 					<div class="col-auto">
@@ -75,20 +76,16 @@
 			</div>
 
 			<div class="card-footer bg-white" th:if="${!boards.empty}">
-				<!-- Pagination -->
 				<nav aria-label="Page navigation">
 					<ul class="pagination justify-content-center mb-0">
-						<!-- 이전 블록 링크 -->
 						<li class="page-item" th:classappend="${startPage == 1} ? 'disabled'">
 							<a class="page-link" th:href="@{/community/{category}(category=${category}, page=${startPage - 2}, searchType=${searchType}, keyword=${keyword})}">이전</a>
 						</li>
 
-						<!-- 페이지 번호 링크 -->
 						<li class="page-item" th:each="page: ${#numbers.sequence(startPage, endPage)}" th:classappend="${page == nowPage} ? 'active'">
 							<a class="page-link" th:text="${page}" th:href="@{/community/{category}(category=${category}, page=${page - 1}, searchType=${searchType}, keyword=${keyword})}"></a>
 						</li>
 
-						<!-- 다음 블록 링크 -->
 						<li class="page-item" th:classappend="${endPage >= boards.totalPages} ? 'disabled'">
 							<a class="page-link" th:href="@{/community/{category}(category=${category}, page=${endPage}, searchType=${searchType}, keyword=${keyword})}">다음</a>
 						</li>

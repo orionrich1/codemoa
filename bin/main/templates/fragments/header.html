@@ -1,4 +1,3 @@
-<!-- header.html -->
 <div th:fragment="header" xmlns:th="http://www.thymeleaf.org"
      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 	<nav class="navbar navbar-expand-lg navbar-light bg-light py-3 shadow-sm">
@@ -73,7 +72,10 @@
 						<ul class="navbar-nav">
 							<li class="nav-item dropdown">
 								<a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
-									<span class="fw-bold" sec:authentication="principal.user.nickname"></span>
+									<div th:replace="~{fragments/_userProfile :: userProfile(
+										nickname=${#authentication.principal.user.nickname},
+										iconName=${#authentication.principal.user.grade.name().toLowerCase()}
+									)}"></div>
 								</a>
 								<ul class="dropdown-menu dropdown-menu-end rounded-3">
 									<li><a class="dropdown-item" href="/my-pages"><i class="bi bi-person-circle me-2"></i>마이페이지</a></li>

@@ -6,17 +6,20 @@ import lombok.Getter;
 @Getter
 public class UserRankingResponse {
 
-    private final int rank;             // 순위
-    private final String nickname;      // 닉네임
-    private final String gradeName;     // 등급명 (예: "골드")
-    private final int totalPoints;      // 전체 누적 포인트
-    private final long weeklyPoints;    // 주간 획득 포인트
+    private final int rank;
+    private final String nickname;
+    private final String gradeName;
+    private final long weeklyPoints;
+    private final int totalPoints;
+    private final String gradeIconName; // ▼▼▼ [필드 추가] ▼▼▼
 
     public UserRankingResponse(int rank, User user, long weeklyPoints) {
         this.rank = rank;
         this.nickname = user.getNickname();
         this.gradeName = user.getGrade().getGradeName();
-        this.totalPoints = user.getTotalPoints();
         this.weeklyPoints = weeklyPoints;
+        this.totalPoints = user.getTotalPoints();
+        // ▼▼▼ [로직 추가] Enum의 영문 이름을 소문자로 변환하여 저장합니다. (예: "bronze") ▼▼▼
+        this.gradeIconName = user.getGrade().name().toLowerCase();
     }
 }
