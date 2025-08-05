@@ -48,6 +48,9 @@ public class User {
     @Column(name = "grade", nullable = false)
     private UserGrade grade;
     // ▲▲▲▲▲ [수정된 부분 끝] ▲▲▲▲▲
+    
+    @Column(name = "user_position")
+    private String userPosition;
 
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

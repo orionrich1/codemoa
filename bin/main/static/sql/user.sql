@@ -34,6 +34,7 @@ CREATE TABLE user (
     membership_date DATETIME NOT NULL COMMENT '가입일',
     unban_date DATETIME NOT NULL COMMENT '차단 해제일',
     grade VARCHAR(255) NOT NULL COMMENT '사용자 등급 (Enum 이름)',
+    user_position VARCHAR(10) DEFAULT 'USER' COMMENT '유저 직책',
     PRIMARY KEY (user_id)
 ) COMMENT '사용자 기본 정보';
 
@@ -142,6 +143,9 @@ INSERT INTO point_log (user_id, points, description, event_type, created_at) VAL
 ('user09', 5, '댓글 작성', 'CREATE_COMMENT', NOW() - INTERVAL 2 DAY),
 ('user03', 10, '일일 로그인', 'DAILY_LOGIN', NOW() - INTERVAL 3 DAY),
 ('user05', 10, '일일 로그인', 'DAILY_LOGIN', NOW() - INTERVAL 4 DAY);
+
+-- 3-6. 어드민 계정 수정
+UPDATE user SET user_position='ADMIN' WHERE user_id='admin';
 
 -- ====================================================================================
 -- 4. 데이터 삽입 확인 (SELECT)
