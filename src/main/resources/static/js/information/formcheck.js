@@ -162,4 +162,12 @@ $(function() {
 		$("#checkForm").attr("method","post");
 		$("#checkForm").submit();
 	});
+	
+	$(".searchbox").on("submit", function() {
+		if($("#hiddenType").val() == "") {
+			alert("검색 옵션을 선택해주세요.");
+			return false;
+		}
+	});
+	
 });

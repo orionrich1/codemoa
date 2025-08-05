@@ -15,13 +15,10 @@
 					class="row g-3 border-primary" method="post" enctype="multipart/form-data">
 					<input type="hidden" name="recommendNo" th:value="${lecture.recommendNo}">
 
-					<div class="col-4 offset-md-2">
-						<!--  
+					<div class="col-8 offset-md-2"> 
 						<label for="writer" class="form-label">글쓴이</label>
 						<input type="text" class="form-control" name="writer" id="writer" 
 							placeholder="작성자를 입력해 주세요" th:value="${lecture.userId}" readonly>
-						-->
-						<p>작성자 : [[${lecture.userId}]]</p>
 					</div>
 
 					<div class="col-8 offset-md-2">

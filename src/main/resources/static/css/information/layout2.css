@@ -28,6 +28,8 @@ a, a:hover {
   text-decoration: none;
 }
 
+li {list-style: none;}
+
 header, nav, aside, section, address, article, main, footer, hgroup, div {
     display: block;
 }
@@ -65,196 +67,55 @@ form, div, p, span, ul, li, dl, dt, textarea, h1, h2, h3, h4 {
     font-weight: 500;
 }
 
-/* Section 01 Styles */
-#section01 {
-    background-color: #D6DDFA;
-    margin: 0;
-  	padding: 0;
-}
 
-#section01 .layout {
-  width: 100vw;
-  max-width: none;
-  margin: 0;
-  padding: 0;
+/***서브 컨테이너***/
+#container{}
+#container #spot{
+	position: relative; height: 4rem;
 }
-
-#section01 .in {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: flex-end;
-    position: relative;
-    height: 36.25rem;
-    
+#container #spot .layout{height: 100%;}
+#container #spot .layout .in{
+	display: flex; flex-wrap: wrap; align-items: center; position: relative; height: 100%; padding-top: 3.75rem;
 }
-
-#section01 .in .l {
-    width: 100%;
-    padding: 6.25rem 4rem;
+#container #spot .layout .in .tit{
+	display: block; position: relative; width: 100%; padding-bottom: 1rem; text-align: center; font-size: 2.5rem; font-weight: 600; color: #000;
 }
-
-#section01 .in .l strong {
-    display: block;
+#container #spot .layout .in .tit:before{
+	content: ""; display: block; position: absolute; bottom: 0; left: 50%; width: 1.875rem; height: 0.3125rem; background-color: #413C7F;
 }
-
-#section01 .in .l strong i {
-    font-size: 2.1875rem;
-    font-weight: 600;
-    letter-spacing: -0.7px;
-    color: #2C2859;
-    font-style: normal;
+#container #spot .layout .in .t_wrap{display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; position: absolute; top: 0; left: 0; width: 100%; background-color: #413C7F;}
+#container #spot .layout .in .t_wrap:before{content: ""; display: block; position: absolute; top: 0; right: 100%; width: 1000vw; height: 100%; background-color: #413C7F;}
+#container #spot .layout .in .t_wrap:after{content: ""; display: block; position: absolute; top: 0; left: 100%; width: 1000vw; height: 100%; background-color: #413C7F;}
+#container #spot .layout .in .t_wrap #lnb{}
+#container #spot .layout .in .t_wrap #lnb >ul{display: table; table-layout: fixed; height: 3.75rem;}
+#container #spot .layout .in .t_wrap #lnb >ul >li{
+	display: table-cell; height: 100%; width: 15.625rem; vertical-align: middle;
 }
-
-#section01 .in .l strong span {
-    margin-top: 0.2rem;
-    font-size: 3.125rem;
-    color: #413C7F;
-    font-weight: 700;
+#container #spot .layout .in .t_wrap #lnb >ul >li >a{
+	display: flex; align-items: center; justify-content: center; height: 100%; padding: 0.5rem 1rem; text-align: center; 
+	color: #fff; background-color: transparent;
 }
-
-#section01 .in .l b {
-    color: #302B75;
-    font-size: 3.75rem;
-    letter-spacing: -1.2px;
-    font-weight: 700;
+#container #spot .layout .in .t_wrap #lnb >ul >li >a:hover,
+#container #spot .layout .in .t_wrap #lnb >ul >li.active >a{background-color: rgba(0, 0, 0, 0.30);}
+#container #spot .layout .in .t_wrap .navi{display: flex; flex-wrap: wrap; align-items: center;}
+#container #spot .layout .in .t_wrap .navi li{
+	margin-left: 0.25rem; margin-right: 3.25rem; line-height: 3.2rem;
 }
-
-#section01 .in .l b i {
-    color: #796AB4;
-    font-weight: 500;
-    font-style: normal;
-    font-size: 1.5625rem;
-    letter-spacing: -0.5px;
+#container #spot .layout .in .t_wrap .navi li:first-child{margin-left: 0;}
+#container #spot .layout .in .t_wrap .navi li:not(:first-child):before{
+	content: ""; display: inline-block; width: 1.5rem; height: 1.5rem; margin-right: 0.25rem; 
+	vertical-align: middle; background-size: 100% auto;
 }
-
-#section01 .in .l b i em {
-    color: #413C7F;
+#container #spot .layout .in .t_wrap .navi li a{
+	display: inline-block; font-size: 1rem; line-height: 1.5rem; font-weight: 400; color: #fff;
 }
-
-#section01 .in .r {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: flex-end;
-    padding-right: 3rem;
-    position: absolute;
-    bottom: -3.4375rem;
-    right: 2rem;
-    z-index: 11;
-    width: 100%;
-    max-width: 44.375rem;
-    background: linear-gradient(94deg, #413C7F 0.62%, #60679D 41.51%, #B07AA3 100%);
-    box-shadow: 3px 3px 20px 0px rgba(0, 0, 0, 0.30);
-    border-radius: 15px;
+#container #spot .layout .in .t_wrap .navi li a:hover{text-decoration: underline; text-underline-position: under;}
+#container #spot .layout .in .t_wrap .navi li:first-child a{
+	width: 1.5rem; height: 1.5rem; text-indent: -9999px; background-size: 100% auto;
 }
+#container #content{padding-bottom: 6.25rem;}
+#container #content #txts{position: relative; }
 
-#section01 .in .r .boxs {
-    overflow: hidden;
-    position: relative;
-    width: 100%;
-    padding: 2.5rem 3rem;
-}
-
-#section01 .in .r .boxs:before {
-    content: "Search";
-    position: absolute;
-    top: -1.4rem;
-    right: 0;
-    color: rgba(221, 229, 255, 0.05);
-    font-weight: 600;
-    font-size: 5.9375rem;
-    line-height: 1;
-}
-
-#section01 .in .r .boxs strong {
-    color: #fff;
-    font-size: 1.875rem;
-    font-weight: 500;
-}
-
-#section01 .in .r .boxs .searchbox {
-    display: flex;
-    overflow: hidden;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    justify-content: space-between;
-    position: relative;
-    margin-top: 1.5rem;
-}
-
-#section01 .in .r .boxs .searchbox input {
-    width: calc(100% - 3.4375rem);
-    padding: 0.875rem 1.25rem;
-    font-size: 1rem;
-    color: #fff;
-    border: 2px solid #FFF;
-    border-right: 0;
-    background-color: transparent;
-    border-radius: 10px 0 0 10px;
-}
-
-#section01 .in .r .boxs .searchbox input::placeholder {
-    color: #fff;
-    font-weight: 400;
-    font-size: 1rem;
-}
-
-#section01 .in .r .boxs .searchbox button {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 3.4375rem;
-    height: 100%;
-    background-color: #413C7F;
-    border-radius: 0 10px 10px 0;
-    text-indent: 0px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: none !important;
-	outline: none;
-}
-
-#section01 .in .r .boxs .searchbox button i {
-  font-size: 1.25rem; /* 아이콘 크기 */
-  color: white;        /* 아이콘 색상 */
-}
-
-
-#section01 .in .r .boxs .searchbox button:before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;  
-    height: 100%;
-    background: url(../images/main/sec01_img01.svg) no-repeat center center;
-    background-size: 1.5rem auto;
-}
-
-#section01 .in .r .boxs span {
-    margin-top: 1.5rem;
-}
-
-#section01 .in .r .boxs span em {
-    display: inline-block;
-    margin-right: 1.375rem;
-    color: #FFF;
-    font-weight: 400;
-}
-
-#section01 .in .r .boxs span i {
-    display: inline-block;
-    margin-right: 1.5625rem;
-    font-style: normal;
-    color: #fff;
-    font-weight: 300;
-}
-
-#section01 .in .r .boxs span i:last-of-type {
-    margin-right: 0;
-}
 
 
 
@@ -329,12 +190,9 @@ form, div, p, span, ul, li, dl, dt, textarea, h1, h2, h3, h4 {
     position: relative;
 }
 
-#section02 [data-skin="tab"] > ul > li.more select {
+#section02 [data-skin="tab"] > ul > li.more > a > span {
     display: block;
     padding-right: 1.25rem;
-    border: none;
-    outline: none; /* 선택 시 생기는 파란 테두리 제거 (선택사항) */
-    background-color: transparent; /* 배경 투명하게 하려면 */
 }
 
 #section02 [data-skin="tab"] > ul > li.more > a > span:before,

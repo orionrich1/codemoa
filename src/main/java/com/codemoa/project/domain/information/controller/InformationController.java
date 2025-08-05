@@ -36,16 +36,6 @@ public class InformationController {
 	@Autowired
 	private InformationService informationService;
 	
-	@GetMapping("/test")
-	public String test() {
-		return "views/information/test";
-	}
-	
-	@GetMapping("/test2")
-	public String test2() {
-		return "views/information/test2";
-	}
-	
 	@GetMapping("/information")
 	public String informationMain(Model model,
 			@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
@@ -85,6 +75,23 @@ public class InformationController {
 		model.addAllAttributes(informationService.contestList(pageNum, type, keyword, 8, 10));
 		return "views/information/informationList2";
 	}
+	
+	@GetMapping("/information/searchResult")
+	public String searchResult(Model model,
+			@RequestParam(value = "totalSearchText") String keyword,
+			@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+			@RequestParam(value = "type") String type) {
+		
+		log.info(type, "123456");
+		model.addAttribute("lectureMap",informationService.lectureList(pageNum, type, keyword, 100, 10));
+		model.addAttribute("contestMap",informationService.contestList(pageNum, type, keyword, 100, 10));
+		model.addAttribute("bookMap",informationService.bookList(pageNum, type, keyword, 100, 10));
+		
+		model.addAttribute("keyword", keyword);
+		
+		return "views/information/informationSearch";
+	}
+	
 	
 	// lecture 관련
 	
@@ -148,7 +155,7 @@ public class InformationController {
 		
 		informationService.updateLecture(lecture);
 
-		return "redirect:/information/lectureList";
+		return "redirect:/information/lecture";
 	}
 
 	@PostMapping("/information/lectureDelete")
@@ -170,7 +177,7 @@ public class InformationController {
 
 		reAttrs.addAttribute("pageNum", pageNum);
 		reAttrs.addFlashAttribute("test1", "1회성 파라미터");
-		return "redirect:/information/lectureList";
+		return "redirect:/information/lecture";
 	}
 	
 	@GetMapping("/information/lectureAdd")
@@ -195,7 +202,7 @@ public class InformationController {
 		// 게시글 쓰기가 완료되면 게시글 리스트로 리다이렉트 시킨다.
 		
 		// 리다이렉트 : 같은 글이 계속 들어가지 않게
-		return "redirect:/information/lectureList";
+		return "redirect:/information/lecture";
 	}
 	
 	
@@ -276,7 +283,7 @@ public class InformationController {
 		// return "redirect:boardList?pageNum=" + pageNum;
 		reAttrs.addAttribute("pageNum", pageNum);
 		reAttrs.addFlashAttribute("test1", "1회성 파라미터");
-		return "redirect:/information/bookList";
+		return "redirect:/information/book";
 	}
 
 	@PostMapping("/information/bookDelete")
@@ -298,7 +305,7 @@ public class InformationController {
 
 		reAttrs.addAttribute("pageNum", pageNum);
 		reAttrs.addFlashAttribute("test1", "1회성 파라미터");
-		return "redirect:/information/bookList";
+		return "redirect:/information/book";
 	}
 	
 	@GetMapping("/information/bookAdd")
@@ -324,7 +331,7 @@ public class InformationController {
 		// 게시글 쓰기가 완료되면 게시글 리스트로 리다이렉트 시킨다.
 		
 		// 리다이렉트 : 같은 글이 계속 들어가지 않게
-		return "redirect:/information/bookList";
+		return "redirect:/information/book";
 	}
 	
 	
@@ -406,7 +413,7 @@ public class InformationController {
 		// return "redirect:boardList?pageNum=" + pageNum;
 		reAttrs.addAttribute("pageNum", pageNum);
 		reAttrs.addFlashAttribute("test1", "1회성 파라미터");
-		return "redirect:/information/contestList";
+		return "redirect:/information/contest";
 	}
 
 	@PostMapping("/information/contestDelete")
@@ -428,7 +435,7 @@ public class InformationController {
 
 		reAttrs.addAttribute("pageNum", pageNum);
 		reAttrs.addFlashAttribute("test1", "1회성 파라미터");
-		return "redirect:/information/contestList";
+		return "redirect:/information/contest";
 	}
 	
 	@GetMapping("/information/contestAdd")
@@ -458,7 +465,7 @@ public class InformationController {
 		// 게시글 쓰기가 완료되면 게시글 리스트로 리다이렉트 시킨다.
 		
 		// 리다이렉트 : 같은 글이 계속 들어가지 않게
-		return "redirect:/information/contestList";
+		return "redirect:/information/contest";
 	}
 	
 	

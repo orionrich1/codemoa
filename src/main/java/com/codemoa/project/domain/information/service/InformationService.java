@@ -61,6 +61,13 @@ public class InformationService {
 		}
 		
 		List<Lecture> lList = informationRecommendMapper.getlectureList(startRow, pageSize, type, keyword);
+		// 리스트 내용을 출력
+		
+//		for (Lecture lecture : lList) {
+//		    log.info("LectureNo: {}, Title: {}, Writer: {}", 
+//		             lecture.getRecommendNo(), lecture.getTitle(), lecture.getUserId());
+//		}
+		
 		
 		Map<String, Object> modelMap = new HashMap<>();
 		modelMap.put("lList", lList);

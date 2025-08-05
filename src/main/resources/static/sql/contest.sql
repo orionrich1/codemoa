@@ -6,7 +6,7 @@ use springboot;
 ## recommendList 테이블
 drop table if exists contest;
 CREATE TABLE IF NOT EXISTS contest (
-    recommend_no INTEGER AUTO_INCREMENT PRIMARY KEY,
+    contest_no INTEGER AUTO_INCREMENT PRIMARY KEY,
     user_id VARCHAR(20) NOT NULL,
     title VARCHAR(100) NOT NULL,
     host_organization VARCHAR(300),  
@@ -857,18 +857,23 @@ https://dacon.io/competitions/official/236531/overview/description
 
 대회 홈페이지 내 규칙 탭 (https://dacon.io/competitions/official/236531/overview/rules) 참고하여
 
-대회 홈페이지 내 토론 탭 (https://dacon.io/competitions/official/236531/talkboard)에 문의' -- 내용
+대회 홈페이지 내 토론 탭 (https://dacon.io/competitions/official/236531/talkboard)에 문의', -- 내용
+'8d8dd605330c49489eac9664fb4eea45.png'
 );
 
-insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content)
-values('admin',
-'2025년 통일부 공공데이터 활용 공모전', -- 제목
-'통일부', -- 주최기관
-now(), -- 등록일
-'2025-07-07 00:00:00', -- 시작일 '2025-07-23 00:00:00'
-'2025-08-08 18:00:00', -- 마감일
-'https://www.allforyoung.com/posts/67504', -- 출처
-'통일부에서는 통일 공공데이터에 대한 민간의 활용과 관심 촉진을 위해 ｢2025년 통일부 공공데이터 활용 공모전｣을 개최합니다. 국민 여러분의 많은 관심과 참여를 바랍니다.
+INSERT INTO contest(
+    user_id, title, host_organization, reg_date, start_date, end_date, 
+    contest_source, content, file1
+)
+VALUES (
+    'admin',
+    '2025년 통일부 공공데이터 활용 공모전',
+    '통일부',
+    NOW(),
+    '2025-07-07 00:00:00',  -- 시작일
+    '2025-08-08 18:00:00',  -- 마감일
+    'https://www.allforyoung.com/posts/67504',
+    '통일부에서는 통일 공공데이터에 대한 민간의 활용과 관심 촉진을 위해 ｢2025년 통일부 공공데이터 활용 공모전｣을 개최합니다. 국민 여러분의 많은 관심과 참여를 바랍니다.
 
 o 공모 부문
 
@@ -906,9 +911,10 @@ o 시상 내역 : 전체 10명(팀), 총상금 410만원, 통일부장관상
 
 o 문의 사항
 
-- 통일부 정보화담당관 02-2100-5746, 5992 / data@unikorea.go.kr', -- 내용
-'533cd7c2-f5d0-4550-bddb-a64aa6914b4c.png'
+- 통일부 정보화담당관 02-2100-5746, 5992 / data@unikorea.go.kr',
+    '533cd7c2-f5d0-4550-bddb-a64aa6914b4c.jpg'
 );
+
 
 insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content, file1)
 values('admin',
