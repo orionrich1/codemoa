@@ -31,10 +31,10 @@
 
 					<li class="nav-item dropdown"><a class="nav-link dropdown-toggle fw-bold" href="#" role="button" data-bs-toggle="dropdown">IT 정보</a>
 						<ul class="dropdown-menu">
-							<li><a class="dropdown-item" href="/information/bookList">도서 추천</a></li>
-							<li><a class="dropdown-item" href="/information/lectureList">강좌 추천</a></li>
-							<li><a class="dropdown-item" href="/information">유용한 사이트</a></li>
-							<li><a class="dropdown-item" href="/information/contestList">공모전 정보</a></li>
+							<li><a class="dropdown-item" th:href="@{/information/book}">도서 추천</a></li>
+							<li><a class="dropdown-item" th:href="@{/information/lecture}">강좌 추천</a></li>
+							<li><a class="dropdown-item" th:href="@{/information}">메인 페이지</a></li>
+							<li><a class="dropdown-item" th:href="@{/information/contest}">공모전 정보</a></li>
 						</ul></li>
 
 					<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">채용 & 팀</a>
@@ -45,8 +45,8 @@
 
 					<li class="nav-item dropdown"><a class="nav-link dropdown-toggle fw-bold" href="#" role="button" data-bs-toggle="dropdown">고객센터</a>
 						<ul class="dropdown-menu">
-							<li><a class="dropdown-item" href="/boardList">Q&A</a></li>
-							<li><a class="dropdown-item" href="/boardList2">FAQ</a></li>
+							<li><a class="dropdown-item" th:href="@{/boardList}">Q&A</a></li>
+							<li><a class="dropdown-item" th:href="@{/boardList2}">FAQ</a></li>
 						</ul></li>
 				</ul>
 
