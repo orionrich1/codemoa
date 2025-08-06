@@ -13,6 +13,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,6 +31,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.codemoa.project.domain.recruit.entity.TeamRecruit;
 import com.codemoa.project.domain.recruit.service.TeamRecruitService;
+import com.codemoa.project.domain.user.security.CustomUserDetails;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -45,41 +47,44 @@ public class TeamRecruitController {
 	@Autowired
 	private TeamRecruitService teamRecruitService;
 	
-	private String getLoginUserId(HttpSession session) {
-	    return (String) session.getAttribute("loginId");
-	}
-	
+
 	@GetMapping("/TeamRecruitList")
 	public String redirectTeamRecruitList() {
 		return "redirect:/teamRecruitList";
 	}
 	
 	@DeleteMapping("/recruit/{recruitId}")
-	public ResponseEntity<?> deleteRecruit(@PathVariable("recruitId") int recruitId, HttpSession session){
-	
-		 String loginId = (String) session.getAttribute("loginId");
-		 TeamRecruit teamRecruit = teamRecruitService.getTeamRecruit(recruitId);
-		 if (teamRecruit == null || !teamRecruit.getUserId().equals(loginId)){
-		 	return ResponseEntity.status(HttpStatus.FORBIDDEN).body("삭제 원한이 없습니다.");
-		 }
-		boolean result = teamRecruitService.deleteRecruit(recruitId);
-		if(result) {
-			return ResponseEntity.ok().body("삭제 완료");
-		} else {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("삭제 실패");
-		}
-		
+	public ResponseEntity<?> deleteRecruit(@PathVariable("recruitId") int recruitId,
+	                                       @AuthenticationPrincipal CustomUserDetails principal){
+	    if (principal == null) {
+	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+	    }
+	    String loginId = principal.getUsername();
+
+	    TeamRecruit teamRecruit = teamRecruitService.getTeamRecruit(recruitId);
+	    if (teamRecruit == null || !teamRecruit.getUserId().equals(loginId)){
+	        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("삭제 권한이 없습니다.");
+	    }
+	    boolean result = teamRecruitService.deleteRecruit(recruitId);
+	    if(result) {
+	        return ResponseEntity.ok().body("삭제 완료");
+	    } else {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("삭제 실패");
+	    }
 	}
 	
 	
 	@GetMapping("/recruit/updateForm")
-	public String showUpdateForm(@RequestParam("recruitId") int recruitId, HttpSession session, Model model, HttpServletResponse response) throws IOException {
+	public String showUpdateForm(@RequestParam("recruitId") int recruitId, 
+			@AuthenticationPrincipal CustomUserDetails principal, Model model, 
+			HttpServletResponse response) throws IOException {
 	   
-		String loginId = (String) session.getAttribute("loginId");
-	    if(loginId == null) {
-	        response.sendRedirect("/login"); // 로그인 페이지로 리다이렉트
+		
+	    if(principal == null) {
+	        response.sendRedirect("/loginForm"); // 로그인 페이지로 리다이렉트
 	        return null;
 	    }
+	    String loginId = principal.getUsername();
 
 	    boolean userIdCheck = teamRecruitService.userIdCheck(recruitId, loginId);
 	    if(!userIdCheck) {
@@ -135,16 +140,17 @@ public class TeamRecruitController {
 	@PostMapping("/recruit/write")
 	public String writeRecruit(TeamRecruit teamRecruit, 
 			@RequestParam(value = "attachmentFile", required = false) MultipartFile attachmentFile,
-			RedirectAttributes redirectAttrs, HttpSession session) {
+			RedirectAttributes redirectAttrs, 
+			@AuthenticationPrincipal CustomUserDetails principal) {
 		log.info("팀 모집 등록 요청 title={}", teamRecruit.getTitle());
 		
 		
-	    String loginId = getLoginUserId(session);
-	    if(loginId == null) {
-	    	redirectAttrs.addFlashAttribute("errorMsg", "로그인이 필요합니다.");
-	    	return "redirect:/loginForm";
+		if (principal == null) {
+			redirectAttrs.addFlashAttribute("errorMsg", "로그인이 필요합니다.");
+			return "redirect:/loginForm";
 	    }
-	    teamRecruit.setUserId(loginId);
+		String loginId = principal.getUsername();
+		teamRecruit.setUserId(loginId);
 		
 		if("TEAM_JOIN".equals(teamRecruit.getRecruitType())) {
 			teamRecruit.setRemainingMembers(0);
@@ -191,7 +197,7 @@ public class TeamRecruitController {
 	@GetMapping("/teamRecruitDetail")
 	public String getTeamRecruit(Model model, 
 			@RequestParam("recruitId") int recruitId,
-			HttpSession session) {
+			@AuthenticationPrincipal CustomUserDetails principal) {
 		teamRecruitService.increaseViewCount(recruitId);
 		
 		TeamRecruit teamRecruit = teamRecruitService.getTeamRecruit(recruitId);
@@ -199,8 +205,11 @@ public class TeamRecruitController {
 		
 		 model.addAttribute("teamRecruit", teamRecruit);
 		
-		String loginId = (String) session.getAttribute("loginId");
-		model.addAttribute("loginId", loginId);
+		 if(principal != null) {
+			   model.addAttribute("loginId", principal.getUsername());
+		    } else {
+		        model.addAttribute("loginId", null);
+		    }
 		
 		return "views/recruit/teamRecruitDetail";
 	}
@@ -210,9 +219,10 @@ public class TeamRecruitController {
 	public String TeamRecruitList(Model model, 
 			@RequestParam(value = "pageNum", required=false, defaultValue="1") int pageNum,
 			@RequestParam(value = "type", required=false, defaultValue="") String type,
-			@RequestParam(value = "keyword", required=false, defaultValue="") String keyword
+			@RequestParam(value = "keyword", required=false, defaultValue="") String keyword,
+			@AuthenticationPrincipal CustomUserDetails principal
 			) {
-		try {
+		
 		if("null".equalsIgnoreCase(type)) type ="";
 		if("null".equalsIgnoreCase(keyword)) keyword = "";
 		
@@ -221,10 +231,13 @@ public class TeamRecruitController {
 		
 		model.addAttribute("type", type);
 		model.addAttribute("keyword", keyword);
-		} catch(Exception e) {
-	        log.error("TeamRecruitList 오류 발생", e);
-	        throw e;  // 또는 적절히 처리
-	    }
+		
+		 if (principal != null) {
+		        model.addAttribute("loginId", principal.getUsername());
+		    } else {
+		        model.addAttribute("loginId", null);
+		    }
+		 
 		return "views/recruit/teamRecruitList";
 	}
 }
