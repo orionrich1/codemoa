@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS book (
     isbn VARCHAR(60),
     total_page_num INTEGER,
     view_count INTEGER DEFAULT 0
+    -- FOREIGN KEY (user_id) REFERENCES user(user_id)
 );
  
  insert into book(user_id, title, publisher, reg_date, pub_date, book_source, content, file1, rating, isbn, total_page_num)

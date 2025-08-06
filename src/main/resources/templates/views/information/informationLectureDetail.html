@@ -71,9 +71,9 @@
 								<tr>
 									<td colspan="4" style="white-space: pre-wrap; max-width: 400px; word-wrap: break-word;">[[${lecture.content2}]]</td>
 								</tr>
-								<tr>
+								<!-- <tr>
 									<td colspan="4">출처 : [[${lecture.lectureSource}]]</td>
-								</tr>
+								</tr> -->
 								<tr>
 									<th:block th:if="${lecture.file1}">
 										<td colspan="4">
@@ -99,12 +99,12 @@
 						<!-- /* 일반 게시글 리스트에서 온 경우 */ -->
 						<th:block th:unless="searchOption">
 							<input class="btn btn-primary" type="button" value="목록보기"
-								th:onclick="@{|location.href='lectureList?pageNum=${pageNum}'|}"/>
+								th:onclick="@{|location.href='lecture?pageNum=${pageNum}'|}"/>
 						</th:block>						
 						<!-- /* 검색 게시글 리스트에서 온 경우 */ -->
 						<th:block th:if="searchOption">
 							<input class="btn btn-primary" type="button" value="목록보기"
-								th:onclick="@{|location.href='lectureList?pageNum=${pageNum}&type=${type}&keyword=${keyword}'|}"/>
+								th:onclick="@{|location.href='lecture?pageNum=${pageNum}&type=${type}&keyword=${keyword}'|}"/>
 						</th:block>						
 					</div>
 				</div>

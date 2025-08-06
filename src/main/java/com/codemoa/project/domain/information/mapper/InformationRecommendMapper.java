@@ -31,7 +31,7 @@ public interface InformationRecommendMapper {
 	// 도서 관련
 	
 	List<Book> getBookList(@Param("startRow") int startRow, @Param("num") int num,
-			@Param("type") String type, @Param("keyword") String keyword);
+			@Param("type") String type, @Param("keyword") String keyword, @Param("order") String order);
 
 	Book getBook(int no);
 	

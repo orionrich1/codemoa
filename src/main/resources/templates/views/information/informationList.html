@@ -23,7 +23,10 @@
 								<li class="active"><a href="javascript:goMenu(&#39;/reqst/combine/eCombineList.do&#39;,&#39;null&#39;);"><span>Contents</span></a></li></ul>
 							</div>
 							<ul class="navi">
-							<li><a href="https://library.nih.go.kr/spec/main.do">HOME</a></li><li><a href="https://library.nih.go.kr/spec/reqst/combine/eCombineList.do?#">통합검색</a></li><li><a href="https://library.nih.go.kr/spec/reqst/combine/eCombineList.do?#">Contents</a></li></ul>
+								<li><a href="https://library.nih.go.kr/spec/main.do">HOME</a></li>
+								<li><a th:href="@{/information}">통합검색</a></li>
+								<li><a th:href="@{lectureAdd}">글쓰기</a></li>
+							</ul>
 						</div>
 					</div>
 				</div>
@@ -45,12 +48,14 @@
 														<img th:src="@{/files/information/{img}(img=${lecture.file1})}" alt="이미지를 찾을 수 없습니다.">
 														<div class="texts">
 															<strong>[[${lecture.title}]]</strong>
-															<div>
-																<p>등록일 : [[${lecture.regDate}]]</p>
-																<p>작성자 : [[${lecture.userId}]]</p>
-															</div>
+															<span>
+																<i data-color="2">등록일</i> [[${#dates.format(lecture.regDate, 'yyyy-HH-dd')}]]
+															</span>
+															<span>
+																<i data-color="1">작성자</i> [[${lecture.userId}]]
+															</span>
 														</div>
-														<a th:href="@{/information/lectureDetail(no=${lecture.recommendNo})}">
+														<a th:href="@{/information/lectureDetail(no=${lecture.recommendNo}, pageNum=${currentPage})}">
 															<div class="cover-item">
 																<div class="cover-text">
 																	<span class="cover-label"></span>

@@ -11,6 +11,17 @@
 
 	<select id="getlectureList" parameterType="map">
 		select * from lecture
+		<where>
+			<if test="type == 'title'">
+				title like CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="type == 'writer'">
+				user_id like CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="type == 'content'">
+				content1 like CONCAT('%', #{keyword}, '%')
+			</if>
+		</where>
 		ORDER BY recommend_no DESC
 		LIMIT #{startRow}, #{num}	
 	</select>
@@ -23,10 +34,10 @@
 				title like CONCAT('%', #{keyword}, '%')
 			</if>
 			<if test="type == 'writer'">
-				writer like CONCAT('%', #{keyword}, '%')
+				user_id like CONCAT('%', #{keyword}, '%')
 			</if>
 			<if test="type == 'content'">
-				content like CONCAT('%', #{keyword}, '%')
+				content1 like CONCAT('%', #{keyword}, '%')
 			</if>
 		</where>
 	</select>
@@ -60,7 +71,39 @@
 
 	<select id="getBookList" parameterType="map">
 		select * from book
-		ORDER BY book_no DESC
+		<where>
+			<if test="type == 'title'">
+				title like CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="type == 'writer'">
+				user_id like CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="type == 'content'">
+				content like CONCAT('%', #{keyword}, '%')
+			</if>
+		</where>
+		
+		<!-- 동적 정렬 -->
+		<choose>
+			<when test="order == 'rating'">
+				ORDER BY rating desc
+			</when>
+			<when test="order == 'pubDate'">
+				ORDER BY pub_date desc
+			</when>
+			<otherwise>
+				ORDER BY book_no desc
+			</otherwise>
+		</choose>
+	
+		<!-- <choose>
+			<when test="orderDir == 'asc' or orderDir == 'ASC'">
+				ASC
+			</when>
+			<otherwise>
+				DESC
+			</otherwise>
+		</choose>  -->
 		LIMIT #{startRow}, #{num}	
 	</select>
 	
@@ -72,7 +115,7 @@
 				title like CONCAT('%', #{keyword}, '%')
 			</if>
 			<if test="type == 'writer'">
-				host_organization like CONCAT('%', #{keyword}, '%')
+				user_id like CONCAT('%', #{keyword}, '%')
 			</if>
 			<if test="type == 'content'">
 				content like CONCAT('%', #{keyword}, '%')
@@ -90,7 +133,7 @@
 	</update>
 	
 	<delete id="deleteBook">
-		delete from contest where contest_no = #{no}
+		delete from book where book_no = #{no}
 	</delete>
 
 	<insert id="addBook" parameterType="com.codemoa.project.domain.information.entity.Book">
@@ -110,7 +153,18 @@
 
 	<select id="getContestList" parameterType="map">
 		select * from contest
-		ORDER BY recommend_no DESC
+		<where>
+			<if test="type == 'title'">
+				title like CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="type == 'writer'">
+				user_id like CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="type == 'content'">
+				content like CONCAT('%', #{keyword}, '%')
+			</if>
+		</where>
+		ORDER BY contest_no DESC
 		LIMIT #{startRow}, #{num}	
 	</select>
 	
@@ -122,7 +176,7 @@
 				title like CONCAT('%', #{keyword}, '%')
 			</if>
 			<if test="type == 'writer'">
-				host_organization like CONCAT('%', #{keyword}, '%')
+				user_id like CONCAT('%', #{keyword}, '%')
 			</if>
 			<if test="type == 'content'">
 				content like CONCAT('%', #{keyword}, '%')

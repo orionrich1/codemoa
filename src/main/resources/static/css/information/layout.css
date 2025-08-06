@@ -21,7 +21,6 @@
 }
 
 a:-webkit-any-link {
-    color: -webkit-link;
     cursor: pointer;
 }
 
@@ -201,7 +200,7 @@ form, div, p, span, ul, li, dl, dt, textarea, h1, h2, h3, h4 {
     font-size: 1rem;
 }
 
-#section01 .in .r .boxs .searchbox a {
+#section01 .in .r .boxs .searchbox button {
     position: absolute;
     top: 0;
     right: 0;
@@ -209,10 +208,21 @@ form, div, p, span, ul, li, dl, dt, textarea, h1, h2, h3, h4 {
     height: 100%;
     background-color: #413C7F;
     border-radius: 0 10px 10px 0;
-    text-indent: -9999px;
+    text-indent: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: none !important;
+	outline: none;
 }
 
-#section01 .in .r .boxs .searchbox a:before {
+#section01 .in .r .boxs .searchbox button i {
+  font-size: 1.25rem; /* 아이콘 크기 */
+  color: white;        /* 아이콘 색상 */
+}
+
+
+#section01 .in .r .boxs .searchbox button:before {
     content: "";
     position: absolute;
     top: 0;
@@ -296,7 +306,7 @@ form, div, p, span, ul, li, dl, dt, textarea, h1, h2, h3, h4 {
     margin-left: 0.625rem;
 }
 
-#section02 [data-skin="tab"] > ul > li > a {
+#section02 [data-skin="tab"] > ul > li > a,.more {
     display: block;
     min-width: 6.25rem;
     padding: 0.85rem 1.25rem;
@@ -319,9 +329,12 @@ form, div, p, span, ul, li, dl, dt, textarea, h1, h2, h3, h4 {
     position: relative;
 }
 
-#section02 [data-skin="tab"] > ul > li.more > a > span {
+#section02 [data-skin="tab"] > ul > li.more select {
     display: block;
     padding-right: 1.25rem;
+    border: none;
+    outline: none; /* 선택 시 생기는 파란 테두리 제거 (선택사항) */
+    background-color: transparent; /* 배경 투명하게 하려면 */
 }
 
 #section02 [data-skin="tab"] > ul > li.more > a > span:before,
@@ -479,6 +492,8 @@ form, div, p, span, ul, li, dl, dt, textarea, h1, h2, h3, h4 {
 
 #section02 .in [data-skin="tab"] .cont .swiper .swiper-slide .swiper-area span {
     display: block;
+    color: #000;
+    padding: 0.7rem 0rem;
 }
 
 #section02 .in [data-skin="tab"] .cont .swiper .swiper-slide .swiper-area span i {
@@ -659,7 +674,7 @@ form, div, p, span, ul, li, dl, dt, textarea, h1, h2, h3, h4 {
 }
 
 #section02 .in [data-skin="tab"] .cont .swiper .swiper-slide .swiper-area .cover-item {
-    margin: 30px 0;
+    margin: 0px 0;
     position: absolute;
     top: 0;
     left: 0;
