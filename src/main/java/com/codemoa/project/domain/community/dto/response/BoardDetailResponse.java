@@ -19,6 +19,7 @@ public class BoardDetailResponse {
     private final List<CommentResponse> comments;
     private final Integer stakedPoints;
     private final boolean isResolved; 
+    private final String authorGradeIconName;
 
     // 생성자를 수정하여 댓글 목록을 받도록 합니다.
     public BoardDetailResponse(CommunityBoard board, List<CommentResponse> comments) {
@@ -28,6 +29,7 @@ public class BoardDetailResponse {
         this.category = board.getCategory();
         this.authorNickname = board.getUser().getNickname();
         this.authorId = board.getUser().getUserId();
+        this.authorGradeIconName = board.getUser().getGrade().name().toLowerCase();
         this.createdAt = board.getCreatedAt();
         this.comments = comments;
         this.stakedPoints = board.getStakedPoints();

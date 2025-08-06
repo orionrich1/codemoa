@@ -3,7 +3,7 @@
 
 <mapper namespace="com.codemoa.project.domain.user.mapper.AdminMapper">
 	<select id="getUserList" resultType="UserDetailResponse">
-		SELECT * FROM user JOIN user_grade USING (grade_id) ORDER BY grade_name;
+		SELECT * FROM user ORDER BY user_id
 	</select>
 	
 	<!-- 유저의 차단 기록을 가져오기 위해 Map 설정 -->
@@ -16,7 +16,8 @@
 	    <result property="totalPoints" column="total_points"/>
 	    <result property="membershipDate" column="membership_date"/>
 	    <result property="unbanDate" column="unban_date"/>
-	    <result property="gradeName" column="grade_name"/>
+	    <result property="grade" column="grade"/>
+	    <result property="userPosition" column="user_position"/>
 	
 	    <collection property="banHistory" ofType="UserBanHistory">
 	        <result property="banDate" column="ban_date"/>
@@ -27,7 +28,6 @@
 
 	<select id="getUserDetail" resultMap="UserDetailMap">
 		SELECT * FROM user u
-		JOIN user_grade USING (grade_id)
 		LEFT JOIN ban_history b ON u.user_id = b.user_id
 		WHERE u.user_id=#{id}
 		ORDER BY b.history_no DESC;

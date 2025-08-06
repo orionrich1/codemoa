@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS lecture (
     content1 VARCHAR(1000),
     content2 VARCHAR(5000),  
     file1 VARCHAR(100)
+    -- FOREIGN KEY (user_id) REFERENCES user(user_id)
 );
 
 insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2, file1) 

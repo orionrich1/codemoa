@@ -57,7 +57,7 @@ public class CustomUserDetails implements OAuth2User, UserDetails {
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// UserGrade Enum의 이름을 기반으로 권한을 생성합니다. (예: "ROLE_BRONZE")
 		// user.getUserGrade().getGradeId() -> user.getGrade().name()
-		return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getGrade().name()));
+		return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getUserPosition()));
 	}
 	// ▲▲▲▲▲ [수정된 부분] ▲▲▲▲▲
 

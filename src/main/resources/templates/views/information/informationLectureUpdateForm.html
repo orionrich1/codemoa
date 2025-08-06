@@ -11,17 +11,14 @@
 						<h2 class="fs-3 fw-bold">강좌 추천글 수정하기</h2>
 					</div>
 				</div>  
-				<form name="lectureUpdateForm" action="lectureUpdate" id="updateForm" 
+				<form name="lectureUpdateForm" action="lectureUpdate" id="lectureUpdateForm" 
 					class="row g-3 border-primary" method="post" enctype="multipart/form-data">
 					<input type="hidden" name="recommendNo" th:value="${lecture.recommendNo}">
 
-					<div class="col-4 offset-md-2">
-						<!--  
+					<div class="col-8 offset-md-2"> 
 						<label for="writer" class="form-label">글쓴이</label>
-						<input type="text" class="form-control" name="writer" id="writer" 
+						<input type="text" class="form-control" name="userId" id="userId" 
 							placeholder="작성자를 입력해 주세요" th:value="${lecture.userId}" readonly>
-						-->
-						<p>작성자 : [[${lecture.userId}]]</p>
 					</div>
 
 					<div class="col-8 offset-md-2">
@@ -37,7 +34,7 @@
 						<input type="text" class="form-control" name="category"  id="category" th:value="${lecture.category}">
 					</div>
 					<div class="col-8 offset-md-2">
-						<label for="title" class="form-label">별 점</label>
+						<label for="title" class="form-label">별 점(0 ~ 5.0)</label>
 						<input type="text" class="form-control" name="rating"  id="rating" th:value="${lecture.rating}">
 					</div>
 					<div class="col-8 offset-md-2">

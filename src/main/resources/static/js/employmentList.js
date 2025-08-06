@@ -1,3 +1,4 @@
+/*
 const regionData = {
 	서울 : ["강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구", "금천구",
 		 "노원구", "도봉구", "동대문구", "동작구", "마포구", "서대문구", "서초구",
@@ -24,24 +25,56 @@ const regionData = {
 };
 
 //지역 선택시 하위 지역 동적 로딩
-function updateSubRegion(){
-	const regionSelect = document.getElementById("region")
-	const subRegionSelect = document.getElementById("subRegion")
-	const selectedRegion = regionSelect.value;
-	
-	//기존 하위 지역 초기화
+function updateSubRegion(selectedRegion) {
+	console.log('updateSubRegion called with:', selectedRegion);
+	const subRegionSelect = document.getElementById("subRegion");
+
 	subRegionSelect.innerHTML = '<option value="">구/군 선택</option>';
-	
-	if(regionData[selectedRegion]){
+
+	if(regionData[selectedRegion]) {
 		regionData[selectedRegion].forEach(subRegion => {
 			const option = document.createElement("option");
 			option.value = subRegion;
 			option.textContent = subRegion;
 			subRegionSelect.appendChild(option);
 		});
+	}	else {
+	        console.log('No region data found for:', selectedRegion);
+	}
+	const selectedSubRegion = [[${param.subRegion}]] "";
+	if(selectedSubRegion){
+		subRegionSelect.value = selectedSubRegion;
+	}
+}
+*/
+
+// 카드 클릭 이벤트
+function setupCardClickEvent(){
+	const cards = document.querySelectorAll(".employment-card");
+	cards.forEach(card => {
+		const url = card.getAttribute("data-url");
+		card.addEventListener("click", () => {
+			if(url){
+				window.open(url,"_blank");
+			}
+		});
+	});
+}
+
+//수동 크롤링폼 전송 함수 추가
+function submitCrawlForm(){
+	const crawlForm = document.getElementById("crawlForm");
+	if(crawlForm){
+		crawlForm.submit();
 	}
 }
 
+
 window.onload = function() {
-	updateSubRegion();
-};
+	const typeSelect = document.getElementById("type");
+	const selectedType = /*[[${type}]]*/ ""; // Thymeleaf가 서버에서 넣어줌
+	if(selectedType) {
+	  typeSelect.value = selectedType;
+	}
+	setupCardClickEvent();
+	};

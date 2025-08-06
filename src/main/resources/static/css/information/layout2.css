@@ -1,0 +1,622 @@
+@charset "utf-8";
+
+* {
+    line-height: 1.3;
+    max-height: 1000000px;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+}
+
+.container {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+a:-webkit-any-link {
+    cursor: pointer;
+}
+
+a, a:hover {
+  text-decoration: none;
+}
+
+li {list-style: none;}
+
+header, nav, aside, section, address, article, main, footer, hgroup, div {
+    display: block;
+}
+
+form, div, p, span, ul, li, dl, dt, textarea, h1, h2, h3, h4 {
+    word-break: break-word;
+}
+
+
+/* Container and Section Spacing */
+#container {
+    position: relative;
+}
+
+[id*="section"]:not(:first-child) {
+    margin-top: 5.75rem;
+}
+
+/* Common Section Styles */
+
+[id*="section"] .swiper{overflow: hidden;}
+
+[id*="section"] .titles strong {
+    position: relative;
+    color: #000;
+    font-size: 2.5rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+[id*="section"] .titles p {
+    margin-top: 0.2rem;
+    font-size: 1.125rem;
+    color: #666;
+    font-weight: 500;
+}
+
+
+/***서브 컨테이너***/
+#container{}
+#container #spot{
+	position: relative; height: 4rem;
+}
+#container #spot .layout{height: 100%;}
+#container #spot .layout .in{
+	display: flex; flex-wrap: wrap; align-items: center; position: relative; height: 100%; padding-top: 3.75rem;
+}
+#container #spot .layout .in .tit{
+	display: block; position: relative; width: 100%; padding-bottom: 1rem; text-align: center; font-size: 2.5rem; font-weight: 600; color: #000;
+}
+#container #spot .layout .in .tit:before{
+	content: ""; display: block; position: absolute; bottom: 0; left: 50%; width: 1.875rem; height: 0.3125rem; background-color: #413C7F;
+}
+#container #spot .layout .in .t_wrap{display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; position: absolute; top: 0; left: 0; width: 100%; background-color: #413C7F;}
+#container #spot .layout .in .t_wrap:before{content: ""; display: block; position: absolute; top: 0; right: 100%; width: 1000vw; height: 100%; background-color: #413C7F;}
+#container #spot .layout .in .t_wrap:after{content: ""; display: block; position: absolute; top: 0; left: 100%; width: 1000vw; height: 100%; background-color: #413C7F;}
+#container #spot .layout .in .t_wrap #lnb{}
+#container #spot .layout .in .t_wrap #lnb >ul{display: table; table-layout: fixed; height: 3.75rem;}
+#container #spot .layout .in .t_wrap #lnb >ul >li{
+	display: table-cell; height: 100%; width: 15.625rem; vertical-align: middle;
+}
+#container #spot .layout .in .t_wrap #lnb >ul >li >a{
+	display: flex; align-items: center; justify-content: center; height: 100%; padding: 0.5rem 1rem; text-align: center; 
+	color: #fff; background-color: transparent;
+}
+#container #spot .layout .in .t_wrap #lnb >ul >li >a:hover,
+#container #spot .layout .in .t_wrap #lnb >ul >li.active >a{background-color: rgba(0, 0, 0, 0.30);}
+#container #spot .layout .in .t_wrap .navi{display: flex; flex-wrap: wrap; align-items: center;}
+#container #spot .layout .in .t_wrap .navi li{
+	margin-left: 0.25rem; margin-right: 3.25rem; line-height: 3.2rem;
+}
+#container #spot .layout .in .t_wrap .navi li:first-child{margin-left: 0;}
+#container #spot .layout .in .t_wrap .navi li:not(:first-child):before{
+	content: ""; display: inline-block; width: 1.5rem; height: 1.5rem; margin-right: 0.25rem; 
+	vertical-align: middle; background-size: 100% auto;
+}
+#container #spot .layout .in .t_wrap .navi li a{
+	display: inline-block; font-size: 1rem; line-height: 1.5rem; font-weight: 400; color: #fff;
+}
+#container #spot .layout .in .t_wrap .navi li a:hover{text-decoration: underline; text-underline-position: under;}
+#container #spot .layout .in .t_wrap .navi li:first-child a{
+	width: 1.5rem; height: 1.5rem; text-indent: -9999px; background-size: 100% auto;
+}
+#container #content{padding-bottom: 6.25rem;}
+#container #content #txts{position: relative; }
+
+
+
+
+/* Section 02 Styles */
+
+#section02 .in {
+    position: relative;
+    padding-left: 4rem;  /* 또는 원하는 px 값 */
+}
+
+#section02 [data-skin="tab"] {}
+
+ #section02 [data-skin="tab"] .title{display: none;} 
+
+#section02 [data-skin="tab"] > ul {
+    overflow-x: auto;
+    display: inline-flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start; 
+    align-items: flex-start;
+    position: absolute;
+    top: 1.8rem;
+    right: 0;
+    max-width: 800px;
+    white-space: nowrap;
+}
+
+/* Scrollbar styles for tabs */
+#section02 [data-skin="tab"] > ul{
+	list-style-type: none;
+}
+
+#section02 [data-skin="tab"] > ul::-webkit-scrollbar {
+    height: 0.5rem;
+    border-radius: 100px;
+}
+
+#section02 [data-skin="tab"] > ul::-webkit-scrollbar-thumb {
+    background-color: #c1c1c1;
+    border-radius: 100px;
+}
+
+#section02 [data-skin="tab"] > ul::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+    border-radius: 100px;
+}
+
+#section02 [data-skin="tab"] > ul > li:not(:first-child) {
+    margin-left: 0.625rem;
+}
+
+#section02 [data-skin="tab"] > ul > li > a,.more {
+    display: block;
+    min-width: 6.25rem;
+    padding: 0.85rem 1.25rem;
+    text-align: center;
+    color: #000;
+    border: 1px solid #E0E0E0;
+    border-radius: 10px;
+    background-color: #fff;
+    transition: all 0.2s linear;
+}
+
+#section02 [data-skin="tab"] > ul > li.active > a,
+#section02 [data-skin="tab"] > ul > li > a:hover {
+    background-color: #413C7F;
+    border-color: #413C7F;
+    color: #fff;
+}
+
+#section02 [data-skin="tab"] > ul > li > a > span {
+    position: relative;
+}
+
+#section02 [data-skin="tab"] > ul > li.more > a > span {
+    display: block;
+    padding-right: 1.25rem;
+}
+
+#section02 [data-skin="tab"] > ul > li.more > a > span:before,
+#section02 [data-skin="tab"] > ul > li.more > a > span:after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0.5rem;
+    right: 0;
+    width: 0.75rem;
+    height: 2px;
+    background-color: #000;
+    transition: all 0.2s linear;
+}
+
+#section02 [data-skin="tab"] > ul > li.more > a > span:after {
+    -webkit-transform: rotate(90deg); transform: rotate(90deg);
+}
+
+#section02 [data-skin="tab"] > ul > li.more > a:hover > span:before {
+    -webkit-transform: rotate(180deg); transform: rotate(180deg);
+}
+
+#section02 [data-skin="tab"] > ul > li.more > a:hover > span:after {
+    -webkit-transform: rotate(270deg); transform: rotate(270deg);
+}
+
+#section02 [data-skin="tab"] > ul > li.more > a:hover > span:before,
+#section02 [data-skin="tab"] > ul > li.more > a:hover > span:after {
+    background-color: #fff;
+}
+
+#section02 .in [data-skin="tab"] .cont {
+    margin-top: 3rem;
+}
+
+
+/* #section02 .in [data-skin="tab"] .cont [data-tab-cont]{opacity: 0; visibility: hidden; height: 0;} */
+
+#section02 .in [data-skin="tab"] .cont [data-tab-cont].active {
+    opacity: 1;
+    visibility: visible;
+    height: auto;
+}
+
+#section02 .in [data-skin="tab"] .cont [data-tab-cont].active .swiper {
+    padding-bottom: 5rem;
+}
+
+#section02 .in [data-skin="tab"] .cont [data-tab-cont].active .swiper .swiper-wrapper {
+	transform: translate3d(0, 0, 0);
+}
+
+#section02 .in [data-skin="tab"] .cont .swiper .swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: auto !important;
+    border-radius: 20px;
+    transform: translate3d(0, 0, 0);
+}
+
+#section02 .in [data-skin="tab"] .cont .swiper .swiper-slide .swiper-area {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    padding-top: 15rem;
+    border-radius: 20px;
+    border: 1px solid #E0E0E0;
+    box-shadow: 5px 5px 30px 0px transparent;
+    transition: all 2s linear;
+    
+    /* ---------- */
+    height: 500px;
+}
+
+#section02 .in [data-skin="tab"] .cont .swiper .swiper-slide.specialty:before {
+    content: "전문과정";
+    position: absolute;
+    top: 0;
+    right: 1.25rem;
+    z-index: 1111;
+    width: 3.75rem;
+    height: 3.125rem;
+    padding: 0.3rem 0.8rem 0.8rem 0.8rem;
+    background: url(../images/main/sec02_img03.svg) no-repeat center center;
+    background-size: 100% auto;
+    font-size: 0.9375rem;
+    color: #fff;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+#section02 .in [data-skin="tab"] .cont .swiper .swiper-slide.open:before {
+    content: "열린과정";
+    position: absolute;
+    top: 0;
+    right: 1.25rem;
+    z-index: 1111;
+    width: 3.75rem;
+    height: 3.125rem;
+    padding: 0.3rem 0.8rem 0.8rem 0.8rem;
+    background: url(../images/main/sec02_img04.svg) no-repeat center center;
+    background-size: 100% auto;
+    font-size: 0.9375rem;
+    color: #fff;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+#section02 .in [data-skin="tab"] .cont .swiper .swiper-slide .swiper-area:hover {
+    border-color: #9385D8;
+    box-shadow: 5px 5px 30px 0px #EDEAFF;
+}
+
+.swiper-slide:hover .texts {
+    opacity: 0.3; /* 흐릿하게 보이게 */
+}
+
+#section02 .in [data-skin="tab"] .cont .swiper .swiper-slide .swiper-area .cover-content img {
+  width: 100%;          /* 가로 너비를 부모에 맞춤 */
+  height: 300px;       
+  display: block;       /* 이미지 하단 여백 제거 */
+  object-fit: cover;    /* 이미지 꽉 채우기 (선택 사항) */
+}
+
+#section02 .in [data-skin="tab"] .cont .swiper .swiper-slide .swiper-area .texts {
+    position: relative;
+    padding: 1.25rem 1.25rem 2.1875em;
+    
+    /* ------ */
+    z-index: 1;
+    transition: all 0.3s ease;
+    /* ------ */
+}
+
+#section02 .in [data-skin="tab"] .cont .swiper .swiper-slide .swiper-area .texts p {
+    color: #000;         /* 글자색을 검정으로 명확히 */
+    font-size: 0.95rem;  /* 크기도 적당히 */
+    margin: 1rem 1rem;    /* 여백 추가 */
+}
+
+/* --------------------------- 
+#section02 .in [data-skin="tab"] .cont .swiper .swiper-slide .swiper-area .texts > div {
+	display: flex; 
+	flex-wrap: nowrap; 
+	align-items: flex-start;
+	justify-content: space-between; 
+	margin-top: 1.125rem; 
+	color: #535353;
+	font-weight: 500;
+}
+ --------------------------- */
+
+#section02 .in [data-skin="tab"] .cont .swiper .swiper-slide .swiper-area span {
+    display: block;
+    color: #000;
+    padding: 0.7rem 0rem;
+}
+
+#section02 .in [data-skin="tab"] .cont .swiper .swiper-slide .swiper-area span i {
+    display: inline-block;
+    min-width: 4.375rem;
+    padding: 0.22rem 1.1875rem;
+    border: 1px solid #E0E0E0;
+    color: #000;
+    font-weight: 600;
+    text-align: center;
+    background-color: #fff;
+    border-radius: 10px;
+    font-style: normal;
+}
+
+#section02 .in [data-skin="tab"] .cont .swiper .swiper-slide .swiper-area span i:not(:last-child) {
+    margin-right: 0.25rem;
+}
+
+#section02 .in [data-skin="tab"] .cont .swiper .swiper-slide .swiper-area span i[data-color="2"] {
+    background-color: #413C7F;
+    border-color: #413C7F;
+    color: #fff;
+    font-weight: 500;
+}
+
+#section02 .in [data-skin="tab"] .cont .swiper .swiper-slide .swiper-area span i[data-color="3"] {
+    background-color: #03022A;
+    border-color: #03022A;
+    color: #fff;
+    font-weight: 500;
+}
+
+#section02 .in [data-skin="tab"] .cont .swiper .swiper-slide .swiper-area strong {
+    display: block;
+    margin-top: 1.125rem;
+    color: #000;
+    font-weight: 700;
+    font-size: 1.125rem;
+    
+    white-space: normal;       /* 줄바꿈 허용 */
+  	overflow: visible;         /* 넘치는 것 숨기지 않음 */
+ 	text-overflow: unset;      /* 말줄임표 제거 */
+ 	text-align: center;  /* 중앙 정렬 */
+}
+
+
+/* Swiper Pagination and Navigation */
+
+.swiper-pagination-progressbar .swiper-pagination-progressbar-fill {
+    background: #007aff;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    
+    transform-origin: left top;
+}
+
+/* Swiper Pagination and Navigation */
+
+
+
+#section02 .in [data-skin="tab"] .cont .swiper .swiper-pagination {
+    top: auto;
+    bottom: 0.75rem;
+    width: calc(100% - 11.0625rem);
+    height: 0.3125rem;
+    background-color: #eee;
+    left: 0;  /* ---------- */
+}
+
+#section02 .in [data-skin="tab"] .cont .swiper .swiper-pagination span {
+    background-color: #413C7F;
+}
+
+
+#section02 .in [data-skin="tab"] .cont .swiper .btn_wrap {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 8.875rem;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+#section02 .in [data-skin="tab"] .cont .swiper .btn_wrap a {
+    display: block;
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    z-index: 10;
+    width: 1.875rem;
+    height: 1.875rem;
+    margin-top: 0;
+    text-indent: -9999px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100% auto;
+}
+
+/*
+#section02 .in [data-skin="tab"] .cont .swiper .btn_wrap {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    margin-top: 4.375rem;
+}
+*/
+
+#section02 .in [data-skin="tab"] .cont .swiper .btn_wrap .swiper-button-prev {
+    background-image: url(../images/main/sec02_img01.svg);
+}
+
+.swiper-button-next, .swiper-button-prev {
+    position: absolute;
+    top: 50%;
+    width: 27px;
+    height: 44px;
+    margin-top: -22px;
+    z-index: 10;
+    cursor: pointer;
+    background-size: 27px 44px;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#section02 .in [data-skin="tab"] .cont .swiper .btn_wrap .swiper-button-next{
+	background-image: url(../images/main/sec02_img01.svg);
+}
+
+#section02 .in [data-skin="tab"] .cont .swiper .btn_wrap .more_btn {
+    background-image: url(../images/main/sec02_img02.svg);
+    -webkit-transform: rotate(0);
+    transform: rotate(0);
+    -webkit-transition: all 0.2s linear;
+    transition: all 0.2s linear;
+}
+
+
+
+
+#section02 .in [data-skin="tab"] .cont .swiper .btn_wrap .more_btn:hover{
+	-webkit-transform: rotate(180deg); transform: rotate(180deg);
+}
+
+/* Swiper Slide Cover Effect */
+#section02 .in [data-skin="tab"] .cont .swiper .swiper-slide .swiper-area .cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* background: rgba(0, 0, 0, 0.9); */ 
+    /* opacity: 0; */ 
+    transition: opacity 0.3s ease;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: left;
+}
+
+
+#section02 .in [data-skin="tab"] .cont .swiper .swiper-slide .swiper-area .cover-content {
+     font-size: 1rem;
+	 width: 100%;
+	 
+	 /* ------- */
+	 overflow: hidden;
+	 box-sizing: border-box;
+	 overflow-wrap: break-word;  
+	 word-break: break-word;
+}
+
+#section02 .in [data-skin="tab"] .cont .swiper .swiper-slide .swiper-area .cover-item {
+    margin: 0px 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8); /* 검정 배경에 투명도 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 2;
+}
+
+#section02 .in [data-skin="tab"] .cont .swiper .swiper-slide .swiper-area .cover-label {
+    font-weight: bold;
+    color: grey;
+}
+
+#section02 .in [data-skin="tab"] .cont .swiper .swiper-slide .swiper-area:hover .cover-item {
+    opacity: 1;
+}
+
+#section02 .in [data-skin="tab"] .cont .swiper .swiper-slide .swiper-area .cover-text {
+    display: flex;
+    flex-direction: column;
+}
+
+#section02 .in [data-skin="tab"] .cont .swiper .swiper-slide .swiper-area .cover-image {
+    width: 40px;
+    height: 40px;
+    margin-right: 20px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/*
+.swiper-wrapper > div { 
+  flex-shrink: 0; 
+}
+*/
+/* ---------------------- 추가 부분  ---------------------- */
+
+.more_button {
+  pointer-events: none; /* 클릭 이벤트 제거 */
+}
+
+/*
+.swiper-pagination {
+    position: absolute;
+    text-align: center;
+    -webkit-transition: .3s opacity;
+    -o-transition: .3s opacity;
+    transition: .3s opacity;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    z-index: 10;
+}
+*/
+
+
+/*
+#section02 .in [data-skin="tab"] .cont [data-tab-cont] {
+    opacity: 0;
+    visibility: hidden;
+    height: 0;
+}
+*/
+
+
+/*
+.swiper-button-next, .swiper-container-rtl .swiper-button-prev {
+    background-image: url(data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2027%2044'%3E%3Cpath%20d%3D'M27%2C22L27%2C22L5%2C44l-2.1-2.1L22.8%2C22L2.9%2C2.1L5%2C0L27%2C22L27%2C22z'%20fill%3D'%23007aff'%2F%3E%3C%2Fsvg%3E);
+    right: 10px;
+    left: auto;
+}
+*/
+
+
+
+
+
+
+

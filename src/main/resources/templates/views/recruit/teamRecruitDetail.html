@@ -27,7 +27,7 @@ layout:decorate="~{layouts/default_layout}">
 				<div class="card mb-4">
 					<div class="card-body">	
 						<div class="mb-3">
-						<strong>작성자 : </strong><span th:text="${teamRecruit.userId}"></span></div>
+						<strong>작성자 : </strong><span th:text="${teamRecruit.nickname}"></span></div>
 				</div>
 				<div class="mb-3">
 					<strong>공모전 정보 : </strong>
@@ -60,8 +60,8 @@ layout:decorate="~{layouts/default_layout}">
 				</div>
 			</div>
 		</div>
-	</div>
-				
+	</div>			
+		
 				<!-- 모집/진행 정보 -->
 				<div class="card mb-4">
 					<div class="card-body">
@@ -123,18 +123,16 @@ layout:decorate="~{layouts/default_layout}">
 					</div>
 				</div>
 				
-		<div class="text-center my-4"
-			th:if="${loginId == teamRecruit.userId}">
-			<div class="text-center my-4">
-				<a th:href="@{'/recruit/updateForm'(recruitId=${teamRecruit.recruitId})}" class="btn btn-warning mx-2">수정</a>
-				<button type="button" class="btn btn-danger mx-2" id="detailDelete">삭제</button>
-			</div>
-			<div class="text-center my-4">
-				<a href="TeamRecruitList" class="btn btn-primary mx-2">목록보기</a>
-			</div>
+		<div class="text-center my-4" th:if="${loginId == teamRecruit.userId}">
+		  <div style="display: flex; justify-content: center; gap: 20px;">
+		    <button type="button" class="btn btn-warning" id="detailUpdate">수정</button>
+		    <button type="button" class="btn btn-danger" id="detailDelete">삭제</button>
+		  </div>
 		</div>
-
-
+			<div class="text-center my-2">
+				<a th:href="@{/teamRecruitList}" class="btn btn-primary mx-2">목록보기</a>
+			</div>
+</div>
 		
 		<!-- script 구문 -->
 		<script src="/js/recruitDetail.js" defer></script>

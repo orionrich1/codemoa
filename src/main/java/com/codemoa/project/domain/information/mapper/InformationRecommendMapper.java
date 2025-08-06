@@ -15,7 +15,7 @@ public interface InformationRecommendMapper {
 	// 강좌 관련
 	
 	List<Lecture> getlectureList(@Param("startRow") int startRow, @Param("num") int num,
-			@Param("type") String type, @Param("keyword") String keyword);
+			@Param("type") String type, @Param("keyword") String keyword, @Param("order") String order);
 	
 	Lecture getLecture(int no);
 	
@@ -31,7 +31,7 @@ public interface InformationRecommendMapper {
 	// 도서 관련
 	
 	List<Book> getBookList(@Param("startRow") int startRow, @Param("num") int num,
-			@Param("type") String type, @Param("keyword") String keyword);
+			@Param("type") String type, @Param("keyword") String keyword, @Param("order") String order);
 
 	Book getBook(int no);
 	
@@ -48,7 +48,7 @@ public interface InformationRecommendMapper {
 	// 공모전 관련
 	
 	List<Contest> getContestList(@Param("startRow") int startRow, @Param("num") int num,
-			@Param("type") String type, @Param("keyword") String keyword);
+			@Param("type") String type, @Param("keyword") String keyword, @Param("order") String order);
 
 	Contest getContest(int no);
 	

@@ -34,6 +34,7 @@ public class TeamRecruit {
     private LocalDateTime updateDate;		//수정일
     private String statusName;
     private String recruitTypeName;
+    private String nickname;
     // --- Getters and Setters ---
 
     public String getRecruitTypeName() {

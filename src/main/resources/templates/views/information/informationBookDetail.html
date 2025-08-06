@@ -62,9 +62,9 @@
 								<tr>
 									<td colspan="4" style="white-space: pre-wrap; max-width: 400px; word-wrap: break-word;">[[${book.content}]]</td>
 								</tr>
-								<tr>
+								<!-- <tr>
 									<td colspan="4">출처 : [[${book.bookSource}]]</td>
-								</tr>
+								</tr> -->
 								<tr>
 									<th:block th:if="${book.file1}">
 										<td colspan="4">
@@ -87,14 +87,14 @@
 						&nbsp;&nbsp;<input class="btn btn-danger"  type="button" id="bookDetailDelete" value="삭제하기" />			
 						&nbsp;&nbsp;
 						<!-- /* 일반 게시글 리스트에서 온 경우 */ -->
-						<th:block th:unless="searchOption">
+						<th:block th:unless="order">
 							<input class="btn btn-primary" type="button" value="목록보기"
-								th:onclick="@{|location.href='bookList?pageNum=${pageNum}'|}"/>
+								th:onclick="@{|location.href='book?pageNum=${pageNum}'|}"/>
 						</th:block>						
 						<!-- /* 검색 게시글 리스트에서 온 경우 */ -->
-						<th:block th:if="searchOption">
+						<th:block th:if="order">
 							<input class="btn btn-primary" type="button" value="목록보기"
-								th:onclick="@{|location.href='bookList?pageNum=${pageNum}&type=${type}&keyword=${keyword}'|}"/>
+								th:onclick="@{|location.href='book?pageNum=${pageNum}&order=${order}'|}"/>
 						</th:block>						
 					</div>
 				</div>

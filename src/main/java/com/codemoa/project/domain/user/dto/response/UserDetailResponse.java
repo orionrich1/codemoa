@@ -19,8 +19,10 @@ public class UserDetailResponse {
 	private LocalDateTime membershipDate;
 	private LocalDateTime unbanDate;
 	private Boolean isBan;
+	private String grade;
+	private String userPosition;
 	
 	private List<UserBanHistory> banHistory;
 
-	private String gradeName;
+	
 }

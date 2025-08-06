@@ -49,8 +49,10 @@
 						<span class="badge bg-warning text-dark fs-6 ms-3" th:if="${board.stakedPoints > 0}" th:text="|${board.stakedPoints} 포인트|"> </span>
 					</div>
 					<div class="d-flex justify-content-between align-items-center board-meta mt-3">
-						<div>
-							<span class="fw-bold" th:text="${board.authorNickname}">작성자</span> <span class="mx-2">|</span> <span th:text="'작성일 ' + ${#temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm')}">작성일</span>
+						<div class="d-flex align-items-center" style="gap: 16px;">
+							<div th:replace="~{fragments/_userProfile :: userProfile(nickname=${board.authorNickname}, iconName=${board.authorGradeIconName})}"></div>
+							<span class="mx-2">|</span> 
+							<span th:text="'작성일 ' + ${#temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm')}">작성일</span>
 						</div>
 						<span class="badge bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill" th:text="${board.category}">카테고리</span>
 					</div>
@@ -82,8 +84,9 @@
 					<ul class="list-group list-group-flush" th:unless="${#lists.isEmpty(board.comments)}">
 						<li class="list-group-item px-0" th:each="comment : ${board.comments}">
 							<div class="d-flex justify-content-between align-items-center">
-								<div>
-									<strong th:text="${comment.authorNickname}">작성자</strong> <small class="text-muted ms-2" th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}">작성일</small> <span th:if="${comment.isAdopted}" class="badge bg-success ms-2">채택됨</span>
+								<div class="d-flex align-items-center" style="gap: 16px;">
+									<div th:replace="~{fragments/_userProfile :: userProfile(nickname=${comment.authorNickname}, iconName=${comment.authorGradeIconName})}"></div>
+									<small class="text-muted ms-2" th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}">작성일</small> <span th:if="${comment.isAdopted}" class="badge bg-success ms-2">채택됨</span>
 								</div>
 								<div>
 									<button th:if="${board.stakedPoints > 0 and !board.isResolved and !comment.isAdopted and #authentication.name == board.authorId}" th:attr="data-comment-no=${comment.commentNo}" class="btn btn-sm btn-outline-success adopt-btn">

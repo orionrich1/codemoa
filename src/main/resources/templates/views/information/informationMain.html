@@ -7,6 +7,7 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>  
 		<th:block>
 			<link th:href="@{css/information/layout.css}" rel="stylesheet" />
+			<script th:src="@{/js/information/formcheck.js}"></script>
 			<!--  <link th:href="@{css/information/main.css}" rel="stylesheet" />
 			<link th:href="@{css/information/layout.css}" rel="stylesheet" /> -->
 		</th:block>
@@ -26,11 +27,17 @@
 					<div class="r">
 						<div class="boxs">
 							<strong>원하는 Contents를 검색해보세요!</strong>
-							<div class="searchbox">
-								<input type="text" id="totalSearchText"
+							<!-- <div class="searchbox">
+								<input type="text" id="totalSearchText" name="totalSearchText"
 								placeholder="검색어를 입력해주세요.">
-								<a href="#">돋보기 아이콘</a>
+								<a th:href="@{/information/searchResult}"><i class="bi bi-search"></i></a>
  							</div>
+ 							 -->
+ 							<form th:action="@{/information/searchResult}" method="get" class="searchbox">
+				                <input type="text" id="totalSearchText" name="totalSearchText" placeholder="검색어를 입력해주세요.">
+				                <button type="submit"><i class="bi bi-search"></i></button>
+				                <input type="hidden" name="type" id="hiddenType">
+				            </form>
 							<span id="kwList">
 								<i># Content1</i>
 								<i># Content2</i>
@@ -53,19 +60,22 @@
 					<div data-skin="tab">
 						<ul>
 							<li data-tab-btn="1">
-								<a href="#"><span>전체보기</span></a>
-							</li>
-							<li data-tab-btn="2">
 								<a th:href="@{/information/book}"><span>추천 도서</span></a>
 							</li>
-							<li data-tab-btn="3">
+							<li data-tab-btn="2">
 								<a th:href="@{/information/lecture}"><span>추천 강좌</span></a>
 							</li>
 							<li data-tab-btn="3">
 								<a th:href="@{/information/contest}"><span>공모전 정보</span></a>
 							</li>
 							<li class="more" id="clPlust">
-								<a href="#"><span>주제 더보기</span></a>
+								<!-- <a href="#"><span>주제 더보기</span></a>  -->
+								<select name="type" id="typeSelector">
+									<option value="" disabled selected>통합검색 옵션</option>
+									<option value="content">내용</option>
+									<option value="title">제목</option>
+									<option value="writer">작성자</option>
+								</select>
 							</li>
 						</ul>
 						<div class="cont" id="eCombineDiv">
@@ -83,10 +93,12 @@
 															<img th:src="@{/files/information/{img}(img=${lecture.file1})}" alt="이미지를 찾을 수 없습니다.">
 															<div class="texts">
 																<strong>[[${lecture.title}]]</strong>
-																<div>
-																	<p>등록일 : [[${lecture.regDate}]]</p>
-																	<p>작성자 : [[${lecture.userId}]]</p>
-																</div>
+																<span>
+																	<i data-color="2">등록일</i> [[${#dates.format(lecture.regDate, 'yyyy-HH-dd')}]]
+																</span>
+																<span>
+																	<i data-color="1">작성자</i> [[${lecture.userId}]]
+																</span>
 															</div>
 															<a th:href="@{/information/lectureDetail(no=${lecture.recommendNo})}">
 																<div class="cover-item">
@@ -136,9 +148,21 @@
 </html>
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
+	document.querySelector('.more_button').addEventListener('click', function(e) {
+		e.preventDefault(); // 페이지 위로 스크롤되는 기본 동작 제거
+	});
+	
+    document.getElementById('typeSelector').addEventListener('change', function() {
+        document.getElementById('hiddenType').value = this.value;
+    });
+	
+    // 폼 제출 전, 기본값도 설정 (초기 선택값이 hidden에 반영되도록)
+	window.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('hiddenType').value = document.getElementById('typeSelector').value;
+    });
 	
 	const swiper = new Swiper(".mySwiper", {
-		slidesPerView: 2, // 한 줄에 3개의 슬라이드가 보임
+		slidesPerView: 4, // 한 줄에 4개의 슬라이드가 보임
 	  	grid: {
 	    	rows: 2,
 	   		fill: "row",
