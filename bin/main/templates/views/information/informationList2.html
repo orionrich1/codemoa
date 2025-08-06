@@ -24,6 +24,14 @@
 							</div>
 							<ul class="navi">
 								<li><a href="https://library.nih.go.kr/spec/main.do">HOME</a></li>
+								<!-- <li>
+									<select name="type">
+										<option value="" disabled selected>정렬기준</option>
+										<option value="no">기존 순서</option>
+										<option value="endDate">마감일</option>
+										<option value="startDate">시작일</option>
+									</select>
+								</li> -->
 								<li><a th:href="@{/information}">통합검색</a></li>
 								<li><a th:href="@{contestAdd}">글쓰기</a></li>
 							</ul>
@@ -146,6 +154,11 @@
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
+	
+	// 폼 제출 전, 기본값도 설정 (초기 선택값이 hidden에 반영되도록)
+	window.addEventListener('DOMContentLoaded', function () {
+	    document.getElementById('hiddenType').value = document.getElementById('typeSelector').value;
+	});
 	
 	const swiper = new Swiper(".mySwiper", {
 		slidesPerView: 4, // (가로)한 줄에 4개의 슬라이드가 보임

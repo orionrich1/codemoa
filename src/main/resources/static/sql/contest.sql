@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS contest (
     pass VARCHAR(60),
     file1 VARCHAR(100),
     recommend_num INTEGER DEFAULT 0
+    -- FOREIGN KEY (user_id) REFERENCES user(user_id) 
 );
 
 insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content, file1)
