@@ -1,1 +1,75 @@
-@charset "UTF-8";
+/* /src/main/resources/static/css/common.css */
+
+/*
+ * =========================================
+ * 1. 폰트 정의 (Font Imports)
+ * =========================================
+ * - Pretendard: 고딕(Sans-serif) 계열, 가독성 높은 현대적인 폰트
+ */
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+
+/*
+ * =========================================
+ * 2. CSS 변수 설정 (:root)
+ * =========================================
+ * Bootstrap의 기본 변수를 'Sparta-Tech' 디자인 시스템에 맞게 재정의합니다.
+ */
+:root {
+    /* Color Palette */
+    --bs-primary: #E8344E;
+    --bs-primary-rgb: 232, 52, 78;
+    --bs-body-color: #212529;
+    --bs-body-bg: #FFFFFF;
+    --bs-secondary-color: #495057;
+
+    /* Typography (Gothic/Sans-serif System) */
+    --bs-font-sans-serif: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
+
+    /* Component Styles */
+    --bs-border-radius: 0.5rem; /* 8px, 기본 둥글기를 살짝 키웁니다. */
+    --bs-btn-border-radius: var(--bs-border-radius);
+    --bs-card-border-radius: var(--bs-border-radius);
+    --bs-box-shadow-sm: 0 4px 20px rgba(0, 0, 0, 0.07); /* 부드러운 그림자 효과 재정의 */
+}
+
+
+/*
+ * =========================================
+ * 3. 전역 스타일 (Global Styles)
+ * =========================================
+ */
+
+/* body의 기본 폰트 설정 */
+body {
+    font-family: var(--bs-font-sans-serif);
+    color: var(--bs-body-color);
+    background-color: var(--bs-body-bg);
+}
+
+/* * 헤드라인 폰트 굵기 설정 (Sparta-Tech 시스템의 핵심)
+ * 모든 제목 태그에 Extra Bold 가중치를 부여하여 힘 있고 신뢰감 있는 인상을 줍니다.
+ */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 800; /* Extra Bold */
+}
+
+/* 기본 링크 스타일 */
+a {
+    color: var(--bs-body-color);
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+}
+
+a:hover {
+    color: var(--bs-primary);
+}
+
+/* 버튼의 기본 폰트 굵기를 Bold로 설정 */
+.btn {
+    font-weight: 700;
+}
+
+.btn-primary {
+    color: #FFFFFF;
+}

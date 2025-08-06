@@ -76,7 +76,7 @@ public class SecurityConfig {
             // 폼 로그인 및 SNS 로그인 설정 (기존과 동일)
             .formLogin(form -> form
                 .loginPage("/loginForm")
-                .loginProcessingUrl("/login")                
+                .loginProcessingUrl("/login")     
                 .successHandler(customLoginSuccessHandler)
                 .permitAll()
             )

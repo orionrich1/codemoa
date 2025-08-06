@@ -11,6 +11,7 @@ import java.util.List;
 @Builder
 public class RankingPageResponse {
 
+
     private final List<UserRankingResponse> weeklyTop10;
     private final MyRankingInfo myRankingInfo;
 
@@ -21,19 +22,17 @@ public class RankingPageResponse {
         private final int totalPoints;
         private final String nextGradeName;
         private final int pointsNeededForNextGrade;
+        private final int currentGradeMinPoints;
+        private final int nextGradeMinPoints;
+        private final String currentGradeIconName; // ▼▼▼ [필드 추가] ▼▼▼
         
-        // ▼▼▼▼▼ [신규 추가된 필드] ▼▼▼▼▼
-        private final int currentGradeMinPoints; // 현재 등급의 최소 점수
-        private final int nextGradeMinPoints;    // 다음 등급의 최소 점수
-        // ▲▲▲▲▲ [신규 추가된 필드] ▲▲▲▲▲
-
         public static MyRankingInfo from(User user) {
             UserGrade currentGrade = user.getGrade();
             UserGrade nextGrade = currentGrade.getNextGrade();
 
             int pointsNeeded = 0;
             String nextGradeName = "최고 등급";
-            int nextGradeMinPoints = user.getTotalPoints(); // 최고 등급이면 현재 점수가 최대 점수
+            int nextGradeMinPoints = user.getTotalPoints();
 
             if (nextGrade != null) {
                 pointsNeeded = nextGrade.getMinPoints() - user.getTotalPoints();
@@ -48,6 +47,8 @@ public class RankingPageResponse {
                     .pointsNeededForNextGrade(Math.max(0, pointsNeeded))
                     .currentGradeMinPoints(currentGrade.getMinPoints())
                     .nextGradeMinPoints(nextGradeMinPoints)
+                    // ▼▼▼ [로직 추가] Enum의 영문 이름을 소문자로 변환하여 저장합니다. ▼▼▼
+                    .currentGradeIconName(currentGrade.name().toLowerCase())
                     .build();
         }
     }

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layouts/default_layout}">
+
+<head>
+    <title>채팅방 목록</title>
+</head>
+
+<div layout:fragment="content">
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>채팅방 목록</h2>
+                    </div>
+                    <div class="card-body">
+                        <div sec:authorize="isAuthenticated() and authentication.principal.getUser().getGrade().name().equalsIgnoreCase('admin')" class="mb-3">
+                            <form th:action="@{/chat/room}" method="post" class="d-flex">
+                                <input type="text" name="name" class="form-control me-2" placeholder="새 채팅방 이름" required>
+                                <button type="submit" class="btn btn-primary text-nowrap">방 만들기</button>
+                            </form>
+                        </div>
+
+                        <ul class="list-group">
+                            <li th:each="room : ${rooms}" class="list-group-item">
+                                <a th:href="@{/chat/room/{roomId}(roomId=${room.roomId})}" th:text="${room.name}" class="text-decoration-none"></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

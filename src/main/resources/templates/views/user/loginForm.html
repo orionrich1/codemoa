@@ -6,14 +6,13 @@
 <div layout:fragment="content">
    
 	<div class="container">
-	    <div class="row justify-content-center align-items-center vh-100">
+	    <div class="row justify-content-center align-items-center min-vh-100 py-5">
 	        <div class="col-lg-5 col-md-7 col-sm-9">
-	            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card shadow-sm border-0">
 	                <div class="card-body p-4 p-sm-5">
 	                    <div class="text-center mb-4">
-	                        <i class="bi bi-box-arrow-in-right display-4 text-primary"></i>
-	                        <h3 class="fw-bold mt-2">로그인</h3>
-	                        <p class="text-muted">CodeMoa에 오신걸 환영합니다.</p>
+                            <h2 class="mb-2">로그인</h2>
+	                        <p class="text-secondary">CodeMoa에 오신걸 환영합니다.</p>
 	                    </div>
 	                        
 						<div th:if="${param.error}" class="alert alert-danger my-3">
@@ -22,52 +21,55 @@
 	                        
 	                    <form id="loginForm" th:action="@{/login}" method="post">
 	                        <div class="form-floating mb-3">
-	                            <input type="text" name="username" class="form-control" id="floatingInput"  required>
-	                            <label for="floatingInput"><i class="bi bi-envelope me-2"></i>아이디</label>
+                                <input type="text" name="username" class="form-control" id="floatingInput"  required>
+	                            <label for="floatingInput">아이디</label>
 	                        </div>
 	                            
 	                        <div class="form-floating mb-3">
-	                            <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password" required>
-	                            <label for="floatingPassword"><i class="bi bi-lock me-2"></i>비밀번호</label>
+	                            <input type="password" name="password" class="form-control" id="floatingPassword" required>
+	                            <label for="floatingPassword">비밀번호</label>
 	                        </div>
 	                            
 	                        <div class="d-flex justify-content-between align-items-center mb-4">
 	                            <div class="form-check">
 	                                <input class="form-check-input" type="checkbox" value="" id="rememberMe">
-	                                <label class="form-check-label" for="rememberMe">
+	                                <label class="form-check-label small" for="rememberMe">
 	                                    로그인 정보 저장
 	                                </label>
 	                            </div>
-	                            <a href="findId" class="text-decoration-none ms-5">아이디 찾기</a>
-	                            <a href="findPass" class="text-decoration-none">비밀번호 찾기</a>
+								<div>
+                                    <a th:href="@{/findId}" class="text-decoration-none text-secondary small">아이디 찾기</a>
+									<span class="text-muted mx-1">|</span>
+									<a th:href="@{/findPass}" class="text-decoration-none text-secondary small">비밀번호 찾기</a>
+								</div>
 	                        </div>
 	                            
 	                        <div class="d-grid mb-3">
-	                            <button class="btn btn-primary btn-lg fw-bold" type="submit">로그인</button>
+                                <button class="btn btn-primary btn-lg" type="submit">로그인</button>
 	                        </div>
 
 							<th:block th:if="${session.provider == null or #strings.isEmpty(session.provider)}">
 		                        <div class="text-center my-4">
-		                            <span class="text-muted small">또는 소셜 계정으로 로그인</span>
+		                            <span class="text-secondary small">또는 소셜 계정으로 로그인</span>
 		                        </div>
 	
 		                        <div class="d-grid gap-2">
-		                            <a href="/oauth2/authorization/google" class="btn btn-light border"><i class="bi bi-google me-2"></i>Google 계정으로 로그인</a>
+                                    <a href="/oauth2/authorization/google" class="btn btn-outline-secondary"><i class="bi bi-google me-2"></i>Google 계정으로 로그인</a>
 		                            <a href="/oauth2/authorization/kakao" class="btn btn-warning text-dark"><i class="bi bi-chat-fill me-2"></i>Kakao 계정으로 로그인</a>
 		                        </div>
 	                        </th:block>
 	                        
 	                        <th:block th:if="${!#strings.isEmpty(session.provider)}">
 	                        	<div class="text-center my-4">
-		                            <p class="text-muted small">[[${session.provider}]] 계정과 연동되었습니다.</p>
-		                            <p class="text-muted small">로그인이나 회원가입을 진행해주세요.</p>
+		                            <p class="text-secondary small">[[${session.provider}]] 계정과 연동되었습니다.</p>
+		                            <p class="text-secondary small">로그인이나 회원가입을 진행해주세요.</p>
 		                            <a th:href="@{/snsDisconnect}" class="btn btn-warning text-dark">SNS 계정 로그아웃</a>
 		                        </div>
 	                        </th:block>
 	                    </form>
 
 	                    <div class="text-center mt-4">
-	                        <p class="text-muted">계정이 없으신가요? <a href="/joinForm" class="text-decoration-none fw-bold">회원가입</a></p>
+                            <p class="text-secondary">계정이 없으신가요? <a th:href="@{/joinForm}" class="fw-bold">회원가입</a></p>
 	                    </div>
 	                </div>
 	            </div>

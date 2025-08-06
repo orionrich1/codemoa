@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="userProfile(nickname, iconName)" 
+         class="d-flex align-items-center" style="gap: 8px;">
+        
+        <img th:src="@{/images/rank/{icon}.png(icon=${iconName})}"
+             th:alt="${nickname}" 
+             style="width: 24px; height: 24px; vertical-align: middle;">
+             
+        <span class="fw-bold" th:text="${nickname}">Nickname</span>
+    </div>
+</body>
+</html>
