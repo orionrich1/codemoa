@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.codemoa.project.domain.diary.dto.request.ChecklistCreateRequest;
+import com.codemoa.project.domain.diary.dto.request.UpdateCheckStatusRequest;
 import com.codemoa.project.domain.diary.dto.request.UpdateChecklistRequest;
 import com.codemoa.project.domain.diary.entity.Project;
 import com.codemoa.project.domain.diary.entity.ProjectChecklist;
@@ -19,28 +20,59 @@ public class DiaryService {
 
 	private final DiaryMapper diaryMapper;
 
+	// ======================================
+	// 프로젝트(Project) 관련 기능
+	// ======================================
+	
+	// 프로젝트 전체 가져오기
 	public List<Project> getProjectList(String userId) {
 		return diaryMapper.getProjectList(userId);
 	}
 
+	// 프로젝트 상세 가져오기
 	public Project getProjectDetail(Integer projectId) {
 		return diaryMapper.getProjectDetail(projectId);
 	}
 
+	
+	// ======================================
+	// 프로젝트 체크리스트 (ProjectChecklist) 관련 기능
+	// ======================================
+	
+	// 체크리스트 가져오기
 	public List<ProjectChecklist> getProjectCheckList(Integer projectId) {
 		return diaryMapper.getProjectCheckList(projectId);
 	}
 
-	public List<ProjectDiary> getProjectdiaries(Integer projectId) {
-		return diaryMapper.getProjectdiaries(projectId);
-	}
-	
+	// 체크리스트 추가하기
 	public ProjectChecklist addChecklist(ChecklistCreateRequest request) {
 		diaryMapper.addChecklist(request);
 		return diaryMapper.getNewProjectCheckList(request.getChecklistId());
 	};
+
+	// 체크리스트의 체크 상태 업데이트하기
+	public void updateCheck(UpdateCheckStatusRequest request) {
+		diaryMapper.updateCheck(request);
+	}
 	
+	// 체크리스트 내용 업데이트하기
 	public void updateChecklist(UpdateChecklistRequest request) {
 		diaryMapper.updateChecklist(request);
 	}
+	
+	// 체크리스트 삭제하기
+	public void deleteChecklist(int checklistId) {
+		diaryMapper.deleteChecklist(checklistId);
+	}
+
+	
+	// ======================================
+	// 프로젝트 다이어리 (ProjectDiary) 관련 기능
+	// ======================================
+	
+	// 다이어리 가져오기
+	public List<ProjectDiary> getProjectdiaries(Integer projectId) {
+		return diaryMapper.getProjectdiaries(projectId);
+	}
+
 }

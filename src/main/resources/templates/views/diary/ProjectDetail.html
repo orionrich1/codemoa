@@ -22,20 +22,35 @@
         <div class="col-md-6 mb-4">
             <h5>체크리스트</h5>
             <ul class="list-group">
-                <li class="list-group-item d-flex justify-content-between align-items-center"
-                    th:each="item : ${checklist}">
-                    <span>
-                        <input class="checkListBox form-check-input me-2" type="checkbox"
-                               th:checked="${item.done}" th:data-no="${item.checklistId}"/>
-                        <span th:text="${item.content}">작업 내용</span>
-                    </span>	
-					<span class="badge rounded-pill"
-					      th:switch="${item.priority}">
-					  <span th:case="1" class="priority-high">우선순위</span>
-					  <span th:case="2" class="priority-medium">우선순위</span>
-					  <span th:case="* "class="priority-low">우선순위</span>
-					</span>
-                </li>
+				<li class="list-group-item d-flex justify-content-between align-items-center"
+				    th:each="item : ${checklist}">
+				    <span>
+				        <input class="checkListBox form-check-input me-2" type="checkbox"
+				               th:checked="${item.done}" th:data-no="${item.checklistId}"/>
+				        <span th:text="${item.content}" class="checklistContent">작업 내용</span>
+				    </span>	
+				
+				    <span class="d-flex align-items-center gap-2">
+				        <!-- 우선순위 배지 -->
+				        <span class="badge rounded-pill" th:switch="${item.priority}">
+				            <span th:case="1" class="priority-high">우선순위</span>
+				            <span th:case="2" class="priority-medium">우선순위</span>
+				            <span th:case="*" class="priority-low">우선순위</span>
+				        </span>
+				
+				        <!-- 수정 버튼 -->
+				        <button type="button" class="updateBtn btn btn-outline-primary btn-sm edit-checklist"
+				                th:data-no="${item.checklistId}">
+				            <i class="bi bi-pencil-square"></i>
+				        </button>
+				
+				        <!-- 삭제 버튼 -->
+				        <button type="button" class="deleteBtn btn btn-outline-danger btn-sm delete-checklist"
+				                th:data-no="${item.checklistId}">
+				            <i class="bi bi-trash3"></i>
+				        </button>
+				    </span>
+				</li>
                 
 		        <li class="list-group-item checklist-add" data-bs-toggle="collapse" data-bs-target="#checklistForm">
 		            <div class="text-center" style="font-size: 1.5rem; color: #888;">＋</div>

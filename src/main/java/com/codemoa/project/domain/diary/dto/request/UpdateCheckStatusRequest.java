@@ -5,8 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UpdateChecklistRequest {
-	private int checklistId;
-	private String content;
-	private int priority;
+public class UpdateCheckStatusRequest {
+	private boolean done;
+	private int no;
 }
