@@ -5,7 +5,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.codemoa.project.domain.diary.dto.request.ChecklistCreateRequest;
+import com.codemoa.project.domain.diary.dto.request.CreateChecklistRequest;
+import com.codemoa.project.domain.diary.dto.request.SaveDiaryRequest;
 import com.codemoa.project.domain.diary.dto.request.UpdateCheckStatusRequest;
 import com.codemoa.project.domain.diary.dto.request.UpdateChecklistRequest;
 import com.codemoa.project.domain.diary.entity.Project;
@@ -39,13 +40,13 @@ public class DiaryService {
 	// 프로젝트 체크리스트 (ProjectChecklist) 관련 기능
 	// ======================================
 	
-	// 체크리스트 가져오기
+	// 체크리스트 리스트 가져오기
 	public List<ProjectChecklist> getProjectCheckList(Integer projectId) {
 		return diaryMapper.getProjectCheckList(projectId);
 	}
 
 	// 체크리스트 추가하기
-	public ProjectChecklist addChecklist(ChecklistCreateRequest request) {
+	public ProjectChecklist addChecklist(CreateChecklistRequest request) {
 		diaryMapper.addChecklist(request);
 		return diaryMapper.getNewProjectCheckList(request.getChecklistId());
 	};
@@ -70,9 +71,22 @@ public class DiaryService {
 	// 프로젝트 다이어리 (ProjectDiary) 관련 기능
 	// ======================================
 	
-	// 다이어리 가져오기
+	// 다이어리 리스트 가져오기
 	public List<ProjectDiary> getProjectdiaries(Integer projectId) {
 		return diaryMapper.getProjectdiaries(projectId);
 	}
-
+	
+	public ProjectDiary saveDiary(SaveDiaryRequest request) {
+		if (request.getDiaryId() == 0) {
+			diaryMapper.addDiary(request);
+		}
+		else {
+			diaryMapper.updateDiary(request);
+		}
+		return diaryMapper.getDiary(request.getDiaryId());
+	}
+	
+	public void deleteDiary(int diaryId) {
+		diaryMapper.deleteDiary(diaryId);
+	}
 }

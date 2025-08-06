@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ChecklistCreateRequest {	
+public class CreateChecklistRequest {	
 	private int checklistId;
 	private int projectId;
 	private String content;

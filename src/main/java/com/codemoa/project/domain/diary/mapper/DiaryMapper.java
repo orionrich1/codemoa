@@ -5,7 +5,8 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.codemoa.project.domain.diary.dto.request.ChecklistCreateRequest;
+import com.codemoa.project.domain.diary.dto.request.CreateChecklistRequest;
+import com.codemoa.project.domain.diary.dto.request.SaveDiaryRequest;
 import com.codemoa.project.domain.diary.dto.request.UpdateCheckStatusRequest;
 import com.codemoa.project.domain.diary.dto.request.UpdateChecklistRequest;
 import com.codemoa.project.domain.diary.entity.Project;
@@ -29,7 +30,7 @@ public interface DiaryMapper {
 
 	public void updateCheck(UpdateCheckStatusRequest request);
 
-	public void addChecklist(ChecklistCreateRequest request);
+	public void addChecklist(CreateChecklistRequest request);
 
 	public ProjectChecklist getNewProjectCheckList(int checklistId);
 	
@@ -41,5 +42,12 @@ public interface DiaryMapper {
 	// 프로젝트 다이어리 (ProjectDiary) 관련 기능
 	// ======================================
 	public List<ProjectDiary> getProjectdiaries(Integer projectId);
+	
+	public int addDiary(SaveDiaryRequest request);
+	
+	public void updateDiary(SaveDiaryRequest request);
+	
+	public ProjectDiary getDiary(int diaryId);
 
+	public void deleteDiary(int diaryId);
 }
