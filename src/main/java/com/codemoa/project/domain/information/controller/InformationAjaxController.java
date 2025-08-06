@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codemoa.project.domain.information.entity.Book;
+import com.codemoa.project.domain.information.entity.Contest;
 import com.codemoa.project.domain.information.service.InformationService;
 
 @RestController
@@ -18,17 +19,15 @@ public class InformationAjaxController {
 	private InformationService informationService;
 	
 	@GetMapping("/orderlecture.ajax")
-	public List<Book> orderlecture() {
+	public Map<String, Object> orderlecture(@RequestParam("order") String order) {
 		
-	
-		return null;
+		return informationService.lectureList(1, "null", "null", 8, 10, order);
 	}
 
 	@GetMapping("/ordercontest.ajax")
-	public List<Book> ordercontest() {
+	public Map<String, Object> ordercontest(@RequestParam("order") String order) {
 		
-		
-		return null;
+		return informationService.contestList(1, "null", "null", 8, 10, order);
 	}
 	
 	@GetMapping("/orderbook.ajax")

@@ -22,7 +22,27 @@
 				content1 like CONCAT('%', #{keyword}, '%')
 			</if>
 		</where>
-		ORDER BY recommend_no DESC
+		<!-- 동적 정렬 -->
+		<choose>
+			<when test="order == 'rating'">
+				ORDER BY rating desc
+			</when>
+			<when test="order == 'regDate'">
+				ORDER BY reg_date desc
+			</when>
+			<otherwise>
+				ORDER BY recommend_no desc
+			</otherwise>
+		</choose>
+	
+		<!-- <choose>
+			<when test="orderDir == 'asc' or orderDir == 'ASC'">
+				ASC
+			</when>
+			<otherwise>
+				DESC
+			</otherwise>
+		</choose>  -->
 		LIMIT #{startRow}, #{num}	
 	</select>
 	
@@ -82,8 +102,6 @@
 				content like CONCAT('%', #{keyword}, '%')
 			</if>
 		</where>
-		
-		<!-- 동적 정렬 -->
 		<choose>
 			<when test="order == 'rating'">
 				ORDER BY rating desc
@@ -95,15 +113,6 @@
 				ORDER BY book_no desc
 			</otherwise>
 		</choose>
-	
-		<!-- <choose>
-			<when test="orderDir == 'asc' or orderDir == 'ASC'">
-				ASC
-			</when>
-			<otherwise>
-				DESC
-			</otherwise>
-		</choose>  -->
 		LIMIT #{startRow}, #{num}	
 	</select>
 	
@@ -164,7 +173,17 @@
 				content like CONCAT('%', #{keyword}, '%')
 			</if>
 		</where>
-		ORDER BY contest_no DESC
+		<choose>
+			<when test="order == 'startDate'">
+				ORDER BY start_date desc
+			</when>
+			<when test="order == 'endDate'">
+				ORDER BY end_date desc
+			</when>
+			<otherwise>
+				ORDER BY contest_no desc
+			</otherwise>
+		</choose>
 		LIMIT #{startRow}, #{num}	
 	</select>
 	

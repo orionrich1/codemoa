@@ -26,28 +26,28 @@
 							<ul class="navi">
 								<li><a href="https://library.nih.go.kr/spec/main.do">HOME</a></li>
 								<li>
-								<th:block th:if="${order =='pubDate'}">
-									<select name="order" id="typeSelector">
-										<option value="bookNo">기존 순서</option>
-										<option value="pubDate" selected>출판일</option>
-										<option value="rating">평점</option>
-									</select>
-								</th:block>
-								<th:block th:if="${order =='rating'}">
-									<select name="order" id="typeSelector">
-										<option value="bookNo">기존 순서</option>
-										<option value="pubDate">출판일</option>
-										<option value="rating" selected>평점</option>
-									</select>
-								</th:block>
-								<th:block th:if="${order !='pubDate' and order !='rating'}">
-									<select name="order" id="typeSelector">
-										<option value="bookNo" disabled selected>정렬기준</option>
-										<option value="bookNo">기존 순서</option>
-										<option value="pubDate">출판일</option>
-										<option value="rating">평점</option>
-									</select>
-								</th:block>
+									<th:block th:if="${order =='pubDate'}">
+										<select name="order" id="typeSelector3">
+											<option value="bookNo">기존 순서</option>
+											<option value="pubDate" selected>출판일</option>
+											<option value="rating">평점</option>
+										</select>
+									</th:block>
+									<th:block th:if="${order =='rating'}">
+										<select name="order" id="typeSelector3">
+											<option value="bookNo">기존 순서</option>
+											<option value="pubDate">출판일</option>
+											<option value="rating" selected>평점</option>
+										</select>
+									</th:block>
+									<th:block th:if="${order !='pubDate' and order !='rating'}">
+										<select name="order" id="typeSelector3">
+											<option value="bookNo" disabled selected>정렬기준</option>
+											<option value="bookNo">기존 순서</option>
+											<option value="pubDate">출판일</option>
+											<option value="rating">평점</option>
+										</select>
+									</th:block>
 								</li>
 								<li><a th:href="@{/information}">통합검색</a></li>
 								<li><a th:href="@{bookAdd}">글쓰기</a></li>
