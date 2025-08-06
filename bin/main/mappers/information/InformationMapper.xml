@@ -82,7 +82,28 @@
 				content like CONCAT('%', #{keyword}, '%')
 			</if>
 		</where>
-		ORDER BY book_no DESC
+		
+		<!-- 동적 정렬 -->
+		<choose>
+			<when test="order == 'rating'">
+				ORDER BY rating desc
+			</when>
+			<when test="order == 'pubDate'">
+				ORDER BY pub_date desc
+			</when>
+			<otherwise>
+				ORDER BY book_no desc
+			</otherwise>
+		</choose>
+	
+		<!-- <choose>
+			<when test="orderDir == 'asc' or orderDir == 'ASC'">
+				ASC
+			</when>
+			<otherwise>
+				DESC
+			</otherwise>
+		</choose>  -->
 		LIMIT #{startRow}, #{num}	
 	</select>
 	

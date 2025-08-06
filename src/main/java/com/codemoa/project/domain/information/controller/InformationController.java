@@ -60,9 +60,10 @@ public class InformationController {
 	public String bookList(Model model,
 			@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
 			@RequestParam(value = "type", required = false, defaultValue = "null") String type,
-			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword) {
+			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword,
+			@RequestParam(value = "order", required = false, defaultValue = "null") String order) {
 		
-		model.addAllAttributes(informationService.bookList(pageNum, type, keyword, 8, 10));
+		model.addAllAttributes(informationService.bookList(pageNum, type, keyword, 8, 10, order));
 		return "views/information/informationList3";
 	}
 	
@@ -85,7 +86,7 @@ public class InformationController {
 		log.info(type, "123456");
 		model.addAttribute("lectureMap",informationService.lectureList(pageNum, type, keyword, 100, 10));
 		model.addAttribute("contestMap",informationService.contestList(pageNum, type, keyword, 100, 10));
-		model.addAttribute("bookMap",informationService.bookList(pageNum, type, keyword, 100, 10));
+		model.addAttribute("bookMap",informationService.bookList(pageNum, type, keyword, 100, 10, null));
 		
 		model.addAttribute("keyword", keyword);
 		
@@ -215,7 +216,7 @@ public class InformationController {
 			@RequestParam(value = "type", required = false, defaultValue = "null") String type,
 			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword) {
 		
-		model.addAllAttributes(informationService.bookList(pageNum, type, keyword, 10, 10));
+		model.addAllAttributes(informationService.bookList(pageNum, type, keyword, 10, 10, null));
 		
 		return "views/information/informationBookList";
 	}
@@ -225,10 +226,12 @@ public class InformationController {
 			@RequestParam(value = "no") int no,
 			@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
 			@RequestParam(value = "type", required = false, defaultValue = "null") String type,
-			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword) {
+			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword,
+			@RequestParam(value = "order", required = false, defaultValue = "null") String order) {
 		
 		model.addAttribute("pageNum", pageNum);
 		model.addAttribute(informationService.getBook(no));
+		model.addAttribute("order", order);
 		return "views/information/informationBookDetail";
 	}
 	
