@@ -68,15 +68,15 @@ transition: box-shadow 0.3s ease-in-out;
    		 	※고용 정보글은 매일 새벽 3시에 자동 갱신되며, 수동갱신이 필요할 경우 정보 갱신버튼을 누르면 갱신됩니다. 
    		 	</small>
    		 </div>
-	
+	</div>
 	
 	
 	
 	<!--  채용 공고 리스트  -->
 		<div class="row row-cols-1 row-cols-md-3 g-4">
 		    <div class="col" th:each="post : ${employmentList}">
-		        <div class="card h-100 shadow-sm border-0.5 rounded-4" style="cursor:pointer;"
-					     th:attr="data-url=${post.url}">
+		       <div class="card employment-card h-100 shadow-sm border-0.5 rounded-4" style="cursor:pointer;" 
+		       	th:attr="data-url=${post.url}">
 				  <div class="card-body">
 		            <div class="card-body">
 		                <!-- 1. 공고 제목 -->
@@ -118,16 +118,16 @@ transition: box-shadow 0.3s ease-in-out;
 			<div class="col text-center">
 				<nav>
 					<ul class="pagination justify-content-center">
-					    <li class="page-item" th:classappend="${page.currentPage == 1} ? 'disabled'">
-					        <a class="page-link" th:href="@{/employmentList(page=${page.currentPage - 1})}">이전</a>
-					    </li>
-					    <li class="page-item" th:each="i : ${#numbers.sequence(1, page.totalPages > 0 ?  page.totalPages : 1)}"
-					        th:classappend="${i == page.currentPage} ? 'active'">
-					        <a class="page-link" th:href="@{/employmentList(page=${i})}" th:text="${i}">1</a>
-					    </li>
-					    <li class="page-item" th:classappend="${page.currentPage == (page.totalPages > 0 ? page.totalPages:1)} ? 'disabled'">
-					        <a class="page-link" th:href="@{/employmentList(page=${page.currentPage + 1})}">다음</a>
-					    </li>
+					  <li class="page-item" th:classappend="${pagination['currentPage'] == 1} ? 'disabled'">
+						    <a class="page-link" th:href="@{/employmentList(page=${pagination['currentPage'] - 1})}">이전</a>
+						</li>
+						<li class="page-item" th:each="i : ${#numbers.sequence(1, pagination['totalPages'] > 0 ?  pagination['totalPages'] : 1)}"
+						    th:classappend="${i == pagination['currentPage']} ? 'active'">
+						    <a class="page-link" th:href="@{/employmentList(page=${i})}" th:text="${i}">1</a>
+						</li>
+						<li class="page-item" th:classappend="${pagination['currentPage'] == (pagination['totalPages'] > 0 ? pagination['totalPages'] : 1)} ? 'disabled'">
+						    <a class="page-link" th:href="@{/employmentList(page=${pagination['currentPage'] + 1})}">다음</a>
+						</li>
 					</ul>
 				</nav>
 			</div>

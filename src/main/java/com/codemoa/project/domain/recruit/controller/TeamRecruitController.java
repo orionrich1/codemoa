@@ -49,6 +49,10 @@ public class TeamRecruitController {
 	    return (String) session.getAttribute("loginId");
 	}
 	
+	@GetMapping("/TeamRecruitList")
+	public String redirectTeamRecruitList() {
+		return "redirect:/teamRecruitList";
+	}
 	
 	@DeleteMapping("/recruit/{recruitId}")
 	public ResponseEntity<?> deleteRecruit(@PathVariable("recruitId") int recruitId, HttpSession session){
@@ -104,7 +108,7 @@ public class TeamRecruitController {
 			redirectAttrs.addFlashAttribute("errorMsg", "수정중 오류가 발생되었습니다.");
 			return "redirect:/recruit/updateForm?recruitId=" + teamRecruit.getRecruitId();
 		}
-		return "redirect:/recruit/TeamRecruitDetail?recruitId=" + teamRecruit.getRecruitId();
+		return "redirect:/recruit/teamRecruitDetail?recruitId=" + teamRecruit.getRecruitId();
 	}
 	
 	
@@ -173,7 +177,7 @@ public class TeamRecruitController {
 
 		    teamRecruitService.addTeamRecruit(teamRecruit);
 		    redirectAttrs.addFlashAttribute("msg", "등록이 완료되었습니다.");
-		    return "redirect:/TeamRecruitList";
+		    return "redirect:/teamRecruitList";
 		}	
 		
 	@GetMapping("/addTeamRecruit")
@@ -190,7 +194,10 @@ public class TeamRecruitController {
 			HttpSession session) {
 		teamRecruitService.increaseViewCount(recruitId);
 		
-		model.addAttribute("teamRecruit", teamRecruitService.getTeamRecruit(recruitId));
+		TeamRecruit teamRecruit = teamRecruitService.getTeamRecruit(recruitId);
+		 log.info("teamRecruit nickname = {}", teamRecruit.getNickname()); 
+		
+		 model.addAttribute("teamRecruit", teamRecruit);
 		
 		String loginId = (String) session.getAttribute("loginId");
 		model.addAttribute("loginId", loginId);
@@ -198,12 +205,14 @@ public class TeamRecruitController {
 		return "views/recruit/teamRecruitDetail";
 	}
 	
+	
 	@GetMapping("/teamRecruitList")
 	public String TeamRecruitList(Model model, 
 			@RequestParam(value = "pageNum", required=false, defaultValue="1") int pageNum,
 			@RequestParam(value = "type", required=false, defaultValue="") String type,
 			@RequestParam(value = "keyword", required=false, defaultValue="") String keyword
 			) {
+		try {
 		if("null".equalsIgnoreCase(type)) type ="";
 		if("null".equalsIgnoreCase(keyword)) keyword = "";
 		
@@ -212,7 +221,10 @@ public class TeamRecruitController {
 		
 		model.addAttribute("type", type);
 		model.addAttribute("keyword", keyword);
-
+		} catch(Exception e) {
+	        log.error("TeamRecruitList 오류 발생", e);
+	        throw e;  // 또는 적절히 처리
+	    }
 		return "views/recruit/teamRecruitList";
 	}
 }
