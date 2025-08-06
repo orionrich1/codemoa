@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 @Component
@@ -21,14 +22,12 @@ public class DataInitializer implements CommandLineRunner {
 
     private final CommunityBoardRepository communityBoardRepository;
     private final UserRepository userRepository;
-    // ▼▼▼ [추가된 의존성] ▼▼▼
     private final LocalUserRepository localUserRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
     public void run(String... args) throws Exception {
-        // 1. 샘플 사용자 생성
         System.out.println("샘플 사용자 데이터 생성을 시작합니다.");
         createUserIfNotExists("admin", "관리자", "Admin", "1234", 999999);
         createUserIfNotExists("user01", "김브론즈", "브론즈맨", "1234", 500);
@@ -43,14 +42,12 @@ public class DataInitializer implements CommandLineRunner {
         createUserIfNotExists("user10", "임다이아", "빛나는다이아", "1234", 45000);
         System.out.println("샘플 사용자 데이터 생성을 완료했습니다.");
 
-        // 2. 테스트 게시물 생성
         long boardCount = communityBoardRepository.count();
-        if (boardCount > 0) { // 게시물이 하나라도 있으면 생성하지 않음
+        if (boardCount > 0) {
             System.out.println("이미 테스트 게시물 데이터가 존재합니다.");
             return;
         }
 
-        // 게시물 작성을 위해 사용자 조회
         User postUser = userRepository.findByUserId("user05").orElseThrow();
 
         System.out.println("테스트용 게시물 데이터 생성을 시작합니다.");
@@ -74,21 +71,33 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     /**
-     * 사용자가 존재하지 않으면 새로 생성하는 헬퍼 메서드
+     * 사용자가 존재하지 않으면 새로 생성하고, 
+     * 'admin' 사용자가 존재하지만 등급이 ADMIN이 아닐 경우 강제로 업데이트하는 메서드
      */
     private void createUserIfNotExists(String userId, String name, String nickname, String rawPassword, int points) {
-        if (userRepository.findByUserId(userId).isEmpty()) {
-            UserGrade grade = UserGrade.getGradeForPoints(points); // 포인트에 맞는 등급 계산
+        Optional<User> optionalUser = userRepository.findByUserId(userId);
+
+        if (optionalUser.isEmpty()) {
+            // 시나리오 1: 사용자가 존재하지 않으면 새로 생성
+            UserGrade grade = "admin".equals(userId) ? UserGrade.ADMIN : UserGrade.getGradeForPoints(points);
             
             User newUser = new User(userId, name, nickname, userId + "@test.com", "010-1234-5678", grade);
             newUser.setTotalPoints(points);
 
-            // LocalUser를 생성할 때 암호화된 비밀번호를 사용
             String encodedPassword = passwordEncoder.encode(rawPassword);
             LocalUser newLocalUser = new LocalUser(newUser, encodedPassword);
 
-            // LocalUser를 저장하면 User도 함께 저장됩니다 (CascadeType.ALL)
             localUserRepository.save(newLocalUser);
+
+        } else if ("admin".equals(userId)) {
+            // 시나리오 2: 사용자가 존재하고, 그 사용자가 'admin'인 경우
+            User adminUser = optionalUser.get();
+            if (adminUser.getGrade() != UserGrade.ADMIN) {
+                // 등급이 ADMIN이 아니면, ADMIN으로 강제 업데이트
+                System.out.println("기존 'admin' 계정의 등급을 ADMIN으로 업데이트합니다.");
+                adminUser.setGrade(UserGrade.ADMIN);
+                userRepository.save(adminUser); // 변경사항 저장
+            }
         }
     }
 }

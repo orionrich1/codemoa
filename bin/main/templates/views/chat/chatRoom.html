@@ -38,7 +38,6 @@
 
 <th:block layout:fragment="script">
     <script th:inline="javascript">
-        // 이전 단계에서 제공한 STOMP JavaScript 로직과 동일
         const username = [[${username}]];
         const roomId = [[${room.roomId}]];
         let stompClient = null;
@@ -47,9 +46,19 @@
             const socket = new SockJS('/ws-stomp');
             stompClient = Stomp.over(socket);
             stompClient.connect({}, function (frame) {
+                console.log('Connected: ' + frame);
+
+                // 1. 채팅방 전체 메시지 구독 (모두가 보는 채널)
                 stompClient.subscribe('/sub/chat/room/' + roomId, function (chatMessage) {
                     showMessage(JSON.parse(chatMessage.body));
                 });
+
+                // 2. 과거 대화 기록을 수신할 개인 큐 구독 (나만 보는 채널)
+                stompClient.subscribe('/user/queue/messages', function (chatMessage) {
+                    showMessage(JSON.parse(chatMessage.body));
+                });
+
+                // 3. 입장 메시지 전송
                 stompClient.send("/pub/chat/message", {}, JSON.stringify({
                     'type': 'ENTER', 'roomId': roomId, 'sender': username
                 }));
@@ -88,6 +97,7 @@
                 newMsg.classList.add("msg-system");
                 newMsg.innerText = message.message;
             }
+            // 참고: 서버에서 보내준 과거 기록은 type이 'TALK'이므로, 위 if문에서 처리됩니다.
             msgArea.appendChild(newMsg);
             msgArea.scrollTop = msgArea.scrollHeight;
         }

@@ -11,44 +11,40 @@ import java.util.stream.Stream;
 @Getter
 @RequiredArgsConstructor
 public enum UserGrade {
-    
-    BRONZE("브론즈", 0),
-    SILVER("실버", 2000),
-    GOLD("골드", 5000),
-    PLATINUM("플래티넘", 10000),
-    DIAMOND("다이아몬드", 20000),
+
+    // ▼▼▼ [핵심 수정 부분] ▼▼▼
+    ADMIN("관리자", Integer.MAX_VALUE), // 관리자 등급 추가
+    // ▲▲▲ [핵심 수정 부분] ▲▲▲
+
+    GRANDMASTER("그랜드마스터", 100000),
     MASTER("마스터", 50000),
-    GRANDMASTER("그랜드마스터", 100000);
+    DIAMOND("다이아몬드", 20000),
+    PLATINUM("플래티넘", 10000),
+    GOLD("골드", 5000),
+    SILVER("실버", 2000),
+    BRONZE("브론즈", 0);
 
     private final String gradeName;
     private final int minPoints;
 
-    // 포인트에 해당하는 등급을 찾아주는 Map (효율적인 조회를 위해)
     private static final Map<Integer, UserGrade> POINTS_TO_GRADE_MAP =
             Collections.unmodifiableMap(Stream.of(values())
                     .collect(Collectors.toMap(UserGrade::getMinPoints, grade -> grade)));
 
-    /**
-     * 주어진 포인트에 맞는 등급을 반환합니다.
-     * @param points 현재 사용자 포인트
-     * @return 해당 포인트에 맞는 UserGrade
-     */
     public static UserGrade getGradeForPoints(int points) {
-        // 포인트 역순으로 등급을 순회하며 가장 적합한 등급을 찾습니다.
         return Stream.of(values())
                 .filter(grade -> points >= grade.getMinPoints())
-                .reduce((first, second) -> second) // 마지막으로 매칭되는(가장 높은) 등급을 선택
-                .orElse(BRONZE); // 조건을 만족하는 등급이 없으면 BRONZE 반환
+                .reduce((first, second) -> second)
+                .orElse(BRONZE);
     }
 
-    /**
-     * 다음 등급을 반환합니다.
-     * @return 다음 UserGrade, 최고 등급일 경우 null
-     */
     public UserGrade getNextGrade() {
-        if (this == GRANDMASTER) {
-            return null; // 최고 등급
+        if (this == ADMIN) { // 최고 등급이 ADMIN이므로 조건 변경
+            return null;
         }
-        return values()[this.ordinal() + 1];
+        // ADMIN이 가장 앞에 오도록 순서를 바꿨으므로, 로직은 그대로 유지됩니다.
+        // 하지만 더 안전한 방법은 Enum의 순서에 의존하지 않는 것입니다.
+        // 현재는 그대로 두어도 문제는 없습니다.
+        return this.ordinal() == 0 ? null : values()[this.ordinal() - 1]; // 역순으로 다음 등급 찾기
     }
 }

@@ -21,36 +21,58 @@ public class ChatRoomController {
 
     private final ChatService chatService;
 
-    // 채팅방 목록 조회
+    // [디버깅을 위해 Authentication 파라미터 추가]
     @GetMapping("/rooms")
-    public String rooms(Model model) {
+    public String rooms(Model model, Authentication authentication) {
+
+        // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ 디버깅용 코드 추가 ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+        if (authentication != null && !(authentication.getPrincipal() instanceof String)) {
+            try {
+                CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+                String userId = userDetails.getUsername();
+                Object grade = userDetails.getUser().getGrade();
+
+                System.out.println("=================================================");
+                System.out.println("### 현재 로그인한 사용자 ID: " + userId);
+                System.out.println("### 실제 인식된 등급(Grade) 객체: " + grade);
+                if (grade != null) {
+                    System.out.println("### 등급 이름(Grade.name()): " + userDetails.getUser().getGrade().name());
+                }
+                System.out.println("=================================================");
+
+            } catch (Exception e) {
+                System.out.println("### 디버깅 중 에러 발생: " + e.getMessage());
+            }
+        }
+        // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ 디버깅용 코드 끝 ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+
         List<ChatRoomDto> rooms = chatService.findAllRooms();
         model.addAttribute("rooms", rooms);
         return "views/chat/chatList";
     }
 
-    // [최종 수정] 채팅방 생성 - Controller에서 grade를 직접 확인
+
     @PostMapping("/room")
-    public String createRoom(@RequestParam String name, Authentication authentication) {
-        // 1. Principal 객체를 CustomUserDetails 타입으로 형변환합니다.
+    // ▼▼▼▼▼ [핵심 수정 부분] ▼▼▼▼▼
+    public String createRoom(@RequestParam("name") String name, Authentication authentication) {
+    // ▲▲▲▲▲ [핵심 수정 부분] ▲▲▲▲▲
+        
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        // 2. User 엔티티를 가져옵니다.
         User user = userDetails.getUser();
 
-        // 3. 사용자의 grade를 가져와서 이름(name)이 'admin'인지 대소문자 구분 없이 확인합니다.
-        //    (DB에는 'admin', Enum에는 'ADMIN'으로 저장되어 있을 수 있으므로 equalsIgnoreCase 사용)
         if (user.getGrade() == null || !"admin".equalsIgnoreCase(user.getGrade().name())) {
             throw new AccessDeniedException("채팅방을 생성할 권한이 없습니다.");
         }
 
-        // 4. 권한이 확인된 경우에만 방 생성 로직을 실행합니다.
         chatService.createRoom(name);
         return "redirect:/chat/rooms";
     }
 
-    // 채팅방 입장
+ // 채팅방 입장
     @GetMapping("/room/{roomId}")
-    public String roomDetail(@PathVariable String roomId, Model model, Principal principal) {
+    // ▼▼▼▼▼ [핵심 수정 부분] ▼▼▼▼▼
+    public String roomDetail(@PathVariable("roomId") String roomId, Model model, Principal principal) {
+    // ▲▲▲▲▲ [핵심 수정 부분] ▲▲▲▲▲
         ChatRoomDto room = chatService.findRoomById(roomId);
         model.addAttribute("room", room);
         

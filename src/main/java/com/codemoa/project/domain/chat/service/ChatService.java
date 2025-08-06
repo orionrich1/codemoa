@@ -7,6 +7,7 @@ import com.codemoa.project.domain.chat.entity.ChatRoom;
 import com.codemoa.project.domain.chat.repository.ChatMessageRepository;
 import com.codemoa.project.domain.chat.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,4 +61,19 @@ public class ChatService {
     public List<ChatMessage> getMessages(String roomId) {
         return chatMessageRepository.findByRoomIdOrderBySentAtAsc(roomId);
     }
+
+    // ▼▼▼ [핵심 추가 부분] ▼▼▼
+    /**
+     * 매시간 정각에 6시간이 지난 채팅 메시지를 자동으로 삭제합니다.
+     * cron = "초 분 시 일 월 요일"
+     * "0 0 * * * *"는 매일, 매월, 매시 정각 0분 0초에 실행하라는 의미입니다.
+     */
+    @Scheduled(cron = "0 0 * * * *")
+    @Transactional
+    public void cleanupOldMessages() {
+        LocalDateTime sixHoursAgo = LocalDateTime.now().minusHours(6);
+        chatMessageRepository.deleteBySentAtBefore(sixHoursAgo);
+        System.out.println("오래된 채팅 메시지 삭제 완료 (6시간 이전 데이터) - 실행 시각: " + LocalDateTime.now());
+    }
+    // ▲▲▲ [핵심 추가 부분] ▲▲▲
 }
