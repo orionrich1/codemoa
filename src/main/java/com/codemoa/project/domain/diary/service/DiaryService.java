@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.codemoa.project.domain.diary.dto.request.CreateChecklistRequest;
-import com.codemoa.project.domain.diary.dto.request.CreateProjectRequest;
+import com.codemoa.project.domain.diary.dto.request.SaveProjectRequest;
 import com.codemoa.project.domain.diary.dto.request.SaveDiaryRequest;
 import com.codemoa.project.domain.diary.dto.request.UpdateCheckStatusRequest;
 import com.codemoa.project.domain.diary.dto.request.UpdateChecklistRequest;
@@ -30,14 +30,26 @@ public class DiaryService {
 	public List<Project> getProjectList(String userId) {
 		return diaryMapper.getProjectList(userId);
 	}
+	
+	public List<Project> searchProjectList(String userId, String keyword) {
+		return diaryMapper.searchProjectList(userId, keyword);
+	}
 
 	// 프로젝트 상세 가져오기
 	public Project getProjectDetail(Integer projectId) {
 		return diaryMapper.getProjectDetail(projectId);
 	}
 	
-	public void addProject(CreateProjectRequest request) {
+	public void addProject(SaveProjectRequest request) {
 		diaryMapper.addProject(request); 
+	}
+	
+	public void updateProject(SaveProjectRequest request) {
+		diaryMapper.updateProject(request); 
+	}
+	
+	public void deleteProject(int projectId) {
+		diaryMapper.deleteProject(projectId);
 	}
 
 	

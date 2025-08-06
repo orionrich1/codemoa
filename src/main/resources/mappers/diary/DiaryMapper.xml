@@ -11,13 +11,27 @@
 		SELECT * FROM project WHERE user_id=#{userID} ORDER BY project_id DESC
 	</select>
 	
+	<select id="searchProjectList" resultType="Project">
+		SELECT * FROM project
+		WHERE user_id=#{userId} AND name LIKE CONCAT('%', #{keyword}, '%')
+		ORDER BY project_id DESC
+	</select>
+	
 	<select id="getProjectDetail" resultType="Project">
 		SELECT * FROM project WHERE project_id=#{projectId}
 	</select>
 	
-	<insert id="addProject" parameterType="CreateProjectRequest">
+	<insert id="addProject" parameterType="SaveProjectRequest">
 		INSERT INTO project (user_id, name, description, status) VALUES (#{userId}, #{name}, #{description}, #{status});
 	</insert>
+	
+	<update id="updateProject" parameterType="SaveProjectRequest">
+		UPDATE project SET name=#{name}, description=#{description}, status=#{status} WHERE project_id=#{projectId}
+	</update>
+	
+	<delete id="deleteProject">
+		DELETE FROM project WHERE project_id=#{projectId}
+	</delete>
 	
 <!-- 
 	===============================

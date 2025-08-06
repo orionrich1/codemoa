@@ -146,3 +146,88 @@
     transform: translateY(-1px);
     box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
+
+
+/* ===============================
+   ProjectForm.html 부분
+   =============================== */
+.project-form {
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 20px 25px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.project-form .form-group {
+    margin-bottom: 20px;
+}
+
+.project-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #333;
+}
+
+.project-form input[type="text"],
+.project-form textarea,
+.project-form select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+}
+
+.project-form input[type="text"]:focus,
+.project-form textarea:focus,
+.project-form select:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.project-form textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.project-form .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.project-form button {
+    padding: 10px 16px;
+    background: #007bff;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.project-form button:hover {
+    background: #0056b3;
+}
+
+.project-form a {
+    padding: 10px 16px;
+    background: #ccc;
+    color: #333;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: background 0.2s ease;
+}
+
+.project-form a:hover {
+    background: #999;
+}
