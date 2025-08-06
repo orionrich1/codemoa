@@ -12,7 +12,7 @@
 					<h2 class="fs-3 fw-bold" th:text="#{bbs.Q&A.title}">Q&A</h2>
 				</div>
 			</div>
-			<form name="searchForm" id="searchForm" action="boardList"
+			<form name="searchForm" id="searchForm" action="boardList2"
 				class="row justify-content-center my-3">
 				<div class="col-auto">
 					<select name="type" class="form-select">
@@ -44,7 +44,7 @@
 							<th:block th:if="${not #lists.isEmpty(bList)}">
 								<tr th:block th:each="board, status: ${bList}">
 									<td>[[ ${board.no}]]</td>
-									<td><a th:href="@{boardDetail(no=${board.no},
+									<td><a th:href="@{boardDetail2(no=${board.no},
 									pageNum=${currentPage})}"
 									class="text-decoration-none link-text-dark">[[ ${board.title}]]</a></td>
 									<td th:text="${ board.writer }"></td>

@@ -2,11 +2,14 @@ package com.springbootstudy.bbs.mapper;
 
 import java.util.List;
 
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.springbootstudy.bbs.domain.Board;
 import com.springbootstudy.bbs.domain.Reply;
+
+
 
 @Mapper
 public interface BoardMapper {
@@ -48,4 +51,11 @@ public interface BoardMapper {
 	
 	// DB 테이블에서 no에 해당하는 게시글을 읽어와 Board 객체로 반환하는 메서드
 	public Board getBoard2(int no);
+	
+	// 게시글 번호에 해당하는 추천/땡큐를 업데이트 하는 메서드
+	public void updateRecommend(
+			@Param("no") int no, @Param("recommend") String recommend);
+	
+	// 게시글 번호에 해당하는 추천/땡큐 정보를 읽어와 반환하는 메서드
+	public Board getRecommend(int no);
 }

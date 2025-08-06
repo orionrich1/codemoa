@@ -30,13 +30,13 @@ $(function() {
 				data: params,
 				type: "delete",
 				dataType: "json",
-				success: function(resData) {
-					console.log(resData);
+				success: function(data) {
+					console.log(data);
 					// 기본에 화면에 보이는 리스트 지우기
 					$("#replyList").empty();
 									  	
 					// 응답 받은 데이터를 이용해 화면을 갱신
-					$.each(resData, function(index, value) {					
+					$.each(data, function(index, value) {					
 						// 2025-06-16 13:37:42   <= 2025. 6. 16. 오후 1:38:26
 						let regDate = new Date(value.regDate);
 						
@@ -108,14 +108,14 @@ $(function() {
 			type: "patch", // post, get, put, patch
 			data: params,
 			dataType: "json",
-			success: function(resData) {
-				console.log(resData);
+			success: function(data) {
+				console.log(data);
 				
 				// 기본에 화면에 보이는 리스트 지우기
 				$("#replyList").empty();
 								  	
 				// 응답 받은 데이터를 이용해 화면을 갱신
-				$.each(resData, function(index, value) {					
+				$.each(data, function(index, value) {					
 					// 2025-06-16 13:37:42   <= 2025. 6. 16. 오후 1:38:26
 					let regDate = new Date(value.regDate);
 					
@@ -217,12 +217,12 @@ $(function() {
 			type: "post",
 			data: params,
 			dataType: "json",
-			success: function(resData) {
-			    console.log(resData);
+			success: function(data) {
+			    console.log(data);
 				$("#replyList").empty();
 			    	
 				// 응답 받은 데이터를 이용해 화면을 갱신
-				$.each(resData, function(index, value) {					
+				$.each(data, function(index, value) {					
 					// 2025-06-16 13:37:42   <= 2025. 6. 16. 오후 1:38:26
 					let regDate = new Date(value.regDate);
 					
@@ -307,6 +307,7 @@ $(function() {
 		
 	});
 	
+	// 추천/땡큐 Ajax
 	$(".btnCommend").click(function() {
 		let com = $(this).attr("id");
 		console.log("com : ", com);
@@ -316,14 +317,14 @@ $(function() {
 			data: {recommend: com, no: $("#no").val()},
 			dataType: "json",
 			type: "post",
-			success: function(resData) {
-				console.log(resData);
+			success: function(data) {
+				console.log(data);
 				let msg = com == 'commend' ? "추천이" : "땡큐가";
 				alert(msg + " 반영 되었습니다.");
-				$("#commend > .recommend").text(" (" + resData.recommend + ")")
-				$("#thank > .recommend").text(" (" + resData.thank + ")")
+				$("#commend > .recommend").text(" (" + data.recommend + ")")
+				$("#thank > .recommend").text(" (" + data.thank + ")")
 			}, 
-			error: function(xhr, satus, error) {
+			error: function(xhr, status, error) {
 				console.log("error : " + xhr.statusText + ", " + status + ", " + error); 
 			}
 		});

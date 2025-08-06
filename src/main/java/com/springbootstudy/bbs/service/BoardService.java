@@ -20,6 +20,18 @@ public class BoardService {
 	@Autowired
 	private BoardMapper boardMapper;
 	
+	// FAQ 게시판에 추천/땡큐 정보를 업데이트하고 갱신된 추천/땡큐를 가져오는 메서드
+	public Map<String, Integer> recommend(int no, String recommend) {
+		boardMapper.updateRecommend(no, recommend);
+		
+		Board board = boardMapper.getRecommend(no);
+		
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("recommend", board.getRecommend());
+		map.put("thank", board.getThank());
+		return map;
+	}
+	
 	// FAQ 게시글 번호에 해당하는 댓글 리스트를 반환하는 메서드
 	public List<Reply> replyList(int no) {
 		return boardMapper.replyList(no);

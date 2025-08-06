@@ -3,6 +3,7 @@ package com.springbootstudy.bbs.domain;
 import java.sql.Timestamp;
 
 
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

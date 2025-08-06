@@ -92,4 +92,27 @@ LIMIT #{startRow}, #{num}
 		SET read_count = read_count + 1
 	WHERE no = #{no}
 </update>
+
+<!-- 추천/땡큐 정보를 업데이트하는 맵핑 구문 -->
+<update id="updateRecommend">
+	UPDATE springbbs
+		SET
+		<if test="recommend == 'commend'">
+			recommend = recommend + 1
+		</if>
+		<if test="recommend == 'thank'">
+			thank = thank + 1
+		</if>
+	WHERE no = #{no}
+</update>
+<!-- 추천/땡큐 정보를 가져오는 맵핑 구문 -->
+<select id="getRecommend" resultType="Board">
+	SELECT recommend, thank
+	FROM springbbs
+	WHERE no = #{no}
+</select>
+
+
+
+
 </mapper>

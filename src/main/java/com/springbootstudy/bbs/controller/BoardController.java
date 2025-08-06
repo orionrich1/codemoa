@@ -28,13 +28,10 @@ public class BoardController {
 			@RequestParam("no") int no,
 			@RequestParam(value="pageNum", defaultValue="1") int pageNum) {
 		
-		Board board = boardService.getBoard2(no, true);
+		Board board = boardService.getBoard(no, true);
 		
 		model.addAttribute("board", board);
 		model.addAttribute("pageNum", pageNum);
-		
-		List<Reply> replyList = boardService.replyList(no);
-		model.addAttribute("replyList", replyList);
 		
 		return "views/FAQDetail";
 	}
@@ -63,6 +60,9 @@ public class BoardController {
 		
 		model.addAttribute("board", board);
 		model.addAttribute("pageNum", pageNum);
+		
+		List<Reply> replyList = boardService.replyList(no);
+		model.addAttribute("replyList", replyList);
 		
 		return "views/Q&ADetail";
 	}
