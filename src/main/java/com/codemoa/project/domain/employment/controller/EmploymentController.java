@@ -83,8 +83,8 @@ public class EmploymentController {
 	
 	@GetMapping("/employment/crawl")
 	public String crawlEmploymentDate(){
-		  employmentApiService.fetchAndSaveEmploymentList(1, 1000); // 페이지: 1, 10건 가져오기
-		    employmentApiService.fetchAndSavePublicRecruitmentNews(1, 1000);
+		  employmentApiService.fetchAndSaveEmploymentList(1, 300); // 페이지: 1, 10건 가져오기
+
 		    return "redirect:/employmentList"; // 크롤링 후 목록 페이지로 리다이렉트
 	}
 	

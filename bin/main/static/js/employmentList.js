@@ -48,7 +48,7 @@ function updateSubRegion(selectedRegion) {
 }
 */
 
-
+// 카드 클릭 이벤트
 function setupCardClickEvent(){
 	const cards = document.querySelectorAll(".employment-card");
 	cards.forEach(card => {
@@ -59,6 +59,14 @@ function setupCardClickEvent(){
 			}
 		});
 	});
+}
+
+//수동 크롤링폼 전송 함수 추가
+function submitCrawlForm(){
+	const crawlForm = document.getElementById("crawlForm");
+	if(crawlForm){
+		crawlForm.submit();
+	}
 }
 
 

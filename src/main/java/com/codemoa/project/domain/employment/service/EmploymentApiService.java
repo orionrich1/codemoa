@@ -3,6 +3,7 @@ package com.codemoa.project.domain.employment.service;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 import org.springframework.stereotype.Service;
 import org.w3c.dom.*;
@@ -17,6 +18,15 @@ import jakarta.transaction.Transactional;
 public class EmploymentApiService {
 
 	private final EmploymentRepository employmentRepository;
+	private static final String[] DEV_KEYWORDS = {
+		    "개발", "개발자", "웹", "프론트", "백엔드", "풀스택", "프론트엔드", "백엔드",
+		    "IT", "소프트웨어", "엔지니어", "프로그래머", "Java", "자바", "Spring", 
+		    "Node", "React", "Vue", "Python", "C#", "C++", "앱", "모바일", "서버", "AI", "머신러닝"
+		};
+	private static final String[] EXCLUDE_KEYWORDS = {
+			"웹툰", "웹소설", "웹디자인", "일러스트", "만화", "콘텐츠 제작", "스토리 작가", 
+		    "영상 편집", "앱디자인", "UIUX", "그래픽", "애니메이션", "미술", "캐릭터 디자인"
+		};
 	
 	//고용 24 API 인증키 (환경변수 또는 application.propertyies 로 관리 권장?)
 	private static final String authKey = "4fcb876e-1e49-4f9e-ad8a-2a99c63315cd";
@@ -50,15 +60,17 @@ public class EmploymentApiService {
 			
 			   System.out.println(">>> 공고: " + title + ", 회사: " + company + ", 유형: " + type + ", URL: " + url);
 			
-			   if (title != null && (
-					   title.contains("개발자") || 
-					   title.contains("IT") || 
-					   title.contains("소프트웨어") ||
-					   title.contains("프로그래머") ||
-					   title.contains("엔지니어") ||
-					   title.contains("백엔드") ||
-					   title.contains("프론트엔드")					   
-					   )) {
+			   String combinedText = (title + " " + type).toLowerCase();
+			   
+			   //포함 키워드 검색 조건(개발 관련)
+			   boolean isDevRelated = Arrays.stream(DEV_KEYWORDS)
+			       .anyMatch(keyword -> combinedText.contains(keyword.toLowerCase()));
+			   
+			   //제외 키워드 검색 조건(비개발 관련)
+			   boolean isExcluded = Arrays.stream(EXCLUDE_KEYWORDS)
+					    .anyMatch(keyword -> combinedText.contains(keyword.toLowerCase()));
+
+			   if (isDevRelated && !isExcluded) {
 		
 		
 			//중복 url 체크후 저장
@@ -117,27 +129,6 @@ public class EmploymentApiService {
 		}
 	}
 
-	public void fetchAndSavePublicRecruitmentNews(int startPage, int display) {
-		System.out.println("API 호출 시작");
-        System.out.println("startPage: " + startPage + ", display: " + display);
-
-		try {					  
-			//API 요청 Url	 https://www.work24.go.kr/cm/openApi/call/wk/callOpenApiSvcInfo210L22.do
-			String apiUrl = "https://www.work24.go.kr/cm/openApi/call/wk/callOpenApiSvcInfo210L22.do"
-					 + "?authKey=" + URLEncoder.encode(authKey, StandardCharsets.UTF_8)
-				        + "&callTp=L"
-				        + "&returnType=XML"
-				        + "&startPage=" + startPage
-				        + "&display=" + display;
-				        //+ "&keyword=" + URLEncoder.encode("개발자", StandardCharsets.UTF_8);
-						
-			//URL 연결 및 XML 파싱
-			InputStream is = new java.net.URL(apiUrl).openStream();			
-			parseAndSaveEmploymentData(is, "공채속보");			
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	
 	@Transactional
