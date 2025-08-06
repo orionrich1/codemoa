@@ -12,7 +12,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,6 +25,10 @@ public class ChatService {
 
     private final ChatRoomRepository chatRoomRepository;
     private final ChatMessageRepository chatMessageRepository;
+
+    // ▼▼▼ [접속자 관리 Map 추가] ▼▼▼
+    private final Map<String, Set<String>> roomUsers = new ConcurrentHashMap<>();
+    // ▲▲▲ [접속자 관리 Map 추가] ▲▲▲
 
     @Transactional(readOnly = true)
     public List<ChatRoomDto> findAllRooms() {
@@ -62,12 +70,25 @@ public class ChatService {
         return chatMessageRepository.findByRoomIdOrderBySentAtAsc(roomId);
     }
 
-    // ▼▼▼ [핵심 추가 부분] ▼▼▼
-    /**
-     * 매시간 정각에 6시간이 지난 채팅 메시지를 자동으로 삭제합니다.
-     * cron = "초 분 시 일 월 요일"
-     * "0 0 * * * *"는 매일, 매월, 매시 정각 0분 0초에 실행하라는 의미입니다.
-     */
+    // ▼▼▼ [접속자 관리 메서드 추가] ▼▼▼
+    public void addUserToRoom(String roomId, String username) {
+        roomUsers.computeIfAbsent(roomId, k -> ConcurrentHashMap.newKeySet()).add(username);
+    }
+
+    public void removeUserFromRoom(String roomId, String username) {
+        if (roomUsers.containsKey(roomId)) {
+            roomUsers.get(roomId).remove(username);
+            if (roomUsers.get(roomId).isEmpty()) {
+                roomUsers.remove(roomId);
+            }
+        }
+    }
+
+    public Set<String> getUsersInRoom(String roomId) {
+        return roomUsers.getOrDefault(roomId, Collections.emptySet());
+    }
+    // ▲▲▲ [접속자 관리 메서드 추가] ▲▲▲
+
     @Scheduled(cron = "0 0 * * * *")
     @Transactional
     public void cleanupOldMessages() {
@@ -75,5 +96,4 @@ public class ChatService {
         chatMessageRepository.deleteBySentAtBefore(sixHoursAgo);
         System.out.println("오래된 채팅 메시지 삭제 완료 (6시간 이전 데이터) - 실행 시각: " + LocalDateTime.now());
     }
-    // ▲▲▲ [핵심 추가 부분] ▲▲▲
 }
