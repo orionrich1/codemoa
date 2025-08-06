@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.codemoa.project.domain.diary.dto.request.CreateChecklistRequest;
+import com.codemoa.project.domain.diary.dto.request.CreateProjectRequest;
 import com.codemoa.project.domain.diary.dto.request.SaveDiaryRequest;
 import com.codemoa.project.domain.diary.dto.request.UpdateCheckStatusRequest;
 import com.codemoa.project.domain.diary.dto.request.UpdateChecklistRequest;
@@ -33,6 +34,10 @@ public class DiaryService {
 	// 프로젝트 상세 가져오기
 	public Project getProjectDetail(Integer projectId) {
 		return diaryMapper.getProjectDetail(projectId);
+	}
+	
+	public void addProject(CreateProjectRequest request) {
+		diaryMapper.addProject(request); 
 	}
 
 	

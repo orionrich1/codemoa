@@ -83,7 +83,7 @@ $(function() {
 		});
 	});
 
-	// 삭제] 버튼 클릭
+	// 삭제 버튼 클릭
 	$(document).on("click", ".deleteDiaryBtn", function() {
 		const diaryId = $(this).data("id");
 		const card = $(this).closest(".card");
@@ -92,10 +92,10 @@ $(function() {
 		$.ajax({
 			url: `deleteDiary/${diaryId}`,
 			type: "DELETE",
-			success: function(res) {
+			success: function() {
 				card.fadeOut(300, function() { $(this).remove(); });
 			},
-			error: function(err) {
+			error: function() {
 				alert("삭제 중 오류가 발생했습니다.");
 			}
 		});

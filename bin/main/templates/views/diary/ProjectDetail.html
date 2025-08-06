@@ -22,35 +22,37 @@
         <div class="col-md-6 mb-4">
             <h5>체크리스트</h5>
             <ul class="list-group">
-				<li class="list-group-item d-flex justify-content-between align-items-center"
-				    th:each="item : ${checklist}">
-				    <span>
-				        <input class="checkListBox form-check-input me-2" type="checkbox"
-				               th:checked="${item.done}" th:data-no="${item.checklistId}"/>
-				        <span th:text="${item.content}" class="checklistContent">작업 내용</span>
-				    </span>	
-				
-				    <span class="d-flex align-items-center gap-2">
-				        <!-- 우선순위 배지 -->
-				        <span class="badge rounded-pill" th:switch="${item.priority}">
-				            <span th:case="1" class="priority-high">우선순위</span>
-				            <span th:case="2" class="priority-medium">우선순위</span>
-				            <span th:case="*" class="priority-low">우선순위</span>
-				        </span>
-				
-				        <!-- 수정 버튼 -->
-				        <button type="button" class="updateChecklistBtn btn btn-outline-primary btn-sm"
-				                th:data-no="${item.checklistId}">
-				            <i class="bi bi-pencil-square"></i>
-				        </button>
-				
-				        <!-- 삭제 버튼 -->
-				        <button type="button" class="deleteChecklistBtn btn btn-outline-danger btn-sm"
-				                th:data-no="${item.checklistId}">
-				            <i class="bi bi-trash3"></i>
-				        </button>
-				    </span>
-				</li>
+            	<th:block th:if="${!#lists.isEmpty(checklist)}">
+					<li class="list-group-item d-flex justify-content-between align-items-center"
+						th:each="item : ${checklist}">
+					    <span>
+					        <input class="checkListBox form-check-input me-2" type="checkbox"
+					               th:checked="${item.done}" th:data-no="${item.checklistId}"/>
+					        <span th:text="${item.content}" class="checklistContent">작업 내용</span>
+					    </span>	
+					
+					    <span class="d-flex align-items-center gap-2">
+					        <!-- 우선순위 배지 -->
+					        <span class="badge rounded-pill" th:switch="${item.priority}">
+					            <span th:case="1" class="priority-high">우선순위</span>
+					            <span th:case="2" class="priority-medium">우선순위</span>
+					            <span th:case="*" class="priority-low">우선순위</span>
+					        </span>
+					
+					        <!-- 수정 버튼 -->
+					        <button type="button" class="updateChecklistBtn btn btn-outline-primary btn-sm"
+					                th:data-no="${item.checklistId}">
+					            <i class="bi bi-pencil-square"></i>
+					        </button>
+					
+					        <!-- 삭제 버튼 -->
+					        <button type="button" class="deleteChecklistBtn btn btn-outline-danger btn-sm"
+					                th:data-no="${item.checklistId}">
+					            <i class="bi bi-trash3"></i>
+					        </button>
+					    </span>
+					</li>
+				</th:block>
                 
 		        <li class="list-group-item checklist-add" data-bs-toggle="collapse" data-bs-target="#checklistForm">
 		            <div class="text-center" style="font-size: 1.5rem; color: #888;">＋</div>
@@ -83,29 +85,31 @@
 		    </div>
 		
 		    <!-- 일지 목록 -->
-		    <div th:each="diary : ${diaries}" class="card mb-2 position-relative diary-card">
-		        <div class="card-body d-flex justify-content-between align-items-start">
-		            <div>
-		                <h6 class="card-title mb-1" th:text="${diary.workDate}">2025-08-01</h6>
-		                <p class="card-text ellipsis mb-0" th:title="${diary.content}"
-		                   th:text="${#strings.abbreviate(diary.content, 100)}">
-		                    일지 내용 요약...
-		                </p>
-		            </div>
-		
-		            <!-- 수정/삭제 버튼 -->
-		            <div class="d-flex align-items-center gap-2">
-		                <button type="button" class="updateDiaryBtn btn btn-outline-primary btn-sm"
-		                	th:data-id="${diary.diaryId}">
-		                    <i class="bi bi-pencil-square"></i>
-		                </button>
-		                <button type="button" class="deleteDiaryBtn btn btn-outline-danger btn-sm"
-		                	th:data-id="${diary.diaryId}">
-		                    <i class="bi bi-trash3"></i>
-		                </button>
-		            </div>
-		        </div>
-		    </div>	
+		    <th:block th:if="${!#lists.isEmpty(diaries)}">
+			    <div th:each="diary : ${diaries}" class="card mb-2 position-relative diary-card">
+			        <div class="card-body d-flex justify-content-between align-items-start">
+			            <div>
+			                <h6 class="card-title mb-1" th:text="${diary.workDate}">2025-08-01</h6>
+			                <p class="card-text ellipsis mb-0" th:title="${diary.content}"
+			                   th:text="${#strings.abbreviate(diary.content, 100)}">
+			                    일지 내용 요약...
+			                </p>
+			            </div>
+			
+			            <!-- 수정/삭제 버튼 -->
+			            <div class="d-flex align-items-center gap-2">
+			                <button type="button" class="updateDiaryBtn btn btn-outline-primary btn-sm"
+			                	th:data-id="${diary.diaryId}">
+			                    <i class="bi bi-pencil-square"></i>
+			                </button>
+			                <button type="button" class="deleteDiaryBtn btn btn-outline-danger btn-sm"
+			                	th:data-id="${diary.diaryId}">
+			                    <i class="bi bi-trash3"></i>
+			                </button>
+			            </div>
+			        </div>
+			    </div>	
+		    </th:block>
 		</div>
 	</div>
 		
@@ -134,7 +138,7 @@
 	                    </div>
 	                    
 	                    <!-- 작성, 수정 시 필요 -->
-	                    <input type="hidden" id="projectId", name="projectId" th:value="${project.projectId}">
+	                    <input type="hidden" id="projectId" name="projectId" th:value="${project.projectId}">
 	                    <input type="hidden" id="diaryId" name="diaryId">
 	                </div>
 	                

@@ -7,10 +7,13 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.codemoa.project.domain.diary.dto.request.CreateProjectRequest;
 import com.codemoa.project.domain.diary.entity.Project;
 import com.codemoa.project.domain.diary.service.DiaryService;
 import com.codemoa.project.domain.user.security.CustomUserDetails;
@@ -52,6 +55,19 @@ public class DiaryController {
 			redirectAttributes.addFlashAttribute("errorMessage", "자신의 프로젝트만 열람할 수 있습니다.");
 			return "redirect:/my-pages/";
 		}
-
 	}
+	
+	@GetMapping("/projectForm")
+	public String projectForm() {
+		return "views/diary/projectForm";
+	}
+	
+	@PostMapping("/projects")
+	public String saveProject(@RequestBody CreateProjectRequest request,
+			@AuthenticationPrincipal CustomUserDetails principal) {
+		request.setUserId(principal.getUsername());
+		diaryService.addProject(request);
+		return "redirect:/my-pages/diary/";
+	}
+
 }

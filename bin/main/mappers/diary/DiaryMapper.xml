@@ -15,6 +15,9 @@
 		SELECT * FROM project WHERE project_id=#{projectId}
 	</select>
 	
+	<insert id="addProject" parameterType="CreateProjectRequest">
+		INSERT INTO project (user_id, name, description, status) VALUES (#{userId}, #{name}, #{description}, #{status});
+	</insert>
 	
 <!-- 
 	===============================
