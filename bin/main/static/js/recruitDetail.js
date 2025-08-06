@@ -74,7 +74,7 @@
 			btnUpdate.addEventListener('click', ()=> {
 				const id = recruitIdE1.value;
 				if(!id) return;
-				window.location.href = '/recruit/edit/' + id;
+				window.location.href = '/recruit/updateForm?recruitId=' + id;
 			});
 		}
 		
@@ -91,7 +91,7 @@
 				});
 				if(resp.ok){
 					alert('삭제가 완료되었습니다.');
-					window.location.href="/TeamRecruitList";
+					window.location.href="/teamRecruitList";
 				} else{
 					alert('삭제 실패');
 				}

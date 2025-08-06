@@ -43,7 +43,9 @@ layout:decorate="~{layouts/default_layout}">
 			</form>
 			<div class="row">
 				<div class="col text-end">
+					<div class="text-end mb-3" th:if="${loginId != null}">
 					<a th:href="@{addTeamRecruit}" class="btn btn-outline-success">글쓰기</a>
+					</div>
 				</div>
 			</div>
 			<div class="row my-3">
