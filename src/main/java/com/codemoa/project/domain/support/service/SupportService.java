@@ -1,146 +1,99 @@
 package com.codemoa.project.domain.support.service;
 
-import org.springframework.stereotype.Service;
-
-import com.codemoa.project.domain.support.entity.Board;
-import com.codemoa.project.domain.support.entity.Reply;
+import com.codemoa.project.domain.support.entity.Faq;
+import com.codemoa.project.domain.support.entity.Qna;
+import com.codemoa.project.domain.support.entity.QnaReply;
 import com.codemoa.project.domain.support.mapper.SupportMapper;
-
-import groovy.util.logging.Slf4j;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 @Service
-@Slf4j
+@RequiredArgsConstructor
 public class SupportService {
-	// DB 작업에 필요한 SupportMapper 객체를 의존성 주입 설정
-	@Autowired
-	private SupportMapper supportMapper;
-	
-	// FAQ 게시글 번호에 해당하는 댓글 리스트를 반환하는 메서드
-	public List<Reply> replyList(int no) {
-		return supportMapper.replyList(no);
-	}
-	
-	// FAQ no에 해당하는 게시글을 읽어와 반환하는 메서드
-	public Board getBoard(int no, boolean isCount) {
-		if(isCount) {
-			supportMapper.incrementReadCount(no);
-		}
-		return supportMapper.getBoard(no);
-	}
-	
-	// FAQ 전체 게시글을 읽어와 반환하는 메서드
-	public List<Board> boardList() {
-		return supportMapper.boardList();
-	}
-	
-	// Q&A no에 해당하는 게시글을 읽어와 반환하는 메서드
-	public Board getBoard2(int no, boolean isCount) {
-		if(isCount) {
-			supportMapper.incrementReadCount2(no);
-		}
-		return supportMapper.getBoard2(no);
-	}
-		
-	// Q&A 전체 게시글을 읽어와 반환하는 메서드
-	public List<Board> boardList2() {
-		return supportMapper.boardList2();
-	}
-	
-	// 한 페이지에 출력할 게시글의 수를 상수로 선언
-	private static final int PAGE_SIZE = 10;
-	
-	// 한 페이지에 출력할 페이지 그룹의 수를 상수로 선언
-	private static final int PAGE_GROUP = 10;
-	
-	// 전체 게시글을 읽어와 반환하는 메서드
-	public Map<String, Object> boardList(int pageNum) {
-		
-		// 요청 파라미터의 pageNum을 현재 페이지로 설정
-		int currentPage = pageNum;
-		
-		// 현재 페이지에 해당하는 게시글 리스트의 첫 번째 행의 값을 계산
-		int startRow = (currentPage - 1) * PAGE_SIZE;
-		
-		// SupportMapper를 이용해 전체 게시글 수를 가져온다
-		int listCount = supportMapper.getBoardCount();
-		
-		// 현재 페이지에 해당하는 게시글 리스트를 SupportMapper를 이용해 DB에서 읽어온다
-		List<Board> boardList = supportMapper.boardList(startRow, PAGE_SIZE);
-		
-		// 페이지 그룹 이동 처리를 위해 전체 페이지 수를 계산
-		int pageCount = listCount / PAGE_SIZE + (listCount % PAGE_SIZE == 0 ? 0 : 1);
-		
-		// 페이지 그룹 처리를 위해 페이지 그룹별 페이지와 마지막 페이지를 계산
-		int startPage = (currentPage / PAGE_GROUP) * PAGE_GROUP + 1
-				- (currentPage % PAGE_GROUP == 0 ? PAGE_GROUP : 0);
-		
-		// 현재 페이지 그룹의 마지막 페이지 : 10, 20, 30...
-		int endPage = startPage + PAGE_GROUP - 1;
-		
-		if(endPage > pageCount) {
-			endPage = pageCount;
-		}
-		
-		// View 페이지에서 필요한 데이터를 Map에 저장한다
-		Map<String, Object> modelMap = new HashMap<String, Object>();
-		
-		modelMap.put("bList", boardList);
-		modelMap.put("pageCount", pageCount);
-		modelMap.put("startPage", startPage);
-		modelMap.put("endPage", endPage);
-		modelMap.put("currentPage", currentPage);
-		modelMap.put("listCount", listCount);
-		modelMap.put("pageGroup", PAGE_GROUP);
-		
-		return modelMap;
-	}
-	
-	// 전체 게시글을 읽어와 반환하는 메서드
-		public Map<String, Object> boardList2(int pageNum) {
-			
-		// 요청 파라미터의 pageNum을 현재 페이지로 설정
-		int currentPage = pageNum;
-		
-		// 현재 페이지에 해당하는 게시글 리스트의 첫 번째 행의 값을 계산
-		int startRow = (currentPage - 1) * PAGE_SIZE;
-		
-		// SupportMapper를 이용해 전체 게시글 수를 가져온다
-		int listCount = supportMapper.getBoardCount2();
-		
-		// 현재 페이지에 해당하는 게시글 리스트를 SupportMapper를 이용해 DB에서 읽어온다
-		List<Board> boardList2 = supportMapper.boardList2(startRow, PAGE_SIZE);
-		
-		// 페이지 그룹 이동 처리를 위해 전체 페이지 수를 계산
-		int pageCount = listCount / PAGE_SIZE + (listCount % PAGE_SIZE == 0 ? 0 : 1);
-		
-		// 페이지 그룹 처리를 위해 페이지 그룹별 페이지와 마지막 페이지를 계산
-		int startPage = (currentPage / PAGE_GROUP) * PAGE_GROUP + 1
-				- (currentPage % PAGE_GROUP == 0 ? PAGE_GROUP : 0);
-		
-		// 현재 페이지 그룹의 마지막 페이지 : 10, 20, 30...
-		int endPage = startPage + PAGE_GROUP - 1;
-		
-		if(endPage > pageCount) {
-			endPage = pageCount;
-		}
-		
-		// View 페이지에서 필요한 데이터를 Map에 저장한다
-		Map<String, Object> modelMap = new HashMap<String, Object>();
-		
-		modelMap.put("bList", boardList2);
-		modelMap.put("pageCount", pageCount);
-		modelMap.put("startPage", startPage);
-		modelMap.put("endPage", endPage);
-		modelMap.put("currentPage", currentPage);
-		modelMap.put("listCount", listCount);
-		modelMap.put("pageGroup", PAGE_GROUP);
-		
-		return modelMap;
-	}
+
+    private final SupportMapper supportMapper;
+
+    // FAQ 전체 목록 조회
+    @Transactional(readOnly = true)
+    public List<Faq> getAllFaqs() {
+        return supportMapper.findAllFaqs();
+    }
+
+    // Q&A 목록 조회 (페이지네이션 포함)
+    @Transactional(readOnly = true)
+    public Map<String, Object> getQnaList(int page, int pageSize, String type, String keyword) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("startRow", (page - 1) * pageSize);
+        params.put("pageSize", pageSize);
+        params.put("type", type);
+        params.put("keyword", keyword);
+
+        int totalCount = supportMapper.getQnaCount(params);
+        List<Qna> qnaList = supportMapper.findQnaList(params);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("list", qnaList);
+        result.put("totalCount", totalCount);
+        // 페이지네이션을 위한 추가 정보 (Controller에서 계산 후 Model에 담을 예정)
+        result.put("currentPage", page);
+        result.put("pageSize", pageSize);
+
+        return result;
+    }
+
+    // Q&A 상세 조회 (조회수 증가 포함)
+    @Transactional
+    public Qna getQnaWithReplies(Long qnaId) {
+        supportMapper.incrementQnaViewCount(qnaId);
+        Qna qna = supportMapper.findQnaById(qnaId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 Q&A를 찾을 수 없습니다. id=" + qnaId));
+        // 답변 목록은 필요 시 Controller에서 별도 조회 또는 여기서 조회해서 설정 가능
+        return qna;
+    }
+    
+    // Q&A 생성
+    @Transactional
+    public void createQna(Qna qna) {
+        supportMapper.insertQna(qna);
+    }
+    
+    // Q&A 수정
+    @Transactional
+    public void updateQna(Qna qna) {
+        // 본인 확인 로직 등은 Controller에서 처리 후 호출
+        supportMapper.updateQna(qna);
+    }
+
+    // Q&A 삭제
+    @Transactional
+    public void deleteQna(Long qnaId) {
+        // 본인 확인 로직 등은 Controller에서 처리 후 호출
+        supportMapper.deleteQna(qnaId);
+    }
+    
+ // ▼▼▼ [FAQ 생성 서비스 추가] ▼▼▼
+    @Transactional
+    public void createFaq(Faq faq) {
+        supportMapper.insertFaq(faq);
+    }
+    // ▲▲▲ [FAQ 생성 서비스 추가] ▲▲▲
+    
+    // 추가: Q&A 상세보기를 위한 순수 QnA 정보 조회 (조회수 증가 없음)
+    @Transactional(readOnly = true)
+    public Qna getQnaById(Long qnaId) {
+        return supportMapper.findQnaById(qnaId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 Q&A를 찾을 수 없습니다. id=" + qnaId));
+    }
+    
+    @Transactional
+    public void createReply(QnaReply reply) {
+        supportMapper.insertReply(reply);
+        // 답변이 달리면, 원본 Q&A 게시글의 상태를 '답변완료'로 변경
+        supportMapper.updateQnaAnsweredStatus(reply.getQnaId());
+    }
 }

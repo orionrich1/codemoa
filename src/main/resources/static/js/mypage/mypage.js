@@ -49,10 +49,5 @@ $(function() {
 	$('#mobile').on('input', function() {
 		this.value = this.value.replace(/[^0-9]/g, '');
 	});
-	
-	// 프로젝트 리스트에서 클릭 시 Detail 로 이동
-	$(".project-card").click(function() {
-		var id = $(this).data("id");
-		location.href = "projects?id=" + id;
-	});
+
 });

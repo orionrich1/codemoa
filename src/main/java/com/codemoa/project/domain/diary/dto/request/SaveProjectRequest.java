@@ -1,11 +1,13 @@
 package com.codemoa.project.domain.diary.dto.request;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class CreateProjectRequest {
+@NoArgsConstructor
+public class SaveProjectRequest {
 	private int projectId;
 	private String userId;
 	private String name;
