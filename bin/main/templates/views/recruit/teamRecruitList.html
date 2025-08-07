@@ -6,7 +6,7 @@ layout:decorate="~{layouts/default_layout}">
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>BoardService</title>
-		<link th:href="@{/bootstrap/bootstrap.min.css}" rel="stylesheet" >
+		<link th:href="@{/bootstrap/bootstrap.min.css}">
 	</head>
 	
 <th:block layout:fragment="content">
@@ -22,7 +22,7 @@ layout:decorate="~{layouts/default_layout}">
 					<h2 class="fs-3 fw-bold">게시글 리스트</h2>
 				</div>
 			</div>
-			<form name="searchForm" id="searchForm" th:action="@{/TeamRecruitList}"
+			<form name="searchForm" id="searchForm" th:action="@{/teamRecruitList}"
 					class="row justify-content-center my-3" method="get">
 				<div class="col-auto">
 					<select name="type" class="form-select">
@@ -43,7 +43,9 @@ layout:decorate="~{layouts/default_layout}">
 			</form>
 			<div class="row">
 				<div class="col text-end">
+					<div class="text-end mb-3" th:if="${loginId != null}">
 					<a th:href="@{addTeamRecruit}" class="btn btn-outline-success">글쓰기</a>
+					</div>
 				</div>
 			</div>
 			<div class="row my-3">
@@ -65,11 +67,11 @@ layout:decorate="~{layouts/default_layout}">
 							<tr th:each="teamRecruit, status: ${bList}">
 								<td>[[ ${teamRecruit.recruitId} ]]</td>
 								<td class="text-start">
-									<a th:href="@{TeamRecruitDetail(recruitId=${teamRecruit.recruitId},pageNum=${currentPage})}" 
+									<a th:href="@{teamRecruitDetail(recruitId=${teamRecruit.recruitId},pageNum=${currentPage})}" 
 									class="text-decoration-none fw-bold">[[ ${teamRecruit.title} ]]
 									</a>
 								</td>
-								<td>[[${teamRecruit.userId}]]</td>
+								<td>[[${teamRecruit.nickname}]]</td>
 								<td>[[${teamRecruit.recruitTypeName}]]</td>
 								<td>[[${teamRecruit.statusName}]]</td>
 								<td><span th:text="${#temporals.format(teamRecruit.regDate, 'yyyy-MM-dd') }"></span></td>
@@ -89,7 +91,7 @@ layout:decorate="~{layouts/default_layout}">
 							<ul class="pagination justify-content-center">
 								<!-- 이전 페이지 -->
 								<li class="page-item" th:if="${startPage > pageGroup}">
-									<a class="page-link" th:href="@{/TeamRecruitList(pageNum=${startPage - 1}, type=${type}, keyword=${keyword})}">이전</a>
+									<a class="page-link" th:href="@{/teamRecruitList(pageNum=${startPage - 1}, type=${type}, keyword=${keyword})}">이전</a>
 								</li>
 				
 								<!-- 페이지 번호 반복 -->
@@ -100,7 +102,7 @@ layout:decorate="~{layouts/default_layout}">
 									<!-- 현재 페이지가 아니면 링크로 표시 -->
 									<a class="page-link"
 									   th:if="${num != currentPage}"
-									   th:href="@{/TeamRecruitList(pageNum=${num}, type=${type}, keyword=${keyword})}"
+									   th:href="@{/teamRecruitList(pageNum=${num}, type=${type}, keyword=${keyword})}"
 									   th:text="${num}">페이지</a>
 									
 									<!-- 현재 페이지는 span으로 표시 -->
@@ -111,7 +113,7 @@ layout:decorate="~{layouts/default_layout}">
 				
 								<!-- 다음 페이지 -->
 								<li class="page-item" th:if="${endPage < pageCount}">
-									<a class="page-link" th:href="@{/TeamRecruitList(pageNum=${startPage + pageGroup}, type=${type}, keyword=${keyword})}">다음</a>
+									<a class="page-link" th:href="@{/teamRecruitList(pageNum=${startPage + pageGroup}, type=${type}, keyword=${keyword})}">다음</a>
 								</li>
 							</ul>
 						</nav>

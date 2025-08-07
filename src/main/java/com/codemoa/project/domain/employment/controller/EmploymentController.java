@@ -61,6 +61,7 @@ public class EmploymentController {
 		//조건에 따라 필터
 		Page<EmploymentDto> employmentPage = employmentService.getEmploymentWithFilters(type, keyword, pageable);	
 		
+		Map<String, Integer> pagination = employmentService.getPaginationInfo(page);
 		  // 여기에 출력 코드 추가!
 	    System.out.println("현재 페이지: " + page);
 	    System.out.println("전체 페이지 수: " + employmentPage.getTotalPages());
@@ -74,17 +75,16 @@ public class EmploymentController {
 	    
 		model.addAttribute("employmentList", employmentPage.getContent());	
 		model.addAttribute("type", type);
-		model.addAttribute("page", Map.of(
-					"currentPage", page,
-					"totalPages", employmentPage.getTotalPages()
-			));
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("pagination", pagination);
+	
 		return "views/employment/employmentList";		
 	}
 	
 	@GetMapping("/employment/crawl")
 	public String crawlEmploymentDate(){
-		  employmentApiService.fetchAndSaveEmploymentList(1, 1000); // 페이지: 1, 10건 가져오기
-		    employmentApiService.fetchAndSavePublicRecruitmentNews(1, 1000);
+		  employmentApiService.fetchAndSaveEmploymentList(1, 300); // 페이지: 1, 10건 가져오기
+
 		    return "redirect:/employmentList"; // 크롤링 후 목록 페이지로 리다이렉트
 	}
 	

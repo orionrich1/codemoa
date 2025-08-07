@@ -64,51 +64,53 @@ VALUES(#{userId}, #{contestTitle}, #{recruitType}, #{recruitPeriod},
 
 <select id="getTeamRecruit" parameterType="int"
 resultMap="TeamRecruitResult">
-SELECT *
-FROM recruitbbs
-WHERE recruit_id = #{recruitId}
+SELECT r.*, u.nickname
+FROM recruitbbs r
+JOIN user u ON r.user_id = u.user_id
+WHERE r.recruit_id = #{recruitId}
 </select>
 
 <select id="TeamRecruitList" parameterType="map" 
-resultType="com.codemoa.project.domain.recruit.entity.TeamRecruit">
+resultMap="TeamRecruitResult">
 SELECT 
-recruit_id,
-title,
-user_id,
-recruit_type,
-status,
-remaining_members,
-reg_date,
-view_count
-FROM recruitbbs
+r.recruit_id,
+r.title,
+r.user_id,
+u.nickname,
+r.recruit_type,
+r.status,
+r.remaining_members,
+r.reg_date,
+r.view_count
+FROM recruitbbs r
+JOIN user u ON r.user_id = u.user_id
 WHERE 1=1
 	<if test="keyword != null and keyword.trim() !='' and type !=null and type.trim() !=''">
 		AND
 		<choose>
 			<when test="type == 'title'">
-				title LIKE CONCAT('%', #{keyword},'%')
+				r.title LIKE CONCAT('%', #{keyword},'%')
 			</when>
 			<when test="type == 'userId'">
-				user_id LIKE CONCAT('%', #{keyword},'%')
+				r.user_id LIKE CONCAT('%', #{keyword},'%')
 			</when>
 			<when test="type == 'content'">
-				content LIKE CONCAT('%', #{keyword},'%')
+				r.content LIKE CONCAT('%', #{keyword},'%')
 			</when>
 			<when test="type == 'recruitType'">
-				recruit_type LIKE CONCAT('%', #{keyword},'%')
+				r.recruit_type LIKE CONCAT('%', #{keyword},'%')
 			</when>
 			<when test="type == 'status'">
-				status LIKE CONCAT('%', #{keyword},'%')
+				r.status LIKE CONCAT('%', #{keyword},'%')
 			</when>
 			<when test="type == 'techStack'">
-				tech_stack LIKE CONCAT('%', #{keyword},'%')
+				r.tech_stack LIKE CONCAT('%', #{keyword},'%')
 			</when>
 			<otherwise>
-			title Like CONCAT('%', #{keyword},'%')
+				title Like CONCAT('%', #{keyword},'%')
 			</otherwise>			
 		</choose>
 	</if>
-
 ORDER BY recruit_id DESC
 LIMIT #{num} OFFSET #{startRow}
 </select>
@@ -150,6 +152,7 @@ FROM recruitbbs
 <resultMap id="TeamRecruitResult" type="com.codemoa.project.domain.recruit.entity.TeamRecruit">
     <id property="recruitId" column="recruit_id"/>
     <result property="userId" column="user_id"/>
+    <result property="nickname" column="nickname"/>
     <result property="contestTitle" column="contest_title"/>
     <result property="recruitType" column="recruit_type"/>
     <result property="recruitPeriod" column="recruit_period"/>

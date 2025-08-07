@@ -18,7 +18,12 @@ public interface EmploymentRepository extends JpaRepository<Employment, Long> {
 	
 	@Query("SELECT e FROM Employment e WHERE " +
 		       "(:type IS NULL OR e.type LIKE %:type%) AND " +
-		       "(:keyword IS NULL OR e.title LIKE %:keyword%)")
+		       "(:keyword IS NULL OR (" +
+		       "LOWER(e.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+		       "LOWER(e.company) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+		       "LOWER(e.type) LIKE LOWER(CONCAT('%', :keyword, '%'))" +
+		       ")) " +
+		       "ORDER BY e.regDt DESC")
 		Page<Employment> findByFilters(@Param("type") String type,
 		                               @Param("keyword") String keyword,
 		                               Pageable pageable);

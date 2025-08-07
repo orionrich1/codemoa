@@ -1,6 +1,8 @@
 package com.codemoa.project.domain.employment.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
@@ -18,14 +20,30 @@ public class EmploymentService {
 	private final EmploymentRepository employmentRepository;
 	private final EmploymentApiService employmentApiService;
 
-
-
    
 	public EmploymentService(EmploymentApiService employmentApiService, 
             EmploymentRepository employmentRepository) {
 				this.employmentApiService = employmentApiService;
 				this.employmentRepository = employmentRepository;
 }
+	public Map<String, Integer> getPaginationInfo(int currentPage) {
+	    int PAGE_SIZE = 10;
+	    int PAGE_GROUP = 10;
+
+	    int totalPosts = (int) employmentRepository.count(); // Repository에서 총 게시글 수 가져옴
+	    int pageCount = (int) Math.ceil((double) totalPosts / PAGE_SIZE);
+	    int startPage = ((currentPage - 1) / PAGE_GROUP) * PAGE_GROUP + 1;
+	    int endPage = Math.min(startPage + PAGE_GROUP - 1, pageCount);
+
+	    Map<String, Integer> pageMap = new HashMap<>();
+	    pageMap.put("pageCount", pageCount);
+	    pageMap.put("startPage", startPage);
+	    pageMap.put("endPage", endPage);
+	    pageMap.put("currentPage", currentPage);
+
+	    return pageMap;
+	}
+	
 	
 	public List<EmploymentDto> getAllEmployment(){
 		List<Employment> employmentList = employmentRepository.findAll(Sort.by(Sort.Direction.DESC, "recruitNo"));	

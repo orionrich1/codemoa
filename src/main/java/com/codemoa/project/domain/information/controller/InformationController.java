@@ -36,23 +36,13 @@ public class InformationController {
 	@Autowired
 	private InformationService informationService;
 	
-	@GetMapping("/test")
-	public String test() {
-		return "views/information/test";
-	}
-	
-	@GetMapping("/test2")
-	public String test2() {
-		return "views/information/test2";
-	}
-	
 	@GetMapping("/information")
 	public String informationMain(Model model,
 			@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
 			@RequestParam(value = "type", required = false, defaultValue = "null") String type,
 			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword) {
 		
-		model.addAllAttributes(informationService.lectureList(pageNum, type, keyword, 100, 10));
+		model.addAllAttributes(informationService.lectureList(pageNum, type, keyword, 100, 10, "null"));
 		return "views/information/informationMain";
 	}
 	
@@ -60,9 +50,10 @@ public class InformationController {
 	public String lectureList(Model model,
 			@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
 			@RequestParam(value = "type", required = false, defaultValue = "null") String type,
-			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword) {
+			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword,
+			@RequestParam(value = "order", required = false, defaultValue = "null") String order) {
 		
-		model.addAllAttributes(informationService.lectureList(pageNum, type, keyword, 8, 10));
+		model.addAllAttributes(informationService.lectureList(pageNum, type, keyword, 8, 10, order));
 		return "views/information/informationList";
 	}
 	
@@ -70,9 +61,10 @@ public class InformationController {
 	public String bookList(Model model,
 			@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
 			@RequestParam(value = "type", required = false, defaultValue = "null") String type,
-			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword) {
+			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword,
+			@RequestParam(value = "order", required = false, defaultValue = "null") String order) {
 		
-		model.addAllAttributes(informationService.bookList(pageNum, type, keyword, 8, 10));
+		model.addAllAttributes(informationService.bookList(pageNum, type, keyword, 8, 10, order));
 		return "views/information/informationList3";
 	}
 	
@@ -80,11 +72,29 @@ public class InformationController {
 	public String contestList(Model model,
 			@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
 			@RequestParam(value = "type", required = false, defaultValue = "null") String type,
-			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword) {
+			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword,
+			@RequestParam(value = "order", required = false, defaultValue = "null") String order) {
 		
-		model.addAllAttributes(informationService.contestList(pageNum, type, keyword, 8, 10));
+		model.addAllAttributes(informationService.contestList(pageNum, type, keyword, 8, 10, order));
 		return "views/information/informationList2";
 	}
+	
+	@GetMapping("/information/searchResult")
+	public String searchResult(Model model,
+			@RequestParam(value = "totalSearchText") String keyword,
+			@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+			@RequestParam(value = "type") String type) {
+		
+		log.info(type, "123456");
+		model.addAttribute("lectureMap",informationService.lectureList(pageNum, type, keyword, 100, 10, null));
+		model.addAttribute("contestMap",informationService.contestList(pageNum, type, keyword, 100, 10, null));
+		model.addAttribute("bookMap",informationService.bookList(pageNum, type, keyword, 100, 10, null));
+		
+		model.addAttribute("keyword", keyword);
+		
+		return "views/information/informationSearch";
+	}
+	
 	
 	// lecture 관련
 	
@@ -94,7 +104,7 @@ public class InformationController {
 			@RequestParam(value = "type", required = false, defaultValue = "null") String type,
 			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword) {
 		
-		model.addAllAttributes(informationService.lectureList(pageNum, type, keyword, 10, 10));
+		model.addAllAttributes(informationService.lectureList(pageNum, type, keyword, 10, 10, null));
 		
 		return "views/information/informationLectureList";
 	}
@@ -104,10 +114,12 @@ public class InformationController {
 			@RequestParam(value = "no") int no,
 			@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
 			@RequestParam(value = "type", required = false, defaultValue = "null") String type,
-			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword) {
+			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword,
+			@RequestParam(value = "order", required = false, defaultValue = "null") String order) {
 		
 		model.addAttribute("pageNum", pageNum);
 		model.addAttribute(informationService.getLecture(no));
+		model.addAttribute("order", order);
 		return "views/information/informationLectureDetail";
 	}
 	
@@ -148,7 +160,7 @@ public class InformationController {
 		
 		informationService.updateLecture(lecture);
 
-		return "redirect:/information/lectureList";
+		return "redirect:/information/lecture";
 	}
 
 	@PostMapping("/information/lectureDelete")
@@ -170,7 +182,7 @@ public class InformationController {
 
 		reAttrs.addAttribute("pageNum", pageNum);
 		reAttrs.addFlashAttribute("test1", "1회성 파라미터");
-		return "redirect:/information/lectureList";
+		return "redirect:/information/lecture";
 	}
 	
 	@GetMapping("/information/lectureAdd")
@@ -195,7 +207,7 @@ public class InformationController {
 		// 게시글 쓰기가 완료되면 게시글 리스트로 리다이렉트 시킨다.
 		
 		// 리다이렉트 : 같은 글이 계속 들어가지 않게
-		return "redirect:/information/lectureList";
+		return "redirect:/information/lecture";
 	}
 	
 	
@@ -208,7 +220,7 @@ public class InformationController {
 			@RequestParam(value = "type", required = false, defaultValue = "null") String type,
 			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword) {
 		
-		model.addAllAttributes(informationService.bookList(pageNum, type, keyword, 10, 10));
+		model.addAllAttributes(informationService.bookList(pageNum, type, keyword, 10, 10, null));
 		
 		return "views/information/informationBookList";
 	}
@@ -218,10 +230,12 @@ public class InformationController {
 			@RequestParam(value = "no") int no,
 			@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
 			@RequestParam(value = "type", required = false, defaultValue = "null") String type,
-			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword) {
+			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword,
+			@RequestParam(value = "order", required = false, defaultValue = "null") String order) {
 		
 		model.addAttribute("pageNum", pageNum);
 		model.addAttribute(informationService.getBook(no));
+		model.addAttribute("order", order);
 		return "views/information/informationBookDetail";
 	}
 	
@@ -276,7 +290,7 @@ public class InformationController {
 		// return "redirect:boardList?pageNum=" + pageNum;
 		reAttrs.addAttribute("pageNum", pageNum);
 		reAttrs.addFlashAttribute("test1", "1회성 파라미터");
-		return "redirect:/information/bookList";
+		return "redirect:/information/book";
 	}
 
 	@PostMapping("/information/bookDelete")
@@ -298,7 +312,7 @@ public class InformationController {
 
 		reAttrs.addAttribute("pageNum", pageNum);
 		reAttrs.addFlashAttribute("test1", "1회성 파라미터");
-		return "redirect:/information/bookList";
+		return "redirect:/information/book";
 	}
 	
 	@GetMapping("/information/bookAdd")
@@ -324,7 +338,7 @@ public class InformationController {
 		// 게시글 쓰기가 완료되면 게시글 리스트로 리다이렉트 시킨다.
 		
 		// 리다이렉트 : 같은 글이 계속 들어가지 않게
-		return "redirect:/information/bookList";
+		return "redirect:/information/book";
 	}
 	
 	
@@ -337,7 +351,7 @@ public class InformationController {
 			@RequestParam(value = "type", required = false, defaultValue = "null") String type,
 			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword) {
 		
-		model.addAllAttributes(informationService.contestList(pageNum, type, keyword, 10, 10));
+		model.addAllAttributes(informationService.contestList(pageNum, type, keyword, 10, 10, null));
 		
 		return "views/information/informationContestList";
 	}
@@ -347,10 +361,12 @@ public class InformationController {
 			@RequestParam(value = "no") int no,
 			@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
 			@RequestParam(value = "type", required = false, defaultValue = "null") String type,
-			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword) {
+			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword,
+			@RequestParam(value = "order", required = false, defaultValue = "null") String order) {
 		
 		model.addAttribute("pageNum", pageNum);
 		model.addAttribute(informationService.getContest(no));
+		model.addAttribute("order", order);
 		return "views/information/informationContestDetail";
 	}
 	
@@ -366,13 +382,6 @@ public class InformationController {
 		Contest contest = informationService.getContest(no);
 		model.addAttribute("contest", contest);
 		model.addAttribute("pageNum", pageNum);
-
-		boolean searchOption = type.equals("null") || keyword.equals("null") ? false : true;
-		model.addAttribute("searchOption", searchOption);
-		if (searchOption) {
-			model.addAttribute("type", type);
-			model.addAttribute("keyword", keyword);
-		}
 
 		return "views/information/informationContestUpdateForm";
 	}
@@ -406,7 +415,7 @@ public class InformationController {
 		// return "redirect:boardList?pageNum=" + pageNum;
 		reAttrs.addAttribute("pageNum", pageNum);
 		reAttrs.addFlashAttribute("test1", "1회성 파라미터");
-		return "redirect:/information/contestList";
+		return "redirect:/information/contest";
 	}
 
 	@PostMapping("/information/contestDelete")
@@ -428,7 +437,7 @@ public class InformationController {
 
 		reAttrs.addAttribute("pageNum", pageNum);
 		reAttrs.addFlashAttribute("test1", "1회성 파라미터");
-		return "redirect:/information/contestList";
+		return "redirect:/information/contest";
 	}
 	
 	@GetMapping("/information/contestAdd")
@@ -458,7 +467,7 @@ public class InformationController {
 		// 게시글 쓰기가 완료되면 게시글 리스트로 리다이렉트 시킨다.
 		
 		// 리다이렉트 : 같은 글이 계속 들어가지 않게
-		return "redirect:/information/contestList";
+		return "redirect:/information/contest";
 	}
 	
 	

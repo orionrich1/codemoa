@@ -7,6 +7,7 @@
 		
 		<th:block>
 			<link th:href="@{/css/information/listLayout4.css}" rel="stylesheet" />
+			<script th:src="@{/js/information/ajax.js}"></script>
 		</th:block>
 		
 		<main id="container" tabindex="0">
@@ -23,10 +24,34 @@
 								<li class="active"><a href="javascript:goMenu(&#39;/reqst/combine/eCombineList.do&#39;,&#39;null&#39;);"><span>Contents</span></a></li></ul>
 							</div>
 							<ul class="navi">
-								<!-- <li><a href="#">HOME</a></li>
-								<li><a href="#">2depth</a></li>
-								<li><a href="#">3depth</a></li> -->
-							<li><a href="https://library.nih.go.kr/spec/main.do">HOME</a></li><li><a href="https://library.nih.go.kr/spec/reqst/combine/eCombineList.do?#">통합검색</a></li><li><a href="https://library.nih.go.kr/spec/reqst/combine/eCombineList.do?#">Contents</a></li></ul>
+								<li><a href="https://library.nih.go.kr/spec/main.do">HOME</a></li>
+								<li>
+									<th:block th:if="${order =='pubDate'}">
+										<select name="order" id="typeSelector3">
+											<option value="bookNo">기존 순서</option>
+											<option value="pubDate" selected>출판일</option>
+											<option value="rating">평점</option>
+										</select>
+									</th:block>
+									<th:block th:if="${order =='rating'}">
+										<select name="order" id="typeSelector3">
+											<option value="bookNo">기존 순서</option>
+											<option value="pubDate">출판일</option>
+											<option value="rating" selected>평점</option>
+										</select>
+									</th:block>
+									<th:block th:if="${order !='pubDate' and order !='rating'}">
+										<select name="order" id="typeSelector3">
+											<option value="bookNo" disabled selected>정렬기준</option>
+											<option value="bookNo">기존 순서</option>
+											<option value="pubDate">출판일</option>
+											<option value="rating">평점</option>
+										</select>
+									</th:block>
+								</li>
+								<li><a th:href="@{/information}">통합검색</a></li>
+								<li><a th:href="@{bookAdd}">글쓰기</a></li>
+							</ul>
 						</div>
 					</div>
 				</div>
@@ -48,12 +73,14 @@
 														<img th:src="@{/files/information/{img}(img=${book.file1})}" alt="이미지를 찾을 수 없습니다.">
 														<div class="texts">
 															<strong>[[${book.title}]]</strong>
-															<div>
-																<p>등록일 : [[${book.regDate}]]</p>
-																<p>작성자 : [[${book.userId}]]</p>
-															</div>
+															<span>
+																<i data-color="2">출판일</i> [[${#dates.format(book.pubDate, 'yyyy-MM-dd')}]]
+															</span>
+															<span>
+																<i data-color="1">평점</i> [[${book.rating}]]
+															</span>
 														</div>
-														<a th:href="@{/information/bookDetail(no=${book.bookNo})}">
+														<a th:href="@{/information/bookDetail(no=${book.bookNo}, pageNum=${currentPage}, order=${order})}">
 															<div class="cover-item">
 																<div class="cover-text">
 																	<span class="cover-label"></span>
@@ -77,22 +104,22 @@
 			</div>
 			
 			<!-- 패이지 네이션 -->
-			<div class="row">
+			<div class="row" id="Row">
 				<div class="col">
 					<!-- 검색 요청이면서 게시글이 존재할 경우 링크에 type, keyword -->
-					<nav th:if="${searchOption and not #lists.isEmpty(bList)}" aria-label="Page navigation example">
+					<nav th:if="${order != null and not #lists.isEmpty(bList)}" aria-label="Page navigation example">
 						<ul class="pagination justify-content-center">
 						
 							<li class="page-item" th:if="${startPage > pageGroup}">
 								<!-- /* <a class="page-link" th:href="@{boardList(pageNum=${startPage-1})}">Pre</a> */ -->
-								<a class="page-link" th:href="@{|book?pageNum=${startPage-1}&type=${type}&keyword=${keyword}|}">Pre</a>
+								<a class="page-link" th:href="@{|book?pageNum=${startPage-1}&order=${order}|}">Pre</a>
 							</li>
 							 
 							<!-- /* <forEach var="i begin="${startPage}" end="${endPage}"> */-->
 							<li th:each="num : ${#numbers.sequence(startPage, endPage)}"
 								th:classappend="${num == currentPage} ? 'active'" class="page-item">
 								<th:block th:if="${num != currentPage}">
-									<a class="page-link" th:href="@{|book?pageNum=${num}&type=${type}&keyword=${keyword}|}" th:text="${num}"></a>
+									<a class="page-link" th:href="@{|book?pageNum=${num}&order=${order}|}" th:text="${num}"></a>
 								</th:block>									
 								<th:block th:unless="${num != currentPage}">
 									<a class="page-link" th:text="${num}"></a>
@@ -101,13 +128,13 @@
 							</li>
 							
 							<li class="page-item" th:if="${endPage < pageCount}">
-							 	<a class="page-link" th:href="@{|book?pageNum=${startPage+pageGroup}&type=${type}&keyword=${keyword}|}">Next</a>
+							 	<a class="page-link" th:href="@{|book?pageNum=${startPage+pageGroup}&order=${order}|}">Next</a>
 							</li>
 						  
 						</ul>
 					</nav>
 					<!-- 검색 요청이 아니면서 게시글이 존재할 경우 -->
-					<nav th:if="${not searchOption and not #lists.isEmpty(bList)}" aria-label="Page navigation example">
+					<nav th:if="${order == null and not #lists.isEmpty(bList)}" aria-label="Page navigation example">
 						<ul class="pagination justify-content-center">
 						
 							<li class="page-item" th:if="${startPage > pageGroup}">

@@ -34,7 +34,7 @@ public class InformationService {
 	}
 	
 	// 한 페이지에 해당하는 게시 글 리스트 요청을 처리하는 메서드
-	public Map<String, Object> lectureList(int pageNum, String type, String keyword, int pageSize, int pageGrop) {
+	public Map<String, Object> lectureList(int pageNum, String type, String keyword, int pageSize, int pageGrop, String order) {
 		log.info("BoardService : boardLsit(int pageNum, String type, String keyword)");
 		
 		// 현재 페이지
@@ -60,7 +60,14 @@ public class InformationService {
 			endPage = pageCount;
 		}
 		
-		List<Lecture> lList = informationRecommendMapper.getlectureList(startRow, pageSize, type, keyword);
+		List<Lecture> lList = informationRecommendMapper.getlectureList(startRow, pageSize, type, keyword, order);
+		// 리스트 내용을 출력
+		
+//		for (Lecture lecture : lList) {
+//		    log.info("LectureNo: {}, Title: {}, Writer: {}", 
+//		             lecture.getRecommendNo(), lecture.getTitle(), lecture.getUserId());
+//		}
+		
 		
 		Map<String, Object> modelMap = new HashMap<>();
 		modelMap.put("lList", lList);
@@ -70,13 +77,7 @@ public class InformationService {
 		modelMap.put("currentPage", currentPage);
 		modelMap.put("pageGroup", pageGrop);
 		modelMap.put("listCount", listCount);
-		
-		boolean searchOption = type.equals("null")||keyword.equals("null") ? false : true;
-		modelMap.put("searchOption", searchOption);
-		if(searchOption) {
-			modelMap.put("type", type);
-			modelMap.put("keyword", keyword);
-		}
+		modelMap.put("order", order);
 		
 		return modelMap;
 	}
@@ -107,14 +108,11 @@ public class InformationService {
 	}
 	
 	// 한 페이지에 해당하는 게시 글 리스트 요청을 처리하는 메서드
-	public Map<String, Object> bookList(int pageNum, String type, String keyword, int pageSize, int pageGrop) {
-		log.info("BoardService : boardLsit(int pageNum, String type, String keyword)");
+	public Map<String, Object> bookList(int pageNum, String type, String keyword, int pageSize, int pageGrop, String order) {
 		
 		int currentPage = pageNum;
 		int startRow = (currentPage - 1) * pageSize; 
 		int listCount = informationRecommendMapper.getBookCount(type, keyword);
-		log.info("listCount : " + listCount);
-		
 		int pageCount = listCount / pageSize 
 				+ (listCount % pageSize == 0? 0 : 1);
 		
@@ -127,7 +125,7 @@ public class InformationService {
 			endPage = pageCount;
 		}
 		
-		List<Book> bList = informationRecommendMapper.getBookList(startRow, pageSize, type, keyword);
+		List<Book> bList = informationRecommendMapper.getBookList(startRow, pageSize, type, keyword, order);
 		
 		Map<String, Object> modelMap = new HashMap<>();
 		modelMap.put("bList", bList);
@@ -137,13 +135,7 @@ public class InformationService {
 		modelMap.put("currentPage", currentPage);
 		modelMap.put("pageGroup", pageGrop);
 		modelMap.put("listCount", listCount);
-		
-		boolean searchOption = type.equals("null")||keyword.equals("null") ? false : true;
-		modelMap.put("searchOption", searchOption);
-		if(searchOption) {
-			modelMap.put("type", type);
-			modelMap.put("keyword", keyword);
-		}
+		modelMap.put("order", order);
 		
 		return modelMap;
 	}
@@ -170,14 +162,11 @@ public class InformationService {
 	}
 	
 	// 한 페이지에 해당하는 게시 글 리스트 요청을 처리하는 메서드
-	public Map<String, Object> contestList(int pageNum, String type, String keyword, int pageSize, int pageGrop) {
-		log.info("BoardService : boardLsit(int pageNum, String type, String keyword)");
+	public Map<String, Object> contestList(int pageNum, String type, String keyword, int pageSize, int pageGrop, String order) {
 
 		int currentPage = pageNum;
 		int startRow = (currentPage - 1) * pageSize; 
 		int listCount = informationRecommendMapper.getContestCount(type, keyword);
-		
-		log.info("contestCount : " + listCount);
 		
 		int pageCount = listCount / pageSize 
 				+ (listCount % pageSize == 0? 0 : 1);
@@ -191,7 +180,8 @@ public class InformationService {
 			endPage = pageCount;
 		}
 		
-		List<Contest> cList = informationRecommendMapper.getContestList(startRow, pageSize, type, keyword);
+		List<Contest> cList = informationRecommendMapper.getContestList(startRow, pageSize, type, keyword, order);
+		log.info("order : " + order);
 		
 		Map<String, Object> modelMap = new HashMap<>();
 		modelMap.put("cList", cList);
@@ -201,13 +191,7 @@ public class InformationService {
 		modelMap.put("currentPage", currentPage);
 		modelMap.put("pageGroup", pageGrop);
 		modelMap.put("listCount", listCount);
-		
-		boolean searchOption = type.equals("null")||keyword.equals("null") ? false : true;
-		modelMap.put("searchOption", searchOption);
-		if(searchOption) {
-			modelMap.put("type", type);
-			modelMap.put("keyword", keyword);
-		}
+		modelMap.put("order", order);
 		
 		return modelMap;
 	}

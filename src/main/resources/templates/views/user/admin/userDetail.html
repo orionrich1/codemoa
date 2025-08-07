@@ -45,10 +45,10 @@
 
 						<dt class="col-sm-3 col-lg-2 text-muted">등급</dt>
 						<dd class="col-sm-9 col-lg-10">
-							<span class="badge text-bg-secondary" th:text="${user.gradeName}"></span>
+							<span class="badge text-bg-secondary" th:text="${user.grade}"></span>
 						</dd>
 					</dl>
-					<div th:if="${user.gradeName != '관리자'}" class="row mt-3">
+					<div th:if="${user.userPosition != 'ADMIN'}" class="row mt-3">
 						<button class="col-2 btn btn-warning m-2" id="banBtn"
 							data-bs-toggle="modal" data-bs-target="#banModal">차단</button>
 						<button class="col-2 btn btn-primary m-2" id="unBanBtn">차단해제</button>

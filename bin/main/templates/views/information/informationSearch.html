@@ -1,0 +1,201 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}">
+	
+	<th:block layout:fragment="content">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>  
+		
+		<th:block>
+			<link th:href="@{/css/information/layout2.css}" rel="stylesheet" />
+		</th:block>
+		
+		<main id="container" tabindex="0">
+			<div id="spot">
+				<div class="layout">
+					<div class="in">
+						<div class="t_wrap">
+							<div id="lnb">
+								<ul id="depthMenu">
+								<!-- 	<li class="active"><a href="#"><span>2depth</span></a></li>
+									<li><a href="#"><span>2depth</span></a></li>
+									<li><a href="#"><span>2depth</span></a></li> -->
+								<li class="active"><a href="javascript:goMenu(&#39;/reqst/combine/eCombineList.do&#39;,&#39;null&#39;);"><span>Contents</span></a></li></ul>
+							</div>
+							<ul class="navi">
+								<li><a href="https://library.nih.go.kr/spec/main.do">HOME</a></li>
+								<li><a th:href="@{/information}">메인 페이지</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+		
+		<section id="section02">
+			<div class="layout">
+				<div class="in">
+					<div class="titles">
+						<strong>contents</strong>
+						<p>"[[${keyword}]]" 검색결과 </p>
+					</div>
+					<div data-skin="tab">
+						<div class="cont" id="eCombineDiv">
+							<div data-tab-cont="1" class="active">
+								<!-- <div class="swiper mySwiper swiper-container-horizontal swiper-container-multirow">  -->
+								<th:block th:unless="${#lists.isEmpty(lectureMap.lList)} and ${#lists.isEmpty(contestMap.cList)} and ${#lists.isEmpty(bookMap.bList)}">
+									<div class="swiper mySwiper">
+										<div class="swiper-wrapper">
+											
+											<th:block th:unless="${#lists.isEmpty(lectureMap.lList)}">
+												<th:block th:each="lecture: ${lectureMap.lList}">
+													<div class="swiper-slide">
+														<div class="swiper-area">
+															<div class="cover">
+																<div class="cover-content">
+																	<img th:src="@{/files/information/{img}(img=${lecture.file1})}" alt="이미지를 찾을 수 없습니다.">
+																	<div class="texts">
+																		<strong>[[${lecture.title}]]</strong>
+																		<span>
+																			<i data-color="2">등록일</i> [[${#dates.format(lecture.regDate, 'yyyy-HH-dd')}]]
+																		</span>
+																		<span>
+																			<i data-color="1">작성자</i> [[${lecture.userId}]]
+																		</span>
+																	</div>
+																	<a th:href="@{/information/lectureDetail(no=${lecture.recommendNo}, pageNum=${currentPage})}">
+																		<div class="cover-item">
+																			<div class="cover-text">
+																				<span class="cover-label"></span>
+																				[[${lecture.subtitle}]]
+																			</div>
+																		</div>
+																	</a>
+																</div>
+														
+															</div>
+														</div>
+													</div>
+												</th:block>
+											</th:block>
+											
+											<th:block th:unless="${#lists.isEmpty(contestMap.cList)}">
+												<th:block th:each="contest: ${contestMap.cList}">
+													<div class="swiper-slide">
+														<div class="swiper-area">
+															<div class="cover">
+																<div class="cover-content">
+																	<img th:src="@{/files/information/{img}(img=${contest.file1})}" alt="이미지를 찾을 수 없습니다.">
+																	<div class="texts">
+																		<strong>[[${contest.title}]]</strong>
+																		<span>
+																			<i data-color="2">기한</i> [[${#dates.format(contest.startDate, 'yyyy-HH-dd')}]] ~ [[${#dates.format(contest.endDate, 'yyyy-HH-dd HH:mm')}]]
+																		</span>
+																		<span>
+																			<i data-color="1">주최기관</i> [[${contest.hostOrganization}]]
+																		</span>
+																	</div>
+																	<a th:href="@{/information/contestDetail(no=${contest.contestNo}, pageNum=${currentPage})}">
+																		<div class="cover-item">
+																			<div class="cover-text">
+																				<span class="cover-label">
+																					<p>작성자 : [[${contest.userId}]]</p>
+																					<p>등록일 : [[${contest.regDate}]]</p>
+																				</span>
+																			</div>
+																		</div>
+																	</a>
+																</div>
+														
+															</div>
+														</div>
+													</div>
+												</th:block>
+											</th:block>
+											
+											<th:block th:unless="${#lists.isEmpty(bookMap.bList)}">
+												<th:block th:each="book: ${bookMap.bList}">
+													<div class="swiper-slide">
+														<div class="swiper-area">
+															<div class="cover">
+																<div class="cover-content">
+																	<img th:src="@{/files/information/{img}(img=${book.file1})}" alt="이미지를 찾을 수 없습니다.">
+																	<div class="texts">
+																		<strong>[[${book.title}]]</strong>
+																		<span>
+																			<i data-color="2">출판일</i> [[${#dates.format(book.pubDate, 'yyyy-MM-dd')}]]
+																		</span>
+																		<span>
+																			<i data-color="1">평점</i> [[${book.rating}]]
+																		</span>
+																	</div>
+																	<a th:href="@{/information/bookDetail(no=${book.bookNo}, pageNum=${currentPage})}">
+																		<div class="cover-item">
+																			<div class="cover-text">
+																				<span class="cover-label"></span>
+																				[[${book.content}]]
+																			</div>
+																		</div>
+																	</a>
+																</div>
+														
+															</div>
+														</div>
+													</div>
+												</th:block>	
+											</th:block>
+											
+										</div>
+										<div class="swiper-pagination swiper-pagination-progressbar">
+										
+										</div>
+										
+										<div class="btn_wrap">
+											
+											<div class="swiper-button-prev" tabindex="0" role="button" aria-label="Previous slide" 
+												aria-disabled="false"></div>
+	
+												 
+											<div class="swiper-button-next" tabindex="0" role="button" aria-label="Next slide" 
+												aria-disabled="false"></div>
+												
+											<a href="#" class="more_button"></a>
+										</div>
+									</div>
+								</th:block>
+								<th:block th:if="${#lists.isEmpty(lectureMap.lList)} and ${#lists.isEmpty(contestMap.cList)} and ${#lists.isEmpty(bookMap.bList)}">
+									<span>검색에 부합하는 내용이 없습니다.</span>
+								</th:block>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		
+
+	</th:block>
+</html>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+	
+const swiper = new Swiper(".mySwiper", {
+	slidesPerView: 4, // 한 줄에 4개의 슬라이드가 보임
+  	grid: {
+    	rows: 2,
+   		fill: "row",
+  	},
+  	spaceBetween: 20,
+
+  	pagination: {
+    	el: ".swiper-pagination",
+    	type: "progressbar", // 또는 "bullets", "fraction"
+  	},
+  	navigation: {
+    	nextEl: ".swiper-button-next",
+    	prevEl: ".swiper-button-prev",
+  	},
+});
+		  
+
+</script>

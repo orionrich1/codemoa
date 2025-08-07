@@ -11,13 +11,13 @@
 						<h2 class="fs-3 fw-bold">강좌 추천글 쓰기</h2>
 					</div>
 				</div>  
-				<form name="lectureWriteForm" action="lectureWrite" id="writeForm" 
+				<form name="lectureWriteForm" action="lectureWrite" id="lectureWriteForm" 
 					class="row g-3 border-primary" method="post"
 					enctype="multipart/form-data">
 				
-					<div class="col-4 offset-md-2">
-						<label for="writer" class="form-label">글쓴이</label>
-						<input type="text" class="form-control" name="userId" id="writer" 
+					<div class="col-6 offset-md-2">
+						<label for="userId" class="form-label">글쓴이</label>
+						<input type="text" class="form-control" name="userId" id="userId" 
 							placeholder="작성자를 입력해 주세요">
 						<!-- 
 						<input type="text" class="form-control" name="userId" id="writer" 
@@ -37,7 +37,7 @@
 						<input type="text" class="form-control" name="category"  id="category">
 					</div>
 					<div class="col-8 offset-md-2">
-						<label for="title" class="form-label">별 점</label>
+						<label for="title" class="form-label">별 점(0 ~ 5.0)</label>
 						<input type="text" class="form-control" name="rating"  id="rating">
 					</div>
 					<div class="col-8 offset-md-2">
@@ -60,7 +60,7 @@
 						<input type="submit" value="등록하기" class="btn btn-primary"/>
 							&nbsp;&nbsp;
 						<input type="button" value="목록보기" 
-							onclick="location.href='lectureList'" class="btn btn-primary"/>
+							onclick="location.href='lecture'" class="btn btn-primary"/>
 					</div>	
 				</form>
 			</div>
