@@ -51,6 +51,31 @@ public class BoardService {
 		return boardMapper.boardList();
 	}
 	
+	// Q&A no에 해당하는 게시글을 삭제하는 메서드
+	public void deleteBoard(int no) {
+		boardMapper.deleteBoard(no);
+	}
+	
+	// Q&A 게시글을 수정하는 메서드
+	public void updateBoard(Board board) {
+		boardMapper.updateBoard(board);
+	}
+	
+	// Q&A 게시글 수정과 삭제할때 비밀번호가 맞는지 체크하는 메서드
+	public boolean isPassCheck(int no, String pass) {
+		boolean result = false;
+		String dbPass = boardMapper.isPassCheck(no);
+		if(dbPass.equals(pass)) {
+			result = true;
+		}
+		return result;
+	}
+	
+	// Q&A 게시글 정보를 추가하는 메서드
+	public void addBoard(Board board) {
+		boardMapper.insertBoard(board);
+	}
+	
 	// Q&A no에 해당하는 게시글을 읽어와 반환하는 메서드
 	public Board getBoard2(int no, boolean isCount) {
 		if(isCount) {

@@ -95,7 +95,7 @@ LIMIT #{startRow}, #{num}
 
 <!-- 추천/땡큐 정보를 업데이트하는 맵핑 구문 -->
 <update id="updateRecommend">
-	UPDATE springbbs
+	UPDATE springbbs2
 		SET
 		<if test="recommend == 'commend'">
 			recommend = recommend + 1
@@ -105,13 +105,44 @@ LIMIT #{startRow}, #{num}
 		</if>
 	WHERE no = #{no}
 </update>
+
 <!-- 추천/땡큐 정보를 가져오는 맵핑 구문 -->
 <select id="getRecommend" resultType="Board">
 	SELECT recommend, thank
-	FROM springbbs
+	FROM springbbs2
 	WHERE no = #{no}
 </select>
 
+<!-- Q&A 게시글을 테이블에 추가하는 맵핑 구문 -->
+<insert id="insertBoard" parameterType="Board"
+	useGeneratedKeys="true" keyProperty="no">
+	INSERT INTO springbbs2(title, writer, content,
+		reg_date, read_count, pass, file1)
+		VALUES(#{title}, #{writer}, #{content},
+		SYSDATE(), #{readCount}, #{pass}, #{file1})
+</insert>
+
+<!-- Q&A 게시글 테이블에서 no에 해당하는 게시글의 비밀번호를 가져오는 맵핑 구문 -->
+<select id="isPassCheck">
+	SELECT
+		pass
+	FROM springbbs2
+	WHERE no = #{no}
+</select>
+
+<!-- Q&A 게시글 테이블에서 no에 해당하는 게시글을 수정하는 맵핑 구문 -->
+<update id="updateBoard" parameterType="Board">
+	UPDATE springbbs2
+		SET title = #{title}, content = #{content},
+			reg_date = SYSDATE()
+		WHERE no = #{no}
+</update>
+
+<!-- Q&A 게시글 테이블에서 no에 해당하는 게시글을 삭제하는 맵핑 구문 -->
+<delete id="deleteBoard">
+	DELETE FROM springbbs2
+	WHERE no = #{no}
+</delete>
 
 
 

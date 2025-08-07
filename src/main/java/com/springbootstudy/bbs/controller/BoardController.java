@@ -1,5 +1,6 @@
 package com.springbootstudy.bbs.controller;
 
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 
@@ -7,12 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.springbootstudy.bbs.domain.Board;
 import com.springbootstudy.bbs.domain.Reply;
 import com.springbootstudy.bbs.service.BoardService;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -81,5 +84,75 @@ public class BoardController {
 		return "views/Q&A";
 	}
 	
+	@GetMapping("/addBoard")
+	public String addBoard() {
+		return "views/writeForm";
+	}
+	
+	@PostMapping("/addBoard")
+	public String addBoard(Board board) {
+		boardService.addBoard(board);
+		
+		return "redirect:boardList2";
+	}
+	
+	@PostMapping("/updateForm")
+	public String updateBoard(Model model,
+			HttpServletResponse response, PrintWriter out,
+			@RequestParam("no") int no, @RequestParam("pass") String pass) {
+		boolean isPassCheck = boardService.isPassCheck(no, pass);
+		if(! isPassCheck) {
+			response.setContentType("text/html; charset=utf-8");
+			out.println("<script>");
+			out.println(" alert('비밀번호가 맞지 않습니다.');");
+			out.println(" history.back();");
+			out.println("</script>");
+			
+			return null;
+		}
+		
+		Board board = boardService.getBoard(no, false);
+		model.addAttribute("board", board);
+		return "views/updateForm";
+	}
+	
+	@PostMapping("/update")
+	public String updateBoard(Board board,
+	HttpServletResponse response, PrintWriter out) {
 
+		boolean isPassCheck = boardService.isPassCheck(board.getNo(), board.getPass());
+		if(! isPassCheck) {
+		response.setContentType("text/html; charset=utf-8");
+		out.println("<script>");
+		out.println(" alert('비밀번호가 맞지 않습니다.');");
+		out.println(" history.back();");
+		out.println("</script>");
+
+		return null;
+		}
+		
+		boardService.updateBoard(board);
+		return "redirect:boardList2";
+		
+		}
+	
+	@PostMapping("/delete")
+	public String deleteBoard(
+	HttpServletResponse response, PrintWriter out,
+	@RequestParam("no") int no, @RequestParam("pass") String pass) {
+
+	boolean isPassCheck = boardService.isPassCheck(no, pass);
+	if(! isPassCheck) {
+	response.setContentType("text/html; charset=utf-8");
+	out.println("<script>");
+	out.println(" alert('비밀번호가 맞지 않습니다.');");
+	out.println(" history.back();");
+	out.println("</script>");
+	return null;
+	}
+
+	boardService.deleteBoard(no);
+	return "redirect:boardList2";
+	}
+	
 }
