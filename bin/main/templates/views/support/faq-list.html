@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layouts/default_layout}">
+
+<head>
+    <title>FAQ</title>
+</head>
+
+<th:block layout:fragment="content">
+    <div class="container my-5">
+        <div class="row text-center mb-4">
+            <div class="col">
+                <h2 class="fs-3 fw-bold">FAQ</h2>
+            </div>
+        </div>
+
+        <div class="row justify-content-center mb-5" 
+             sec:authorize="isAuthenticated() and authentication.principal.getUser().getGrade().name().equalsIgnoreCase('admin')">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        FAQ 신규 등록
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/support/faq}" method="post">
+                            <div class="mb-3">
+                                <label for="question" class="form-label">질문 (Question)</label>
+                                <input type="text" class="form-control" id="question" name="question" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="answer" class="form-label">답변 (Answer)</label>
+                                <textarea class="form-control" id="answer" name="answer" rows="5" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">등록하기</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="accordion" id="faqAccordion">
+            <th:block th:if="${!#lists.isEmpty(faqList)}">
+                <div class="accordion-item" th:each="faq, iterStat : ${faqList}">
+                    <h2 class="accordion-header" th:id="'heading' + ${iterStat.count}">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapse' + ${iterStat.count}" aria-expanded="false" th:aria-controls="'collapse' + ${iterStat.count}">
+                            <strong th:text="${faq.question}"></strong>
+                        </button>
+                    </h2>
+                    <div th:id="'collapse' + ${iterStat.count}" class="accordion-collapse collapse" th:aria-labelledby="'heading' + ${iterStat.count}" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body" style="white-space: pre-wrap;" th:text="${faq.answer}">
+                        </div>
+                    </div>
+                </div>
+            </th:block>
+
+            <th:block th:if="${#lists.isEmpty(faqList)}">
+                <div class="text-center p-5">
+                    <p class="text-muted">등록된 FAQ가 없습니다.</p>
+                </div>
+            </th:block>
+        </div>
+    </div>
+</th:block>
+</html>

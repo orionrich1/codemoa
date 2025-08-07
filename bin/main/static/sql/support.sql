@@ -1,0 +1,31 @@
+-- FAQ 테이블
+CREATE TABLE faq (
+    faq_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    question VARCHAR(255) NOT NULL,
+    answer TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Q&A 게시글 테이블
+CREATE TABLE qna (
+    qna_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    writer_id VARCHAR(255) NOT NULL, -- user 테이블의 user_id와 연결
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    is_answered BOOLEAN DEFAULT FALSE, -- 답변 완료 여부
+    view_count INT DEFAULT 0
+);
+
+-- Q&A 답변 테이블
+CREATE TABLE qna_reply (
+    reply_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    qna_id BIGINT NOT NULL,
+    content TEXT NOT NULL,
+    writer_id VARCHAR(255) NOT NULL, -- user 테이블의 user_id와 연결 (관리자)
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (qna_id) REFERENCES qna(qna_id) ON DELETE CASCADE
+);
