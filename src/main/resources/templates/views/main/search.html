@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}">
+
+<div layout:fragment="content">
+	<th:block th:if="${!#lists.isEmpty(searchList)}">
+		<ul>
+			<li th:each="board : ${searchList}">
+				<div th:text="${board.type}"></div>
+				<div th:text="${board.writer}"></div>
+				<div th:text="${board.title}"></div>
+				<div th:text="${#strings.abbreviate(board.content, 80)}"></div>
+				<div th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm')}"></div>
+			</li>
+		</ul>
+	</th:block>
+</div>
+</html>
