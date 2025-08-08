@@ -44,7 +44,6 @@ public class InformationService {
 		int startRow = (currentPage - 1) * pageSize; 
 		
 		// 전체 페이지 수 계산 = 전체 게시 글의 수 / 페이지 당 게시 글 수
-		// int listCount = boardDao.getBoardCount();
 		int listCount = informationRecommendMapper.getLectureCount(type, keyword);
 		
 		// 총 페이지 갯수
@@ -78,6 +77,7 @@ public class InformationService {
 		modelMap.put("pageGroup", pageGrop);
 		modelMap.put("listCount", listCount);
 		modelMap.put("order", order);
+		modelMap.put("keyword", keyword);
 		
 		return modelMap;
 	}
@@ -109,6 +109,10 @@ public class InformationService {
 	
 	// 한 페이지에 해당하는 게시 글 리스트 요청을 처리하는 메서드
 	public Map<String, Object> bookList(int pageNum, String type, String keyword, int pageSize, int pageGrop, String order) {
+		log.info("pageNum : " + pageNum);
+		log.info("type : " + type);
+		log.info("keyword : " + keyword);
+		log.info("order : " + order);
 		
 		int currentPage = pageNum;
 		int startRow = (currentPage - 1) * pageSize; 
@@ -125,6 +129,7 @@ public class InformationService {
 			endPage = pageCount;
 		}
 		
+		
 		List<Book> bList = informationRecommendMapper.getBookList(startRow, pageSize, type, keyword, order);
 		
 		Map<String, Object> modelMap = new HashMap<>();
@@ -136,6 +141,7 @@ public class InformationService {
 		modelMap.put("pageGroup", pageGrop);
 		modelMap.put("listCount", listCount);
 		modelMap.put("order", order);
+		modelMap.put("keyword", keyword);
 		
 		return modelMap;
 	}
