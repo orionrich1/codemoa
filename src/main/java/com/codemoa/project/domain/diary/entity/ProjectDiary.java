@@ -28,7 +28,4 @@ public class ProjectDiary {
 
     @Column(columnDefinition = "TEXT")
     private String content;
-
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
 }

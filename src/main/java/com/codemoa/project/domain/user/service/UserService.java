@@ -40,6 +40,11 @@ public class UserService {
 	private final PointLogRepository pointLogRepository;
 	private final SnsUserService snsUserSerivce;
 	private final UserMapper userMapper;
+	
+	// 아이디 중복 체크
+	public boolean checkId(String userId) {
+		return userMapper.getLocalUser(userId) != null;
+	}
 
 	// 회원가입
 	@Transactional

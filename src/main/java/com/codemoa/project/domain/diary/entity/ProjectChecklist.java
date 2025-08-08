@@ -28,7 +28,4 @@ public class ProjectChecklist {
 
 	@Column(nullable = false)
 	private Integer priority = 3;
-
-	@Column(nullable = false, updatable = false)
-	private LocalDateTime createdAt = LocalDateTime.now();	
 }

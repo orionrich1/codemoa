@@ -66,13 +66,39 @@
  	<script>
  		// AI 웹 퍼블리셔: 이 스크립트 블록은 기능의 핵심이므로 절대 삭제하거나 수정하지 않습니다.
  		$(function(){
- 			// Form 제출될 때 비밀번호 유효성 검사
- 			$('#userJoinForm').submit(function(){
+ 			// Form 제출될 때 
+ 			$('#userJoinForm').submit(function(e){
+ 				e.preventDefault();
+ 				
+ 				// 비밀번호 유효성 검사
  				if ($("#pass").val() != $("#passConfirm").val() || $("#pass").val() == "") {
  					alert("비밀번호가 일치하지 않습니다.");
  					$("#pass").focus();
  					return false;
  				}
+ 				
+ 				// 아이디 중복 체크
+ 				const userId = $("#userId").val();
+ 				$.ajax({
+				  url: '/checkId',        		
+				  method: 'POST',           	
+				  data: { userId: userId },   	
+				  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+				  dataType: 'json',         	
+				  success: function(response) {
+				    if(response){
+	 					alert("이미 존재하는 아이디입니다.");
+	 					$("#userId").focus();
+	 					return false;
+				    }
+				    else{
+				    	 $('#userJoinForm')[0].submit();  
+				    }
+				  },
+				  error: function(xhr, status, error) {
+				    console.error(error);
+				  }
+				});
  			});
  			
  			// 전화번호 정규식 패턴
