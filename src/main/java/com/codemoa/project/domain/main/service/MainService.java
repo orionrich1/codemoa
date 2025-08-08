@@ -1,6 +1,8 @@
 package com.codemoa.project.domain.main.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -14,9 +16,13 @@ import lombok.RequiredArgsConstructor;
 public class MainService {
 	private final MainMapper mainMapper;
 	
-	public List<MainSearch> searchAll(String keyword) {
-		System.out.println("서비스");
-		return mainMapper.searchAll(keyword);	
+	public Map<String, Object>  searchAll(String keyword) {
+		Map<String, Object> map = new HashMap<>();
+		List<MainSearch> list = mainMapper.searchAll(keyword);
+		map.put("searchList", list);
+		if(!list.isEmpty())
+			map.put("searchCount", list.size());
+		return map;
 	}
 	
 }

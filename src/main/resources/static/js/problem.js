@@ -141,8 +141,7 @@ function requestApi() {
 		},
 		"answer": userAnswer
 	}
-
-	console.log(test);
+	$("#result").text("💭 답변 생성 중입니다...");
 
 	fetch('/problems/apiRequest', {
 		method: 'POST',
@@ -159,7 +158,7 @@ function requestApi() {
 	})
 		.then(res => res.json())
 		.then(data => {
-			document.getElementById('result').innerText = data.result;
+			$("#result").text(data.result);
 		});
 }
 

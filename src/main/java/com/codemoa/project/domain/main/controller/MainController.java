@@ -1,5 +1,7 @@
 package com.codemoa.project.domain.main.controller;
 
+import java.util.Map;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,7 +30,10 @@ public class MainController {
 
 	@GetMapping("/search")
     public String search(@RequestParam ("keyword") String keyword, Model model) {
-    	model.addAttribute("searchList", mainService.searchAll(keyword));
+		Map<String, Object> map = mainService.searchAll(keyword);
+
+		model.addAllAttributes(map);
+    	model.addAttribute("keyword", keyword);
     	return "views/main/search";
     }
 }
