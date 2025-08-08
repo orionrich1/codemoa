@@ -2,7 +2,7 @@ let typeFilterSelected = [0, 0, 0];
 let difficultyFilterSelected = [0, 0, 0];
 
 $(function() {
-	
+
 	$(".typeFilter").on("change", function() {
 		typeFilterSelected[$(this).val() - 1] = $(this).is(':checked') ? 1 : 0;
 		requestList();
@@ -72,6 +72,12 @@ $(function() {
 			return false;
 		}
 	});
+
+	$("#questionForm").submit(function(e) {
+		e.preventDefault();
+
+		questionApi();
+	});
 });
 
 function requestList() {
@@ -135,8 +141,7 @@ function requestApi() {
 		},
 		"answer": userAnswer
 	}
-
-	console.log(test);
+	$("#result").text("💭 답변 생성 중입니다...");
 
 	fetch('/problems/apiRequest', {
 		method: 'POST',
@@ -153,6 +158,26 @@ function requestApi() {
 	})
 		.then(res => res.json())
 		.then(data => {
-			document.getElementById('result').innerText = data.result;
+			$("#result").text(data.result);
 		});
+}
+
+function questionApi() {
+	const questionText = $("#questionText").val();
+	$(".code-block").text("💭 답변 생성 중입니다...");
+
+	fetch('/problems/apiQuestion', {
+		method: "POST",
+		headers: {
+			"Content-Type": "text/plain",
+		},
+		body: questionText
+	})
+		.then(res => res.json())
+		.then(data => {
+			$(".code-block").text(data.result);
+		})
+		.catch(err => {
+			$(".code-block").text("❌ 오류가 발생했습니다: " + err.message);
+		});;
 } 

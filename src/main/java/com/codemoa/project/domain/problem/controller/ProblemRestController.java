@@ -45,4 +45,13 @@ public class ProblemRestController {
 		map.put("result", response.text());
 		return map;
 	}
+	
+	// 질문을 gemini에게 전송하여 결과를 받아옴
+	@PostMapping("/apiQuestion")
+	public Map<String, String> apiQuestion(@RequestBody String question) {
+		Map<String, String> map = new HashMap<>();
+		GenerateContentResponse response = aiSupportService.apiQuestion(question);
+		map.put("result", response.text());
+		return map;
+	}
 }

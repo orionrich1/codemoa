@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.codemoa.project.domain.main.mapper.MainMapper">
+
+	<select id="searchAll" resultType="MainSearch">
+		SELECT category type, user_id writer, title, content, created_at createdAt,
+			CONCAT('/boards/', board_no) url
+		FROM community_board
+		WHERE user_id LIKE CONCAT('%', #{keyword}, '%')
+			OR title LIKE CONCAT('%', #{keyword}, '%')
+			OR content LIKE CONCAT('%', #{keyword}, '%')
+			
+		UNION ALL
+		
+		SELECT '강좌 추천' type, user_id writer, title, content2 content, reg_date createdAt,
+			CONCAT('/information/lectureDetail?no=', recommend_no) url
+		FROM lecture
+		WHERE user_id LIKE CONCAT('%', #{keyword}, '%')
+			OR title LIKE CONCAT('%', #{keyword}, '%')
+			OR content1 LIKE CONCAT('%', #{keyword}, '%')
+			OR content2 LIKE CONCAT('%', #{keyword}, '%')
+		
+		UNION ALL
+		
+		SELECT '공모전 정보' type, user_id writer, title, content, reg_date createdAt,
+			CONCAT('/information/contestDetail?no=', contest_no) url
+		FROM contest
+		WHERE user_id LIKE CONCAT('%', #{keyword}, '%')
+			OR title LIKE CONCAT('%', #{keyword}, '%')
+			OR content LIKE CONCAT('%', #{keyword}, '%')
+		
+		UNION ALL
+		
+		SELECT '도서 추천' type, user_id writer, title, content, reg_date createAt,
+			CONCAT('/information/bookDetail?no=', book_no) url
+		FROM book
+		WHERE user_id LIKE CONCAT('%', #{keyword}, '%')
+			OR title LIKE CONCAT('%', #{keyword}, '%')
+			OR content LIKE CONCAT('%', #{keyword}, '%')
+					
+		UNION ALL
+		
+		SELECT '팀원 모집' type, user_id writer, title, content, reg_date createdAt,
+			CONCAT('/teamRecruitDetail?recruitId=', recruit_id) url
+		FROM recruitbbs
+		WHERE user_id LIKE CONCAT('%', #{keyword}, '%')
+			OR title LIKE CONCAT('%', #{keyword}, '%')
+			OR content LIKE CONCAT('%', #{keyword}, '%');
+	</select>
+</mapper>

@@ -1,5 +1,5 @@
 //도영
-package com.codemoa.project.domain.diary.controller;
+package com.codemoa.project.domain.user.controller;
 
 import java.util.Map;
 
@@ -23,8 +23,8 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/my-pages/diary")
-public class DiaryRestController {
+@RequestMapping("/my-pages")
+public class MyPageRestController {
 
 	private final DiaryService diaryService;
 

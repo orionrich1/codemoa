@@ -34,6 +34,11 @@ public class ProblemController {
 		model.addAttribute("problemList", problemService.getProblemList());
 		return "views/problem/problemList";
 	}
+	
+	@GetMapping("/aiAnswer")
+	public String aiAnswer() {
+		return "views/problem/aiAnswer";
+	}
 
 	// 상세 페이지, 문제 내용 및 답안 입력 화면
 	@GetMapping("/problemDetail")

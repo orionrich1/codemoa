@@ -140,42 +140,49 @@
 	validateMemberCounts();
 	
 	//기술 스택 태그 입력 (콤마 / Enter / blur)
-	const tagInput = $('#techStackInput');
-	const tagHidden = $('#techStackHidden');
-	const tagContainer = $('#techTagContainer');
+	const tagInput = $('#techStackInput');			 // 입력 텍스트 박스
+	const tagHidden = $('#techStackHidden');		// 숨겨진 실제 폼 데이터 저장용
+	const tagContainer = $('#techTagContainer');	// 태그들이 시각적으로 보여질 컨테이너
 	let tags = [];
 	
-		
+	// 태그를 화면에 랜더링 하고 숨겨진 필드값을 업데이트
 	function renderTags(){
 		if(!tagContainer) return;
-		tagContainer.innerHTML='';
+		tagContainer.innerHTML='';		//기존 태그를 제거 하는 역활
 		tags.forEach((t,idx)=>{
 			const span = document.createElement('span');
 			span.className = 'badge bg-secondary me-1 mb-1';
-			span.textContent = '#' +t;
-			span.style.cursor = 'pointer';
-			span.title = '클릭하면 삭제';
-			span.addEventListener('click',() => {removeTag(idx);});
-			tagContainer.appendChild(span);
+			span.textContent = '#' +t;			//태그 형식 표시
+			span.style.cursor = 'pointer';			//클릭 가능 커서 표시
+			span.title = '클릭하면 삭제';				//툴팁 안내용
+			//클릭시 태그가 삭제되기 위한 코드
+			span.addEventListener('click',() => {removeTag(idx);}); 
+			tagContainer.appendChild(span);		//태그 컨테이너에 추가
 		});
-		if(tagHidden) tagHidden.value = tags.join(',');
+		//태그 배열을 콤마 구분을 통해 문자열로 숨겨진 필드에 저장하기 위한 용도
+		if(tagHidden) tagHidden.value = tags.join(','); 
 	}
+	
+	//새로운 태그 추가시 중복 및 빈값 검사용 함수
 	function addTag(raw){
 		const trimmed = raw.trim();
-		if(! trimmed) return;
-		if(tags.includes(trimmed)) return;
-		tags.push(trimmed);
-		renderTags();
+		if(! trimmed) return;			// 빈 문자열 무시
+		if(tags.includes(trimmed)) return;	// 중복 태그 무시
+		tags.push(trimmed);		//태그 배열에 추가
+		renderTags();					//태그 화면에 출력
 	}
-	function removeTag(i){
-		tags.splice(i,1); 
-		renderTags();
+	// 인덱스에 해당되는 태그 삭제
+	function removeTag(i){	
+		tags.splice(i,1); 				//배열에서 제거
+		renderTags();					// 화면 갱신
 	}
+	
+	// 입력 문자열을 공백, 콤마 단위로 따로 분리하여 태그로 변환
 	function parseInputTags(str){
-		str.split(/[\s,]+/)
-			.map(s => s.replace(/#/g, '').trim().toLowerCase())
-			.filter(s => s.length > 0 && !tags.includes('#' + s))		
-			.forEach(s => addTag(s));
+		str.split(/[\s,]+/)					// 공백 또는 콤마로 분리
+			.map(s => s.replace(/#/g, '').trim().toLowerCase())	// '#' 제거, 소문자 변환
+			.filter(s => s.length > 0 && !tags.includes('#' + s))		// 빈값과 중복 제외	
+			.forEach(s => addTag(s));				 // 각 단어를 태그로 추가
 	}
 	
 	if(tagHidden && tagHidden.value){
@@ -186,19 +193,19 @@
 	
 	if(tagInput){
 		tagInput.addEventListener('keypress', function(e){
-			if(e.key === '#'){
+			if(e.key === '#'){			//'#' 직접 입력 차단
 				e.preventDefault();
 			}
 		});
 		
 		tagInput.addEventListener('keydown', function(e){
-			if(e.key==='Enter'){
+			if(e.key==='Enter'){			// 엔터 시 입력값을 태그로 변환
 				e.preventDefault();
 				parseInputTags(tagInput.value);
 				tagInput.value='';
 			}
 		});
-		tagInput.addEventListener('blur', function(){
+		tagInput.addEventListener('blur', function(){  // 입력란 포커스 해제 시 태그 변환
 			parseInputTags(tagInput.value);
 			tagInput.value='';
 		});

@@ -81,10 +81,10 @@
 				<div class="row mt-4">
 					<div class="col text-center">
 						<th:block th:unless="${order}">
-							<a class="btn btn-secondary px-5" th:href="@{|/information/book?pageNum=${pageNum}|}">목록</a>
+							<a class="btn btn-secondary px-5" th:href="@{|/information/book?pageNum=${pageNum}&keyword=${keyword}&type=${type}|}">목록</a>
 						</th:block>						
 						<th:block th:if="${order}">
-							<a class="btn btn-secondary px-5" th:href="@{|/information/book?pageNum=${pageNum}&order=${order}|}">목록</a>
+							<a class="btn btn-secondary px-5" th:href="@{|/information/book?pageNum=${pageNum}&order=${order}&keyword=${keyword}&type=${type}|}">목록</a>
 						</th:block>						
 					</div>
 				</div>

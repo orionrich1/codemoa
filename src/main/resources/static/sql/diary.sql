@@ -17,7 +17,6 @@ CREATE TABLE project_checklist (
     content VARCHAR(255) NOT NULL,
     is_done BOOLEAN NOT NULL DEFAULT FALSE,
     priority TINYINT NOT NULL DEFAULT 3,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (project_id) REFERENCES project(project_id) ON DELETE CASCADE
 );
 

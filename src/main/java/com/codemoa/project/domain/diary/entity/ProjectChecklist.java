@@ -5,8 +5,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
 @Entity
@@ -28,7 +26,4 @@ public class ProjectChecklist {
 
 	@Column(nullable = false)
 	private Integer priority = 3;
-
-	@Column(nullable = false, updatable = false)
-	private LocalDateTime createdAt = LocalDateTime.now();	
 }

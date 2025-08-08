@@ -7,7 +7,7 @@
 	<!-- 임시 css 사용중 -->
 	<link rel="stylesheet" th:href="@{/css/mypage/diary.css}" />
     
-	<form class="project-form" action="/my-pages/diary/projects" method="post" th:object="${project}">
+	<form class="project-form" action="/my-pages/projects" method="post" th:object="${project}">
 	
 	    <h1 class="text-center mb-3" th:text="${projectId != 0} ? '프로젝트 수정' : '프로젝트 등록'"></h1>
 	    
