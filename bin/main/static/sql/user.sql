@@ -81,7 +81,7 @@ CREATE TABLE comment (
     CONSTRAINT fk_comment_board FOREIGN KEY (board_no) REFERENCES community_board (board_no) ON DELETE CASCADE
 ) COMMENT '게시판 댓글';
 
-CREATE TABLE point_log (
+CREATE TABLE pointlog (
     id BIGINT NOT NULL AUTO_INCREMENT COMMENT '로그 ID (PK)',
     user_id VARCHAR(10) COMMENT '사용자 ID (FK)',
     points INT COMMENT '지급 또는 사용된 포인트',

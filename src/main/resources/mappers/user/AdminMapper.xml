@@ -6,6 +6,12 @@
 		SELECT * FROM user ORDER BY user_id
 	</select>
 	
+	<select id="searchUserList" resultType="UserDetailResponse">
+		SELECT * FROM user 
+		WHERE user_id LIKE CONCAT('%', #{keyword}, '%')
+		ORDER BY user_id
+	</select>
+	
 	<!-- 유저의 차단 기록을 가져오기 위해 Map 설정 -->
 	<resultMap id="UserDetailMap" type="UserDetailResponse">
 	    <id property="userId" column="user_id"/>

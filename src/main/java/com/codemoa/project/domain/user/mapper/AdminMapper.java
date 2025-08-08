@@ -11,6 +11,8 @@ import com.codemoa.project.domain.user.dto.response.UserDetailResponse;
 @Mapper
 public interface AdminMapper {
 	public List<UserDetailResponse> getUserList();
+	
+	public List<UserDetailResponse> searchUserList(String keyword);
 
 	public UserDetailResponse getUserDetail(String userId);
 

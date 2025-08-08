@@ -51,7 +51,7 @@
 	        </th:block>
 	        
 	        <th:block th:unless="!${#lists.isEmpty(projects)}">
-	        	<h5 th:if="${!searched}" class="text-center w-100 my-5">작성된 프로젝트가 없습니다.</h5>
+	        	<h5 th:if="${searched == null || !searched}" class="text-center w-100 my-5">작성된 프로젝트가 없습니다.</h5>
 	        	<h5 th:if="${searched}" class="text-center w-100 my-5">검색된 프로젝트가 없습니다.</h5>
 	        </th:block>
 	    </div>

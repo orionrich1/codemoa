@@ -1,106 +1,93 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeloadf.org"
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/default_layout}">
 	
 	<th:block layout:fragment="content">
 		
 		<script th:src="@{/js/information/formcheck.js}"></script>
-		<div class="row my-5" id="global-content">
-			<div class="col-10">
-				<form name="checkForm" id="checkForm">
-					<input type="hidden" name="no" id="no" th:value="${contest.contestNo}"/>
-					<input type="hidden" name="pass" id="rPass" />
-					<input type="hidden" name="pageNum" th:value="${pageNum}" />
-					<th:block th:if="${searchOption}">
-						<input type="hidden" name="type" th:value="${type}" />
-						<input type="hidden" name="keyword" th:value="${keyword}" />
-					</th:block>
-				</form>
-				<div class="row text-center">
-					<div class="col">
-						<h2 class="fs-3 fw-bold">게시글 상세보기</h2>
+		<form name="checkForm" id="checkForm" class="d-none">
+			<input type="hidden" name="no" id="no" th:value="${contest.contestNo}"/>
+			<input type="hidden" name="pass" id="rPass" />
+			<input type="hidden" name="pageNum" th:value="${pageNum}" />
+			<th:block th:if="${searchOption}">
+				<input type="hidden" name="type" th:value="${type}" />
+				<input type="hidden" name="keyword" th:value="${keyword}" />
+			</th:block>
+		</form>
+
+		<div class="container my-5">
+			<div class="row justify-content-center">
+				<div class="col-lg-9 col-xl-8">
+
+					<div class="text-center mb-4">
+						<h2 class="fw-bold fs-2">공모전 정보</h2>
 					</div>
-				</div> 
-				<div class="row my-3">
-					<div class="col">
-						<table class="table table-bordered">
-							<tbody>
-								<tr>
-									<th class="table-secondary">제 목</th>
-									<td colspan="3" th:text="${contest.title}">게시글 제목</td>		
-								</tr>
-								
-								<tr>
-									<th class="table-secondary" style="width: 180px;">주최기관</th>
-									<td colspan="3" th:text="${contest.hostOrganization}">주최기관</td>		
-								</tr>
-								<tr>
-									<th class="table-secondary">시작일</th>
-									<td colspan="3" th:text="${contest.startDate}">시작일</td>		
-								</tr>
-								<tr>
-									<th class="table-secondary">마감일</th>
-									<td colspan="3" th:text="${contest.endDate}">마감일</td>		
-								</tr>
-								<tr>
-									<th>글쓴이</th>
-									<td th:text="${contest.userId}"></td>
-								</tr>
-								<tr>
-									<th>작성일</th>
-									<td>[[${#dates.format(contest.regDate, 'yyyy-HH-dd HH:mm:ss')}]]</td>		
-								</tr>
-								<tr>		
-									<th>비밀번호</th>
-									<td>
-										<div class="col-sm-8">
-											<input class="form-control" type="password" name="pass" id="pass">
-										</div>
-									</td>
-									<!-- 
-									<th>추천수</th>
-									<td th:text="${lecture.recommendNum}"></td>
-									 -->
-								</tr>	
-								<tr>
-									<td colspan="4" style="white-space: pre-wrap; max-width: 400px; word-wrap: break-word;">[[${contest.content}]]</td>
-								</tr>
-								<!-- <tr>
-									<td colspan="4">출처 : [[${contest.contestSource}]]</td>
-								</tr> -->
-								<tr>
-									<th:block th:if="${contest.file1}">
-										<td colspan="4">
-											<div style="display: flex; justify-content: center; align-items: center;">
-												<img th:src="@{/files/information/{img}(img=${contest.file1})}" alt="이미지를 찾을 수 없습니다." style="max-width: 100%;">
-											</div>
-										</td>
-									</th:block>
-									<th:block th:unless="${contest.file1}">
-										<td colspan="4">업로드 된 이미지 없음</td>
-									</th:block>
-								</tr>
-							</tbody>
-						</table>
+
+					<div class="card shadow-sm border-0">
+						<div class="card-body p-4 p-sm-5">
+							
+							<div class="pb-4 border-bottom">
+								<h1 class="h2 mb-3" th:text="${contest.title}">게시글 제목</h1>
+								<div class="d-flex justify-content-between text-secondary small">
+									<span>
+										<b class="fw-bold">글쓴이:</b>
+										<span th:text="${contest.userId}"></span>
+									</span>
+									<span>
+										<b class="fw-bold">작성일:</b>
+										<span>[[${#dates.format(contest.regDate, 'yyyy-MM-dd HH:mm')}]]</span>
+									</span>
+								</div>
+								<div class="d-flex justify-content-between text-secondary small mt-2">
+									<span>
+										<b class="fw-bold">주최기관:</b>
+										<span th:text="${contest.hostOrganization}"></span>
+									</span>
+									<span>
+										<b class="fw-bold">접수기간:</b>
+										<span th:text="|${contest.startDate} ~ ${contest.endDate}|"></span>
+									</span>
+								</div>
+							</div>
+
+							<div class="py-4 my-3" style="min-height: 150px;">
+								<p style="white-space: pre-wrap;" th:text="${contest.content}"></p>
+							</div>
+
+							<div class="py-4 border-top text-center">
+								<th:block th:if="${contest.file1}">
+									<img th:src="@{/files/information/{img}(img=${contest.file1})}" alt="첨부 이미지" class="img-fluid rounded">
+								</th:block>
+								<th:block th:unless="${contest.file1}">
+									<p class="text-secondary">업로드 된 이미지가 없습니다.</p>
+								</th:block>
+							</div>
+
+							<div class="p-3 bg-light rounded mt-4">
+								<div class="d-flex justify-content-between align-items-center">
+									<div class="flex-grow-1 me-3">
+										<input class="form-control" type="password" name="pass" id="pass" placeholder="수정 또는 삭제를 위해 비밀번호를 입력하세요.">
+									</div>
+									<div class="flex-shrink-0">
+										<button class="btn btn-warning" type="button" id="contestDetailUpdate">수정</button>
+										<button class="btn btn-danger"  type="button" id="contestDetailDelete">삭제</button>
+									</div>
+								</div>
+							</div>
+
+						</div>
 					</div>
-				</div>
-				<div class="row my-3">
-					<div class="col text-center">
-						<input class="btn btn-warning" type="button" id="contestDetailUpdate" value="수정하기"/>
-						&nbsp;&nbsp;<input class="btn btn-danger"  type="button" id="contestDetailDelete" value="삭제하기" />			
-						&nbsp;&nbsp;
-						<!-- /* 일반 게시글 리스트에서 온 경우 */ -->
-						<th:block th:unless="order">
-							<input class="btn btn-primary" type="button" value="목록보기"
-								th:onclick="@{|location.href='contest?pageNum=${pageNum}'|}"/>
+
+					<div class="text-center mt-4">
+						<th:block th:unless="${order}">
+							<a class="btn btn-secondary px-5" th:href="@{|/information/contestList?pageNum=${pageNum}|}">목록</a>
 						</th:block>						
-						<!-- /* 검색 게시글 리스트에서 온 경우 */ -->
-						<th:block th:if="order">
-							<input class="btn btn-primary" type="button" value="목록보기"
-								th:onclick="@{|location.href='contest?pageNum=${pageNum}&order=${order}'|}"/>
+						<th:block th:if="${order}">
+							<a class="btn btn-secondary px-5" th:href="@{|/information/contestList?pageNum=${pageNum}&order=${order}|}">목록</a>
 						</th:block>						
 					</div>
+
 				</div>
 			</div>
 		</div>

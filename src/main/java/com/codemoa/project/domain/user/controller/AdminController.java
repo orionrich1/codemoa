@@ -30,9 +30,18 @@ public class AdminController {
 	}
 
 	@GetMapping("/users")
-	public String adminUsers(Model model, @RequestParam(value = "userId", required = false) String userId) {
+	public String adminUsers(Model model, @RequestParam(value = "userId", required = false) String userId,
+			@RequestParam(value = "keyword", required = false) String keyword) {
 		if (userId == null || userId.equals("")) {
-			model.addAttribute("userList", adminService.getUserList());
+			boolean searched = false;
+			if (keyword != null) {
+				searched = true;
+				model.addAttribute("keyword", keyword);
+				model.addAttribute("userList", adminService.getUserList(keyword));
+			} else {
+				model.addAttribute("userList", adminService.getUserList());
+			}
+			model.addAttribute("searched", searched);
 			return "views/user/admin/users";
 		} else {
 			model.addAttribute("user", adminService.getUserDetail(userId));
@@ -51,7 +60,7 @@ public class AdminController {
 		adminService.unbanUser(userId);
 		return "redirect:users?userId=" + userId;
 	}
-	
+
 	@GetMapping("/deleteUser")
 	public String deleteUser(@RequestParam("userId") String userId) {
 		adminService.deleteUser(userId);

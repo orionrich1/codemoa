@@ -1,71 +1,76 @@
-<html xmlns:th="http://www.thymeleaf.org"
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/default_layout}">
 	<th:block layout:fragment="content">
   		
-  		<!-- content -->
-		<div class="row my-5" id="global-content">
-			<div class="col">
-				<div class="row text-center mb-5">
-					<div class="col">
-						<h2 class="fs-3 fw-bold">강좌 추천글 쓰기</h2>
+		<div class="container my-5">
+			<div class="row justify-content-center">
+				<div class="col-lg-9 col-xl-8">
+					<div class="text-center mb-4">
+						<h2 class="fw-bold fs-2">강좌 추천하기</h2>
+						<p class="text-secondary">유용한 IT 강좌 정보를 공유해주세요.</p>
 					</div>
-				</div>  
-				<form name="lectureWriteForm" action="lectureWrite" id="lectureWriteForm" 
-					class="row g-3 border-primary" method="post"
-					enctype="multipart/form-data">
-				
-					<div class="col-6 offset-md-2">
-						<label for="userId" class="form-label">글쓴이</label>
-						<input type="text" class="form-control" name="userId" id="userId" 
-							placeholder="작성자를 입력해 주세요">
-						<!-- 
-						<input type="text" class="form-control" name="userId" id="writer" 
-							placeholder="작성자를 입력해 주세요" th:value="${lecture.userId}" readonly>
-						 -->
+
+					<div class="card shadow-sm border-0">
+						<div class="card-body p-4 p-sm-5">
+							<form name="lectureWriteForm" action="lectureWrite" id="lectureWriteForm" 
+								method="post" enctype="multipart/form-data">
+							
+								<div class="row g-3">
+									<div class="col-md-6">
+										<label for="userId" class="form-label">글쓴이</label>
+										<input type="text" class="form-control" name="userId" id="userId" placeholder="작성자를 입력해 주세요">
+									</div>
+									<div class="col-md-6">
+										<label for="rating" class="form-label">별점 (0.0 ~ 5.0)</label>
+										<input type="text" class="form-control" name="rating"  id="rating">
+									</div>
+
+									<div class="col-12">
+										<label for="title" class="form-label">강좌명</label>
+										<input type="text" class="form-control" name="title"  id="title">
+									</div>
+									<div class="col-12">
+										<label for="subtitle" class="form-label">한 줄 요약</label>
+										<input type="text" class="form-control" name="subtitle"  id="subtitle">
+									</div>
+
+									<div class="col-md-6">
+										<label for="category" class="form-label">카테고리</label>
+										<input type="text" class="form-control" name="category"  id="category">
+									</div>
+									<div class="col-md-6">
+										<label for="lectureSource" class="form-label">출처(링크)</label>
+										<input type="text" class="form-control" name="lectureSource"  id="lectureSource">
+									</div>
+									
+									<div class="col-12">
+										<label for="content1" class="form-label">이런 걸 배울 수 있어요</label>
+										<textarea class="form-control" name="content1" id="content1" rows="6"></textarea>
+									</div>
+									<div class="col-12">
+										<label for="content2" class="form-label">강좌 상세 설명</label>
+										<textarea class="form-control" name="content2" id="content2" rows="6"></textarea>
+									</div>	
+
+									<div class="col-12">
+										<label for="addFile" class="form-label">대표 이미지</label>
+										<input type="file" class="form-control" name="addFile" id="addFile" >
+									</div>
+									
+									<div class="col-12 text-center mt-5">
+										<input type="submit" value="등록하기" class="btn btn-primary btn-lg px-5"/>
+										<input type="button" value="목록보기" 
+											onclick="location.href='lecture'" class="btn btn-secondary btn-lg px-5"/>
+									</div>	
+								</div>
+							</form>
+						</div>
 					</div>
-					<div class="col-8 offset-md-2">
-						<label for="title" class="form-label">제 목</label>
-						<input type="text" class="form-control" name="title"  id="title">
-					</div>
-					<div class="col-8 offset-md-2">
-						<label for="title" class="form-label">부제목</label>
-						<input type="text" class="form-control" name="subtitle"  id="subtitle">
-					</div>
-					<div class="col-8 offset-md-2">
-						<label for="title" class="form-label">카테고리</label>
-						<input type="text" class="form-control" name="category"  id="category">
-					</div>
-					<div class="col-8 offset-md-2">
-						<label for="title" class="form-label">별 점(0 ~ 5.0)</label>
-						<input type="text" class="form-control" name="rating"  id="rating">
-					</div>
-					<div class="col-8 offset-md-2">
-						<label for="content" class="form-label">내 용 1</label>
-						<textarea class="form-control" name="content1" id="content" rows="10"></textarea>
-					</div>
-					<div class="col-8 offset-md-2">
-						<label for="content" class="form-label">내 용 2</label>
-						<textarea class="form-control" name="content2" id="content" rows="10"></textarea>
-					</div>	
-					<div class="col-8 offset-md-2">
-						<label for="addFile" class="form-label">업로드 할 이미지</label>
-						<input type="file" class="form-control" name="addFile" id="addFile" >
-					</div>
-					<div class="col-8 offset-md-2">
-						<label for="title" class="form-label">출 처</label>
-						<input type="text" class="form-control" name="lectureSource"  id="lectureSource">
-					</div>
-					<div class="col-8 offset-md-2 text-center mt-5">
-						<input type="submit" value="등록하기" class="btn btn-primary"/>
-							&nbsp;&nbsp;
-						<input type="button" value="목록보기" 
-							onclick="location.href='lecture'" class="btn btn-primary"/>
-					</div>	
-				</form>
+				</div>
 			</div>
 		</div>
 		
 	</th:block>
 </html>
-		
