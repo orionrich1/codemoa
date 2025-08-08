@@ -207,9 +207,7 @@ public class InformationController {
 	    }
 		
 		informationService.addLecture(lecture);
-		// 게시글 쓰기가 완료되면 게시글 리스트로 리다이렉트 시킨다.
-		
-		// 리다이렉트 : 같은 글이 계속 들어가지 않게
+
 		return "redirect:/information/lecture";
 	}
 	

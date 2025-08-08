@@ -125,26 +125,28 @@
 		<div class="swiper mySwiper">
 			<div class="swiper-wrapper" id="content">
 		
-				<th:block th:each="book: ${bList}">
-					<div class="swiper-slide">
-						<div class="book-gallery-card">
-							<a th:href="@{/information/bookDetail(no=${book.bookNo}, pageNum=${currentPage}, order=${order}, type=${type}, keyword=${keyword})}">
-								<img th:src="@{/files/information/{img}(img=${book.file1})}" alt="이미지" class="book-cover-image">
-								<div class="book-hover-overlay">
-									<div class="book-hover-content">
-										[[${book.content}]]
+				<th:block th:each="book, iterStat : ${bList}">
+	   				<th:block th:if="${iterStat.index < 8}">
+						<div class="swiper-slide">
+							<div class="book-gallery-card">
+								<a th:href="@{/information/bookDetail(no=${book.bookNo}, pageNum=${currentPage}, order=${order}, type=${type}, keyword=${keyword})}">
+									<img th:src="@{/files/information/{img}(img=${book.file1})}" alt="이미지" class="book-cover-image">
+									<div class="book-hover-overlay">
+										<div class="book-hover-content">
+											[[${book.content}]]
+										</div>
 									</div>
-								</div>
-							</a>
-							<div class="book-texts">
-								<strong>[[${book.title}]]</strong>
-								<div class="metadata">
-									<span><b class="fw-bold">출판일:</b> [[${#dates.format(book.pubDate, 'yyyy-MM-dd')}]]</span>
-									<span><b class="fw-bold">평점:</b> [[${book.rating}]]</span>
+								</a>
+								<div class="book-texts">
+									<strong>[[${book.title}]]</strong>
+									<div class="metadata">
+										<span><b class="fw-bold">출판일:</b> [[${#dates.format(book.pubDate, 'yyyy-MM-dd')}]]</span>
+										<span><b class="fw-bold">평점:</b> [[${book.rating}]]</span>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
+					</th:block>
 				</th:block>
 				
 			</div>
@@ -175,19 +177,25 @@
 	<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 	<script th:src="@{/js/information/ajax.js}"></script>
 	<script>
-		const swiper = new Swiper(".mySwiper", {
-			slidesPerView: 1,
-			spaceBetween: 30,
-			grid: {
-				rows: 2,
-				fill: "row",
-			},
-			breakpoints: {
-				576: { slidesPerView: 2, grid: { rows: 2, fill: "row" } },
-				768: { slidesPerView: 3, grid: { rows: 2, fill: "row" } },
-				992: { slidesPerView: 4, grid: { rows: 2, fill: "row" } }
-			}
+	const swiper = new Swiper(".mySwiper", {
+		  spaceBetween: 30,
+		  slidesPerView: 4,
+		  grid: {
+		    rows: 2,
+		    fill: "row"
+		  },
+		  pagination: {
+		    el: ".swiper-pagination",
+		    clickable: true
+		  },
+		  breakpoints: {
+		    0: { slidesPerView: 1, grid: { rows: 8 } },
+		    576: { slidesPerView: 2, grid: { rows: 4 } },
+		    768: { slidesPerView: 3, grid: { rows: 3 } },
+		    992: { slidesPerView: 4, grid: { rows: 2 } }
+		  }
 		});
+
 	</script>
 </th:block>
 	

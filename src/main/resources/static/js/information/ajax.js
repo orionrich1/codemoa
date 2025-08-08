@@ -1,5 +1,8 @@
-// DOM(Document Object Model)이 준비되면
+let swiperInstance = null;
+
 $(function() {
+
+	swiperInstance = initSwiper();
 	
 	$(document).on('change', "#typeSelector3", function(e) {
 		const urlParams = new URLSearchParams(window.location.search);
@@ -27,13 +30,6 @@ $(function() {
 
 				$("#Row").empty();
 				renderPagination(resData);
-
-				new Swiper(".mySwiper", {
-					slidesPerView: 4,
-					grid: { rows: 2, fill: "row" },
-					spaceBetween: 20,
-					
-				});
 			},
 			error: function (xhr, status, error) {
 				alert("error : " + xhr.statusText + ", " + status + ", " + error);
@@ -61,12 +57,6 @@ $(function() {
 
 				$("#Row").empty();
 				renderPagination(resData);
-
-				new Swiper(".mySwiper", {
-					slidesPerView: 4,
-					grid: { rows: 2, fill: "row" },
-					spaceBetween: 20,
-				});
 			},
 			error: function (xhr, status, error) {
 				alert("error : " + xhr.statusText + ", " + status + ", " + error);
@@ -145,14 +135,6 @@ $(function() {
 				
 			   renderPagination(resData);
 			
-			   new Swiper(".mySwiper", {
-			   		slidesPerView: 4, 
-			   	  	grid: {
-			   	    	rows: 2,
-			   	   		fill: "row",
-			   	  	},
-			   	  	spaceBetween: 20,
-			 	});
 			},
 			error: function(xhr, status, error) {
 				alert("error : " + xhr.statusText + ", " + status + ", " + error);
@@ -188,12 +170,6 @@ $(function() {
 				renderLectureList(resData.lList, pageNum, order, keyword, type);
 				$("#Row").empty();
 				renderPagination(resData);
-
-				new Swiper(".mySwiper", {
-					slidesPerView: 4,
-					grid: { rows: 2, fill: "row" },
-					spaceBetween: 20,
-				});
 			},
 			error: function(xhr, status, error) {
 				alert("error : " + xhr.statusText + ", " + status + ", " + error);
@@ -237,6 +213,36 @@ $(function() {
 
 	
 });
+
+function resetSwiper() {
+    if (swiperInstance !== null) {
+        swiperInstance.destroy(true, true);  // 기존 swiper 완전 제거
+    }
+    swiperInstance = initSwiper();  // 새로 만든 인스턴스를 저장
+}
+
+function initSwiper() {
+    return new Swiper(".mySwiper", {
+        spaceBetween: 30,
+        slidesPerView: 4,
+        grid: {
+            rows: 2,
+            fill: "row"
+        },
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true
+        },
+        breakpoints: {
+            0: { slidesPerView: 1, grid: { rows: 8 } },
+            576: { slidesPerView: 2, grid: { rows: 4 } },
+            768: { slidesPerView: 3, grid: { rows: 3 } },
+            992: { slidesPerView: 4, grid: { rows: 2 } }
+        }
+    });
+}
+
+
 
 function renderPagination(data) {
     const {
@@ -286,8 +292,9 @@ function renderPagination(data) {
 
 function renderBookList(bList, pageNum, order, keyword, type) {
 	let html = '';
+	const slicedList = bList.slice(0, 8); // 항상 최대 8개만
 
-	bList.forEach(book => {
+	slicedList.forEach(book => {
 		const detailUrl = `/information/bookDetail?no=${book.bookNo}&pageNum=${pageNum}&order=${order || ''}&keyword=${encodeURIComponent(keyword || '')}&type=${encodeURIComponent(type || '')}`;
 
 		html += `
@@ -314,7 +321,9 @@ function renderBookList(bList, pageNum, order, keyword, type) {
 	});
 
 	$("#content").empty().append(html);
+	resetSwiper(); // Swiper 재초기화
 }
+
 
 function renderLectureList(lList, pageNum, order, keyword, type) {
 	let html = '';
@@ -346,6 +355,7 @@ function renderLectureList(lList, pageNum, order, keyword, type) {
 	});
 
 	$("#content").empty().append(html);
+	resetSwiper();
 }
 
 
