@@ -5,20 +5,25 @@ $(function() {
 		const urlParams = new URLSearchParams(window.location.search);
 		const pageNum = urlParams.get('pageNum') || 1;
 		const order = $("#typeSelector3").val();
-		const keyword = $("#booksearch").val();
+		const keyword = $("#bookSearch").val();
+		let type = "";
 
+		if (keyword !== null && keyword.trim() !== "") {
+		    type = "title";
+		}
+		
 		e.preventDefault();     
 		e.stopPropagation();
 		
 		$.ajax({
 			url: "/orderbook.ajax",
 			type: "get",
-			data: { order : order, keyword : keyword, pageNum : pageNum },
+			data: { order : order, keyword : keyword, pageNum : pageNum , type : type},
 			dataType: "json",
 			success: function (resData) {
 				console.log(resData);
 
-				renderBookList(resData.bList, pageNum, order, keyword);
+				renderBookList(resData.bList, pageNum, order, keyword, type);
 
 				$("#Row").empty();
 				renderPagination(resData);
@@ -27,6 +32,7 @@ $(function() {
 					slidesPerView: 4,
 					grid: { rows: 2, fill: "row" },
 					spaceBetween: 20,
+					
 				});
 			},
 			error: function (xhr, status, error) {
@@ -39,27 +45,23 @@ $(function() {
 	$(document).on('submit', "#bookSearchForm", function(e) {
 		const keyword = $("#bookSearch").val();
 		const pageNum = 1;
-		const order = $("#typeSelector3").val(); // 현재 정렬 기준 유지
+		const order = $("#typeSelector3").val();
 
 		e.preventDefault();     
 		e.stopPropagation();
-		
+
 		$.ajax({
 			url: "/booksearch",
 			type: "get",
-			data: { keyword : keyword , order : order },
+			data: { keyword: keyword, order: order },
 			dataType: "json",
 			success: function (resData) {
-				console.log(resData);
+				const type = "title";  // 성공 시에만 type을 설정
+				renderBookList(resData.bList, pageNum, order, keyword, type);  // type 전달
 
-				// 리스트 렌더링
-				renderBookList(resData.bList, 1, order, keyword);
-
-				// 페이지네이션
 				$("#Row").empty();
 				renderPagination(resData);
 
-				// Swiper 다시 초기화
 				new Swiper(".mySwiper", {
 					slidesPerView: 4,
 					grid: { rows: 2, fill: "row" },
@@ -70,8 +72,8 @@ $(function() {
 				alert("error : " + xhr.statusText + ", " + status + ", " + error);
 			}
 		});
-
 	});
+
 
 	
 	
@@ -161,119 +163,78 @@ $(function() {
 
 
 
-	$(document).on('change', "#typeSelector1", function() {
+	$(document).on('change', "#typeSelector1", function(e) {
+		const urlParams = new URLSearchParams(window.location.search);
+		const pageNum = urlParams.get('pageNum') || 1;
+		const order = $("#typeSelector1").val();
+		const keyword = $("#lectureSearch").val();
+		let type = "";
+
+		if (keyword !== null && keyword.trim() !== "") {
+		    type = "title";
+		}
+		
+		e.preventDefault();
+		e.stopPropagation();
+
 		$.ajax({
 			url: "/orderlecture.ajax",
 			type: "get",
-			data : {order : $("#typeSelector1").val()},
+			data: { order : order, keyword : keyword, pageNum : pageNum, type : type},
 			dataType: "json",
-			success: function(resData) {	
-				console.log(resData);	
-				
-			   $("#content").empty();
-			   $("#Row").empty();
+			success: function(resData) {
+				console.log(resData);
 
-			   let html = ``;
+				renderLectureList(resData.lList, pageNum, order, keyword, type);
+				$("#Row").empty();
+				renderPagination(resData);
 
-			   resData.lList.forEach(lecture => {
-			       html += `
-			           <div class="swiper-slide">
-					        <div class="item-gallery-card">
-	   							<a href="/information/lectureDetail?no=${lecture.recommendNo}&pageNum=1">
-	   								<img src="/files/information/${lecture.file1}" alt="이미지" class="item-cover-image">
-	   								<div class="item-hover-overlay">
-	   									<div class="item-hover-content">
-	   										${lecture.subtitle}
-	   									</div>
-	   								</div>
-	   							</a>
-	   							<div class="item-texts">
-	   								<strong>${lecture.title}</strong>
-	   								<div class="metadata">
-	   									<span><b class="fw-bold">평점:</b> ${lecture.rating}</span>
-	   									<span><b class="fw-bold">작성자:</b> ${lecture.userId}</span>
-	   								</div>
-	   							</div>
-	   						</div>
-			           </div>
-			       `;
-			   });
-
-			   $("#content").append(html);
-				
-			   renderPagination(resData);
-			
-			   new Swiper(".mySwiper", {
-			   		slidesPerView: 4, 
-			   	  	grid: {
-			   	    	rows: 2,
-			   	   		fill: "row",
-			   	  	},
-			   	  	spaceBetween: 20,
-			 	});
+				new Swiper(".mySwiper", {
+					slidesPerView: 4,
+					grid: { rows: 2, fill: "row" },
+					spaceBetween: 20,
+				});
 			},
 			error: function(xhr, status, error) {
 				alert("error : " + xhr.statusText + ", " + status + ", " + error);
 			}
 		});
 	});
-	
-	$(document).on('submit', "#lecturesearch", function() {
+
+
+	$(document).on('submit', "#lectureSearchForm", function(e) {
+		const keyword = $("#lectureSearch").val();
+		const pageNum = 1;
+		const order = $("#typeSelector1").val();
+
+		e.preventDefault();
+		e.stopPropagation();
+
 		$.ajax({
-			url: "/orderlecture.ajax",
+			url: "/lecturesearch",
 			type: "get",
-			data : {order : $("#typeSelector1").val()},
+			data: { keyword: keyword, order: order },
 			dataType: "json",
-			success: function(resData) {	
-				console.log(resData);	
-				
-			   $("#content").empty();
-			   $("#Row").empty();
+			success: function(resData) {
+				const type = "title";  // 성공 시에만 설정
+				renderLectureList(resData.lList, pageNum, order, keyword, type);  // type 전달
 
-			   let html = ``;
+				$("#Row").empty();
+				renderPagination(resData);
 
-			   resData.lList.forEach(lecture => {
-			       html += `
-			           <div class="swiper-slide">
-					        <div class="item-gallery-card">
-	   							<a href="/information/lectureDetail?no=${lecture.recommendNo}&pageNum=1">
-	   								<img src="/files/information/${lecture.file1}" alt="이미지" class="item-cover-image">
-	   								<div class="item-hover-overlay">
-	   									<div class="item-hover-content">
-	   										${lecture.subtitle}
-	   									</div>
-	   								</div>
-	   							</a>
-	   							<div class="item-texts">
-	   								<strong>${lecture.title}</strong>
-	   								<div class="metadata">
-	   									<span><b class="fw-bold">평점:</b> ${lecture.rating}</span>
-	   									<span><b class="fw-bold">작성자:</b> ${lecture.userId}</span>
-	   								</div>
-	   							</div>
-	   						</div>
-			           </div>
-			       `;
-			   });
-
-			   $("#content").append(html);
-				
-			   renderPagination(resData);
-			
-			   new Swiper(".mySwiper", {
-			   		slidesPerView: 4, 
-			   	  	grid: {
-			   	    	rows: 2,
-			   	   		fill: "row",
-			   	  	},
-			   	  	spaceBetween: 20,
-			 	});
+				new Swiper(".mySwiper", {
+					slidesPerView: 4,
+					grid: { rows: 2, fill: "row" },
+					spaceBetween: 20,
+				});
 			},
 			error: function(xhr, status, error) {
 				alert("error : " + xhr.statusText + ", " + status + ", " + error);
 			}
 		});
 	});
+
+
 	
 });
 
@@ -323,11 +284,11 @@ function renderPagination(data) {
     document.querySelector("#Row").innerHTML = paginationHtml;
 }
 
-function renderBookList(bList, pageNum, order, keyword) {
+function renderBookList(bList, pageNum, order, keyword, type) {
 	let html = '';
 
 	bList.forEach(book => {
-		const detailUrl = `/information/bookDetail?no=${book.bookNo}&pageNum=${pageNum}&order=${order || ''}&keyword=${encodeURIComponent(keyword || '')}`;
+		const detailUrl = `/information/bookDetail?no=${book.bookNo}&pageNum=${pageNum}&order=${order || ''}&keyword=${encodeURIComponent(keyword || '')}&type=${encodeURIComponent(type || '')}`;
 
 		html += `
 			<div class="swiper-slide">
@@ -354,4 +315,37 @@ function renderBookList(bList, pageNum, order, keyword) {
 
 	$("#content").empty().append(html);
 }
+
+function renderLectureList(lList, pageNum, order, keyword, type) {
+	let html = '';
+
+	lList.forEach(lecture => {
+		const detailUrl = `/information/lectureDetail?no=${lecture.recommendNo}&pageNum=${pageNum}&order=${order || ''}&keyword=${encodeURIComponent(keyword || '')}&type=${encodeURIComponent(type || '')}`;
+
+		html += `
+			<div class="swiper-slide">
+				<div class="item-gallery-card">
+					<a href="${detailUrl}">
+						<img src="/files/information/${lecture.file1}" alt="이미지" class="item-cover-image">
+						<div class="item-hover-overlay">
+							<div class="item-hover-content">
+								${lecture.subtitle}
+							</div>
+						</div>
+					</a>
+					<div class="item-texts">
+						<strong>${lecture.title}</strong>
+						<div class="metadata">
+							<span><b class="fw-bold">평점:</b> ${lecture.rating}</span>
+							<span><b class="fw-bold">작성자:</b> ${lecture.userId}</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		`;
+	});
+
+	$("#content").empty().append(html);
+}
+
 

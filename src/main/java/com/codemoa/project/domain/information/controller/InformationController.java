@@ -120,6 +120,9 @@ public class InformationController {
 		model.addAttribute("pageNum", pageNum);
 		model.addAttribute(informationService.getLecture(no));
 		model.addAttribute("order", order);
+		model.addAttribute("type", type);
+		model.addAttribute("keyword", keyword);
+		
 		return "views/information/informationLectureDetail";
 	}
 	
@@ -136,12 +139,12 @@ public class InformationController {
 		model.addAttribute("lecture", lecture);
 		model.addAttribute("pageNum", pageNum);
 
-		boolean searchOption = type.equals("null") || keyword.equals("null") ? false : true;
-		model.addAttribute("searchOption", searchOption);
-		if (searchOption) {
-			model.addAttribute("type", type);
-			model.addAttribute("keyword", keyword);
-		}
+//		boolean searchOption = type.equals("null") || keyword.equals("null") ? false : true;
+//		model.addAttribute("searchOption", searchOption);
+//		if (searchOption) {
+//			model.addAttribute("type", type);
+//			model.addAttribute("keyword", keyword);
+//		}
 
 		return "views/information/informationLectureUpdateForm";
 	}
@@ -236,6 +239,7 @@ public class InformationController {
 		model.addAttribute("pageNum", pageNum);
 		model.addAttribute(informationService.getBook(no));
 		model.addAttribute("order", order);
+		model.addAttribute("type", type);
 		model.addAttribute("keyword", keyword);
 		return "views/information/informationBookDetail";
 	}
@@ -253,12 +257,6 @@ public class InformationController {
 		model.addAttribute("book", book);
 		model.addAttribute("pageNum", pageNum);
 
-		boolean searchOption = type.equals("null") || keyword.equals("null") ? false : true;
-		model.addAttribute("searchOption", searchOption);
-		if (searchOption) {
-			model.addAttribute("type", type);
-			model.addAttribute("keyword", keyword);
-		}
 
 		return "views/information/informationBookUpdateForm";
 	}
@@ -283,11 +281,6 @@ public class InformationController {
 		
 		informationService.updateBook(book);
 
-		boolean searchOption = type.equals("null") || keyword.equals("null") ? false : true;
-		if (searchOption) {
-			reAttrs.addAttribute("type", type);
-			reAttrs.addAttribute("keyword", keyword);
-		}
 		// return "redirect:boardList?pageNum=" + pageNum;
 		reAttrs.addAttribute("pageNum", pageNum);
 		reAttrs.addFlashAttribute("test1", "1회성 파라미터");
@@ -305,11 +298,6 @@ public class InformationController {
 		
 		informationService.deleteBook(no);
 
-		boolean searchOption = type.equals("null") || keyword.equals("null") ? false : true;
-		if (searchOption) {
-			reAttrs.addAttribute("type", type);
-			reAttrs.addAttribute("keyword", keyword);
-		}
 
 		reAttrs.addAttribute("pageNum", pageNum);
 		reAttrs.addFlashAttribute("test1", "1회성 파라미터");
@@ -368,6 +356,8 @@ public class InformationController {
 		model.addAttribute("pageNum", pageNum);
 		model.addAttribute(informationService.getContest(no));
 		model.addAttribute("order", order);
+		model.addAttribute("type", type);
+		model.addAttribute("keyword", keyword);
 		return "views/information/informationContestDetail";
 	}
 	
@@ -408,11 +398,7 @@ public class InformationController {
 		
 		informationService.updateContest(contest);
 
-		boolean searchOption = type.equals("null") || keyword.equals("null") ? false : true;
-		if (searchOption) {
-			reAttrs.addAttribute("type", type);
-			reAttrs.addAttribute("keyword", keyword);
-		}
+
 		// return "redirect:boardList?pageNum=" + pageNum;
 		reAttrs.addAttribute("pageNum", pageNum);
 		reAttrs.addFlashAttribute("test1", "1회성 파라미터");
@@ -430,11 +416,6 @@ public class InformationController {
 		
 		informationService.deleteContest(no);
 
-		boolean searchOption = type.equals("null") || keyword.equals("null") ? false : true;
-		if (searchOption) {
-			reAttrs.addAttribute("type", type);
-			reAttrs.addAttribute("keyword", keyword);
-		}
 
 		reAttrs.addAttribute("pageNum", pageNum);
 		reAttrs.addFlashAttribute("test1", "1회성 파라미터");

@@ -59,7 +59,7 @@
 	      <span class="type" th:text="${board.type}"></span>
 	      <span class="writer" th:text="${board.writer}"></span>
 	      <strong class="title" th:text="${board.title}"></strong>
-	      <p class="content" th:text="${#strings.abbreviate(board.content, 80)}"></p>
+	      <p class="content" th:text="${#strings.abbreviate(board.content, 120)}"></p>
 	      <time class="createdAt" th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm')}"></time>
 	    </li>
 	  </ul>

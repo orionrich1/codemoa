@@ -17,6 +17,7 @@
 		FROM lecture
 		WHERE user_id LIKE CONCAT('%', #{keyword}, '%')
 			OR title LIKE CONCAT('%', #{keyword}, '%')
+			OR content1 LIKE CONCAT('%', #{keyword}, '%')
 			OR content2 LIKE CONCAT('%', #{keyword}, '%')
 		
 		UNION ALL

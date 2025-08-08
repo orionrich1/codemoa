@@ -18,9 +18,10 @@ public class InformationAjaxController {
 	@GetMapping("/orderlecture.ajax")
 	public Map<String, Object> orderLecture(@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword,
 		@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-		@RequestParam(value = "order", required = false, defaultValue = "null") String order) {
+		@RequestParam(value = "order", required = false, defaultValue = "null") String order,
+		@RequestParam(value = "type", required = false, defaultValue = "null") String type) {
 		
-		return informationService.lectureList(pageNum, "null", keyword, 8, 10, order);
+		return informationService.lectureList(pageNum, type, keyword, 8, 10, order);
 	}
 	
 	@GetMapping("/lecturesearch")
@@ -43,9 +44,10 @@ public class InformationAjaxController {
 	@GetMapping("/orderbook.ajax")
 	public Map<String, Object> orderBook(@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword,
 			@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-			@RequestParam(value = "order", required = false, defaultValue = "null") String order) {
+			@RequestParam(value = "order", required = false, defaultValue = "null") String order,
+			@RequestParam(value = "type", required = false, defaultValue = "null") String type) {
 		
-		return informationService.bookList(pageNum, "null", keyword, 8, 10, order);
+		return informationService.bookList(pageNum, type, keyword, 8, 10, order);
 	}
 	
 	@GetMapping("/booksearch")

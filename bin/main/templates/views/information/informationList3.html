@@ -94,6 +94,7 @@
 					<input class="form-control" type="search" name="keyword" 
 					       placeholder="도서명 검색" style="min-width: 200px;" id="bookSearch"
 					       th:value="${#strings.isEmpty(keyword) or keyword == 'null' ? '' : keyword}" />
+					<input type="hidden" name="type" id="type">
 				</form>
 				<th:block th:if="${order =='pubDate'}">
 					<select name="order" id="typeSelector3" class="form-select">
@@ -127,7 +128,7 @@
 				<th:block th:each="book: ${bList}">
 					<div class="swiper-slide">
 						<div class="book-gallery-card">
-							<a th:href="@{/information/bookDetail(no=${book.bookNo}, pageNum=${currentPage}, order=${order}, keyword=${keyword})}">
+							<a th:href="@{/information/bookDetail(no=${book.bookNo}, pageNum=${currentPage}, order=${order}, type=${type}, keyword=${keyword})}">
 								<img th:src="@{/files/information/{img}(img=${book.file1})}" alt="이미지" class="book-cover-image">
 								<div class="book-hover-overlay">
 									<div class="book-hover-content">
