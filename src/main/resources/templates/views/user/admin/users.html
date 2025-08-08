@@ -7,6 +7,24 @@
 	<!-- 임시 css 사용중 -->
 	<link rel="stylesheet" th:href="@{/css/admin/users.css}" />
 	
+	<form class="row g-2 align-items-center my-5 mx-auto" action="/admin/users"
+		style="max-width: 700px;" id="searchForm">
+		<div class="col-auto flex-grow-1 me-3">
+			<input type="text" class="form-control" name="keyword" required
+				placeholder="검색할 아이디를 입력하세요" />
+		</div>
+
+		<div class="col-auto">
+			<button type="submit" class="btn btn-outline-primary">검색</button>
+			<button type="button" class="btn btn-outline-secondary" onclick="location.href='/admin/users'">검색 해제</button>
+		</div>
+	</form>
+	
+	<div th:if="${searched}">
+		<h4 class="text-center mb-4">[[${keyword}]] 검색 결과</h4>
+	</div>
+	
+	
 	<table class="table text-center my-3 align-middle">
 		<thead>
 			<tr class="table-skyblue">
@@ -34,11 +52,13 @@
 			<th:block
 				th:unless="${userList != null && !#lists.isEmpty(userList)}">
 				<tr>
-					<td colspan=5>가입한 유저가 존재하지 않습니다.</td>
+					<td th:if="${!searched}" colspan=5>가입한 유저가 존재하지 않습니다.</td>
+					<td th:if="${searched}" colspan=5>검색된 유저가 존재하지 않습니다.</td>
 				</tr>
 			</th:block>
 		</tbody>
 	</table>
+	
 	<script th:src="@{/js/admin/users.js}"></script>
 </div>
 </html>

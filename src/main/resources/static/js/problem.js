@@ -2,7 +2,7 @@ let typeFilterSelected = [0, 0, 0];
 let difficultyFilterSelected = [0, 0, 0];
 
 $(function() {
-
+	
 	$(".typeFilter").on("change", function() {
 		typeFilterSelected[$(this).val() - 1] = $(this).is(':checked') ? 1 : 0;
 		requestList();

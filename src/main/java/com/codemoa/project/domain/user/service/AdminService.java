@@ -20,6 +20,10 @@ public class AdminService {
 	public List<UserDetailResponse> getUserList() {
 		return adminMapper.getUserList();
 	}
+	
+	public List<UserDetailResponse> getUserList(String keyword) {
+		return adminMapper.searchUserList(keyword);
+	}
 
 	public UserDetailResponse getUserDetail(String userId) {
 		UserDetailResponse user = adminMapper.getUserDetail(userId);

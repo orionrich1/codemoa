@@ -35,7 +35,6 @@
 						<ul class="dropdown-menu">
 							<li><a class="dropdown-item" th:href="@{/information/book}">도서 추천</a></li>
 							<li><a class="dropdown-item" th:href="@{/information/lecture}">강좌 추천</a></li>
-							<li><a class="dropdown-item" th:href="@{/information}">메인 페이지</a></li>
 							<li><a class="dropdown-item" th:href="@{/information/contest}">공모전 정보</a></li>
 						</ul></li>
 
@@ -47,8 +46,8 @@
 
 					<li class="nav-item dropdown"><a class="nav-link dropdown-toggle fw-bold" href="#" role="button" data-bs-toggle="dropdown">고객센터</a>
 						<ul class="dropdown-menu">
-							<li><a class="dropdown-item" th:href="@{/boardList}">Q&A</a></li>
-							<li><a class="dropdown-item" th:href="@{/boardList2}">FAQ</a></li>
+							<li><a class="dropdown-item" th:href="@{/support/qna}">Q&A</a></li>
+							<li><a class="dropdown-item" th:href="@{/support/faq}">FAQ</a></li>
 						</ul></li>
 				</ul>
 
@@ -83,7 +82,7 @@
 									<li><hr class="dropdown-divider"></li>
 									
 									<th:block sec:authorize="hasRole('ROLE_ADMIN')">
-										<li><a class="dropdown-item" href="/admin"><i class="bi bi-person-video me-2"></i>관리자페이지</a></li>
+										<li><a class="dropdown-item" href="/admin/users"><i class="bi bi-person-video me-2"></i>유저 관리</a></li>
 										<li><hr class="dropdown-divider"></li>
 									</th:block>
 									
