@@ -112,7 +112,7 @@ public class EmploymentApiService {
         System.out.println("startPage: " + startPage + ", display: " + display);
 
 		try {					  
-			//API 요청 Url	  https://www.work24.go.kr/cm/openApi/call/wk/callOpenApiSvcInfo210L21.do
+			//API 요청 Url	  
 			String apiUrl = "https://www.work24.go.kr/cm/openApi/call/wk/callOpenApiSvcInfo210L21.do"
 					 + "?authKey=" + URLEncoder.encode(authKey, StandardCharsets.UTF_8)
 				        + "&callTp=L"
