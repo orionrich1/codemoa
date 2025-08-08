@@ -236,6 +236,7 @@ public class InformationController {
 		model.addAttribute("pageNum", pageNum);
 		model.addAttribute(informationService.getBook(no));
 		model.addAttribute("order", order);
+		model.addAttribute("keyword", keyword);
 		return "views/information/informationBookDetail";
 	}
 	
