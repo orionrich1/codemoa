@@ -34,4 +34,9 @@ public class AiSupportService {
 		Client client = Client.builder().apiKey(apiKey).build();
 		return client.models.generateContent("gemini-2.5-flash", geminiQuery, null);
 	}
+	
+	public GenerateContentResponse apiQuestion(String question) {
+		Client client = Client.builder().apiKey(apiKey).build();
+		return client.models.generateContent("gemini-2.5-flash", question, null);
+	}
 }

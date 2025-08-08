@@ -24,9 +24,10 @@
 				<div class="card shadow-sm border-0 mb-4">
 					<div class="card-body p-4">
 						<h3 class="card-title fw-bold mb-3">AI에게 질문하기</h3>
-						<form>
+						<form id="questionForm">
 							<div class="mb-3">
-								<textarea class="form-control" rows="5" placeholder="궁금한 점을 여기에 입력하세요..."></textarea>
+								<textarea class="form-control" rows="6" style="resize: none;" id="questionText"
+									 placeholder="궁금한 점을 여기에 입력하세요..."></textarea>
 							</div>
 							<div class="text-end">
 								<button type="submit" class="btn btn-primary px-4">
@@ -40,24 +41,14 @@
 				<div class="card shadow-sm border-0">
 					<div class="card-body p-4 p-sm-5">
 						<h2 class="card-title fw-bold border-bottom pb-3 mb-4">AI 답변</h2>
-
 						<pre class="code-block">
-                        <code class="language-python">from flask import Flask
-
-app = Flask(__name__)
-
-@app.route('/')
-def hello_world():
-    return 'Hello, World!'
-
-if __name__ == '__main__':
-    app.run(debug=True)</code>
-    </pre>
+                        	<code class="language-python">무엇이든 질문해주세요.</code>
+						</pre>
 					</div>
 				</div>
-
 			</div>
 		</div>
 	</div>
+	<script th:src="@{/js/problem.js}"></script>
 </th:block>
 </html>
