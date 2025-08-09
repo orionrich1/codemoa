@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}">
+<head>
+	<style>
+	  .search-list {
+	    list-style: none;
+	    padding: 0;
+	    margin: 0;
+	  }
+	  .search-item {
+	    cursor: pointer;
+	    padding: 12px 16px;
+	    border-bottom: 1px solid #ddd;
+	    transition: background-color 0.2s ease;
+	  }
+	  .search-item:hover {
+	    background-color: #f5f5f5;
+	  }
+	  .search-item .type {
+	    font-size: 0.75rem;
+	    color: #777;
+	    margin-right: 8px;
+	  }
+	  .search-item .writer {
+	    font-size: 0.85rem;
+	    color: #333;
+	    margin-right: 12px;
+	  }
+	  .search-item .title {
+	    font-size: 1.1rem;
+	    color: #222;
+	    display: block;
+	    margin: 4px 0 6px 0;
+	  }
+	  .search-item .content {
+	    font-size: 0.9rem;
+	    color: #555;
+	    margin: 0 0 6px 0;
+	    white-space: normal;
+	  }
+	  .search-item .createdAt {
+	    font-size: 0.75rem;
+	    color: #999;
+	  }
+	</style>
+</head>
+
+<div layout:fragment="content">
+	
+	<h2 class="text-center my-3">"[[${keyword}]]" 검색 결과</h2>
+
+	<th:block th:if="${!#lists.isEmpty(searchList)}">
+	  <h5 class="text-center my-3">[[${searchCount}]]개의 검색 결과가 있습니다.</h5>
+	  <ul class="search-list">
+	    <li th:each="board : ${searchList}" th:data-url="${board.url}" class="search-item"
+	    	onclick="location.href=this.dataset.url">
+	      <span class="type" th:text="${board.type}"></span>
+	      <span class="writer" th:text="${board.writer}"></span>
+	      <strong class="title" th:text="${board.title}"></strong>
+	      <p class="content" th:text="${#strings.abbreviate(board.content, 120)}"></p>
+	      <time class="createdAt" th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm')}"></time>
+	    </li>
+	  </ul>
+	</th:block>
+	
+	<h5 th:if="${#lists.isEmpty(searchList)}" class="text-center my-5">검색 결과가 없습니다.</h5>
+
+</div>
+</html>

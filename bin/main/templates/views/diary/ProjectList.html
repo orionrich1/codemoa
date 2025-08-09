@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}">
+
+<div layout:fragment="content">
+	<!-- 임시 css 사용중 -->
+	<link rel="stylesheet" th:href="@{/css/mypage/diary.css}" />
+
+	<div class="container my-5">
+		<h2 class="mb-4 text-center">프로젝트 리스트</h2>
+
+		<div class="text-end mt-4">
+			<button th:if="${searched}" class="btn btn-secondary me-2" onclick="location.href='/my-pages/diary/'">검색 초기화</button>
+			<button class="btn btn-primary my-4" id="write-btn" onclick="location.href='projectForm/0'">작성</button>
+		</div>
+
+	    <div class="d-flex flex-wrap gap-3">
+	    	<th:block th:if="!${#lists.isEmpty(projects)}" th:each="project : ${projects}" >
+				<div class="card project-card shadow-sm" th:data-id="${project.projectId}">
+				    <div class="project-id" th:text="${project.projectId}"></div>
+					<div class="project-top d-flex justify-content-between align-items-center">
+					    <div class="project-name" th:text="${project.name}">프로젝트 이름</div>
+					
+					    <div class="d-flex align-items-center">
+					        <div class="status me-2"
+					             th:text="${project.status}"
+					             th:classappend="' status-' + ${project.status}">
+					            상태
+					        </div>
+					        <button type="button" class="projectUpdateBtn btn btn-sm btn-outline-secondary me-1"
+					        	th:data-id="${project.projectId}">
+					            <i class="bi bi-pencil"></i>
+					        </button>
+					         <button type="button" class="projectDeleteBtn btn btn-sm btn-outline-secondary"
+					        	th:data-id="${project.projectId}">
+					            <i class="bi bi-trash3"></i>
+					        </button>
+					    </div>
+					</div>
+				
+				    <div class="project-description" th:title="${project.description}" 
+				         th:text="${#strings.abbreviate(project.description, 80)}">
+				        프로젝트 설명이 들어갈 자리입니다.
+				    </div>
+				    <div class="project-created" 
+				         th:text="${#temporals.format(project.createdAt, 'yyyy-MM-dd HH:mm')}">
+				        2025-08-01 10:15
+				    </div>
+				</div>
+	        </th:block>
+	        
+	        <th:block th:unless="!${#lists.isEmpty(projects)}">
+	        	<h5 th:if="${searched == null || !searched}" class="text-center w-100 my-5">작성된 프로젝트가 없습니다.</h5>
+	        	<h5 th:if="${searched}" class="text-center w-100 my-5">검색된 프로젝트가 없습니다.</h5>
+	        </th:block>
+	    </div>
+
+		<form class="row g-2 align-items-center my-3 mx-auto" action="/my-pages/diary/"
+			style="max-width: 700px;" id="searchForm">
+			<div class="col-auto flex-grow-1">
+				<input type="text" class="form-control" name="keyword" required
+					placeholder="검색할 제목을 입력하세요" />
+			</div>
+
+			<div class="col-auto">
+				<button type="submit" class="btn btn-outline-primary">검색</button>
+			</div>
+		</form>
+	</div>
+	<script th:src="@{/js/mypage/project.js}"></script>
+</div>
+</html>

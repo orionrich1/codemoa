@@ -1,0 +1,306 @@
+@charset "utf-8";
+html{height: auto; }
+body{position: relative; width: 100%; height: auto;}
+body.action{height: 100%; /* overflow: hidden; */}
+*{line-height: 1.3;}
+#wrap{overflow-x:hidden; position:relative; width: 100%; height:100%;}
+
+a, a:hover {text-decoration: none;}
+li {list-style: none;}
+
+.layout{width:100%; max-width: 1540px; margin:0 auto; padding: 0 1.25rem;}
+
+
+/***서브 컨테이너***/
+#container{}
+#container #spot{
+	position: relative; height: 18.125rem;
+}
+#container #spot .layout{height: 100%;}
+#container #spot .layout .in{
+	display: flex; flex-wrap: wrap; align-items: center; position: relative; height: 100%; padding-top: 3.75rem;
+}
+#container #spot .layout .in .tit{
+	display: block; position: relative; width: 100%; padding-bottom: 1rem; text-align: center; font-size: 2.5rem; font-weight: 600; color: #000;
+}
+#container #spot .layout .in .tit:before{
+	content: ""; display: block; position: absolute; bottom: 0; left: 50%; width: 1.875rem; height: 0.3125rem; background-color: #413C7F;
+}
+#container #spot .layout .in .t_wrap{display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; position: absolute; top: 0; left: 0; width: 100%; background-color: #413C7F;}
+#container #spot .layout .in .t_wrap:before{content: ""; display: block; position: absolute; top: 0; right: 100%; width: 1000vw; height: 100%; background-color: #413C7F;}
+#container #spot .layout .in .t_wrap:after{content: ""; display: block; position: absolute; top: 0; left: 100%; width: 1000vw; height: 100%; background-color: #413C7F;}
+#container #spot .layout .in .t_wrap #lnb{}
+#container #spot .layout .in .t_wrap #lnb >ul{display: table; table-layout: fixed; height: 3.75rem;}
+#container #spot .layout .in .t_wrap #lnb >ul >li{
+	display: table-cell; height: 100%; width: 15.625rem; vertical-align: middle;
+}
+#container #spot .layout .in .t_wrap #lnb >ul >li >a{
+	display: flex; align-items: center; justify-content: center; height: 100%; padding: 0.5rem 1rem; text-align: center; 
+	color: #fff; background-color: transparent;
+}
+#container #spot .layout .in .t_wrap #lnb >ul >li >a:hover,
+#container #spot .layout .in .t_wrap #lnb >ul >li.active >a{background-color: rgba(0, 0, 0, 0.30);}
+#container #spot .layout .in .t_wrap .navi{display: flex; flex-wrap: wrap; align-items: center;}
+#container #spot .layout .in .t_wrap .navi li{
+	margin-left: 0.25rem; line-height: 3.2rem;
+}
+#container #spot .layout .in .t_wrap .navi li:first-child{margin-left: 0;}
+#container #spot .layout .in .t_wrap .navi li:not(:first-child):before{
+	content: ""; display: inline-block; width: 1.5rem; height: 1.5rem; margin-right: 0.25rem; 
+	vertical-align: middle; background-size: 100% auto;
+}
+#container #spot .layout .in .t_wrap .navi li a{
+	display: inline-block; font-size: 1rem; line-height: 1.5rem; font-weight: 400; color: #fff;
+}
+#container #spot .layout .in .t_wrap .navi li a:hover{text-decoration: underline; text-underline-position: under;}
+#container #spot .layout .in .t_wrap .navi li:first-child a{
+	width: 1.5rem; height: 1.5rem; text-indent: -9999px; background-size: 100% auto;
+}
+#container #content{padding-bottom: 6.25rem;}
+#container #content #txts{position: relative; }
+
+
+
+/*-----------------------------------*/
+
+.swiper .swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: auto !important;
+    border-radius: 20px;
+    transform: translate3d(0, 0, 0);
+}
+
+.swiper .swiper-slide.specialty:before {
+    content: "전문과정";
+    position: absolute;
+    top: 0;
+    right: 1.25rem;
+    z-index: 1111;
+    width: 3.75rem;
+    height: 3.125rem;
+    padding: 0.3rem 0.8rem 0.8rem 0.8rem;
+    background: url(../images/main/sec02_img03.svg) no-repeat center center;
+    background-size: 100% auto;
+    font-size: 0.9375rem;
+    color: #fff;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.swiper .swiper-slide.open:before {
+    content: "열린과정";
+    position: absolute;
+    top: 0;
+    right: 1.25rem;
+    z-index: 1111;
+    width: 3.75rem;
+    height: 3.125rem;
+    padding: 0.3rem 0.8rem 0.8rem 0.8rem;
+    background: url(../images/main/sec02_img04.svg) no-repeat center center;
+    background-size: 100% auto;
+    font-size: 0.9375rem;
+    color: #fff;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.swiper .swiper-slide .swiper-area:hover {
+    border-color: #9385D8;
+    box-shadow: 5px 5px 30px 0px #EDEAFF;
+}
+
+.swiper-slide:hover .texts {
+    opacity: 0.3; /* 흐릿하게 보이게 */
+}
+
+.swiper-area .cover-content img {
+    /*display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 15rem;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    text-indent: -9999px; */
+    width: 100%;          /* 가로 너비를 부모에 맞춤 */
+  	height: 300px;        
+  	display: block;       /* 이미지 하단 여백 제거 */
+  	object-fit: cover;    /* 이미지 꽉 채우기 (선택 사항) */
+}
+
+.swiper .swiper-slide .swiper-area .texts {
+    position: relative;
+    padding: 1.25rem 1.25rem 2.1875em;
+    
+    /* ------ */
+    z-index: 1;
+    transition: all 0.3s ease;
+}
+
+.swiper .swiper-slide .swiper-area .texts p {
+    color: #000;         /* 글자색을 검정으로 명확히 */
+    font-size: 0.95rem;  /* 크기도 적당히 */
+    margin: 1rem 1rem;    /* 여백 추가 */
+}
+
+.swiper .swiper-slide .swiper-area .texts span {
+    color: #000;         /* 글자색을 검정으로 명확히 */
+    font-size: 0.95rem;  /* 크기도 적당히 */
+    margin: 0.8rem 0rem;    
+}
+
+.swiper .swiper-slide .swiper-area span {
+    display: block;
+}
+
+.swiper .swiper-slide .swiper-area span i {
+    display: inline-block;
+    min-width: 4.375rem;
+    padding: 0.22rem 1.1875rem;
+    border: 1px solid #E0E0E0;
+    color: #000;
+    font-weight: 600;
+    text-align: center;
+    background-color: #fff;
+    border-radius: 10px;
+    font-style: normal;
+}
+
+.swiper .swiper-slide .swiper-area span i:not(:last-child) {
+    margin-right: 0.25rem;
+}
+
+.swiper .swiper-slide .swiper-area span i[data-color="2"] {
+    background-color: #413C7F;
+    border-color: #413C7F;
+    color: #fff;
+    font-weight: 500;
+}
+
+.swiper .swiper-slide .swiper-area span i[data-color="3"] {
+    background-color: #03022A;
+    border-color: #03022A;
+    color: #fff;
+    font-weight: 500;
+}
+
+/* Swiper Slide Cover Effect */
+
+#section02 .in [data-skin="tab"] .cont .swiper .swiper-slide .swiper-area .cover-label {
+    font-weight: bold;
+    color: grey;
+}
+
+#section02 .in [data-skin="tab"] .cont .swiper .swiper-slide .swiper-area:hover .cover-item {
+    opacity: 1;
+}
+
+#section02 .in [data-skin="tab"] .cont .swiper .swiper-slide .swiper-area .cover-text {
+    display: flex;
+    flex-direction: column;
+}
+
+#section02 .in [data-skin="tab"] .cont .swiper .swiper-slide .swiper-area .cover-image {
+    width: 40px;
+    height: 40px;
+    margin-right: 20px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* ------------------- hover 관련 ------------------- */
+
+.swiper .swiper-slide .swiper-area .cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* background: rgba(0, 0, 0, 0.9); */ 
+    /* opacity: 0; */ 
+    transition: opacity 0.3s ease;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: left;
+}
+
+.swiper {
+    opacity: 1;
+    visibility: visible;
+    height: auto;
+}
+
+.swiper .swiper-slide .swiper-area .cover-item {
+    margin: 0 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8); /* 검정 배경에 투명도 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 2;
+}
+
+.swiper .swiper-slide .swiper-area:hover .cover-item {
+    opacity: 1;
+}
+
+.swiper .swiper-slide .swiper-area {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    padding-top: 0rem;
+    border-radius: 20px;
+    border: 1px solid #E0E0E0;
+    box-shadow: 5px 5px 30px 0px transparent;
+    transition: all 2s linear;
+    
+    /* ---------- */
+    height: 500px;
+}
+
+.swiper .swiper-slide .swiper-area strong {
+    display: block;
+    overflow: hidden;
+    margin-top: 1.125rem;
+    color: #000;
+    font-weight: 700;
+    font-size: 1.125rem;
+    
+    white-space: normal;       /* 줄바꿈 허용 */
+  	overflow: visible;         /* 넘치는 것 숨기지 않음 */
+ 	text-overflow: unset;      /* 말줄임표 제거 */
+ 	text-align: center;  /* 중앙 정렬 */
+}
+
+#section02 .in [data-skin="tab"] .cont .swiper .swiper-slide .swiper-area .cover-content {
+     font-size: 1rem;
+	 width: 100%;
+	 
+	 /* ------- */
+	 display: flex;
+  	 flex-direction: column;
+  	 justify-content: flex-start; /* or center */
+  	 height: 100%;               /* 중요: 부모 높이만큼 확장 */
+	 overflow: hidden;
+	 box-sizing: border-box;
+	 overflow-wrap: break-word;  
+	 word-break: break-word;
+}

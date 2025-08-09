@@ -1,0 +1,67 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}">
+	<th:block layout:fragment="content">
+  		
+  		<!-- content -->
+		<div class="row my-5" id="global-content">
+			<div class="col">
+				<div class="row text-center mb-5">
+					<div class="col">
+						<h2 class="fs-3 fw-bold">공모전 추천글 쓰기</h2>
+					</div>
+				</div>  
+				<form name="contestWriteForm" action="contestWrite" id="contestWriteForm" 
+					class="row g-3 border-primary" method="post"
+					enctype="multipart/form-data">
+				
+					<div class="col-6 offset-md-2">
+						<label for="userId" class="form-label">글쓴이</label>
+						<input type="text" class="form-control" name="userId" id="userId" 
+							placeholder="작성자를 입력해 주세요">
+						<!-- 
+						<input type="text" class="form-control" name="userId" id="writer" 
+							placeholder="작성자를 입력해 주세요" th:value="${lecture.userId}" readonly>
+						 -->
+					</div>
+					<div class="col-8 offset-md-2">
+						<label for="title" class="form-label">제 목</label>
+						<input type="text" class="form-control" name="title"  id="title">
+					</div>
+					<div class="col-8 offset-md-2">
+						<label for="hostOrganization" class="form-label">주최기관</label>
+						<input type="text" class="form-control" name="hostOrganization"  id="hostOrganization">
+					</div>
+					<div class="col-8 offset-md-2">
+						<label for="start" class="form-label">시작일</label>
+						<input type="datetime-local" class="form-control" name="start"  id="start">
+					</div>
+					<div class="col-8 offset-md-2">
+						<label for="end" class="form-label">마감일</label>
+						<input type="datetime-local" class="form-control" name="end"  id="end">
+					</div>
+					<div class="col-8 offset-md-2">
+						<label for="content" class="form-label">내 용 </label>
+						<textarea class="form-control" name="content" id="content" rows="10"></textarea>
+					</div>
+					<div class="col-8 offset-md-2">
+						<label for="addFile" class="form-label">업로드 할 이미지</label>
+						<input type="file" class="form-control" name="addFile" id="addFile" >
+					</div>
+					<div class="col-8 offset-md-2">
+						<label for="contestSource" class="form-label">출 처</label>
+						<input type="text" class="form-control" name="contestSource"  id="contestSource">
+					</div>
+					<div class="col-8 offset-md-2 text-center mt-5">
+						<input type="submit" value="등록하기" class="btn btn-primary"/>
+							&nbsp;&nbsp;
+						<input type="button" value="목록보기" 
+							onclick="location.href='contest'" class="btn btn-primary"/>
+					</div>	
+				</form>
+			</div>
+		</div>
+		
+	</th:block>
+</html>
+		

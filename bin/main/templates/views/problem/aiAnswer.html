@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default_layout}">
+
+<head>
+<style>
+/* 예시 코드 블록 스타일 */
+.code-block {
+	background-color: #282c34;
+	color: #abb2bf;
+	padding: 1.5rem;
+	border-radius: 0.5rem;
+	white-space: pre-wrap;
+	word-wrap: break-word;
+	font-family: 'D2Coding', monospace; /* 코딩용 폰트 (설치 필요) */
+}
+</style>
+</head>
+
+<th:block layout:fragment="content">
+	<div class="container my-5">
+		<div class="row justify-content-center">
+			<div class="col-lg-9 col-xl-8">
+
+				<div class="card shadow-sm border-0 mb-4">
+					<div class="card-body p-4">
+						<h3 class="card-title fw-bold mb-3">AI에게 질문하기</h3>
+						<form id="questionForm">
+							<div class="mb-3">
+								<textarea class="form-control" rows="6" style="resize: none;" id="questionText"
+									 placeholder="궁금한 점을 여기에 입력하세요..."></textarea>
+							</div>
+							<div class="text-end">
+								<button type="submit" class="btn btn-primary px-4">
+									<i class="bi bi-send-fill me-2"></i>답변 생성하기
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+
+				<div class="card shadow-sm border-0">
+					<div class="card-body p-4 p-sm-5">
+						<h2 class="card-title fw-bold border-bottom pb-3 mb-4">AI 답변</h2>
+						<pre class="code-block">
+                        	<code class="language-python">무엇이든 질문해주세요.</code>
+						</pre>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script th:src="@{/js/problem.js}"></script>
+</th:block>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layouts/default_layout}">
+
+<head>
+    <title th:text="${qna.title}"></title>
+</head>
+
+<th:block layout:fragment="content">
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between">
+                        <h3 class="fs-5 mb-0" th:text="${qna.title}"></h3>
+                        <span th:if="${qna.isAnswered}" class="badge bg-success">답변완료</span>
+                        <span th:unless="${qna.isAnswered}" class="badge bg-warning text-dark">답변대기</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-muted small mb-3">
+                            <span>작성자: <span th:text="${qna.writerNickname}"></span></span> |
+                            <span>작성일: <span th:text="${#temporals.format(qna.createdAt, 'yyyy-MM-dd HH:mm')}"></span></span> |
+                            <span>조회수: <span th:text="${qna.viewCount}"></span></span>
+                        </div>
+                        <div style="white-space: pre-wrap; min-height: 150px;" th:text="${qna.content}"></div>
+                    </div>
+                </div>
+
+                <div class="card mb-4" th:if="${!#lists.isEmpty(replyList)}">
+                    <div class="card-header bg-light">
+                        <h4 class="fs-6 mb-0">답변</h4>
+                    </div>
+                    <div class="card-body" th:each="reply : ${replyList}">
+                        <div class="text-muted small mb-2">
+                            <span>답변자: <span th:text="${reply.writerNickname}"></span> (관리자)</span> |
+                            <span>답변일: <span th:text="${#temporals.format(reply.createdAt, 'yyyy-MM-dd HH:mm')}"></span></span>
+                        </div>
+                        <div style="white-space: pre-wrap;" th:text="${reply.content}"></div>
+                    </div>
+                </div>
+
+                <div class="card" sec:authorize="isAuthenticated() and authentication.principal.getUser().getGrade().name().equalsIgnoreCase('admin')">
+                    <div class="card-header">
+                        <h4 class="fs-6 mb-0">답변하기</h4>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/support/qna/reply}" method="post">
+                            <input type="hidden" name="qnaId" th:value="${qna.qnaId}" />
+                            <div class="mb-3">
+                                <textarea class="form-control" name="content" rows="5" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">답변 등록</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="mt-4 d-flex justify-content-between">
+                    <a th:href="@{/support/qna}" class="btn btn-secondary">목록으로</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+</html>

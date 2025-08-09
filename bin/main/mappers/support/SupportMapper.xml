@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0// EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.codemoa.project.domain.support.mapper.SupportMapper">
+
+   
+
+    <sql id="qnaSearchCondition">
+        <if test="type != null and keyword != null and !keyword.equals('')">
+            <choose>
+                <when test="type.equals('title')">
+                    AND q.title LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+                <when test="type.equals('writer')">
+                    AND u.nickname LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+                <when test="type.equals('content')">
+                    AND q.content LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+            </choose>
+        </if>
+    </sql>
+    
+    <update id="updateQnaAnsweredStatus" parameterType="long">
+    UPDATE qna SET is_answered = TRUE WHERE qna_id = #{qnaId}
+</update>
+
+    <select id="getQnaCount" parameterType="map" resultType="int">
+        SELECT COUNT(q.qna_id)
+        FROM qna q
+        LEFT JOIN user u ON q.writer_id = u.user_id
+        WHERE 1=1
+        <include refid="qnaSearchCondition" />
+    </select>
+
+    <select id="findQnaList" parameterType="map" resultType="com.codemoa.project.domain.support.entity.Qna">
+        SELECT
+            q.qna_id, q.title, q.writer_id, q.created_at, q.is_answered, q.view_count,
+            u.nickname AS writerNickname
+        FROM qna q
+        LEFT JOIN user u ON q.writer_id = u.user_id
+        WHERE 1=1
+        <include refid="qnaSearchCondition" />
+        ORDER BY q.qna_id DESC
+        LIMIT #{startRow}, #{pageSize}
+    </select>
+
+    <select id="findQnaById" parameterType="long" resultType="com.codemoa.project.domain.support.entity.Qna">
+        SELECT
+            q.*,
+            u.nickname AS writerNickname
+        FROM qna q
+        LEFT JOIN user u ON q.writer_id = u.user_id
+        WHERE q.qna_id = #{qnaId}
+    </select>
+
+    <insert id="insertQna" parameterType="com.codemoa.project.domain.support.entity.Qna">
+        INSERT INTO qna (title, content, writer_id)
+        VALUES (#{title}, #{content}, #{writerId})
+    </insert>
+
+    <update id="updateQna" parameterType="com.codemoa.project.domain.support.entity.Qna">
+        UPDATE qna
+        SET title = #{title}, content = #{content}, updated_at = NOW()
+        WHERE qna_id = #{qnaId}
+    </update>
+
+    <delete id="deleteQna" parameterType="long">
+        DELETE FROM qna WHERE qna_id = #{qnaId}
+    </delete>
+
+    <update id="incrementQnaViewCount" parameterType="long">
+        UPDATE qna SET view_count = view_count + 1 WHERE qna_id = #{qnaId}
+    </update>
+
+    <select id="findRepliesByQnaId" parameterType="long" resultType="com.codemoa.project.domain.support.entity.QnaReply">
+        SELECT
+            qr.*,
+            u.nickname AS writerNickname
+        FROM qna_reply qr
+        LEFT JOIN user u ON qr.writer_id = u.user_id
+        WHERE qr.qna_id = #{qnaId}
+        ORDER BY qr.reply_id ASC
+    </select>
+
+    <insert id="insertReply" parameterType="com.codemoa.project.domain.support.entity.QnaReply">
+        INSERT INTO qna_reply (qna_id, content, writer_id)
+        VALUES (#{qnaId}, #{content}, #{writerId})
+    </insert>
+
+    <delete id="deleteReply" parameterType="long">
+        DELETE FROM qna_reply WHERE reply_id = #{replyId}
+    </delete>
+
+    <select id="findReplyById" parameterType="long" resultType="com.codemoa.project.domain.support.entity.QnaReply">
+        SELECT * FROM qna_reply WHERE reply_id = #{replyId}
+    </select>
+    
+        <select id="findAllFaqs" resultType="com.codemoa.project.domain.support.entity.Faq">
+        SELECT * FROM faq ORDER BY faq_id DESC
+    </select>
+    
+    <insert id="insertFaq" parameterType="com.codemoa.project.domain.support.entity.Faq">
+        INSERT INTO faq (question, answer) VALUES (#{question}, #{answer})
+    </insert>
+
+</mapper>

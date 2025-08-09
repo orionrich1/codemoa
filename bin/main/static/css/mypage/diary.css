@@ -1,0 +1,233 @@
+@charset "UTF-8";
+
+/* ===============================
+   ProjectList.html 부분
+   =============================== */
+.project-card {
+	position: relative;
+	width: 350px;
+	padding: 5px;
+	margin-bottom: 20px;
+	transition: background-color 0.3s ease;
+	margin-bottom: 20px;
+}
+
+.project-card:hover {
+	background-color: #f2f3f4;
+	cursor: pointer;
+}
+
+.project-id {
+	position: absolute;
+	left: 10px;
+	top: 10px;
+	font-weight: 600;
+	color: #555;
+	font-size: 0.85rem;
+}
+
+.project-top {
+	padding-left: 50px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.project-name {
+	font-weight: 700;
+	font-size: 1.25rem;
+}
+
+.status {
+	font-weight: 600;
+	font-size: 0.9rem;
+}
+
+.status-계획 {
+	color: #0d6efd; /* Bootstrap primary */
+}
+
+.status-진행중 {
+	color: #198754; /* Bootstrap success */
+}
+
+.status-종료 {
+	color: #6c757d; /* Bootstrap secondary */
+}
+
+.project-description {
+	padding-left: 50px;
+	margin-top: 10px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.project-created {
+	padding-left: 50px;
+	margin-top: 8px;
+	font-size: 0.8rem;
+	color: #666;
+}
+
+/* ===============================
+   ProjectDetail.html 부분 - 체크리스트 관련
+   =============================== */
+.priority-high {
+	background-color: rgba(220, 53, 69, 0.85); /* 진한 빨강 + 반투명 */
+	color: #fff;
+	padding: 0.3em 0.7em;
+	border-radius: 12px;
+	box-shadow: 0 0 6px rgba(220, 53, 69, 0.5);
+	transition: background-color 0.3s ease;
+}
+
+.priority-high:hover {
+	background-color: rgba(220, 53, 69, 1);
+}
+
+.priority-medium {
+	background-color: rgba(255, 193, 7, 0.85); /* 진한 노랑 + 반투명 */
+	color: #fff;
+	padding: 0.3em 0.7em;
+	border-radius: 12px;
+	box-shadow: 0 0 6px rgba(255, 193, 7, 0.5);
+	transition: background-color 0.3s ease;
+}
+
+.priority-medium:hover {
+	background-color: rgba(255, 193, 7, 1);
+	color: #000;
+}
+
+.priority-low {
+	background-color: rgba(108, 117, 125, 0.85); /* 회색 + 반투명 */
+	color: #fff;
+	padding: 0.3em 0.7em;
+	border-radius: 12px;
+	box-shadow: 0 0 6px rgba(108, 117, 125, 0.5);
+	transition: background-color 0.3s ease;
+}
+
+.priority-low:hover {
+	background-color: rgba(108, 117, 125, 1);
+}
+
+.ellipsis {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.checklist-add {
+	border: 2px dashed #ccc;
+	background-color: #f8f9fa;
+	text-align: center;
+	padding: 10px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.checklist-add:hover {
+	background-color: #e9ecef;
+	border-color: #999;
+}
+
+/* ===============================
+   ProjectDetail.html 부분 - 다이어리 관련
+   =============================== */
+.write-btn {
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+}
+
+.write-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+
+/* ===============================
+   ProjectForm.html 부분
+   =============================== */
+.project-form {
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 20px 25px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.project-form .form-group {
+    margin-bottom: 20px;
+}
+
+.project-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #333;
+}
+
+.project-form input[type="text"],
+.project-form textarea,
+.project-form select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+}
+
+.project-form input[type="text"]:focus,
+.project-form textarea:focus,
+.project-form select:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.project-form textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.project-form .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.project-form button {
+    padding: 10px 16px;
+    background: #007bff;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.project-form button:hover {
+    background: #0056b3;
+}
+
+.project-form a {
+    padding: 10px 16px;
+    background: #ccc;
+    color: #333;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: background 0.2s ease;
+}
+
+.project-form a:hover {
+    background: #999;
+}

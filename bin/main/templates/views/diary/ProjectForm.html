@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}">
+
+<div layout:fragment="content">
+	<!-- 임시 css 사용중 -->
+	<link rel="stylesheet" th:href="@{/css/mypage/diary.css}" />
+    
+	<form class="project-form" action="/my-pages/projects" method="post" th:object="${project}">
+	
+	    <h1 class="text-center mb-3" th:text="${projectId != 0} ? '프로젝트 수정' : '프로젝트 등록'"></h1>
+	    
+	    <input type="hidden" name="projectId" id="projectId" th:value="${projectId != 0} ? ${projectId} : '0'" />
+	
+	    <div class="form-group">
+	        <label for="name">프로젝트명</label>
+	        <input type="text" id="name" th:field="*{name}" placeholder="프로젝트명을 입력하세요" required />
+	    </div>
+	
+	    <div class="form-group">
+	        <label for="description">설명</label>
+	        <textarea id="description" th:field="*{description}" placeholder="프로젝트 설명을 입력하세요"></textarea>
+	    </div>
+	
+	    <div class="form-group">
+	        <label for="status">상태</label>
+	        <select id="status" th:field="*{status}">
+	            <option value="계획">계획</option>
+	            <option value="진행중">진행중</option>
+	            <option value="종료">종료</option>
+	        </select>
+	    </div>
+	
+	    <div class="form-actions">
+	        <button type="submit" th:text="${projectId != 0} ? '수정하기' : '등록하기'"></button>
+	        <a href="/my-pages/diary/">취소</a>
+	    </div>
+	</form>
+
+</div>
+</html>
