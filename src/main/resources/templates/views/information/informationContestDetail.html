@@ -93,12 +93,12 @@
 						<!-- /* 일반 게시글 리스트에서 온 경우 */ -->
 						<th:block th:unless="order">
 							<input class="btn btn-primary" type="button" value="목록보기"
-								th:onclick="@{|location.href='contest?pageNum=${pageNum}'|}"/>
+								th:onclick="@{|location.href='contest?pageNum=${pageNum}&keyword=${keyword}&type=${type}'|}"/>
 						</th:block>						
 						<!-- /* 검색 게시글 리스트에서 온 경우 */ -->
 						<th:block th:if="order">
 							<input class="btn btn-primary" type="button" value="목록보기"
-								th:onclick="@{|location.href='contest?pageNum=${pageNum}&order=${order}'|}"/>
+								th:onclick="@{|location.href='contest?pageNum=${pageNum}&order=${order}&keyword=${keyword}&type=${type}'|}"/>
 						</th:block>						
 					</div>
 				</div>
