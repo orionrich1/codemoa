@@ -12,6 +12,15 @@ import com.codemoa.project.domain.information.entity.Lecture;
 @Mapper
 public interface InformationRecommendMapper {
 	
+	// ▼▼▼ [메인 페이지용 메서드 추가] ▼▼▼
+	/**
+	 * 최신 강의 목록을 지정된 개수만큼 조회합니다.
+	 * @param limit 가져올 개수
+	 * @return Lecture 리스트
+	 */
+	List<Lecture> findLatestLectures(@Param("limit") int limit);
+	// ▲▲▲ [메인 페이지용 메서드 추가] ▲▲▲
+
 	// 강좌 관련
 	
 	List<Lecture> getlectureList(@Param("startRow") int startRow, @Param("num") int num,

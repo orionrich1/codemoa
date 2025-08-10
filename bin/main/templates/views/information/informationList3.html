@@ -5,46 +5,44 @@
 	
 <head>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>  
-	<link th:href="@{/css/information/listLayout4.css}" rel="stylesheet" />
 </head>
 
 <th:block layout:fragment="content">
 	<style>
-		/* AI 웹 퍼블리셔: Swiper 컨테이너에 padding을 추가하여 그림자가 잘리지 않도록 공간을 확보합니다. */
+		/* 그림자 잘림 방지를 위한 Swiper 컨테이너 패딩 */
 		.mySwiper {
 			padding-top: 10px;
 			padding-bottom: 30px;
 		}
-
-		.book-gallery-card {
-			background-color: white;
-			border-radius: var(--bs-border-radius);
-			box-shadow: var(--bs-box-shadow-sm);
+		/* 카드 스타일 */
+		.item-gallery-card {
+			background-color: var(--surface-default);
+			border-radius: var(--border-radius-lg);
+			box-shadow: var(--shadow-sm);
 			height: 100%;
 			display: flex;
 			flex-direction: column;
-			transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+			transition: transform 0.2s ease, box-shadow 0.2s ease;
 		}
-		.book-gallery-card:hover {
+		.item-gallery-card:hover {
 			transform: translateY(-5px);
-			box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+			box-shadow: var(--shadow-md);
 		}
-
-		/* AI 웹 퍼블리셔: object-fit을 'contain'으로 변경하여 이미지가 잘리지 않고 전체가 보이도록 수정 */
-		.book-cover-image {
+		/* 이미지 잘림 방지 */
+		.item-cover-image {
 			width: 100%;
 			height: 250px;
 			object-fit: contain; 
 		}
-
-		.book-texts {
+		/* Flexbox를 이용한 텍스트 하단 정렬 */
+		.item-texts {
 			padding: 1rem;
 			flex-grow: 1;
 			display: flex;
 			flex-direction: column;
 		}
-		.book-texts strong {
-			font-weight: 700;
+		.item-texts strong {
+			font-weight: var(--font-weight-bold);
 			display: -webkit-box;
 			-webkit-line-clamp: 2;
 			-webkit-box-orient: vertical;
@@ -53,29 +51,29 @@
 			min-height: 2.5em; 
 			flex-grow: 1; 
 		}
-		.book-texts .metadata {
-			font-size: 0.85rem;
-			color: #495057;
+		.item-texts .metadata {
+			font-size: 1.4rem; /* 14px */
+			color: var(--text-secondary);
 			margin-top: 0.75rem;
 		}
-		.book-texts .metadata span {
+		.item-texts .metadata span {
 			display: block;
 		}
-		
-		.book-hover-overlay {
+		/* 호버 오버레이 */
+		.item-hover-overlay {
 			position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-			background-color: rgba(33, 37, 41, 0.7);
-			color: white;
+			background-color: rgba(var(--bs-dark-rgb), 0.7);
+			color: var(--text-inverse);
 			padding: 1.5rem;
 			opacity: 0;
 			transition: opacity 0.3s ease;
 			display: flex; align-items: center; justify-content: center; text-align: center;
 		}
-		.book-gallery-card a:hover .book-hover-overlay {
+		.item-gallery-card a:hover .item-hover-overlay {
 			opacity: 1;
 		}
-		.book-hover-content {
-			font-size: 0.9rem;
+		.item-hover-content {
+			font-size: 1.4rem; /* 14px */
 			display: -webkit-box;
 			-webkit-line-clamp: 10;
 			-webkit-box-orient: vertical;
@@ -91,9 +89,7 @@
 		<div class="d-flex justify-content-end align-items-center mb-4">
 			<div class="d-flex align-items-center gap-2">
 				<form class="d-flex" role="search" id="bookSearchForm">
-					<input class="form-control" type="search" name="keyword" 
-					       placeholder="도서명 검색" style="min-width: 200px;" id="bookSearch"
-					       th:value="${#strings.isEmpty(keyword) or keyword == 'null' ? '' : keyword}" />
+					<input class="form-control" type="search" name="keyword" placeholder="도서명 검색" style="min-width: 200px;" id="bookSearch" th:value="${#strings.isEmpty(keyword) or keyword == 'null' ? '' : keyword}">
 					<input type="hidden" name="type" id="type">
 				</form>
 				<th:block th:if="${order =='pubDate'}">
@@ -127,16 +123,16 @@
 		
 				<th:block th:each="book: ${bList}">
 					<div class="swiper-slide">
-						<div class="book-gallery-card">
+						<div class="item-gallery-card">
 							<a th:href="@{/information/bookDetail(no=${book.bookNo}, pageNum=${currentPage}, order=${order}, type=${type}, keyword=${keyword})}">
-								<img th:src="@{/files/information/{img}(img=${book.file1})}" alt="이미지" class="book-cover-image">
-								<div class="book-hover-overlay">
-									<div class="book-hover-content">
+								<img th:src="@{/files/information/{img}(img=${book.file1})}" alt="이미지" class="item-cover-image">
+								<div class="item-hover-overlay">
+									<div class="item-hover-content">
 										[[${book.content}]]
 									</div>
 								</div>
 							</a>
-							<div class="book-texts">
+							<div class="item-texts">
 								<strong>[[${book.title}]]</strong>
 								<div class="metadata">
 									<span><b class="fw-bold">출판일:</b> [[${#dates.format(book.pubDate, 'yyyy-MM-dd')}]]</span>

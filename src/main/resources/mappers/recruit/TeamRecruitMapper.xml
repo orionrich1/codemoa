@@ -2,174 +2,175 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.codemoa.project.domain.recruit.mapper.TeamRecruitMapper">
 
-<delete id="deleteRecruit" parameterType="int">
-DELETE FROM recruitbbs
-WHERE recruit_id = #{recruitId}
-</delete>
+	<select id="findLatestRecruits" parameterType="int" resultMap="TeamRecruitResult">
+		SELECT r.recruit_id, r.title, r.recruit_type, r.status, r.reg_date, u.nickname
+		FROM recruitbbs r
+		JOIN user u ON r.user_id = u.user_id
+		ORDER BY r.reg_date DESC
+		LIMIT #{limit}
+	</select>
+	<delete id="deleteRecruit" parameterType="int">
+		DELETE FROM recruitbbs
+		WHERE recruit_id = #{recruitId}
+	</delete>
 
-<update id="updateTeamRecruit" parameterType="com.codemoa.project.domain.recruit.entity.TeamRecruit">
-UPDATE recruitbbs
-SET
-	const_title = #{contestTitle},
-	recruit_type = #{recruitType},
-	recruit_period = #{recruitPeriod},
-	activity_period = #{activityPeriod},
-	progress_type = #{progressType},
-	status = #{status},
-	description = #{description},
-	attachment = #{attachment}
-	WHERE recruit_id = #{recruitId}
-	
-</update>
+	<update id="updateTeamRecruit" parameterType="com.codemoa.project.domain.recruit.entity.TeamRecruit">
+		UPDATE recruitbbs
+		SET
+			const_title = #{contestTitle},
+			recruit_type = #{recruitType},
+			recruit_period = #{recruitPeriod},
+			activity_period = #{activityPeriod},
+			progress_type = #{progressType},
+			status = #{status},
+			description = #{description},
+			attachment = #{attachment}
+		WHERE recruit_id = #{recruitId}
+	</update>
 
-<update id="incrementViewCount" parameterType="int">
-UPDATE recruitbbs
-SET view_count = view_count + 1
-WHERE recruit_id = #{recruitId}
-</update>
+	<update id="incrementViewCount" parameterType="int">
+		UPDATE recruitbbs
+		SET view_count = view_count + 1
+		WHERE recruit_id = #{recruitId}
+	</update>
 
-<select id="userIdCheck" parameterType="int" resultType="string">
-SELECT user_id
-FROM recruitbbs
-WHERE recruit_id = #{recruitId}
-</select>
+	<select id="userIdCheck" parameterType="int" resultType="string">
+		SELECT user_id
+		FROM recruitbbs
+		WHERE recruit_id = #{recruitId}
+	</select>
 
-<insert id="insertTeamRecruit" parameterType="com.codemoa.project.domain.recruit.entity.TeamRecruit">
-INSERT INTO recruitbbs(
-user_id, 
-contest_title, 
-recruit_type, 
-recruit_period, 
-activity_period, 
-total_members, 
-remaining_members, 
-progress_type, 
-contact, 
-tech_stack, 
-status, 
-apply_guide, 
-title, 
-content, 
-attachment_url, 
-view_count, 
-reg_date, 
-update_date
-)
+	<insert id="insertTeamRecruit" parameterType="com.codemoa.project.domain.recruit.entity.TeamRecruit">
+		INSERT INTO recruitbbs(
+		user_id, 
+		contest_title, 
+		recruit_type, 
+		recruit_period, 
+		activity_period, 
+		total_members, 
+		remaining_members, 
+		progress_type, 
+		contact, 
+		tech_stack, 
+		status, 
+		apply_guide, 
+		title, 
+		content, 
+		attachment_url, 
+		view_count, 
+		reg_date, 
+		update_date
+		)
+		VALUES(#{userId}, #{contestTitle}, #{recruitType}, #{recruitPeriod}, 
+		#{activityPeriod}, #{totalMembers}, #{remainingMembers}, #{progressType}, #{contact}, #{techStack}, 
+		#{status}, #{applyGuide}, #{title}, #{content}, #{attachmentUrl}, #{viewCount}, NOW(), NOW() );
+	</insert>
 
-VALUES(#{userId}, #{contestTitle}, #{recruitType}, #{recruitPeriod}, 
-#{activityPeriod}, #{totalMembers}, #{remainingMembers}, #{progressType}, #{contact}, #{techStack}, 
-#{status}, #{applyGuide}, #{title}, #{content}, #{attachmentUrl}, #{viewCount}, NOW(), NOW() );
+	<select id="getTeamRecruit" parameterType="int" resultMap="TeamRecruitResult">
+		SELECT r.*, u.nickname
+		FROM recruitbbs r
+		JOIN user u ON r.user_id = u.user_id
+		WHERE r.recruit_id = #{recruitId}
+	</select>
 
-</insert>
+	<select id="TeamRecruitList" parameterType="map" resultMap="TeamRecruitResult">
+		SELECT 
+		r.recruit_id,
+		r.title,
+		r.user_id,
+		u.nickname,
+		r.recruit_type,
+		r.status,
+		r.remaining_members,
+		r.reg_date,
+		r.view_count
+		FROM recruitbbs r
+		JOIN user u ON r.user_id = u.user_id
+		WHERE 1=1
+			<if test="keyword != null and keyword.trim() !='' and type !=null and type.trim() !=''">
+				AND
+				<choose>
+					<when test="type == 'title'">
+						r.title LIKE CONCAT('%', #{keyword},'%')
+					</when>
+					<when test="type == 'userId'">
+						r.user_id LIKE CONCAT('%', #{keyword},'%')
+					</when>
+					<when test="type == 'content'">
+						r.content LIKE CONCAT('%', #{keyword},'%')
+					</when>
+					<when test="type == 'recruitType'">
+						r.recruit_type LIKE CONCAT('%', #{keyword},'%')
+					</when>
+					<when test="type == 'status'">
+						r.status LIKE CONCAT('%', #{keyword},'%')
+					</when>
+					<when test="type == 'techStack'">
+						r.tech_stack LIKE CONCAT('%', #{keyword},'%')
+					</when>
+					<otherwise>
+						title Like CONCAT('%', #{keyword},'%')
+					</otherwise>			
+				</choose>
+			</if>
+		ORDER BY recruit_id DESC
+		LIMIT #{num} OFFSET #{startRow}
+	</select>
 
-<select id="getTeamRecruit" parameterType="int"
-resultMap="TeamRecruitResult">
-SELECT r.*, u.nickname
-FROM recruitbbs r
-JOIN user u ON r.user_id = u.user_id
-WHERE r.recruit_id = #{recruitId}
-</select>
+	<select id="countTeamRecruit" parameterType="map" resultType="int">
+		SELECT
+		COUNT(*)
+		FROM recruitbbs
+		  where 1=1
+			  <if test="keyword != null and keyword.trim() != '' and type !=null and type.trim() !=''">
+				AND
+				<choose>
+				  <when test="type == 'title'">
+				   title LIKE CONCAT('%', #{keyword}, '%')
+				  </when>
+				  <when test="type == 'userId'">
+				   user_id LIKE CONCAT('%', #{keyword}, '%')
+				  </when>
+				  <when test="type == 'content'">
+					content LIKE CONCAT('%', #{keyword}, '%')
+				  </when>
+				   <when test="type == 'recruitType'">
+					recruit_type LIKE CONCAT('%', #{keyword}, '%')
+				  </when>
+				   <when test="type == 'status'">
+					status LIKE CONCAT('%', #{keyword}, '%')
+				  </when>
+				   <when test="type == 'techStack'">
+					tech_stack LIKE CONCAT('%', #{keyword}, '%')
+				  </when>
+				  <otherwise>
+				  1=1
+				  </otherwise>
+				</choose>
+			  </if>
+	</select>
 
-<select id="TeamRecruitList" parameterType="map" 
-resultMap="TeamRecruitResult">
-SELECT 
-r.recruit_id,
-r.title,
-r.user_id,
-u.nickname,
-r.recruit_type,
-r.status,
-r.remaining_members,
-r.reg_date,
-r.view_count
-FROM recruitbbs r
-JOIN user u ON r.user_id = u.user_id
-WHERE 1=1
-	<if test="keyword != null and keyword.trim() !='' and type !=null and type.trim() !=''">
-		AND
-		<choose>
-			<when test="type == 'title'">
-				r.title LIKE CONCAT('%', #{keyword},'%')
-			</when>
-			<when test="type == 'userId'">
-				r.user_id LIKE CONCAT('%', #{keyword},'%')
-			</when>
-			<when test="type == 'content'">
-				r.content LIKE CONCAT('%', #{keyword},'%')
-			</when>
-			<when test="type == 'recruitType'">
-				r.recruit_type LIKE CONCAT('%', #{keyword},'%')
-			</when>
-			<when test="type == 'status'">
-				r.status LIKE CONCAT('%', #{keyword},'%')
-			</when>
-			<when test="type == 'techStack'">
-				r.tech_stack LIKE CONCAT('%', #{keyword},'%')
-			</when>
-			<otherwise>
-				title Like CONCAT('%', #{keyword},'%')
-			</otherwise>			
-		</choose>
-	</if>
-ORDER BY recruit_id DESC
-LIMIT #{num} OFFSET #{startRow}
-</select>
-
-<select id="countTeamRecruit" parameterType="map" resultType="int">
-SELECT
-COUNT(*)
-FROM recruitbbs
-  where 1=1
-      <if test="keyword != null and keyword.trim() != '' and type !=null and type.trim() !=''">
-        AND
-        <choose>
-          <when test="type == 'title'">
-           title LIKE CONCAT('%', #{keyword}, '%')
-          </when>
-          <when test="type == 'userId'">
-           user_id LIKE CONCAT('%', #{keyword}, '%')
-          </when>
-          <when test="type == 'content'">
-            content LIKE CONCAT('%', #{keyword}, '%')
-          </when>
-           <when test="type == 'recruitType'">
-            recruit_type LIKE CONCAT('%', #{keyword}, '%')
-          </when>
-           <when test="type == 'status'">
-            status LIKE CONCAT('%', #{keyword}, '%')
-          </when>
-           <when test="type == 'techStack'">
-            tech_stack LIKE CONCAT('%', #{keyword}, '%')
-          </when>
-          <otherwise>
-          1=1
-          </otherwise>
-        </choose>
-      </if>
-  </select>
-
-
-<resultMap id="TeamRecruitResult" type="com.codemoa.project.domain.recruit.entity.TeamRecruit">
-    <id property="recruitId" column="recruit_id"/>
-    <result property="userId" column="user_id"/>
-    <result property="nickname" column="nickname"/>
-    <result property="contestTitle" column="contest_title"/>
-    <result property="recruitType" column="recruit_type"/>
-    <result property="recruitPeriod" column="recruit_period"/>
-    <result property="activityPeriod" column="activity_period"/>
-    <result property="totalMembers" column="total_members"/>
-    <result property="remainingMembers" column="remaining_members"/>
-    <result property="progressType" column="progress_type"/>
-    <result property="contact" column="contact"/>
-    <result property="techStack" column="tech_stack"/>
-    <result property="status" column="status"/>
-    <result property="applyGuide" column="apply_guide"/>
-    <result property="title" column="title"/>
-    <result property="content" column="content"/>
-    <result property="attachmentUrl" column="attachment_url"/>
-    <result property="viewCount" column="view_count"/>
-    <result property="regDate" column="reg_date"/>
-    <result property="updateDate" column="update_date"/>
-</resultMap>
+	<resultMap id="TeamRecruitResult" type="com.codemoa.project.domain.recruit.entity.TeamRecruit">
+		<id property="recruitId" column="recruit_id"/>
+		<result property="userId" column="user_id"/>
+		<result property="nickname" column="nickname"/>
+		<result property="contestTitle" column="contest_title"/>
+		<result property="recruitType" column="recruit_type"/>
+		<result property="recruitPeriod" column="recruit_period"/>
+		<result property="activityPeriod" column="activity_period"/>
+		<result property="totalMembers" column="total_members"/>
+		<result property="remainingMembers" column="remaining_members"/>
+		<result property="progressType" column="progress_type"/>
+		<result property="contact" column="contact"/>
+		<result property="techStack" column="tech_stack"/>
+		<result property="status" column="status"/>
+		<result property="applyGuide" column="apply_guide"/>
+		<result property="title" column="title"/>
+		<result property="content" column="content"/>
+		<result property="attachmentUrl" column="attachment_url"/>
+		<result property="viewCount" column="view_count"/>
+		<result property="regDate" column="reg_date"/>
+		<result property="updateDate" column="update_date"/>
+	</resultMap>
 
 </mapper>

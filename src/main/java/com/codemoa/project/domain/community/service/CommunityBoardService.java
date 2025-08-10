@@ -39,11 +39,10 @@ public class CommunityBoardService {
     private final CommentRepository commentRepository;
     private final UserService userService;
 
-    // @Lazy를 사용하기 위해 @RequiredArgsConstructor를 지우고 생성자를 직접 작성
     public CommunityBoardService(
             CommunityBoardRepository communityBoardRepository,
             UserRepository userRepository,
-            @Lazy CommentService commentService, // 순환 참조를 해결하기 위해 @Lazy 추가
+            @Lazy CommentService commentService, 
             CommentRepository commentRepository,
             UserService userService) {
         this.communityBoardRepository = communityBoardRepository;
@@ -68,7 +67,6 @@ public class CommunityBoardService {
             query.distinct(true);
             List<Predicate> predicates = new ArrayList<>();
 
-            // 카테고리 처리
             if ("free".equalsIgnoreCase(category)) {
                 predicates.add(criteriaBuilder.equal(root.get("category"), "자유"));
             } else if ("etc".equalsIgnoreCase(category)) {
@@ -78,7 +76,6 @@ public class CommunityBoardService {
                 predicates.add(criteriaBuilder.equal(root.get("category"), category));
             }
 
-            // 검색어 처리
             if (StringUtils.hasText(keyword)) {
                 switch (searchType) {
                     case "title":
@@ -91,7 +88,7 @@ public class CommunityBoardService {
                         Join<CommunityBoard, User> userJoin = root.join("user", JoinType.INNER);
                         predicates.add(criteriaBuilder.like(userJoin.get("nickname"), "%" + keyword + "%"));
                         break;
-                    default: // title + content
+                    default: 
                         predicates.add(criteriaBuilder.or(
                                 criteriaBuilder.like(root.get("title"), "%" + keyword + "%"),
                                 criteriaBuilder.like(root.get("content"), "%" + keyword + "%")
@@ -191,4 +188,18 @@ public class CommunityBoardService {
         int points = board.getStakedPoints();
         answerer.addPoints(points);
     }
+    
+    // ▼▼▼ [메인 페이지를 위한 핵심 추가 메서드] ▼▼▼
+    @Transactional(readOnly = true)
+    public List<CommunityBoard> getLatestPostsByCategory(String category, int size) {
+        Specification<CommunityBoard> spec = (root, query, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("category"), category);
+        
+        Pageable pageable = PageRequest.of(0, size, Sort.by(Sort.Direction.DESC, "boardNo"));
+        
+        Page<CommunityBoard> boardPage = communityBoardRepository.findAll(spec, pageable);
+        
+        return boardPage.getContent();
+    }
+    // ▲▲▲ [메인 페이지를 위한 핵심 추가 메서드] ▲▲▲
 }

@@ -4,7 +4,11 @@
 
 <mapper namespace="com.codemoa.project.domain.information.mapper.InformationRecommendMapper" >
 	
-	<!-- 강좌 영역 -->
+	<select id="findLatestLectures" parameterType="int" resultType="com.codemoa.project.domain.information.entity.Lecture">
+		SELECT * FROM lecture 
+		ORDER BY reg_date DESC 
+		LIMIT #{limit}
+	</select>
 	<select id="getLecture">
 		select * from lecture where recommend_no = #{no}
 	</select>

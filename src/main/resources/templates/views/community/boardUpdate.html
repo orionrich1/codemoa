@@ -1,14 +1,19 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default_layout}">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+      layout:decorate="~{layouts/default_layout}">
 
 <body>
     <div layout:fragment="content">
         <div class="container my-5">
             <div class="row justify-content-center">
                 <div class="col-lg-8">
-                    <h2 class="mb-4 text-center">게시글 수정</h2>
-                    <div class="card border-0 shadow-sm">
-                        <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <h2 class="fw-bold fs-2">게시글 수정</h2>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-body p-4 p-md-5">
                             <form id="editForm">
                                 <div class="mb-3">
                                     <label for="title" class="form-label fw-bold">제목</label>
@@ -16,14 +21,18 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="category" class="form-label fw-bold">카테고리</label>
-                                    <input type="text" class="form-control" id="category" name="category" th:value="${board.category}" required>
+                                    <select class="form-select" id="category" name="category" required>
+                                        <option value="Java" th:selected="${board.category == 'Java'}">Java</option>
+                                        <option value="Python" th:selected="${board.category == 'Python'}">Python</option>
+                                        <option value="JavaScript" th:selected="${board.category == 'JavaScript'}">JavaScript</option>
+                                    </select>
                                 </div>
-                                <div class="mb-3">
+                                <div class="mb-4">
                                     <label for="content" class="form-label fw-bold">내용</label>
                                     <textarea id="content" name="content" th:text="${board.content}"></textarea>
                                 </div>
-                                <div class="d-flex justify-content-end mt-4">
-                                    <a th:href="@{/boards/{boardNo}(boardNo=${board.boardNo})}" class="btn btn-secondary me-2">취소</a>
+                                <div class="d-flex justify-content-end gap-2 mt-4">
+                                    <a th:href="@{/boards/{boardNo}(boardNo=${board.boardNo})}" class="btn btn-secondary">취소</a>
                                     <button type="submit" class="btn btn-primary">수정 완료</button>
                                 </div>
                             </form>
@@ -36,6 +45,7 @@
 
     <th:block layout:fragment="script">
         <script th:inline="javascript">
+            // Summernote 에디터 초기화
             $(document).ready(function() {
                 $('#content').summernote({
                     height: 350,
@@ -55,6 +65,7 @@
                 });
             });
 
+            // 폼 전송 로직
 			const token = document.querySelector("meta[name='_csrf']")?.content;
 			const header = document.querySelector("meta[name='_csrf_header']")?.content;
 			const headers = { 'Content-Type': 'application/json' };
