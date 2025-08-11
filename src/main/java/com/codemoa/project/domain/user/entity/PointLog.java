@@ -31,7 +31,7 @@ public class PointLog {
     @Column(nullable = false)
     private PointEventType eventType; // 포인트 이벤트 종류
 
-    @Column(nullable = false)
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt; // 포인트 로그 생성 시각
 
     @PrePersist // 엔티티가 저장되기 전에 자동으로 실행
