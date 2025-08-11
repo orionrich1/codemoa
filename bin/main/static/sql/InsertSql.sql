@@ -1,79 +1,178 @@
 INSERT INTO user (user_id, name, nickname, mobile, email, total_points, membership_date, unban_date, grade) VALUES
-('admin', '관리자', 'Admin', '010-0000-0000', 'admin@codemoa.com', 999999, NOW(), NOW(), 'GRANDMASTER'),
-('user01', '김브론즈', '브론즈맨', '010-1111-0001', 'user01@test.com', 500, NOW(), NOW(), 'BRONZE'),
-('user02', '박브론즈', '나는브론즈', '010-1111-0002', 'user02@test.com', 1500, NOW(), NOW(), 'BRONZE'),
-('user03', '이실버', '실버스타', '010-1111-0003', 'user03@test.com', 2500, NOW(), NOW(), 'SILVER'),
-('user04', '최실버', '실버서퍼', '010-1111-0004', 'user04@test.com', 4800, NOW(), NOW(), 'SILVER'),
-('user05', '정골드', '골드러시', '010-1111-0005', 'user05@test.com', 6000, NOW(), NOW(), 'GOLD'),
-('user06', '강골드', '황금인생', '010-1111-0006', 'user06@test.com', 9500, NOW(), NOW(), 'GOLD'),
-('user07', '조플래', '플래티넘맨', '010-1111-0007', 'user07@test.com', 12000, NOW(), NOW(), 'PLATINUM'),
-('user08', '윤플래', '백금전사', '010-1111-0008', 'user08@test.com', 18000, NOW(), NOW(), 'PLATINUM'),
-('user09', '장다이아', '다이아손', '010-1111-0009', 'user09@test.com', 25000, NOW(), NOW(), 'DIAMOND'),
-('user10', '임다이아', '빛나는다이아', '010-1111-0010', 'user10@test.com', 45000, NOW(), NOW(), 'DIAMOND'),
-('user11', '구글유저', 'Gooogler', '010-1111-0011', 'user11@google.com', 1000, NOW(), NOW(), 'BRONZE');
+('admin', '관리자', 'Admin', '01000000000', 'admin@codemoa.com', 999999, NOW() - INTERVAL 10 DAY, NOW(), 'ADMIN'),
+('user01', '김브론즈', '브론즈맨', '01011110001', 'user01@test.com', 500, NOW() - INTERVAL 8 DAY, NOW(), 'BRONZE'),
+('user02', '박브론즈', '나는브론즈', '01011110002', 'user02@test.com', 1500, NOW() - INTERVAL 7 DAY, NOW(), 'BRONZE'),
+('user03', '이실버', '실버스타', '01011110003', 'user03@test.com', 2500, NOW() - INTERVAL 9 DAY, NOW(), 'SILVER'),
+('user04', '최실버', '실버서퍼', '01011110004', 'user04@test.com', 4800, NOW() - INTERVAL 5 DAY, NOW(), 'SILVER'),
+('user05', '정골드', '골드러시', '01011110005', 'user05@test.com', 6000, NOW() - INTERVAL 7 DAY, NOW(), 'GOLD'),
+('user06', '강골드', '황금인생', '01011110006', 'user06@test.com', 9500, NOW() - INTERVAL 3 DAY, NOW(), 'GOLD'),
+('user07', '조플래', '플래티넘맨', '01011110007', 'user07@test.com', 12000, NOW() - INTERVAL 6 DAY, NOW(), 'PLATINUM'),
+('user08', '윤플래', '백금전사', '01011110008', 'user08@test.com', 18000, NOW() - INTERVAL 2 DAY, NOW(), 'PLATINUM'),
+('user09', '장다이아', '다이아손', '01011110009', 'user09@test.com', 25000, NOW() - INTERVAL 8 DAY, NOW(), 'DIAMOND'),
+('user10', '임다이아', '빛나는다이아', '01011110010', 'user10@test.com', 45000, NOW() - INTERVAL 1 DAY, NOW(), 'DIAMOND'),
+('user11', '구글유저', 'Gooogler', '01011110011', 'user11@google.com', 1000, NOW(), NOW(), 'BRONZE');
 
+INSERT INTO local_user (user_id, pass) VALUES
+('admin', 1),
+('user01', 1),
+('user02', 1),
+('user03', 1),
+('user04', 1),
+('user05', 1),
+('user06', 1),
+('user07', 1),
+('user08', 1),
+('user09', 1),
+('user10', 1),
+('user11', 1);
 
--- 3-3. 게시판 데이터 삽입
-INSERT INTO community_board (board_no, user_id, title, content, category, post_type, staked_points, created_at) VALUES
-(1, 'user05', '자바 질문 있습니다!', '스프링 부트에서 순환 참조는 어떻게 해결하나요? @Lazy 말고 다른 방법도 있나요?', 'Java', 'QUESTION', 100, NOW() - INTERVAL 5 DAY),
-(2, 'user03', '파이썬으로 웹크롤링 하는 법', 'BeautifulSoup 라이브러리와 requests를 사용하면 쉽게 할 수 있습니다.', 'Python', 'NORMAL', 0, NOW() - INTERVAL 4 DAY),
-(3, 'user07', '요즘 코틀린 어떤가요?', '안드로이드 개발에서는 거의 필수로 자리잡았고, 서버 사이드에서도 많이 사용되는 추세입니다.', 'Kotlin', 'NORMAL', 0, NOW() - INTERVAL 3 DAY),
-(4, 'admin', '[공지] CodeMoa 서비스 점검 안내', '더 나은 서비스 제공을 위해 시스템 점검을 실시합니다. 많은 양해 바랍니다.', '자유', 'NORMAL', 0, NOW() - INTERVAL 2 DAY);
-
--- 3-4. 댓글 데이터 삽입
-INSERT INTO comment (user_id, board_no, content, created_at) VALUES
-('user08', 1, '생성자 주입 대신 Setter 주입을 사용하거나, 필드 주입을 사용하는 방법도 있습니다. 하지만 권장되진 않아요.', NOW() - INTERVAL 4 DAY),
-('admin', 1, '좋은 질문과 답변입니다! 순환 참조는 설계적으로 피하는 것이 가장 좋습니다.', NOW() - INTERVAL 4 DAY),
-('user01', 2, '오 좋은 정보 감사합니다!', NOW() - INTERVAL 3 DAY),
-('user02', 4, '점검 시간은 언제부터 언제까지인가요?', NOW() - INTERVAL 1 DAY);
-
--- 3-6. 어드민 계정 수정
 UPDATE user SET user_position='ADMIN' WHERE user_id='admin';
 
-
-
-INSERT INTO recruitbbs
-(user_id, contest_title, recruit_type, recruit_period, activity_period, total_members, remaining_members, progress_type, contact, tech_stack, status, apply_guide, title, content, attachment_url, view_count, reg_date, update_date)
+INSERT INTO recruitbbs (user_id, contest_title, recruit_type, recruit_period, activity_period, total_members, remaining_members, progress_type, contact, tech_stack, status, apply_guide, title, content, attachment_url, view_count, reg_date, update_date)
 VALUES
 ('user01', 'https://career.programmers.co.kr/competitions/4079', 'TEAM_RECRUIT', '2025-06-01 ~ 2025-06-30', '2025-07-01 ~ 2025-10-01', 4, 2, '온라인', 'email:alice01@example.com', '#Java #SpringBoot', 'RECRUITING', '포트폴리오 제출', '프로그래머스 백엔드 팀원 모집', '함께 성장할 백엔드 개발자 구합니다. 관심있으신 분은 연락 주세요.', NULL, 23, '2025-06-02 09:15:00', '2025-06-03 12:00:00'),
-
 ('admin', 'https://www.kaggle.com/c/titanic', 'TEAM_JOIN', '2025-05-20 ~ 2025-06-20', '2025-06-21 ~ 2025-09-30', 3, 1, '혼합', 'kakao:bob02', '#Python #DataScience', 'RECRUITING', 'GitHub 링크 제출', '데이터 사이언스 경진대회 참가 희망', '데이터 분석 경험 많으신 분과 함께하고 싶어요!', NULL, 15, '2025-05-25 14:00:00', '2025-05-26 15:30:00'),
-
 ('user02', 'https://sigmod-contest-2025.github.io/', 'TEAM_JOIN', '2025-04-15 ~ 2025-05-15', '2025-05-20 ~ 2025-08-31', 5, 4, '온라인', 'email:carol03@university.edu', '#C++ #SQL', 'RECRUITING', '이력서 제출', 'SIGMOD DB 경진대회 참가 희망', 'DB 설계 및 최적화 경험자 구합니다.', NULL, 12, '2025-04-20 10:30:00', '2025-04-21 11:00:00'),
-
 ('user03', 'https://www.mofa.go.kr/www/brd/m_4075/view.do?seq=369259', 'TEAM_RECRUIT', '2025-07-01 ~ 2025-07-31', '2025-08-01 ~ 2025-09-30', 4, 3, '온라인', 'email:daniel04@test.com', '#Policy #IdeaGeneration', 'RECRUITING', '자유 제안서 제출', '청년 정책 아이디어 공모전 팀원 모집', '정책 개선 아이디어를 함께 고민할 분을 찾습니다.', NULL, 18, '2025-07-02 09:00:00', '2025-07-03 10:00:00'),
-
 ('user05', 'https://www.unesco.org/en/creativity/arts-contests', 'TEAM_JOIN', '2025-05-10 ~ 2025-06-15', '2025-06-20 ~ 2025-08-31', 3, 1, '혼합', 'kakao:ellen05', '#Art #UNESCO', 'RECRUITING', '포스터 제출', '유엔 문화 공모전 참가 희망', '참신한 아이디어와 아트워크 경험자 환영합니다.', NULL, 9, '2025-05-11 13:00:00', '2025-05-12 14:20:00'),
-
 ('user07', 'https://all-con.co.kr/view/contest/526173', 'TEAM_RECRUIT', '2025-06-02 ~ 2025-08-10', '2025-08-15 ~ 2025-10-10', 4, 2, '온라인', 'email:frank06@example.com', '#Python #GameDevelopment', 'RECRUITING', '소스 제출', '청소년 게임 개발 대회 팀원 모집', '파이썬으로 게임 개발 가능한 분 찾습니다.', NULL, 20, '2025-06-05 16:30:00', '2025-06-06 17:00:00'),
-
 ('user08', 'https://onoffmix.com/event/325414', 'TEAM_RECRUIT', '2025-06-20 ~ 2025-07-20', '2025-08-01 ~ 2025-11-01', 3, 1, '오프라인', 'email:grace07@test.com', '#HTML #CSS #JavaScript', 'RECRUITING', '메일 지원', '대학생 홈페이지 제작 공모전 팀원 모집', '웹 디자인 및 프론트엔드 개발 경험자 구합니다.', NULL, 17, '2025-06-21 10:00:00', '2025-06-22 11:15:00'),
-
 ('user04', 'https://kamco.or.kr/portal/bbs/view.do?mId=0701010000&ptIdx=380&bIdx=22906', 'TEAM_RECRUIT', '2025-06-16 ~ 2025-07-15', '2025-07-20 ~ 2025-10-20', 4, 2, '혼합', 'kakao:henry08', '#AI #PublicData', 'RECRUITING', '이메일 지원', 'AI 공공 데이터 공모전 팀원 모집', 'AI 프로젝트 경험자, 데이터 분석 가능자 구합니다.', NULL, 22, '2025-06-17 09:45:00', '2025-06-18 10:30:00'),
-
 ('user09', 'https://sotong.go.kr/front/epilogue/epilogueNewViewPage.do?bbs_id=7da8f5dd1...', 'TEAM_JOIN', '2025-04-24 ~ 2025-05-23', '2025-05-24 ~ 2025-07-31', 2, 0, '온라인', 'email:irene09@test.com', '#Art #MediaArt', 'COMPLETED', '포트폴리오 제출', '미디어아트 공모전 참가 희망', '미디어아트 작품 제작 경험자 구합니다.', NULL, 13, '2025-04-25 14:00:00', '2025-05-01 15:00:00'),
-
 ('user06', 'http://kitpa.org/contest/4', 'TEAM_RECRUIT', '2025-02-17 ~ 2025-03-13', '2025-03-15 ~ 2025-05-31', 5, 3, '오프라인', 'kakao:jack10', '#C #Algorithms', 'RECRUITING', '카카오톡 지원', '청소년 IT 경시대회 팀원 모집', '알고리즘 개발 경험자 모집합니다.', NULL, 19, '2025-02-18 11:00:00', '2025-02-19 12:30:00'),
-
 ('user10', 'http://www.bfc.or.kr/...&board_no=10562', 'TEAM_RECRUIT', '2025-06-09 ~ 2025-06-30', '2025-07-01 ~ 2025-09-30', 4, 2, '혼합', 'email:kate11@test.com', '#Storytelling #IP', 'RECRUITING', '이메일 지원', '스토리 IP 공모전 팀원 모집', '스토리텔링 경험자, 기획자 우대합니다.', NULL, 11, '2025-06-10 13:00:00', '2025-06-11 13:30:00'),
-
 ('user11', 'https://linkareer.com/activity/247420', 'TEAM_JOIN', '2025-06-02 ~ 2025-08-10', '2025-08-15 ~ 2025-10-30', 3, 0, '온라인', 'email:leo12@test.com', '#Python #GameDev', 'COMPLETED', '포트폴리오 제출', '게임 코딩대회 참가 희망', '게임 개발 경험자 구합니다.', NULL, 14, '2025-06-03 15:00:00', '2025-06-04 15:30:00'),
-
 ('amdin', 'https://www.programmers.co.kr/pages/프로그래머스_코드챌린지', 'TEAM_RECRUIT', '2025-01-20 ~ 2025-02-05', '2025-02-10 ~ 2025-05-01', 4, 2, '온라인', 'kakao:mia13', '#C++ #Go', 'RECRUITING', 'GitHub 링크 제출', '코드챌린지 풀스택 팀원 모집', '프론트 및 백엔드 개발 가능자 모집합니다.', NULL, 16, '2025-01-21 10:00:00', '2025-01-22 10:30:00'),
-
 ('user02', 'https://www.wevity.com/index_university.php?c=find&gbn=viewok&gp=14&ix=96975', 'TEAM_JOIN', '2025-04-14 ~ 2025-06-13', '2025-06-15 ~ 2025-09-15', 3, 1, '혼합', 'email:nina14@test.com', '#Policy #Idea', 'RECRUITING', '자유 제안서', '정책 아이디어 공모전 참가 희망', '정책 제안 경험자 우대합니다.', NULL, 13, '2025-04-15 09:00:00', '2025-04-16 09:30:00'),
-
 ('user06', 'https://www.wevity.com/', 'TEAM_RECRUIT', '2025-05-01 ~ 2025-07-01', '2025-07-05 ~ 2025-11-01', 5, 3, '온라인', 'kakao:oliver15', '#DataViz #Design', 'RECRUITING', '이메일 지원', '영상 공모전 팀원 모집', '영상 제작 가능한 분 환영합니다.', NULL, 18, '2025-05-02 14:30:00', '2025-05-03 15:00:00'),
-
 ('user07', 'https://www.wevity.com/index.php?c=find&gbn=viewok&gp=6&ix=98486', 'TEAM_JOIN', '2025-06-05 ~ 2025-07-05', '2025-07-10 ~ 2025-08-31', 2, 0, '오프라인', 'email:paul16@test.com', '#Cartoon #Character', 'COMPLETED', '아트워크 제출', '캐릭터 콘텐츠 공모전 참가 희망', '캐릭터 디자인 경험자 구합니다.', NULL, 21, '2025-06-06 10:00:00', '2025-06-07 10:30:00'),
-
 ('user01', 'https://www.wevity.com/index.php?c=find&gbn=viewok&gp=8&ix=98792', 'TEAM_RECRUIT', '2025-06-16 ~ 2025-07-15', '2025-07-20 ~ 2025-10-20', 4, 2, '혼합', 'kakao:quinn17', '#AI #PublicData', 'RECRUITING', 'GitHub 링크 제출', 'AI 공모전 팀원 모집', 'AI 프로젝트 경험자 구합니다.', NULL, 22, '2025-06-17 11:00:00', '2025-06-18 12:00:00'),
-
 ('user04', 'https://www.contestkorea.com/sub/view.php?Txt_bcode=030510001&int_gbn=1&str_no=202412280001', 'TEAM_JOIN', '2025-02-03 ~ 2025-02-28', '2025-03-01 ~ 2025-04-30', 3, 0, '온라인', 'email:rachel18@test.com', '#Roblox #GameDev', 'COMPLETED', '포트폴리오 제출', '잼S 코딩 페스티벌 참가 희망', '로블록스 게임 개발 경험자 모집.', NULL, 15, '2025-02-05 13:00:00', '2025-02-06 13:30:00'),
-
 ('user03', 'https://www.wevity.com/index.php?c=find&gbn=viewok&gp=9&ix=96445', 'TEAM_RECRUIT', '2025-06-09 ~ 2025-07-30', '2025-08-01 ~ 2025-10-01', 4, 2, '온라인', 'email:sam19@test.com', '#StoryIP #Writing', 'RECRUITING', '이메일 지원', '스토리 IP 공모전 팀원 모집', '스토리텔링 및 IP 기획 경험자 모집합니다.', NULL, 20, '2025-06-10 09:00:00', '2025-06-11 09:30:00'),
-
 ('user05', 'https://linkareer.com/activity/220644', 'TEAM_JOIN', '2025-01-20 ~ 2025-02-05', '2025-02-10 ~ 2025-05-01', 3, 0, '혼합', 'email:tom20@test.com', '#CodingChallenge #Dev', 'COMPLETED', 'GitHub 링크 제출', '프로그래머스 코드챌린지 참가 희망', '코딩 챌린지 경험자 구합니다.', NULL, 18, '2025-01-22 14:00:00', '2025-01-23 15:00:00');
+
+INSERT INTO community_board (user_id, title, content, category, post_type, created_at) VALUES
+('user01', '오늘 날씨 너무 좋네요', '햇살이 따뜻해서 기분 좋은 하루입니다.', '자유', 'NORMAL', NOW() - INTERVAL 1 DAY),
+('user02', '최근 본 영화 추천해 주세요', '주말에 볼만한 영화 추천 부탁드립니다.', '자유', 'NORMAL', NOW() - INTERVAL 2 DAY),
+('user03', '요즘 읽는 책 소개합니다', '최근에 재미있게 본 소설 한 권 추천해요.', '자유', 'NORMAL', NOW() - INTERVAL 3 DAY),
+('user04', '코딩 공부 어떻게 하나요?', '처음 배우는 사람에게 추천할 만한 방법 있나요?', '자유', 'NORMAL', NOW() - INTERVAL 4 DAY),
+('user05', '주말에 뭐하세요?', '다들 주말 계획은 어떻게 되시나요?', '자유', 'NORMAL', NOW() - INTERVAL 5 DAY),
+('user06', '좋아하는 음악 공유해요', '요즘 듣는 노래 중 좋은 곡 있으면 알려주세요.', '자유', 'NORMAL', NOW() - INTERVAL 6 DAY),
+('user07', '취미 생활이 뭐에요?', '새로운 취미를 찾고 있는데 추천 부탁합니다.', '자유', 'NORMAL', NOW() - INTERVAL 7 DAY),
+('user08', '운동 시작하려고 해요', '효과 좋은 운동법 알려주세요!', '자유', 'NORMAL', NOW() - INTERVAL 8 DAY),
+('user09', '커피 좋아하시는 분?', '좋은 카페 추천해주실 분 계신가요?', '자유', 'NORMAL', NOW() - INTERVAL 9 DAY),
+('user10', '여름 휴가 어디로 가세요?', '올해 휴가지 추천받습니다.', '자유', 'NORMAL', NOW() - INTERVAL 10 DAY),
+('admin', '서버 점검 예정 안내', '다음 주 월요일 새벽 2시부터 4시까지 서버 점검이 있습니다.', '자유', 'NORMAL', NOW() - INTERVAL 11 DAY),
+('user01', '좋은 맛집 추천해주세요', '서울 근처 가성비 좋은 맛집 있나요?', '자유', 'NORMAL', NOW() - INTERVAL 12 DAY),
+('user02', '주말 등산 갈 사람?', '이번 주말에 등산 같이 가실 분 구해요.', '자유', 'NORMAL', NOW() - INTERVAL 13 DAY),
+('user03', '영어 공부법 공유', '효과적인 영어 공부 방법 알려드려요.', '자유', 'NORMAL', NOW() - INTERVAL 14 DAY),
+('user04', '드라마 추천해 주세요', '최근 재미있게 본 드라마 있으신가요?', '자유', 'NORMAL', NOW() - INTERVAL 15 DAY),
+('user05', '새로운 취미 시작했어요', '뜨개질 배우기 시작했습니다!', '자유', 'NORMAL', NOW() - INTERVAL 16 DAY),
+('user06', '건강 관리 팁 공유', '요즘 실천하는 건강 관리 방법 소개합니다.', '자유', 'NORMAL', NOW() - INTERVAL 17 DAY),
+('user07', '영화관 가본지 오래됐네요', '요즘 좋은 영화 상영 중인가요?', '자유', 'NORMAL', NOW() - INTERVAL 18 DAY),
+('user08', '온라인 강의 추천', '유용한 무료 온라인 강의 있으면 알려주세요.', '자유', 'NORMAL', NOW() - INTERVAL 19 DAY),
+('user09', '여행 사진 공유', '최근 다녀온 여행 사진 올려봅니다.', '자유', 'NORMAL', NOW() - INTERVAL 20 DAY),
+('user10', '코로나 예방 수칙', '최근 코로나 관련 정보 공유해요.', '자유', 'NORMAL', NOW() - INTERVAL 21 DAY),
+('admin', '신규 기능 안내', '새로운 게시판 기능이 추가되었습니다.', '자유', 'NORMAL', NOW() - INTERVAL 22 DAY),
+('user01', '반려동물 이야기', '강아지 키우시는 분 있나요?', '자유', 'NORMAL', NOW() - INTERVAL 23 DAY),
+('user02', '요리 초보 질문', '간단한 요리 레시피 추천 부탁해요.', '자유', 'NORMAL', NOW() - INTERVAL 24 DAY),
+('user03', '사진 촬영 팁 공유', '좋은 사진 찍는 법 알려드립니다.', '자유', 'NORMAL', NOW() - INTERVAL 25 DAY),
+('user04', '취업 준비 어떻게 하나요?', '효과적인 취업 준비 방법 공유해주세요.', '자유', 'NORMAL', NOW() - INTERVAL 26 DAY),
+('user05', '새해 계획 세우기', '올해 목표 어떻게 잡으셨나요?', '자유', 'NORMAL', NOW() - INTERVAL 27 DAY),
+('user06', '운동화 추천 부탁', '러닝화 추천 받고 싶어요.', '자유', 'NORMAL', NOW() - INTERVAL 28 DAY),
+('user07', '책 읽는 시간 확보', '바쁜 와중에 책 읽는 시간 어떻게 만드나요?', '자유', 'NORMAL', NOW() - INTERVAL 29 DAY),
+('user08', '커피 머신 고장났어요', '고장 수리 경험 공유해주세요.', '자유', 'NORMAL', NOW() - INTERVAL 30 DAY),
+('user09', '좋은 영화 OST', '영화 음악 추천 부탁드립니다.', '자유', 'NORMAL', NOW() - INTERVAL 31 DAY),
+('user10', '드론 촬영 시작했어요', '초보 드론 촬영 팁 알려주세요.', '자유', 'NORMAL', NOW() - INTERVAL 32 DAY),
+('admin', '공지사항: 사이트 이용 규칙', '커뮤니티 이용 시 지켜야 할 규칙 안내입니다.', '자유', 'NORMAL', NOW() - INTERVAL 33 DAY),
+('user01', '재택근무 장단점', '재택근무 하면서 느낀 점 공유합니다.', '자유', 'NORMAL', NOW() - INTERVAL 34 DAY),
+('user02', '맛집 탐방 후기', '최근 다녀온 맛집 후기 올려요.', '자유', 'NORMAL', NOW() - INTERVAL 35 DAY),
+('user03', '웹툰 추천', '재밌게 본 웹툰 소개합니다.', '자유', 'NORMAL', NOW() - INTERVAL 36 DAY),
+('user04', '사진 편집 프로그램', '무료 사진 편집 프로그램 추천해 주세요.', '자유', 'NORMAL', NOW() - INTERVAL 37 DAY),
+('user05', '기술 블로그 운영 중', '블로그 운영 경험 공유합니다.', '자유', 'NORMAL', NOW() - INTERVAL 38 DAY),
+('user06', 'IT 자격증 공부', 'IT 자격증 준비하시는 분 계신가요?', '자유', 'NORMAL', NOW() - INTERVAL 39 DAY),
+('user07', '영화관람 팁', '할인 받는 방법 공유합니다.', '자유', 'NORMAL', NOW() - INTERVAL 40 DAY);
+
+INSERT INTO community_board (user_id, title, content, category, post_type, staked_points, created_at) VALUES
+('user01', 'Java 8 스트림 사용법 질문', '스트림에서 map과 flatMap의 차이가 궁금합니다.', 'Java', 'QUESTION', 30, NOW() - INTERVAL 1 DAY),
+('user02', '스프링 부트 프로젝트 셋업 팁', '효율적으로 프로젝트를 시작하는 방법 공유합니다.', 'Java', 'NORMAL', 0, NOW() - INTERVAL 2 DAY),
+('user03', 'Java 컬렉션 프레임워크 질문', 'HashMap과 TreeMap의 내부 구조가 어떻게 다른가요?', 'Java', 'QUESTION', 50, NOW() - INTERVAL 3 DAY),
+('user04', 'Java에서 메모리 누수 해결법', 'Garbage Collector 작동 방식과 최적화 팁', 'Java', 'NORMAL', 0, NOW() - INTERVAL 4 DAY),
+('user05', '스프링 AOP 사용 경험 공유', 'AOP로 로깅 처리하는 방법 설명합니다.', 'Java', 'NORMAL', 0, NOW() - INTERVAL 5 DAY),
+('user06', 'Java에서 멀티스레딩 질문', 'synchronized와 ReentrantLock 차이점이 궁금합니다.', 'Java', 'QUESTION', 100, NOW() - INTERVAL 6 DAY),
+('user07', 'Java 11 새로운 기능 소개', 'var 키워드와 HTTP 클라이언트', 'Java', 'NORMAL', 0, NOW() - INTERVAL 7 DAY),
+('user08', '예외 처리 best practice', 'Checked Exception과 Unchecked Exception 차이', 'Java', 'NORMAL', 0, NOW() - INTERVAL 8 DAY),
+('user09', 'Java 람다식 이해하기', '람다식 작성법과 활용 사례', 'Java', 'NORMAL', 0, NOW() - INTERVAL 9 DAY),
+('user10', 'Java GC 튜닝 팁', 'GC 로그 분석과 성능 개선 방법', 'Java', 'NORMAL', 0, NOW() - INTERVAL 10 DAY),
+('admin', 'Java와 Kotlin 비교 질문', '두 언어 중 어떤 점이 더 좋은가요?', 'Java', 'QUESTION', 10, NOW() - INTERVAL 11 DAY),
+('user01', 'Java 14 switch 문법 질문', '새로운 switch 표현식 사용법 알려주세요.', 'Java', 'QUESTION', 30, NOW() - INTERVAL 12 DAY),
+('user02', 'Java 웹 애플리케이션 배포 팁', 'Tomcat 배포 시 주의사항 공유', 'Java', 'NORMAL', 0, NOW() - INTERVAL 13 DAY),
+('user03', 'JPA 성능 최적화', 'Lazy Loading 문제 해결 방법', 'Java', 'NORMAL', 0, NOW() - INTERVAL 14 DAY),
+('user04', 'Java 프로젝트 빌드 도구 추천', 'Maven과 Gradle 중 뭐가 더 좋나요?', 'Java', 'NORMAL', 0, NOW() - INTERVAL 15 DAY),
+
+('user05', 'Python 리스트 컴프리헨션 질문', '복잡한 리스트 컴프리헨션 어떻게 작성하나요?', 'Python', 'QUESTION', 30, NOW() - INTERVAL 16 DAY),
+('user06', '파이썬으로 데이터 분석 시작하기', 'Pandas와 NumPy 기본 사용법 소개', 'Python', 'NORMAL', 0, NOW() - INTERVAL 17 DAY),
+('user07', '파이썬 예외 처리 질문', 'try-except 문에서 여러 예외를 처리하는 방법?', 'Python', 'QUESTION', 50, NOW() - INTERVAL 18 DAY),
+('user08', 'Flask vs Django 비교', '작은 프로젝트에 적합한 프레임워크는?', 'Python', 'NORMAL', 0, NOW() - INTERVAL 19 DAY),
+('user09', '파이썬 멀티스레딩 질문', 'GIL이 무엇이고 어떻게 극복하나요?', 'Python', 'QUESTION', 100, NOW() - INTERVAL 20 DAY),
+('user10', '파이썬 웹 크롤링 팁', 'BeautifulSoup을 활용한 데이터 추출 방법', 'Python', 'NORMAL', 0, NOW() - INTERVAL 21 DAY),
+('admin', 'Python 타입 힌트 사용법', '코드 가독성 향상을 위한 타입 힌트 설명', 'Python', 'NORMAL', 0, NOW() - INTERVAL 22 DAY),
+('user01', '파이썬 람다 함수 질문', '람다 함수와 일반 함수 차이가 뭔가요?', 'Python', 'QUESTION', 10, NOW() - INTERVAL 23 DAY),
+('user02', '파이썬 가상환경 만들기', 'venv 사용법과 활용 팁', 'Python', 'NORMAL', 0, NOW() - INTERVAL 24 DAY),
+('user03', '파이썬에서 데이터 시각화', 'Matplotlib과 Seaborn 사용법', 'Python', 'NORMAL', 0, NOW() - INTERVAL 25 DAY),
+('user04', '파이썬 문자열 처리 질문', '문자열 포매팅 방법 중 추천은?', 'Python', 'QUESTION', 30, NOW() - INTERVAL 26 DAY),
+('user05', '파이썬 스크립트 자동화', 'schedule 라이브러리 활용법', 'Python', 'NORMAL', 0, NOW() - INTERVAL 27 DAY),
+('user06', '파이썬에서 JSON 다루기', 'json 모듈 사용법 소개', 'Python', 'NORMAL', 0, NOW() - INTERVAL 28 DAY),
+('user07', '파이썬 비동기 처리 질문', 'asyncio 기본 사용법 알려주세요.', 'Python', 'QUESTION', 50, NOW() - INTERVAL 29 DAY),
+('user08', '파이썬 패키지 배포', 'PyPI에 패키지 등록 방법', 'Python', 'NORMAL', 0, NOW() - INTERVAL 30 DAY),
+
+('user09', '자바스크립트 클로저 질문', '클로저의 원리와 사용법 궁금합니다.', 'JavaScript', 'QUESTION', 30, NOW() - INTERVAL 31 DAY),
+('user10', 'React 기본 개념 소개', '컴포넌트와 상태 관리', 'JavaScript', 'NORMAL', 0, NOW() - INTERVAL 32 DAY),
+('admin', 'JavaScript 비동기 처리 질문', 'Promise와 async/await 차이점', 'JavaScript', 'QUESTION', 50, NOW() - INTERVAL 33 DAY),
+('user01', 'Node.js 서버 구축 팁', 'Express를 이용한 간단 서버 만들기', 'JavaScript', 'NORMAL', 0, NOW() - INTERVAL 34 DAY),
+('user02', 'JavaScript 이벤트 버블링 질문', '이벤트 캡처링과 버블링 차이점', 'JavaScript', 'QUESTION', 100, NOW() - INTERVAL 35 DAY),
+('user03', 'Vue.js 사용 경험 공유', '초보자가 배우기 좋은 프레임워크', 'JavaScript', 'NORMAL', 0, NOW() - INTERVAL 36 DAY),
+('user04', 'JavaScript 배열 메서드 질문', 'map, filter, reduce 사용법', 'JavaScript', 'QUESTION', 10, NOW() - INTERVAL 37 DAY),
+('user05', '프론트엔드 성능 최적화 팁', '렌더링 속도 개선 방법', 'JavaScript', 'NORMAL', 0, NOW() - INTERVAL 38 DAY),
+('user06', 'JavaScript 모듈 시스템', 'ES6 import/export 기본', 'JavaScript', 'NORMAL', 0, NOW() - INTERVAL 39 DAY),
+('user07', '자바스크립트 this 키워드 질문', 'this가 가리키는 대상', 'JavaScript', 'QUESTION', 30, NOW() - INTERVAL 40 DAY),
+('user08', 'React 훅 사용법', 'useState와 useEffect 활용', 'JavaScript', 'NORMAL', 0, NOW() - INTERVAL 41 DAY),
+('user09', 'JavaScript 디버깅 팁', '크롬 개발자 도구 활용법', 'JavaScript', 'NORMAL', 0, NOW() - INTERVAL 42 DAY),
+('user10', '자바스크립트 타입 변환 질문', '암묵적 형 변환 문제 해결법', 'JavaScript', 'QUESTION', 50, NOW() - INTERVAL 43 DAY),
+('admin', 'ESLint 설정 방법', '코드 스타일 자동화', 'JavaScript', 'NORMAL', 0, NOW() - INTERVAL 44 DAY),
+('user01', '자바스크립트 프로토타입 이해하기', '프로토타입 체인 설명', 'JavaScript', 'NORMAL', 0, NOW() - INTERVAL 45 DAY),
+
+('user02', 'C# async/await 질문', '비동기 프로그래밍 이해', 'C#', 'QUESTION', 30, NOW() - INTERVAL 46 DAY),
+('user03', 'ASP.NET Core 시작하기', '간단한 웹 앱 만들기', 'C#', 'NORMAL', 0, NOW() - INTERVAL 47 DAY),
+('user04', 'LINQ 사용법 질문', '쿼리 문법과 예제', 'C#', 'QUESTION', 50, NOW() - INTERVAL 48 DAY),
+('user05', '.NET Core와 .NET Framework 차이', '성능 및 지원 비교', 'C#', 'NORMAL', 0, NOW() - INTERVAL 49 DAY),
+('user06', 'C#에서 이벤트 처리', '이벤트와 델리게이트 사용법', 'C#', 'NORMAL', 0, NOW() - INTERVAL 50 DAY),
+('user07', 'WPF 기본 사용법', 'UI 디자인과 데이터 바인딩', 'C#', 'NORMAL', 0, NOW() - INTERVAL 51 DAY),
+('user08', 'C# 메모리 관리 질문', 'Garbage Collector 동작 방식', 'C#', 'QUESTION', 100, NOW() - INTERVAL 52 DAY),
+('user09', 'C# 인터페이스와 추상 클래스 차이', '사용 사례와 장단점', 'C#', 'NORMAL', 0, NOW() - INTERVAL 53 DAY),
+('user10', 'Entity Framework Core 소개', 'ORM 기본 개념', 'C#', 'NORMAL', 0, NOW() - INTERVAL 54 DAY),
+('admin', 'C# 9.0 신규 기능', '레코드 타입과 패턴 매칭', 'C#', 'NORMAL', 0, NOW() - INTERVAL 55 DAY),
+('user01', 'C# 컬렉션 사용법 질문', 'List와 Dictionary 차이점', 'C#', 'QUESTION', 10, NOW() - INTERVAL 56 DAY),
+('user02', 'C# 예외 처리 베스트 프랙티스', 'try-catch 활용법', 'C#', 'NORMAL', 0, NOW() - INTERVAL 57 DAY),
+('user03', '유니티 게임 개발 시작', 'C# 스크립팅 기초', 'C#', 'NORMAL', 0, NOW() - INTERVAL 58 DAY),
+('user04', 'C# 제네릭 질문', '제네릭 타입과 메서드 사용법', 'C#', 'QUESTION', 30, NOW() - INTERVAL 59 DAY),
+('user05', 'ASP.NET MVC와 Razor 페이지 차이', '웹 개발 선택 가이드', 'C#', 'NORMAL', 0, NOW() - INTERVAL 60 DAY),
+
+('user06', '코틀린 코루틴 질문', '비동기 처리 방법', 'Kotlin', 'QUESTION', 30, NOW() - INTERVAL 61 DAY),
+('user07', '코틀린 기본 문법 소개', '클래스와 함수', 'Kotlin', 'NORMAL', 0, NOW() - INTERVAL 62 DAY),
+('user08', '안드로이드 개발과 코틀린', 'Kotlin 활용 팁', 'Kotlin', 'NORMAL', 0, NOW() - INTERVAL 63 DAY),
+('user09', '코틀린 데이터 클래스 질문', 'data class의 특징과 사용법', 'Kotlin', 'QUESTION', 50, NOW() - INTERVAL 64 DAY),
+('user10', '코틀린 DSL 만들기', '도메인 특화 언어 작성법', 'Kotlin', 'NORMAL', 0, NOW() - INTERVAL 65 DAY),
+('admin', 'Kotlin Null 안전성', 'null 처리와 안전 호출 연산자', 'Kotlin', 'NORMAL', 0, NOW() - INTERVAL 66 DAY),
+('user01', '코틀린 확장 함수 질문', '확장 함수 작성 및 활용', 'Kotlin', 'QUESTION', 100, NOW() - INTERVAL 67 DAY),
+('user02', '코틀린 람다와 고차 함수', '함수형 프로그래밍 소개', 'Kotlin', 'NORMAL', 0, NOW() - INTERVAL 68 DAY),
+('user03', '코틀린에서 Sealed 클래스', 'sealed 클래스 활용법', 'Kotlin', 'NORMAL', 0, NOW() - INTERVAL 69 DAY),
+('user04', '코틀린 스코프 함수', 'let, apply, also 차이점', 'Kotlin', 'QUESTION', 10, NOW() - INTERVAL 70 DAY),
+('user05', '코틀린 객체 선언', 'object 키워드 사용법', 'Kotlin', 'NORMAL', 0, NOW() - INTERVAL 71 DAY),
+('user06', '코틀린 인터페이스 기본 구현', 'interface에서 메서드 기본 구현', 'Kotlin', 'NORMAL', 0, NOW() - INTERVAL 72 DAY),
+('user07', '코틀린 컬렉션 다루기', 'List, Set, Map 기본', 'Kotlin', 'NORMAL', 0, NOW() - INTERVAL 73 DAY),
+('user08', '코틀린 시퀀스 질문', '시퀀스와 컬렉션 차이점', 'Kotlin', 'QUESTION', 30, NOW() - INTERVAL 74 DAY),
+('user09', '코틀린 멀티플랫폼 프로젝트', '공유 코드 작성 팁', 'Kotlin', 'NORMAL', 0, NOW() - INTERVAL 75 DAY);
 
 insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2, file1) 
 values ('admin', 
@@ -3773,3 +3872,45 @@ T. 02-6372-5001/ E. contest@k-paas.or.kr
 ', -- 내용
 '3235f819-52aa-46bb-abfd-500245b72c66.jpg'
 );
+
+INSERT INTO faq (question, answer) VALUES
+('이 사이트는 어떤 목적으로 만들어졌나요?', '개발자들이 코딩 테스트 문제와 노하우를 공유하고, 협업할 수 있도록 돕기 위해 만들어졌습니다.'),
+('회원 가입은 어떻게 하나요?', '상단 메뉴에서 회원 가입 버튼을 클릭해 이메일과 비밀번호를 입력하면 가입할 수 있습니다.'),
+('AI 코딩 문제 풀이 지원 기능은 어떻게 사용하나요?', '문제 풀이 페이지에서 질문을 입력하면 AI가 풀이 예제와 설명을 제공합니다.'),
+('내 작업물을 어떻게 저장하고 관리할 수 있나요?', '개인 다이어리 기능과 Git 연동을 통해 버전 관리하며 저장할 수 있습니다.'),
+('코딩 작업용 음악 플레이리스트는 어떻게 활성화하나요?', '개인 도구 메뉴에서 플레이리스트 탭을 선택해 원하는 음악을 재생할 수 있습니다.'),
+('문제 풀이 중 모르는 내용이 있으면 어디서 질문하나요?', '커뮤니티 게시판에 질문글을 작성하거나, 댓글로 다른 사용자와 소통할 수 있습니다.'),
+('프로젝트 협업 기능은 무엇인가요?', '팀원들과 작업을 분담하고 진행 상황을 공유하는 협업 도구를 제공합니다.'),
+('포인트는 어떻게 획득하나요?', '문제 풀이 완료, 게시글 작성, 다른 사용자 도움 등 다양한 활동으로 포인트를 받을 수 있습니다.'),
+('포인트는 어디에 사용할 수 있나요?', '포인트는 사이트 내 특별 콘텐츠 접근, 아이템 구매 등 다양한 용도로 활용할 수 있습니다.'),
+('비밀번호를 잊어버렸을 때 어떻게 하나요?', '로그인 페이지에서 ‘비밀번호 찾기’ 기능을 통해 이메일 인증 후 재설정할 수 있습니다.'),
+('모바일에서도 사이트를 사용할 수 있나요?', '네, 모바일 최적화가 되어 있어 스마트폰과 태블릿에서도 편리하게 이용할 수 있습니다.'),
+('내 프로필 정보는 어떻게 수정하나요?', '로그인 후 마이페이지에서 닉네임, 이메일 등 프로필 정보를 변경할 수 있습니다.'),
+('사이트 이용 중 오류가 발생하면 어떻게 신고하나요?', '고객센터 또는 피드백 메뉴를 통해 상세 내용을 작성해 보내주시면 빠르게 처리하겠습니다.');
+
+INSERT INTO qna (title, content, writer_id, is_answered, view_count) VALUES
+('Java에서 NullPointerException 해결 방법은?', 'NullPointerException이 발생할 때 어떻게 디버깅하면 좋을까요?', 'user03', TRUE, 45),
+('Python 리스트와 튜플 차이점 알려주세요.', '리스트와 튜플의 차이점과 사용 예시가 궁금합니다.', 'user07', TRUE, 32),
+('JavaScript 비동기 처리 방법?', 'Promise와 async/await 중 어떤걸 쓰는 게 좋나요?', 'user01', TRUE, 51),
+('Git에서 브랜치 병합 충돌 해결법', '충돌이 났을 때 안전하게 해결하는 팁이 있을까요?', 'user10', TRUE, 60),
+('Spring Boot에서 @Autowired가 안 될 때?', '의존성 주입이 제대로 되지 않을 때 점검할 부분이 무엇인가요?', 'user05', TRUE, 27),
+('JPA와 MyBatis 차이점', '두 기술의 장단점과 추천 사용 사례를 알고 싶어요.', 'user09', TRUE, 38),
+('코딩 테스트 준비 방법 추천해주세요.', '효율적인 문제 풀이 방법과 공부 루틴을 알고 싶어요.', 'user06', FALSE, 15),
+('CSS Flexbox와 Grid 차이점', '레이아웃 잡을 때 Flexbox와 Grid 중 언제 어떤걸 쓰면 좋나요?', 'user02', TRUE, 40),
+('Python에서 딕셔너리 키 순서 보장되나요?', 'Python 3.7 이상에서 딕셔너리 키 순서가 유지되는지 궁금합니다.', 'user08', FALSE, 20),
+('REST API 설계 원칙', '좋은 REST API를 설계하기 위한 기본 원칙은 무엇인가요?', 'user04', TRUE, 55),
+('Docker 이미지 최적화 방법', '이미지 크기를 줄이고 빌드 속도를 높이는 팁이 있을까요?', 'user01', FALSE, 22),
+('React 상태 관리 추천 라이브러리', '초보자가 배우기 좋은 상태 관리 라이브러리가 있을까요?', 'user03', TRUE, 30),
+('SQL 인덱스 잘못 사용하면 어떤 문제가?', '잘못된 인덱스 사용 시 성능 문제 예시가 궁금해요.', 'user07', TRUE, 28);
+
+INSERT INTO qna_reply (qna_id, content, writer_id) VALUES
+(1, 'NullPointerException은 참조 변수가 null인 상태에서 접근할 때 발생합니다. 디버깅 시 변수 값을 꼼꼼히 체크하세요.', 'admin'),
+(2, '리스트는 변경 가능하지만 튜플은 불변입니다. 튜플은 변경하지 않을 데이터에 적합합니다.', 'admin'),
+(3, 'async/await가 가독성 면에서 좋으며, Promise를 더 간단히 사용할 수 있습니다.', 'admin'),
+(4, '충돌 시 `git status`와 `git diff`를 확인하고, 수동으로 충돌 부분을 수정하세요.', 'admin'),
+(5, '@Autowired가 작동하지 않을 땐 컴포넌트 스캔 설정과 빈 등록을 먼저 확인하세요.', 'admin'),
+(6, 'JPA는 객체 중심이고 MyBatis는 SQL 중심입니다. 복잡한 쿼리는 MyBatis가 유리합니다.', 'admin'),
+(8, 'Flexbox는 1차원 레이아웃, Grid는 2차원 레이아웃에 적합합니다.', 'admin'),
+(10, 'REST API는 리소스 기반 URI, HTTP 메서드 활용, 무상태성을 지켜야 합니다.', 'admin'),
+(12, 'React의 기본 useState 외에 Redux, Recoil 등이 많이 쓰입니다. 초보자는 Context API도 추천합니다.', 'admin'),
+(13, '잘못된 인덱스는 오히려 쿼리 속도를 늦출 수 있으니 쿼리 실행 계획을 확인하세요.', 'admin');

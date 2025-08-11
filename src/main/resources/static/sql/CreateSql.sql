@@ -68,7 +68,7 @@ CREATE TABLE community_board (
     post_type VARCHAR(255) NOT NULL COMMENT '게시글 타입 (NORMAL, QUESTION)',
     staked_points INT DEFAULT 0 COMMENT '질문에 건 포인트',
     is_resolved BOOLEAN DEFAULT FALSE COMMENT '해결 여부',
-    created_at DATETIME NOT NULL COMMENT '작성일',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '작성일',
     PRIMARY KEY (board_no),
     CONSTRAINT fk_board_user FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE SET NULL
 ) COMMENT '커뮤니티 게시판';
@@ -77,7 +77,7 @@ CREATE TABLE comment (
     comment_no INT NOT NULL AUTO_INCREMENT COMMENT '댓글 번호 (PK)',
     content LONGTEXT NOT NULL COMMENT '내용',
     is_adopted BOOLEAN DEFAULT FALSE COMMENT '채택 여부',
-    created_at DATETIME NOT NULL COMMENT '작성일',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '작성일',
     user_id VARCHAR(10) COMMENT '댓글 작성자 ID (FK)',
     board_no INT COMMENT '게시글 번호 (FK)',
     PRIMARY KEY (comment_no),
@@ -90,7 +90,7 @@ CREATE TABLE pointlog (
     user_id VARCHAR(10) COMMENT '사용자 ID (FK)',
     points INT COMMENT '지급 또는 사용된 포인트',
     description VARCHAR(255) COMMENT '포인트 변경 사유',
-    created_at DATETIME NOT NULL COMMENT '로그 생성 시각',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '로그 생성 시각',
     PRIMARY KEY (id),
     CONSTRAINT fk_pointlog_user FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE SET NULL
 ) COMMENT '포인트 변동 내역';
