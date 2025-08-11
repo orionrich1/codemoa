@@ -173,7 +173,12 @@ public class InformationService {
 	
 	// 한 페이지에 해당하는 게시 글 리스트 요청을 처리하는 메서드
 	public Map<String, Object> contestList(int pageNum, String type, String keyword, int pageSize, int pageGrop, String order) {
-
+		
+		log.info("pageNum : " + pageNum);
+		log.info("type : " + type);
+		log.info("keyword : " + keyword);
+		log.info("order : " + order);
+		
 		int currentPage = pageNum;
 		int startRow = (currentPage - 1) * pageSize; 
 		int listCount = informationRecommendMapper.getContestCount(type, keyword);

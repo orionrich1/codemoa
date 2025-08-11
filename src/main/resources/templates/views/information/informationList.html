@@ -123,27 +123,29 @@
 
 		<div class="swiper mySwiper">
 			<div class="swiper-wrapper" id="content">
-		
-				<th:block th:each="lecture: ${lList}">
-					<div class="swiper-slide">
-						<div class="item-gallery-card">
-							<a th:href="@{/information/lectureDetail(no=${lecture.recommendNo}, pageNum=${currentPage}, order=${order})}">
-								<img th:src="@{/files/information/{img}(img=${lecture.file1})}" alt="이미지" class="item-cover-image">
-								<div class="item-hover-overlay">
-									<div class="item-hover-content">
-										[[${lecture.subtitle}]]
+				
+				<th:block th:each="lecture, iterStat : ${lList}">
+					<th:block th:if="${iterStat.index < 8}">
+						<div class="swiper-slide">
+							<div class="item-gallery-card">
+								<a th:href="@{/information/lectureDetail(no=${lecture.recommendNo}, pageNum=${currentPage}, order=${order})}">
+									<img th:src="@{/files/information/{img}(img=${lecture.file1})}" alt="이미지" class="item-cover-image">
+									<div class="item-hover-overlay">
+										<div class="item-hover-content">
+											[[${lecture.subtitle}]]
+										</div>
 									</div>
-								</div>
-							</a>
-							<div class="item-texts">
-								<strong>[[${lecture.title}]]</strong>
-								<div class="metadata">
-									<span><b class="fw-bold">평점:</b> [[${lecture.rating}]]</span>
-									<span><b class="fw-bold">작성자:</b> [[${lecture.userId}]]</span>
+								</a>
+								<div class="item-texts">
+									<strong>[[${lecture.title}]]</strong>
+									<div class="metadata">
+										<span><b class="fw-bold">평점:</b> [[${lecture.rating}]]</span>
+										<span><b class="fw-bold">작성자:</b> [[${lecture.userId}]]</span>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
+					</th:block>	
 				</th:block>
 				
 			</div>

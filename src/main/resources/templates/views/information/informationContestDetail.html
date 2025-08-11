@@ -79,12 +79,22 @@
 						</div>
 					</div>
 
-					<div class="text-center mt-4">
-						<th:block th:unless="${order}">
-							<a class="btn btn-secondary px-5" th:href="@{|/information/contestList?pageNum=${pageNum}|}">목록</a>
+				</div>
+				<div class="row my-3">
+					<div class="col text-center">
+						<input class="btn btn-warning" type="button" id="contestDetailUpdate" value="수정하기"/>
+						&nbsp;&nbsp;<input class="btn btn-danger"  type="button" id="contestDetailDelete" value="삭제하기" />			
+						&nbsp;&nbsp;
+						<!-- /* 일반 게시글 리스트에서 온 경우 */ -->
+						<th:block th:unless="order">
+							<input class="btn btn-primary" type="button" value="목록보기"
+								th:onclick="@{|location.href='contest?pageNum=${pageNum}&keyword=${keyword}&type=${type}'|}"/>
 						</th:block>						
-						<th:block th:if="${order}">
-							<a class="btn btn-secondary px-5" th:href="@{|/information/contestList?pageNum=${pageNum}&order=${order}|}">목록</a>
+
+						<!-- /* 검색 게시글 리스트에서 온 경우 */ -->
+						<th:block th:if="order">
+							<input class="btn btn-primary" type="button" value="목록보기"
+								th:onclick="@{|location.href='contest?pageNum=${pageNum}&order=${order}&keyword=${keyword}&type=${type}'|}"/>
 						</th:block>						
 					</div>
 
