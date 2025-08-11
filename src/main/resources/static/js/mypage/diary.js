@@ -55,10 +55,10 @@ $(function() {
 			                    </p>
 			                </div>
 			                <div class="d-flex align-items-center gap-2">
-			                    <button type="button" class="updateDiaryBtn btn btn-outline-primary btn-sm" data-id="${res.diaryId}">
+			                    <button type="button" class="updateDiaryBtn diaryBtn btn btn-outline-primary btn-sm" data-id="${res.diaryId}">
 			                        <i class="bi bi-pencil-square"></i>
 			                    </button>
-			                    <button type="button" class="deleteDiaryBtn btn btn-outline-danger btn-sm" data-id="${res.diaryId}">
+			                    <button type="button" class="deleteDiaryBtn diaryBtn btn btn-outline-danger btn-sm" data-id="${res.diaryId}">
 			                        <i class="bi bi-trash3"></i>
 			                    </button>
 			                </div>

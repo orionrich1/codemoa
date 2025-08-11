@@ -61,13 +61,13 @@ $(function() {
 
 				const buttonsHtml = `
 				    <!-- 수정 버튼 -->
-				    <button type="button" class="updateChecklistBtn btn btn-outline-primary btn-sm"
+				    <button type="button" class="updateChecklistBtn diaryBtn btn btn-outline-primary btn-sm"
 				            data-no="${data.checklistId}">
 				        <i class="bi bi-pencil-square"></i>
 				    </button>
 
 				    <!-- 삭제 버튼 -->
-				    <button type="button" class="deleteChecklistBtn btn btn-outline-danger btn-sm"
+				    <button type="button" class="deleteChecklistBtn diaryBtn btn btn-outline-danger btn-sm"
 				            data-no="${data.checklistId}">
 				        <i class="bi bi-trash3"></i>
 				    </button>
