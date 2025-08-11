@@ -69,8 +69,16 @@ $(function() {
 	
 	
 	
-	$("#typeSelector2").on('change', function () {
-	    const order = $("#typeSelector2").val();
+	$(document).on('change', "#typeSelector2", function () {
+		const urlParams = new URLSearchParams(window.location.search);
+		const pageNum = urlParams.get('pageNum') || 1;
+		const order = $("#typeSelector2").val();
+		const keyword = $("#contestSearch").val();
+		let type = "";
+
+		if (keyword !== null && keyword.trim() !== "") {
+		    type = "title";
+		}
 
 	    $.ajax({
 	        url: "/ordercontest.ajax",
@@ -276,16 +284,16 @@ function renderBookList(bList, pageNum, order, keyword, type) {
 
 		html += `
 			<div class="swiper-slide">
-				<div class="book-gallery-card">
+				<div class="item-gallery-card">
 					<a href="${detailUrl}">
-						<img src="/files/information/${book.file1}" alt="이미지" class="book-cover-image">
-						<div class="book-hover-overlay">
-							<div class="book-hover-content">
+						<img src="/files/information/${book.file1}" alt="이미지" class="item-cover-image">
+						<div class="item-hover-overlay">
+							<div class="item-hover-content">
 								${book.content}
 							</div>
 						</div>
 					</a>
-					<div class="book-texts">
+					<div class="item-texts">
 						<strong>${book.title}</strong>
 						<div class="metadata">
 							<span><b class="fw-bold">출판일:</b> ${book.pubDate.split("T")[0]}</span>
@@ -301,14 +309,14 @@ function renderBookList(bList, pageNum, order, keyword, type) {
 	resetSwiper(); // Swiper 재초기화
 }
 
-function renderContestList(resData, pageNum = 1) {
+function renderContestList(resData, pageNum = 1, order = '', keyword = '', type = '') {
     $("#content").empty();
     $("#Row").empty();
 
     let html = '';
 
     resData.cList.slice(0, 8).forEach(contest => {
-        const detailUrl = `/information/contestDetail?no=${contest.contestNo}&pageNum=${pageNum}`;
+        const detailUrl = `/information/contestDetail?no=${contest.contestNo}&pageNum=${pageNum}&order=${order || ''}&keyword=${encodeURIComponent(keyword || '')}&type=${encodeURIComponent(type || '')}`;
         const imgSrc = `/files/information/${contest.file1}`;
         const regDate = contest.regDate.split("T")[0];
         const startDate = contest.startDate.split("T")[0];
@@ -338,10 +346,11 @@ function renderContestList(resData, pageNum = 1) {
         `;
     });
 
-    $("#content").append(html);
+    $("#content").empty().append(html);
     renderPagination(resData);
     resetSwiper();
 }
+
 
 
 function renderLectureList(lList, pageNum, order, keyword, type) {
