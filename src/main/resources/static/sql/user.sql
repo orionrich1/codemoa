@@ -12,7 +12,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- 1. 기존 테이블 삭제 (존재할 경우)
 DROP TABLE IF EXISTS comment;
 DROP TABLE IF EXISTS community_board;
-DROP TABLE IF EXISTS point_log;
+DROP TABLE IF EXISTS pointlog;
 DROP TABLE IF EXISTS local_user;
 DROP TABLE IF EXISTS sns_user;
 DROP TABLE IF EXISTS user;
@@ -89,7 +89,7 @@ CREATE TABLE pointlog (
     event_type VARCHAR(255) NOT NULL COMMENT '포인트 이벤트 종류',
     created_at DATETIME NOT NULL COMMENT '로그 생성 시각',
     PRIMARY KEY (id),
-    CONSTRAINT fk_point_log_user FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE SET NULL
+    CONSTRAINT fk_pointlog_user FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE SET NULL
 ) COMMENT '포인트 변동 내역';
 
 -- ====================================================================================
@@ -136,7 +136,7 @@ INSERT INTO comment (user_id, board_no, content, created_at) VALUES
 ('user02', 4, '점검 시간은 언제부터 언제까지인가요?', NOW() - INTERVAL 1 DAY);
 
 -- 3-5. 포인트 로그 데이터 삽입
-INSERT INTO point_log (user_id, points, description, event_type, created_at) VALUES
+INSERT INTO pointlog (user_id, points, description, event_type, created_at) VALUES
 ('user10', 15, '게시글 작성', 'CREATE_POST', NOW() - INTERVAL 1 DAY),
 ('user09', 15, '게시글 작성', 'CREATE_POST', NOW() - INTERVAL 2 DAY),
 ('user10', 5, '댓글 작성', 'CREATE_COMMENT', NOW() - INTERVAL 1 DAY),
@@ -155,4 +155,4 @@ SELECT * FROM local_user;
 SELECT * FROM sns_user;
 SELECT * FROM community_board;
 SELECT * FROM comment;
-SELECT * FROM point_log;
+SELECT * FROM pointlog;
