@@ -144,11 +144,11 @@ function refreshList(problemList) {
 }
 
 function requestApi() {
-	var problemCategory = $("#problemCategory").text();
-	var problemTitle = $("#problemTitle").text();
-	var problemContent = $("#problemContent").text();
-	var problemAnswer = $("#problemAnswer").text();
-	var userAnswer = $("#userAnswer").text();
+	const problemCategory = $("#problemCategory").text();
+	const problemTitle = $("#problemTitle").text();
+	const problemContent = $("#problemContent").text();
+	const problemAnswer = $("#problemAnswer").text();
+	const userAnswer = $("#userAnswer").text();
 
 	var test = {
 		"problem": {
