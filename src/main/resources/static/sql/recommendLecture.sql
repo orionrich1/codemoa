@@ -1349,15 +1349,4 @@ Firebase 대신 오픈소스인 Supabase 선호하시는 분들도 많으시죠?
 select * from lecture;
 
 
---insert into lecture(user_id, title, subtitle, category, rating, reg_date, lecture_source, content1, content2)
---values ('admin', 
---'', -- 제목
---'', -- 부제목
---'', -- 카테고리
---5.0,
---now(),
---'', -- 출처
---'', -- 내용 1
---'' -- 내용 2
---);
 

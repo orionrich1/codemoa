@@ -611,30 +611,3 @@ now(), -- regDate
  664 -- totalPageNum
  );
 
-  insert into book(user_id, title, publisher, reg_date, pub_date, book_source, content, file1, rating, isbn, total_page_num)
-values('admin',
-'', -- title
-'', -- publisher
-now(), -- regDate
-' 00:00:00', -- pubDate
-'', -- bookSource
-'', -- content
-'', -- file1
-, -- rating
-'', -- isbn
- -- totalPageNum
- );
-
-  insert into book(user_id, title, publisher, reg_date, pub_date, book_source, content, file1, rating, isbn, total_page_num)
-values('admin',
-'', -- title
-'', -- publisher
-now(), -- regDate
-' 00:00:00', -- pubDate
-'', -- bookSource
-'', -- content
-'', -- file1
-, -- rating
-'', -- isbn
- -- totalPageNum
- );

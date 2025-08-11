@@ -3,88 +3,10 @@ $(function() {
 	
 	// 강좌관련
 	
-	// 게시글 쓰기 폼 유효성 검사
-	$("#lectureWriteForm").on("submit", function() {
-		if($("#writer").val().length <= 0) {
-			alert("작성자를 입력해 주세요");
-			$("#writer").focus();
-			return false;
-		}
-		
-		if($("#title").val().length <= 0) {
-			alert("제목를 입력해 주세요");
-			$("#title").focus();
-			return false;
-		}
-		
-		if($("#subtitle").val().length <= 0) {
-			alert("부제목를 입력해 주세요");
-			$("#subtitle").focus();
-			return false;
-		}
-				
-		if($("#category").val().length <= 0) {
-			alert("카테고리를 입력해 주세요");
-			$("#category").focus();
-			return false;
-		}
-		
-		if($("#content2").val().length <= 0) {
-			alert("내용을 입력해 주세요");
-			$("#content2").focus();
-			return false;
-		}
-		
-		let ratingVal = parseFloat($("#rating").val());
-		if ($("#rating").val().trim() === "" ||          
-		    isNaN(ratingVal) || ratingVal < 0 || ratingVal > 5) {
-		    alert("평점을 0에서 5 사이의 숫자로 정확히 입력해 주세요");
-		    $("#rating").focus();
-		    return false;
-		}
+	$("#lectureWriteForm, #lectureUpdateForm").on("submit", function() {
+	    return validateLectureForm(this.id);
 	});
-	
-	
-	// 게시글 수정 폼 유효성 검사
-	$("#lectureUpdateForm").on("submit", function() {
-		if($("#writer").val().length <= 0) {
-			alert("작성자를 입력해 주세요");
-			$("#writer").focus();
-			return false;
-		}
-		
-		if($("#title").val().length <= 0) {
-			alert("제목를 입력해 주세요");
-			$("#title").focus();
-			return false;
-		}
-		
-		if($("#subtitle").val().length <= 0) {
-			alert("부제목를 입력해 주세요");
-			$("#subtitle").focus();
-			return false;
-		}
-				
-		if($("#category").val().length <= 0) {
-			alert("카테고리를 입력해 주세요");
-			$("#category").focus();
-			return false;
-		}
-		
-		if($("#content2").val().length <= 0) {
-			alert("내용을 입력해 주세요");
-			$("#content2").focus();
-			return false;
-		}
-		
-		let ratingVal = parseFloat($("#rating").val());
-		if ($("#rating").val().trim() === "" ||          
-		    isNaN(ratingVal) || ratingVal < 0 || ratingVal > 5) {
-		    alert("평점을 0에서 5 사이의 숫자로 정확히 입력해 주세요");
-		    $("#rating").focus();
-		    return false;
-		}
-	});
+
 	
 	// 게시 글 상세보기 "삭제하기" 버튼 이벤트
 	$("#lectureDetailDelete").on("click", function() {
@@ -120,62 +42,10 @@ $(function() {
 	
 	// 공모전 관련 
 	
-	// 게시글 쓰기 폼 유효성 검사
-	$("#contestWriteForm").on("submit", function() {
-		if($("#writer").val().length <= 0) {
-			alert("작성자를 입력해 주세요");
-			$("#writer").focus();
-			return false;
-		}
-		
-		if($("#title").val().length <= 0) {
-			alert("제목를 입력해 주세요");
-			$("#title").focus();
-			return false;
-		}
-		
-		if($("#pass").val().length <= 0) {
-			alert("비밀번호를 입력해 주세요");
-			$("#pass").focus();
-			return false;
-		}
-		
-		if($("#content").val().length <= 0) {
-			alert("내용을 입력해 주세요");
-			$("#content").focus();
-			return false;
-		}
-		
+	$("#contestWriteForm, #contestUpdateForm").on("submit", function() {
+	    return validateContestForm(this.id);
 	});
-	
-	
-	// 게시글 수정 폼 유효성 검사
-	$("#contestUpdateForm").on("submit", function() {
-		if($("#writer").val().length <= 0) {
-			alert("작성자를 입력해 주세요");
-			$("#writer").focus();
-			return false;
-		}
-		
-		if($("#title").val().length <= 0) {
-			alert("제목를 입력해 주세요");
-			$("#title").focus();
-			return false;
-		}
-		
-		if($("#category").val().length <= 0) {
-			alert("카테고리를 입력해 주세요");
-			$("#category").focus();
-			return false;
-		}
-		
-		if($("#content2").val().length <= 0) {
-			alert("내용을 입력해 주세요");
-			$("#content2").focus();
-			return false;
-		}
-		
-	});
+
 	
 	// 게시 글 상세보기 "삭제하기" 버튼 이벤트
 	$("#contestDetailDelete").on("click", function() {
@@ -208,78 +78,13 @@ $(function() {
 	});
 	
 	
+	
 	// 도서 관련
 	
-	// 게시글 쓰기 폼 유효성 검사
-	$("#bookWriteForm").on("submit", function() {
-		if($("#writer").val().length <= 0) {
-			alert("작성자를 입력해 주세요");
-			$("#writer").focus();
-			return false;
-		}
-		
-		if($("#title").val().length <= 0) {
-			alert("제목를 입력해 주세요");
-			$("#title").focus();
-			return false;
-		}
-		
-		if($("#pass").val().length <= 0) {
-			alert("비밀번호를 입력해 주세요");
-			$("#pass").focus();
-			return false;
-		}
-		
-		if($("#content").val().length <= 0) {
-			alert("내용을 입력해 주세요");
-			$("#content").focus();
-			return false;
-		}
-		
-		let ratingVal = parseFloat($("#rating").val());
-		if ($("#rating").val().trim() === "" ||          
-		    isNaN(ratingVal) || ratingVal < 0 || ratingVal > 10) {
-		    alert("평점을 0에서 10 사이의 숫자로 정확히 입력해 주세요");
-		    $("#rating").focus();
-		    return false;
-		}
+	$("#bookWriteForm, #bookUpdateForm").on("submit", function() {
+	    return validateBookForm(this.id);
 	});
 	
-	
-	// 게시글 수정 폼 유효성 검사
-	$("#bookUpdateForm").on("submit", function() {
-		if($("#writer").val().length <= 0) {
-			alert("작성자를 입력해 주세요");
-			$("#writer").focus();
-			return false;
-		}
-		
-		if($("#title").val().length <= 0) {
-			alert("제목를 입력해 주세요");
-			$("#title").focus();
-			return false;
-		}
-		
-		if($("#category").val().length <= 0) {
-			alert("카테고리를 입력해 주세요");
-			$("#category").focus();
-			return false;
-		}
-		
-		if($("#content2").val().length <= 0) {
-			alert("내용을 입력해 주세요");
-			$("#content2").focus();
-			return false;
-		}
-		
-		let ratingVal = parseFloat($("#rating").val());
-		if ($("#rating").val().trim() === "" ||          
-		    isNaN(ratingVal) || ratingVal < 0 || ratingVal > 10) {
-		    alert("평점을 0에서 10 사이의 숫자로 정확히 입력해 주세요");
-		    $("#rating").focus();
-		    return false;
-		}
-	});
 		
 	$("#bookDetailDelete").on("click", function() {
 		
@@ -318,3 +123,167 @@ $(function() {
 	});
 	
 });
+
+function validateLectureForm(formId) {
+    const $form = $(`#${formId}`);
+    
+    if ($form.find("#userId").val().trim().length <= 0) {
+        alert("작성자를 입력해 주세요");
+        $form.find("#userId").focus();
+        return false;
+    }
+
+    let ratingVal = parseFloat($form.find("#rating").val());
+    if ($form.find("#rating").val().trim() === "" ||
+        isNaN(ratingVal) || ratingVal < 0 || ratingVal > 5) {
+        alert("평점을 0에서 5 사이의 숫자로 정확히 입력해 주세요");
+        $form.find("#rating").focus();
+        return false;
+    }
+
+    if ($form.find("#title").val().trim().length <= 0) {
+        alert("제목을 입력해 주세요");
+        $form.find("#title").focus();
+        return false;
+    }
+
+    if ($form.find("#subtitle").val().trim().length <= 0) {
+        alert("부제목을 입력해 주세요");
+        $form.find("#subtitle").focus();
+        return false;
+    }
+
+    if ($form.find("#category").val().trim().length <= 0) {
+        alert("카테고리를 입력해 주세요");
+        $form.find("#category").focus();
+        return false;
+    }
+
+    if ($form.find("#content1").val().trim().length <= 0) {
+        alert("내용을 입력해 주세요");
+        $form.find("#content1").focus();
+        return false;
+    }
+
+    if ($form.find("#content2").val().trim().length <= 0) {
+        alert("내용을 입력해 주세요");
+        $form.find("#content2").focus();
+        return false;
+    }
+
+    return true;
+}
+
+function validateContestForm(formId) {
+    const $form = $(`#${formId}`);
+
+    if ($form.find("#userId").val().trim().length <= 0) {
+        alert("작성자를 입력해 주세요");
+        $form.find("#userId").focus();
+        return false;
+    }
+
+    if ($form.find("#title").val().trim().length <= 0) {
+        alert("제목을 입력해 주세요");
+        $form.find("#title").focus();
+        return false;
+    }
+
+    if ($form.find("#hostOrganization").val().trim().length <= 0) {
+        alert("주최기관을 입력해 주세요");
+        $form.find("#hostOrganization").focus();
+        return false;
+    }
+
+    const startDate = $form.find("#start").val();
+    const endDate = $form.find("#end").val();
+
+    if (startDate.trim().length <= 0) {
+        alert("시작일을 입력해 주세요");
+        $form.find("#start").focus();
+        return false;
+    }
+
+    if (endDate.trim().length <= 0) {
+        alert("마감일을 입력해 주세요");
+        $form.find("#end").focus();
+        return false;
+    }
+
+    if (new Date(startDate) > new Date(endDate)) {
+        alert("시작일은 마감일보다 이전이어야 합니다");
+        $form.find("#start").focus();
+        return false;
+    }
+
+    if ($form.find("#pass").val().trim().length <= 0) {
+        alert("비밀번호를 입력해 주세요");
+        $form.find("#pass").focus();
+        return false;
+    }
+
+    if ($form.find("#content").val().trim().length <= 0) {
+        alert("내용을 입력해 주세요");
+        $form.find("#content").focus();
+        return false;
+    }
+
+    return true;
+}
+
+function validateBookForm(formId) {
+    const $form = $(`#${formId}`);
+
+    if ($form.find("#userId").val().trim().length <= 0) {
+        alert("작성자를 입력해 주세요");
+        $form.find("#userId").focus();
+        return false;
+    }
+
+    if ($form.find("#title").val().trim().length <= 0) {
+        alert("제목을 입력해 주세요");
+        $form.find("#title").focus();
+        return false;
+    }
+
+    if ($form.find("#pass").val().trim().length <= 0) {
+        alert("비밀번호를 입력해 주세요");
+        $form.find("#pass").focus();
+        return false;
+    }
+
+    const pubDate = $form.find("#pub").val();
+    if (pubDate.trim().length <= 0) {
+        alert("시작일을 입력해 주세요");
+        $form.find("#pub").focus();
+        return false;
+    }
+
+    if ($form.find("#content").val().trim().length <= 0) {
+        alert("내용을 입력해 주세요");
+        $form.find("#content").focus();
+        return false;
+    }
+
+    let ratingVal = parseFloat($form.find("#rating").val());
+    if ($form.find("#rating").val().trim() === "" ||
+        isNaN(ratingVal) || ratingVal < 0 || ratingVal > 10) {
+        alert("평점을 0에서 10 사이의 숫자로 정확히 입력해 주세요");
+        $form.find("#rating").focus();
+        return false;
+    }
+
+    if ($form.find("#isbn").val().trim().length <= 0) {
+        alert("ISBN 번호를 입력해 주세요");
+        $form.find("#isbn").focus();
+        return false;
+    }
+
+    if ($form.find("#totalPageNum").val().trim().length <= 0) {
+        alert("페이지 수를 입력해 주세요");
+        $form.find("#totalPageNum").focus();
+        return false;
+    }
+
+    return true;
+}
