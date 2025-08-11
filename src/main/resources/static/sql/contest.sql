@@ -1630,13 +1630,13 @@ T. 02-6372-5001/ E. contest@k-paas.or.kr
 
 select * from contest;
 
-insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content)
-values('admin',
-'', -- 제목
-'', -- 주최기관
-now(), -- 등록일
-'2025-07-07 00:00:00', -- 시작일 '2025-07-23 00:00:00'
-'2025-08-14 23:59:59', -- 마감일
-'', -- 출처
-'' -- 내용
-);
+--insert into contest(user_id, title, host_organization, reg_date, start_date, end_date, contest_source, content)
+--values('admin',
+--'', -- 제목
+--'', -- 주최기관
+--now(), -- 등록일
+--'2025-07-07 00:00:00', -- 시작일 '2025-07-23 00:00:00'
+--'2025-08-14 23:59:59', -- 마감일
+--'', -- 출처
+--'' -- 내용
+--);

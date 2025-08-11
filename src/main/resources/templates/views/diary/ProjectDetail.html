@@ -5,6 +5,7 @@
 
 <div layout:fragment="content">
 	<!-- 임시 css 사용중 -->
+	<link rel="stylesheet" th:href="@{/css/mypage/mypage.css}" />
 	<link rel="stylesheet" th:href="@{/css/mypage/diary.css}" />
 
   <!-- 프로젝트 개요 -->
@@ -40,13 +41,13 @@
 					        </span>
 					
 					        <!-- 수정 버튼 -->
-					        <button type="button" class="updateChecklistBtn btn btn-outline-primary btn-sm"
+					        <button type="button" class="updateChecklistBtn diaryBtn btn btn-outline-primary btn-sm"
 					                th:data-no="${item.checklistId}">
 					            <i class="bi bi-pencil-square"></i>
 					        </button>
 					
 					        <!-- 삭제 버튼 -->
-					        <button type="button" class="deleteChecklistBtn btn btn-outline-danger btn-sm"
+					        <button type="button" class="deleteChecklistBtn diaryBtn btn btn-outline-danger btn-sm"
 					                th:data-no="${item.checklistId}">
 					            <i class="bi bi-trash3"></i>
 					        </button>
@@ -98,11 +99,11 @@
 			
 			            <!-- 수정/삭제 버튼 -->
 			            <div class="d-flex align-items-center gap-2">
-			                <button type="button" class="updateDiaryBtn btn btn-outline-primary btn-sm"
+			                <button type="button" class="updateDiaryBtn diaryBtn btn btn-outline-primary btn-sm"
 			                	th:data-id="${diary.diaryId}">
 			                    <i class="bi bi-pencil-square"></i>
 			                </button>
-			                <button type="button" class="deleteDiaryBtn btn btn-outline-danger btn-sm"
+			                <button type="button" class="deleteDiaryBtn diaryBtn btn btn-outline-danger btn-sm"
 			                	th:data-id="${diary.diaryId}">
 			                    <i class="bi bi-trash3"></i>
 			                </button>
