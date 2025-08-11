@@ -37,9 +37,12 @@ public class InformationAjaxController {
 
 	
 	@GetMapping("/ordercontest.ajax")
-	public Map<String, Object> ordercontest(@RequestParam("order") String order) {
+	public Map<String, Object> ordercontest(@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword,
+			@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+			@RequestParam(value = "order", required = false, defaultValue = "null") String order,
+			@RequestParam(value = "type", required = false, defaultValue = "null") String type) {
 		
-		return informationService.contestList(1, "null", "null", 8, 10, order);
+		return informationService.contestList(pageNum, type, keyword, 8, 10, order);
 	}
 	
 	@GetMapping("/contestsearch")
@@ -52,9 +55,9 @@ public class InformationAjaxController {
 	
 	
 	@GetMapping("/orderbook.ajax")
-	public Map<String, Object> orderBook(@RequestParam("keyword") String keyword,
-			@RequestParam("order") String order,
+	public Map<String, Object> orderBook(@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword,
 			@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+			@RequestParam(value = "order", required = false, defaultValue = "null") String order,
 			@RequestParam(value = "type", required = false, defaultValue = "null") String type) {
 		
 		return informationService.bookList(pageNum, type, keyword, 8, 10, order);

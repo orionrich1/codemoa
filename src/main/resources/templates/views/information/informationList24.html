@@ -1,0 +1,185 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}">
+	
+	<th:block layout:fragment="content">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>  
+		
+		<th:block>
+			<link th:href="@{/css/information/listLayout3.css}" rel="stylesheet" />
+			<script th:src="@{/js/information/ajax.js}"></script>
+		</th:block>
+		
+		<main id="container" tabindex="0">
+			<div id="spot">
+				<div class="layout">
+					<div class="in">
+						<h3 class="tit">Contestssss</h3>
+						<div class="t_wrap">
+							<div id="lnb">
+								<ul id="depthMenu">
+								<!-- 	<li class="active"><a href="#"><span>2depth</span></a></li>
+									<li><a href="#"><span>2depth</span></a></li>
+									<li><a href="#"><span>2depth</span></a></li> -->
+								<li class="active"><a href="javascript:goMenu(&#39;/reqst/combine/eCombineList.do&#39;,&#39;null&#39;);"><span>Contents</span></a></li></ul>
+							</div>
+							<ul class="navi">
+								<li><a href="https://library.nih.go.kr/spec/main.do">HOME</a></li>
+								<li>
+									<th:block th:if="${order == 'startDate'}">
+										<select name="order" id="typeSelector2">
+											<option value="contestNo">기존 순서</option>
+											<option value="endDate">마감일</option>
+											<option value="startDate" selected>시작일</option>
+										</select>
+									</th:block>
+									<th:block th:if="${order == 'endDate'}">
+										<select name="order" id="typeSelector2">
+											<option value="contestNo">기존 순서</option>
+											<option value="endDate" selected>마감일</option>
+											<option value="startDate">시작일</option>
+										</select>
+									</th:block>
+									<th:block th:if="${order != 'startDate' and order != 'endDate'}">
+										<select name="order" id="typeSelector2">
+											<option value="contestNo" disabled selected>정렬기준</option>
+											<option value="contestNo">기존 순서</option>
+											<option value="endDate">마감일</option>
+											<option value="startDate">시작일</option>
+										</select>
+									</th:block>
+								</li>
+								<li><a th:href="@{/information}">통합검색</a></li>
+								<li><a th:href="@{contestAdd}">글쓰기</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div id="content" style="min-height: 267px;">
+				<div class="layout">
+					<div class="bod-list-body">
+						<ul class="bod-gallery-list">
+							
+							<div class="swiper mySwiper">
+								<div class="swiper-wrapper">
+							
+									<th:block th:each="contest: ${cList}">
+										<div class="swiper-slide">
+											<div class="swiper-area">
+												<div class="cover">
+													<div class="cover-content">
+														<img th:src="@{/files/information/{img}(img=${contest.file1})}" alt="이미지를 찾을 수 없습니다.">
+														<div class="texts">
+															<strong>[[${contest.title}]]</strong>
+															<span>
+																<i data-color="2">기한</i> [[${#dates.format(contest.startDate, 'yyyy-MM-dd')}]] ~ [[${#dates.format(contest.endDate, 'yyyy-MM-dd HH:mm')}]]
+															</span>
+															<span>
+																<i data-color="1">주최기관</i> [[${contest.hostOrganization}]]
+															</span>
+														</div>
+														<a th:href="@{/information/contestDetail(no=${contest.contestNo}, pageNum=${currentPage}, order=${order})}">
+															<div class="cover-item">
+																<div class="cover-text">
+																	<span class="cover-label">
+																		<p>작성자 : [[${contest.userId}]]</p>
+																		<p>등록일 : [[${contest.regDate}]]</p>
+																	</span>
+																</div>
+															</div>
+														</a>
+													</div>
+											
+												</div>
+											</div>
+										</div>
+									</th:block>
+									
+								</div>
+							</div>
+									
+						</ul>
+					</div>
+				</div>
+			</div>
+			
+			<!-- 패이지 네이션 -->
+			<div class="row" id="Row">
+				<div class="col">
+					<!-- 검색 요청이면서 게시글이 존재할 경우 링크에 type, keyword -->
+					<nav th:if="${order != null and not #lists.isEmpty(cList)}" aria-label="Page navigation example">
+						<ul class="pagination justify-content-center">
+						
+							<li class="page-item" th:if="${startPage > pageGroup}">
+								<!-- /* <a class="page-link" th:href="@{boardList(pageNum=${startPage-1})}">Pre</a> */ -->
+								<a class="page-link" th:href="@{|contest?pageNum=${startPage-1}&order=${order}|}">Pre</a>
+							</li>
+							 
+							<!-- /* <forEach var="i begin="${startPage}" end="${endPage}"> */-->
+							<li th:each="num : ${#numbers.sequence(startPage, endPage)}"
+								th:classappend="${num == currentPage} ? 'active'" class="page-item">
+								<th:block th:if="${num != currentPage}">
+									<a class="page-link" th:href="@{|contest?pageNum=${num}&order=${order}|}" th:text="${num}"></a>
+								</th:block>									
+								<th:block th:unless="${num != currentPage}">
+									<a class="page-link" th:text="${num}"></a>
+								</th:block>									
+								
+							</li>
+							
+							<li class="page-item" th:if="${endPage < pageCount}">
+							 	<a class="page-link" th:href="@{|contest?pageNum=${startPage+pageGroup}&order=${order}|}">Next</a>
+							</li>
+						  
+						</ul>
+					</nav>
+					<!-- 검색 요청이 아니면서 게시글이 존재할 경우 -->
+					<nav th:if="${order == null and not #lists.isEmpty(cList)}" aria-label="Page navigation example">
+						<ul class="pagination justify-content-center">
+						
+							<li class="page-item" th:if="${startPage > pageGroup}">
+								<!-- /* <a class="page-link" th:href="@{boardList(pageNum=${startPage-1})}">Pre</a> */ -->
+								<a class="page-link" th:href="@{|contest?pageNum=${startPage-1}|}">Pre</a>
+							</li>
+							 
+							<!-- /* <forEach var="i begin="${startPage}" end="${endPage}"> */-->
+							<li th:each="num : ${#numbers.sequence(startPage, endPage)}"
+								th:classappend="${num == currentPage} ? 'active'" class="page-item">
+								<th:block th:if="${num != currentPage}">
+									<a class="page-link" th:href="@{|contest?pageNum=${num}|}" th:text="${num}"></a>
+								</th:block>									
+								<th:block th:unless="${num != currentPage}">
+									<a class="page-link" th:text="${num}"></a>
+								</th:block>									
+								
+							</li>
+							
+							<li class="page-item" th:if="${endPage < pageCount}">
+							 	<a class="page-link" th:href="@{|contest?pageNum=${startPage+pageGroup}|}">Next</a>
+							</li>
+						  
+						</ul>
+					</nav>
+				</div>
+			</div>
+			
+		</main>
+	</th:block>
+</html>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+	
+	const swiper = new Swiper(".mySwiper", {
+		slidesPerView: 4, // (가로)한 줄에 4개의 슬라이드가 보임
+	  	grid: {
+	    	rows: 2,
+	   		fill: "row",
+	  	},
+	  	spaceBetween: 20,
+	});
+		  
+
+</script>
