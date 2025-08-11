@@ -34,16 +34,10 @@ $(function() {
 	// Tab 누르면 \t 입력되는 함수
 	$(".useTabkey").on("keydown", function(e) {
 		if (e.key == "Tab") {
-			// 기본 Tab 이벤트 정지
 			e.preventDefault();
-
 			const start = this.selectionStart;
 			const end = this.selectionEnd;
-
-			// 현재 커서 위치에 \t 삽입
 			this.value = this.value.substring(0, start) + "\t" + this.value.substring(end);
-
-			// 커서를 탭 문자 뒤로 이동
 			this.selectionStart = this.selectionEnd = start + 1;
 		}
 	});
@@ -59,13 +53,11 @@ $(function() {
 			title.focus();
 			return false;
 		}
-
 		if (content.val().length <= 0) {
 			alert("문제 내용을 작성해주세요.");
 			content.focus();
 			return false;
 		}
-
 		if (category.val().length <= 0) {
 			alert("프로그래밍 언어를 작성해주세요.");
 			category.focus();
@@ -75,14 +67,13 @@ $(function() {
 
 	$("#questionForm").submit(function(e) {
 		e.preventDefault();
-
 		questionApi();
 	});
 });
 
 function requestList() {
 	$.ajax({
-		url: '/problems/listUpdate',     // 백엔드 URL
+		url: '/problems/listUpdate',
 		type: 'POST',
 		contentType: 'application/json',
 		data: JSON.stringify({
@@ -98,30 +89,57 @@ function requestList() {
 	});
 }
 
+/**
+ * AI 웹 퍼블리셔 (핵심 수정):
+ * 서버에서 받은 문제 목록(JSON)을 사용하여, 세련된 디자인의 HTML을 생성하는 함수.
+ */
 function refreshList(problemList) {
-	const tbody = $('#problemTableBody');
-	tbody.empty(); // 기존 행 제거
+	const listContainer = $('#problemTableBody');
+	listContainer.empty(); // 기존 목록 초기화
 
-	if (problemList.length === 0) {
-		tbody.append(`
-	    <tr>
-	      <td colspan="5">문제가 존재하지 않습니다. 관리자에게 문의해주세요.</td>
-	    </tr>
-	  `);
+	if (!problemList || problemList.length === 0) {
+		listContainer.append(`
+            <li class="list-group-item text-center p-5 text-secondary">
+                해당 조건에 맞는 문제가 없습니다.
+            </li>
+        `);
 		return;
 	}
 
 	problemList.forEach(problem => {
-		const row = `
-	    <tr class="problems" style="cursor: pointer;" onclick="location.href='problemDetail?problemId=${problem.problemId}'">
-	      <td>${problem.category}</td>
-	      <td>${problem.title}</td>
-	      <td>${problem.difficulty}</td>
-	      <td>${problem.userId}</td>
-	      <td>${new Date(problem.regDate).toISOString().slice(0, 10)}</td>
-	    </tr>
-	  `;
-		tbody.append(row);
+		const getDifficultyBadgeClass = (difficulty) => {
+			switch (difficulty) {
+				case '상': return 'bg-danger';
+				case '중': return 'bg-warning text-dark';
+				case '하': return 'bg-success';
+				default: return 'bg-secondary';
+			}
+		};
+		
+		const formatDate = (dateString) => new Date(dateString).toISOString().split('T')[0];
+
+		const problemHtml = `
+			<li class="list-group-item list-group-item-action problem-list-item p-3" style="cursor: pointer;"
+				onclick="location.href='problemDetail?problemId=${problem.problemId}'">
+				<div class="d-flex justify-content-between align-items-center">
+					<div class="flex-grow-1">
+						<div class="d-flex align-items-center gap-3">
+							<span class="badge text-bg-dark" style="width: 90px;">${problem.category}</span>
+							<span class="problem-title">${problem.title}</span>
+						</div>
+						<div class="d-flex align-items-center gap-3 problem-meta mt-2">
+							<div style="width: 90px;"></div>
+							<span>${problem.userId}</span>
+							<span>${formatDate(problem.regDate)}</span>
+						</div>
+					</div>
+					<div class="flex-shrink-0">
+						<span class="badge ${getDifficultyBadgeClass(problem.difficulty)} fs-6">${problem.difficulty}</span>
+					</div>
+				</div>
+			</li>
+		`;
+		listContainer.append(problemHtml);
 	});
 }
 
@@ -180,4 +198,4 @@ function questionApi() {
 		.catch(err => {
 			$(".code-block").text("❌ 오류가 발생했습니다: " + err.message);
 		});;
-} 
+}

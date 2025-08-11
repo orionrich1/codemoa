@@ -1,5 +1,6 @@
 package com.codemoa.project.domain.information.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.codemoa.project.domain.information.entity.Book;
+import com.codemoa.project.domain.information.entity.Contest;
 import com.codemoa.project.domain.information.service.InformationService;
 
 @RestController
@@ -50,7 +53,9 @@ public class InformationAjaxController {
 	
 	@GetMapping("/orderbook.ajax")
 	public Map<String, Object> orderBook(@RequestParam("keyword") String keyword,
-			@RequestParam("order") String order) {
+			@RequestParam("order") String order,
+			@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+			@RequestParam(value = "type", required = false, defaultValue = "null") String type) {
 		
 		return informationService.bookList(pageNum, type, keyword, 8, 10, order);
 	}
@@ -63,4 +68,3 @@ public class InformationAjaxController {
 		return informationService.bookList(1, "title", keyword, 8, 10, order);
 	}
 }
-

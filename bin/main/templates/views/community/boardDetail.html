@@ -1,217 +1,176 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default_layout}">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+      layout:decorate="~{layouts/default_layout}">
 
 <body>
 
-	<div layout:fragment="content">
-		<style>
-		body {
-			background-color: #f8f9fa;
-		}
-		.card {
-			border: none;
-			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-		}
-		.card-header {
-			background-color: #fff;
-			border-bottom: 1px solid #eee;
-		}
-		.board-title {
-			font-size: 2rem;
-			font-weight: 600;
-		}
-		.board-meta {
-			font-size: 0.9rem;
-			color: #6c757d;
-		}
-		.board-content {
-			min-height: 200px;
-			padding: 2rem 0;
-			font-size: 1.1rem;
-			line-height: 1.8;
-		}
-		.btn-group .btn {
-			margin-left: 5px;
-		}
-		.comment-card {
-			background-color: #f8f9fa;
-		}
-		.comment-form-card {
-			background-color: #f8f9fa;
-		}
-		</style>
+<div layout:fragment="content">
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
 
-		<div class="container my-5">
-			<div class="card">
-				<div class="card-header p-4">
-					<div class="d-flex align-items-center">
-						<h1 class="board-title mb-0" th:text="${board.title}">게시글 제목</h1>
-						<span class="badge bg-warning text-dark fs-6 ms-3" th:if="${board.stakedPoints > 0}" th:text="|${board.stakedPoints} 포인트|"> </span>
-					</div>
-					<div class="d-flex justify-content-between align-items-center board-meta mt-3">
-						<div class="d-flex align-items-center" style="gap: 16px;">
-							<div th:replace="~{fragments/_userProfile :: userProfile(nickname=${board.authorNickname}, iconName=${board.authorGradeIconName})}"></div>
-							<span class="mx-2">|</span> 
-							<span th:text="'작성일 ' + ${#temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm')}">작성일</span>
-						</div>
-						<span class="badge bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill" th:text="${board.category}">카테고리</span>
-					</div>
-				</div>
-				<div class="card-body p-4">
-					<div class="board-content" th:utext="${board.content}">본문 내용</div>
-				</div>
-				<div class="card-footer bg-white p-3 d-flex justify-content-end">
-					<div class="btn-group">
-					
-						<div th:if="${#authentication.name == board.authorId}">
-							<a th:href="@{/boards/{boardNo}/edit(boardNo=${board.boardNo})}" id="update-btn" class="btn btn-secondary">수정</a>
-							<button id="delete-btn" class="btn btn-danger">삭제</button>
-						</div>
-						
-						<a href="/list" class="btn btn-primary"><i class="bi bi-list-ul"></i> 목록으로</a>
-					</div>
-				</div>
-			</div>
+                <div class="card">
+                    <div class="card-body p-4 p-md-5">
+                        <div class="border-bottom pb-3 mb-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <h1 class="h3 mb-0" th:text="${board.title}">게시글 제목</h1>
+                                <span class="badge bg-primary ms-2" th:if="${board.stakedPoints > 0}" th:text="|${board.stakedPoints}P|"></span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center" style="gap: 16px;">
+                                    <div th:replace="~{fragments/_userProfile :: userProfile(nickname=${board.authorNickname}, iconName=${board.authorGradeIconName})}"></div>
+                                    <span class="text-secondary small" th:text="'작성일 ' + ${#temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm')}">작성일</span>
+                                </div>
+                                <span class="badge text-bg-secondary" th:text="${board.category}">카테고리</span>
+                            </div>
+                        </div>
+                        
+                        <div class="py-4" style="min-height: 200px;" th:utext="${board.content}">
+                            본문 내용
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white p-3 d-flex justify-content-end align-items-center gap-2">
+                        <div th:if="${#authentication.name == board.authorId}">
+                            <a th:href="@{/boards/{boardNo}/edit(boardNo=${board.boardNo})}" class="btn btn-outline-secondary">수정</a>
+                            <button id="delete-btn" class="btn btn-danger">삭제</button>
+                        </div>
+                        <a href="/list" class="btn btn-primary"><i class="bi bi-list-ul"></i> 목록으로</a>
+                    </div>
+                </div>
 
-			<div class="card mt-4">
-				<div class="card-header bg-white">
-					<h5 class="mb-0">
-						<i class="bi bi-chat-dots-fill"></i> 댓글 <span th:text="${#lists.size(board.comments)}">0</span>개
-					</h5>
-				</div>
-				<div class="card-body">
-					<div th:if="${#lists.isEmpty(board.comments)}" class="text-center py-4 text-muted">등록된 댓글이 없습니다.</div>
-					<ul class="list-group list-group-flush" th:unless="${#lists.isEmpty(board.comments)}">
-						<li class="list-group-item px-0" th:each="comment : ${board.comments}">
-							<div class="d-flex justify-content-between align-items-center">
-								<div class="d-flex align-items-center" style="gap: 16px;">
-									<div th:replace="~{fragments/_userProfile :: userProfile(nickname=${comment.authorNickname}, iconName=${comment.authorGradeIconName})}"></div>
-									<small class="text-muted ms-2" th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}">작성일</small> <span th:if="${comment.isAdopted}" class="badge bg-success ms-2">채택됨</span>
-								</div>
-								<div>
-									<button th:if="${board.stakedPoints > 0 and !board.isResolved and !comment.isAdopted and #authentication.name == board.authorId}" th:attr="data-comment-no=${comment.commentNo}" class="btn btn-sm btn-outline-success adopt-btn">
-										<i class="bi bi-check-circle"></i> 채택
-									</button>
-								</div>
-							</div>
-							<p class="mt-2 mb-0" th:text="${comment.content}">댓글 내용입니다.</p>
-						</li>
-					</ul>
-				</div>
-			</div>
+                <div class="card mt-4">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0"><i class="bi bi-chat-dots-fill"></i> 댓글 <span th:text="${#lists.size(board.comments)}">0</span>개</h5>
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${#lists.isEmpty(board.comments)}" class="text-center py-4 text-secondary">등록된 댓글이 없습니다.</div>
+                        <ul class="list-group list-group-flush" th:unless="${#lists.isEmpty(board.comments)}">
+                            <li class="list-group-item px-0 py-3" th:each="comment : ${board.comments}">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div class="d-flex align-items-center" style="gap: 16px;">
+                                        <div th:replace="~{fragments/_userProfile :: userProfile(nickname=${comment.authorNickname}, iconName=${comment.authorGradeIconName})}"></div>
+                                        <small class="text-secondary ms-2" th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}"></small>
+                                    </div>
+                                    <span th:if="${comment.isAdopted}" class="badge bg-success">채택됨</span>
+                                </div>
+                                <p class="mt-2 mb-0" th:text="${comment.content}">댓글 내용입니다.</p>
+                                <div class.text-end th:if="${board.stakedPoints > 0 and !board.isResolved and !comment.isAdopted and #authentication.name == board.authorId}">
+                                    <button th:attr="data-comment-no=${comment.commentNo}" class="btn btn-sm btn-outline-success adopt-btn">
+                                        <i class="bi bi-check-circle"></i> 채택
+                                    </button>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
 
-			<div class="card mt-4 comment-form-card" th:if="${!board.isResolved}">
-				<div class="card-body">
-					<form id="commentForm">
-						<div class="mb-3">
-							<textarea class="form-control" id="commentContent" rows="3" placeholder="댓글을 입력하세요" required></textarea>
-						</div>
-						<div class="text-end">
-							<button type="submit" class="btn btn-primary">
-								<i class="bi bi-pencil-square"></i> 등록
-							</button>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
-	
-	<th:block layout:fragment="script">
-		<script th:inline="javascript">
-			const token = document.querySelector("meta[name='_csrf']")?.content;
-			const header = document.querySelector("meta[name='_csrf_header']")?.content;
-			const headers = { 'Content-Type': 'application/json' };
-			if (token && header) {
-				headers[header] = token;
-			}
+                <div class="card mt-4" th:if="${!board.isResolved}">
+                    <div class="card-body p-4">
+                        <form id="commentForm">
+                            <div class="mb-3">
+                                <textarea class="form-control" id="commentContent" rows="3" placeholder="댓글을 입력하세요" required></textarea>
+                            </div>
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-primary"><i class="bi bi-pencil-square"></i> 등록</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        const token = document.querySelector("meta[name='_csrf']")?.content;
+        const header = document.querySelector("meta[name='_csrf_header']")?.content;
+        const headers = { 'Content-Type': 'application/json' };
+        if (token && header) {
+            headers[header] = token;
+        }
 
-			const deleteBtn = document.getElementById('delete-btn');
-			if (deleteBtn) {
-				deleteBtn.addEventListener('click', function () {
-					if (!confirm('정말로 삭제하시겠습니까?')) {
-						return;
-					}
+        const deleteBtn = document.getElementById('delete-btn');
+        if (deleteBtn) {
+            deleteBtn.addEventListener('click', function () {
+                if (!confirm('정말로 삭제하시겠습니까?')) {
+                    return;
+                }
+                const boardNo = /*[[${board.boardNo}]]*/ 0;
+                fetch(`/api/boards/${boardNo}`, {
+                    method: 'DELETE',
+                    headers: headers
+                }).then(response => {
+                    if (response.ok) {
+                        alert('게시글이 삭제되었습니다.');
+                        location.href = '/list';
+                    } else {
+                        alert('삭제에 실패했습니다. 권한을 확인해주세요.');
+                    }
+                }).catch(error => console.error('Error:', error));
+            });
+        }
 
-					const boardNo = /*[[${board.boardNo}]]*/ 0;
-					
-					fetch(`/api/boards/${boardNo}`, {
-						method: 'DELETE',
-						headers: headers
-					}).then(response => {
-						if (response.ok) {
-							alert('게시글이 삭제되었습니다.');
-							location.href = '/list';
-						} else {
-							alert('삭제에 실패했습니다. 권한을 확인해주세요.');
-						}
-					}).catch(error => console.error('Error:', error));
-				});
-			}
+        const commentForm = document.getElementById('commentForm');
+        if(commentForm) {
+            commentForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const boardNo = /*[[${board.boardNo}]]*/ 0;
+                const content = document.getElementById('commentContent').value;
 
-			const commentForm = document.getElementById('commentForm');
-			if(commentForm) {
-				commentForm.addEventListener('submit', function(event) {
-					event.preventDefault();
+                if (!content || content.trim() === "") {
+                    alert("댓글 내용을 입력해주세요.");
+                    return;
+                }
+                const data = { content: content };
+                fetch(`/api/boards/${boardNo}/comments`, {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify(data)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert("댓글이 성공적으로 등록되었습니다.");
+                        location.reload();
+                    } else {
+                        alert("댓글 등록에 실패했습니다.");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("오류가 발생했습니다.");
+                });
+            });
+        }
 
-					const boardNo = /*[[${board.boardNo}]]*/ 0;
-					const content = document.getElementById('commentContent').value;
-
-					if (!content || content.trim() === "") {
-						alert("댓글 내용을 입력해주세요.");
-						return;
-					}
-
-					const data = { content: content };
-
-					fetch(`/api/boards/${boardNo}/comments`, {
-						method: 'POST',
-						headers: headers,
-						body: JSON.stringify(data)
-					})
-					.then(response => {
-						if (response.ok) {
-							alert("댓글이 성공적으로 등록되었습니다.");
-							location.reload();
-						} else {
-							alert("댓글 등록에 실패했습니다.");
-						}
-					})
-					.catch(error => {
-						console.error('Error:', error);
-						alert("오류가 발생했습니다.");
-					});
-				});
-			}
-
-			document.querySelectorAll('.adopt-btn').forEach(button => {
-				button.addEventListener('click', function() {
-					const commentNo = this.dataset.commentNo;
-
-					if (confirm("이 답변을 채택하시겠습니까? 채택 후에는 변경할 수 없습니다.")) {
-						fetch(`/api/comments/${commentNo}/adopt`, {
-							method: 'POST',
-							headers: headers
-						})
-						.then(response => {
-							if (response.ok) {
-								alert("답변이 채택되었습니다.");
-								location.reload();
-							} else {
-								response.text().then(text => {
-									alert("채택 실패: " + text);
-								});
-							}
-						})
-						.catch(error => {
-							console.error('Error:', error);
-							alert("채택 중 오류가 발생했습니다.");
-						});
-					}
-				});
-			});
-		</script>
-	</th:block>
+        document.querySelectorAll('.adopt-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const commentNo = this.dataset.commentNo;
+                if (confirm("이 답변을 채택하시겠습니까? 채택 후에는 변경할 수 없습니다.")) {
+                    fetch(`/api/comments/${commentNo}/adopt`, {
+                        method: 'POST',
+                        headers: headers
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            alert("답변이 채택되었습니다.");
+                            location.reload();
+                        } else {
+                            response.text().then(text => {
+                                alert("채택 실패: " + text);
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert("채택 중 오류가 발생했습니다.");
+                    });
+                }
+            });
+        });
+    </script>
+</th:block>
 
 </body>
 </html>

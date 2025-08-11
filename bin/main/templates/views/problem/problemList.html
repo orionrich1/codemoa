@@ -4,91 +4,99 @@
 	layout:decorate="~{layouts/default_layout}">
 
 <div layout:fragment="content">
-	<!-- 임시 css 사용중 -->
-	<link rel="stylesheet" th:href="@{/css/problem.css}" />
+    <style>
+        .problem-list-item {
+            transition: background-color 0.2s ease-in-out;
+        }
+        .problem-title {
+            font-size: 1.8rem; /* 18px */
+            font-weight: var(--font-weight-bold);
+            color: var(--text-primary);
+        }
+        .problem-meta {
+            font-size: 1.4rem; /* 14px */
+            color: var(--text-secondary);
+        }
+    </style>
 
-	<div class="row">
-		<div class="col">
-			<div class="row text-center mt-5">
-				<div class="col">
-					<h2 class="fs-3 fw-bold">문제 목록</h2>
-				</div>
-			</div>
+	<div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
 
-			<div class="row" sec:authorize="hasRole('ROLE_ADMIN')">
-				<div class="col text-end my-2">
-					<button class="btn btn-primary"
-						th:onclick="|location.href='@{problemWrite}'|">문제 작성</button>
-				</div>
-			</div>
+                <div class="text-center mb-4">
+                    <h2 class="fw-bold fs-2">문제 목록</h2>
+                </div>
 
-			<div class="d-flex justify-content-between">
-				<div class="d-flex gap-3">
-					<div class="form-check">
-						<input class="typeFilter form-check-input" type="checkbox" id="leftJAVA" value="1">
-						<label class="form-check-label" for="leftJAVA">JAVA</label>
+                <div class="card">
+                    <div class="card-body p-4">
+
+						<div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+							<div class="d-flex align-items-center gap-3 flex-wrap">
+								<div class="btn-group" role="group" aria-label="Language filter">
+									<input type="checkbox" class="btn-check typeFilter" id="leftJAVA" value="1">
+									<label class="btn btn-outline-primary" for="leftJAVA">JAVA</label>
+								
+									<input type="checkbox" class="btn-check typeFilter" id="leftJavascript" value="2">
+									<label class="btn btn-outline-primary" for="leftJavascript">Javascript</label>
+								
+									<input type="checkbox" class="btn-check typeFilter" id="leftPython" value="3">
+									<label class="btn btn-outline-primary" for="leftPython">Python</label>
+								</div>
+								<div class="btn-group" role="group" aria-label="Difficulty filter">
+									<input type="checkbox" class="btn-check difficultyFilter" id="rightHigh" value="1">
+									<label class="btn btn-outline-primary" for="rightHigh">상</label>
+								
+									<input type="checkbox" class="btn-check difficultyFilter" id="rightMiddle" value="2">
+									<label class="btn btn-outline-primary" for="rightMiddle">중</label>
+								
+									<input type="checkbox" class="btn-check difficultyFilter" id="rightLow" value="3">
+									<label class="btn btn-outline-primary" for="rightLow">하</label>
+								</div>
+							</div>
+							<div sec:authorize="hasRole('ROLE_ADMIN')">
+								<a th:href="@{problemWrite}" class="btn btn-primary">
+									<i class="bi bi-pencil-square me-2"></i>문제 작성
+								</a>
+							</div>
+						</div>
+
+						<ul class="list-group list-group-flush" id="problemTableBody">
+							<th:block th:if="${problemList != null && !#lists.isEmpty(problemList)}">
+								<th:block th:each="problem : ${problemList}">
+									<li class="list-group-item list-group-item-action problem-list-item p-3" style="cursor: pointer;"
+										th:onclick="@{|location.href='problemDetail?problemId=${problem.problemId}'|}">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="flex-grow-1">
+                                                <div class="d-flex align-items-center gap-3">
+                                                    <span class="badge text-bg-dark" style="width: 90px;" th:text="${problem.category}"></span>
+                                                    <span class="problem-title">[[${problem.title}]]</span>
+                                                </div>
+                                                <div class="d-flex align-items-center gap-3 problem-meta mt-2">
+                                                    <div style="width: 90px;"></div> <span>[[${problem.userId}]]</span>
+                                                    <span>[[${#temporals.format(problem.regDate, 'yyyy-MM-dd')}]]</span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-shrink-0">
+                                                <span th:if="${problem.difficulty == '상'}" class="badge bg-danger fs-6">상</span>
+                                                <span th:if="${problem.difficulty == '중'}" class="badge bg-warning text-dark fs-6">중</span>
+                                                <span th:if="${problem.difficulty == '하'}" class="badge bg-success fs-6">하</span>
+                                            </div>
+                                        </div>
+									</li>
+								</th:block>
+							</th:block>
+
+							<th:block th:unless="${problemList != null && !#lists.isEmpty(problemList)}">
+								<li class="list-group-item text-center p-5 text-secondary">
+									문제가 존재하지 않습니다. 관리자에게 문의해주세요.
+								</li>
+							</th:block>
+						</ul>
 					</div>
-					<div class="form-check">
-						<input class="typeFilter form-check-input" type="checkbox" id="leftJavascript" value="2">
-						<label class="form-check-label" for="leftJavascript">Javascript</label>
-					</div>	
-					<div class="form-check">
-						<input class="typeFilter form-check-input" type="checkbox" id="leftPython" value="3">
-						<label class="form-check-label" for="leftPython">Python</label>
-					</div>
-				</div>
-
-				<div class="d-flex gap-3">
-					<div class="form-check">
-						<input class="difficultyFilter form-check-input" type="checkbox" id="rightHigh" value="1">
-						<label class="form-check-label" for="rightHigh">상</label>
-					</div>
-					<div class="form-check">
-						<input class="difficultyFilter form-check-input" type="checkbox" id="rightMiddle" value="2">
-						<label class="form-check-label" for="rightMiddle">중</label>
-					</div>
-					<div class="form-check">
-						<input class="difficultyFilter form-check-input" type="checkbox" id="rightLow" value="3">
-						<label class="form-check-label" for="rightLow">하</label>
-					</div>
-				</div>
-			</div>
-
-			<table class="table text-center my-3 align-middle">
-				<thead>
-					<tr class="table-skyblue">
-						<th>언어</th>
-						<th>제목</th>
-						<th>난이도</th>
-						<th>출제자</th>
-						<th>출제일</th>
-					</tr>
-				</thead>
-				<tbody id="problemTableBody">
-					<th:block
-						th:if="${problemList != null && !#lists.isEmpty(problemList)}">
-						<th:block th:each="problem : ${problemList}">
-							<tr class="problems" style="cursor: pointer;"
-								th:onclick="@{|location.href='problemDetail?problemId=${problem.problemId}'|}">
-								<td>[[${problem.category}]]</td>
-								<td>[[${problem.title}]]</td>
-								<td>[[${problem.difficulty}]]</td>
-								<td>[[${problem.userId}]]</td>
-								<td>[[${#temporals.format(problem.regDate, 'yyyy-MM-dd')}]]</td>
-							</tr>
-						</th:block>
-					</th:block>
-
-					<th:block
-						th:unless="${problemList != null && !#lists.isEmpty(problemList)}">
-						<tr>
-							<td colspan=5>문제가 존재하지 않습니다. 관리자에게 문의해주세요.</td>
-						</tr>
-					</th:block>
-				</tbody>
-			</table>
-		</div>
-	</div>
+                </div>
+            </div>
+        </div>
+    </div>
 	
 	<script th:src="@{/js/problem.js}"></script>
 </div>

@@ -26,6 +26,18 @@ public class InformationService {
 	@Autowired
 	private InformationRecommendMapper informationRecommendMapper;
 	
+	// ▼▼▼ [메인 페이지를 위한 핵심 추가 메서드] ▼▼▼
+	/**
+	 * 메인 페이지에 표시할 최신 강의 목록을 조회합니다.
+	 * @param limit 가져올 개수
+	 * @return Lecture 리스트
+	 */
+	@Transactional(readOnly = true)
+	public List<Lecture> findLatestLectures(int limit) {
+		return informationRecommendMapper.findLatestLectures(limit);
+	}
+	// ▲▲▲ [메인 페이지를 위한 핵심 추가 메서드] ▲▲▲
+	
 	
 	// lecture 관련
 	
@@ -33,23 +45,18 @@ public class InformationService {
 		return informationRecommendMapper.getLecture(no);
 	}
 	
-	// 한 페이지에 해당하는 게시 글 리스트 요청을 처리하는 메서드
 	public Map<String, Object> lectureList(int pageNum, String type, String keyword, int pageSize, int pageGrop, String order) {
 		log.info("pageNum : " + pageNum);
 		log.info("type : " + type);
 		log.info("keyword : " + keyword);
 		log.info("order : " + order);
 		
-		// 현재 페이지
 		int currentPage = pageNum;
 		
-		// 1페이지 = 0   2페이지 = 10  3페이지 = 20
 		int startRow = (currentPage - 1) * pageSize; 
 		
-		// 전체 페이지 수 계산 = 전체 게시 글의 수 / 페이지 당 게시 글 수
 		int listCount = informationRecommendMapper.getLectureCount(type, keyword);
 		
-		// 총 페이지 갯수
 		int pageCount = listCount / pageSize 
 				+ (listCount % pageSize == 0? 0 : 1);
 		
@@ -63,13 +70,6 @@ public class InformationService {
 		}
 		
 		List<Lecture> lList = informationRecommendMapper.getlectureList(startRow, pageSize, type, keyword, order);
-		// 리스트 내용을 출력
-		
-//		for (Lecture lecture : lList) {
-//		    log.info("LectureNo: {}, Title: {}, Writer: {}", 
-//		             lecture.getRecommendNo(), lecture.getTitle(), lecture.getUserId());
-//		}
-		
 		
 		Map<String, Object> modelMap = new HashMap<>();
 		modelMap.put("lList", lList);
@@ -111,7 +111,6 @@ public class InformationService {
 		return informationRecommendMapper.getBook(no);
 	}
 	
-	// 한 페이지에 해당하는 게시 글 리스트 요청을 처리하는 메서드
 	public Map<String, Object> bookList(int pageNum, String type, String keyword, int pageSize, int pageGrop, String order) {
 		log.info("pageNum : " + pageNum);
 		log.info("type : " + type);
@@ -163,7 +162,6 @@ public class InformationService {
 		informationRecommendMapper.addBook(book);
 	}
 	
-
 	
 	// contest 관련
 	
@@ -171,7 +169,6 @@ public class InformationService {
 		return informationRecommendMapper.getContest(no);
 	}
 	
-	// 한 페이지에 해당하는 게시 글 리스트 요청을 처리하는 메서드
 	public Map<String, Object> contestList(int pageNum, String type, String keyword, int pageSize, int pageGrop, String order) {
 		
 		log.info("pageNum : " + pageNum);
@@ -228,7 +225,4 @@ public class InformationService {
 	public void addContest(Contest contest) {
 		informationRecommendMapper.addContest(contest);
 	}
-	
-	
-	
 }
