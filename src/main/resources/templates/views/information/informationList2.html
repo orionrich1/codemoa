@@ -132,7 +132,7 @@
 							<div class="swiper-slide">
 								<div class="book-gallery-card">
 									<a th:href="@{/information/contestDetail(no=${contest.contestNo}, pageNum=${currentPage}, order=${order})}">
-										<img th:src="@{/files/information/{img}(img=${contest.file1})}" alt="이미지" class="book-cover-image">
+										<img th:src="@{/resources/files/information/{img}(img=${contest.file1})}" alt="이미지" class="book-cover-image">
 										<div class="book-hover-overlay">
 											<div class="book-hover-content">
 												<p>작성자: [[${contest.userId}]]</p>

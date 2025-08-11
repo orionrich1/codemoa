@@ -57,7 +57,7 @@
 
 							<div class="py-4 border-top text-center">
 								<th:block th:if="${contest.file1}">
-									<img th:src="@{/files/information/{img}(img=${contest.file1})}" alt="첨부 이미지" class="img-fluid rounded">
+									<img th:src="@{/resources/files/information/{img}(img=${contest.file1})}" alt="첨부 이미지" class="img-fluid rounded">
 								</th:block>
 								<th:block th:unless="${contest.file1}">
 									<p class="text-secondary">업로드 된 이미지가 없습니다.</p>

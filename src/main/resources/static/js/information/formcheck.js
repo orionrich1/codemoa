@@ -3,8 +3,14 @@ $(function() {
 	
 	// 강좌관련
 	
-	$("#lectureWriteForm, #lectureUpdateForm").on("submit", function() {
-	    return validateLectureForm(this.id);
+	$("#lectureWriteForm, #lectureUpdateForm").on("submit", function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		const formId = this.id;
+		
+		if (validateLectureForm(formId)) {
+	       document.getElementById(formId).submit();
+	   }
 	});
 
 	
@@ -42,8 +48,14 @@ $(function() {
 	
 	// 공모전 관련 
 	
-	$("#contestWriteForm, #contestUpdateForm").on("submit", function() {
-	    return validateContestForm(this.id);
+	$("#contestWriteForm, #contestUpdateForm").on("submit", function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		const formId = this.id;
+		
+		if (validateContestForm(formId)) {
+	       document.getElementById(formId).submit();
+	   }
 	});
 
 	
@@ -81,8 +93,14 @@ $(function() {
 	
 	// 도서 관련
 	
-	$("#bookWriteForm, #bookUpdateForm").on("submit", function() {
-	    return validateBookForm(this.id);
+	$("#bookWriteForm, #bookUpdateForm").on("submit", function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		const formId = this.id;
+		
+		if (validateBookForm(formId)) {
+	       document.getElementById(formId).submit();
+	   }
 	});
 	
 		
@@ -126,162 +144,170 @@ $(function() {
 
 function validateLectureForm(formId) {
     const $form = $(`#${formId}`);
-    
-    if ($form.find("#userId").val().trim().length <= 0) {
+
+    const $userId = $form.find("#userId");
+    if ($userId.length === 0 || $userId.val()?.trim().length <= 0) {
         alert("작성자를 입력해 주세요");
-        $form.find("#userId").focus();
+        $userId.focus();
         return false;
     }
 
-    let ratingVal = parseFloat($form.find("#rating").val());
-    if ($form.find("#rating").val().trim() === "" ||
-        isNaN(ratingVal) || ratingVal < 0 || ratingVal > 5) {
+    const $rating = $form.find("#rating");
+    let ratingVal = parseFloat($rating.val());
+    if ($rating.length === 0 || $rating.val()?.trim() === "" || isNaN(ratingVal) || ratingVal < 0 || ratingVal > 5) {
         alert("평점을 0에서 5 사이의 숫자로 정확히 입력해 주세요");
-        $form.find("#rating").focus();
+        $rating.focus();
         return false;
     }
 
-    if ($form.find("#title").val().trim().length <= 0) {
+    const $title = $form.find("#title");
+    if ($title.length === 0 || $title.val()?.trim().length <= 0) {
         alert("제목을 입력해 주세요");
-        $form.find("#title").focus();
+        $title.focus();
         return false;
     }
 
-    if ($form.find("#subtitle").val().trim().length <= 0) {
+    const $subtitle = $form.find("#subtitle");
+    if ($subtitle.length === 0 || $subtitle.val()?.trim().length <= 0) {
         alert("부제목을 입력해 주세요");
-        $form.find("#subtitle").focus();
+        $subtitle.focus();
         return false;
     }
 
-    if ($form.find("#category").val().trim().length <= 0) {
+    const $category = $form.find("#category");
+    if ($category.length === 0 || $category.val()?.trim().length <= 0) {
         alert("카테고리를 입력해 주세요");
-        $form.find("#category").focus();
+        $category.focus();
         return false;
     }
 
-    if ($form.find("#content1").val().trim().length <= 0) {
+    const $content1 = $form.find("#content1");
+    if ($content1.length === 0 || $content1.val()?.trim().length <= 0) {
         alert("내용을 입력해 주세요");
-        $form.find("#content1").focus();
+        $content1.focus();
         return false;
     }
 
-    if ($form.find("#content2").val().trim().length <= 0) {
+    const $content2 = $form.find("#content2");
+    if ($content2.length === 0 || $content2.val()?.trim().length <= 0) {
         alert("내용을 입력해 주세요");
-        $form.find("#content2").focus();
+        $content2.focus();
         return false;
     }
 
     return true;
 }
 
+
 function validateContestForm(formId) {
     const $form = $(`#${formId}`);
 
-    if ($form.find("#userId").val().trim().length <= 0) {
+    const $userId = $form.find("#userId");
+    if ($userId.length === 0 || $userId.val()?.trim().length <= 0) {
         alert("작성자를 입력해 주세요");
-        $form.find("#userId").focus();
+        $userId.focus();
         return false;
     }
 
-    if ($form.find("#title").val().trim().length <= 0) {
+    const $title = $form.find("#title");
+    if ($title.length === 0 || $title.val()?.trim().length <= 0) {
         alert("제목을 입력해 주세요");
-        $form.find("#title").focus();
+        $title.focus();
         return false;
     }
 
-    if ($form.find("#hostOrganization").val().trim().length <= 0) {
+    const $hostOrg = $form.find("#hostOrganization");
+    if ($hostOrg.length === 0 || $hostOrg.val()?.trim().length <= 0) {
         alert("주최기관을 입력해 주세요");
-        $form.find("#hostOrganization").focus();
+        $hostOrg.focus();
         return false;
     }
 
-    const startDate = $form.find("#start").val();
-    const endDate = $form.find("#end").val();
+    const $start = $form.find("#start");
+    const $end = $form.find("#end");
+    const startDate = $start.val()?.trim();
+    const endDate = $end.val()?.trim();
 
-    if (startDate.trim().length <= 0) {
+    if ($start.length === 0 || !startDate) {
         alert("시작일을 입력해 주세요");
-        $form.find("#start").focus();
+        $start.focus();
         return false;
     }
 
-    if (endDate.trim().length <= 0) {
+    if ($end.length === 0 || !endDate) {
         alert("마감일을 입력해 주세요");
-        $form.find("#end").focus();
+        $end.focus();
         return false;
     }
 
     if (new Date(startDate) > new Date(endDate)) {
         alert("시작일은 마감일보다 이전이어야 합니다");
-        $form.find("#start").focus();
+        $start.focus();
         return false;
     }
 
-    if ($form.find("#pass").val().trim().length <= 0) {
-        alert("비밀번호를 입력해 주세요");
-        $form.find("#pass").focus();
-        return false;
-    }
-
-    if ($form.find("#content").val().trim().length <= 0) {
+    const $content = $form.find("#content");
+    if ($content.length === 0 || $content.val()?.trim().length <= 0) {
         alert("내용을 입력해 주세요");
-        $form.find("#content").focus();
+        $content.focus();
         return false;
     }
 
     return true;
 }
 
+
 function validateBookForm(formId) {
     const $form = $(`#${formId}`);
 
-    if ($form.find("#userId").val().trim().length <= 0) {
+    const $userId = $form.find("#userId");
+    if ($userId.length === 0 || $userId.val()?.trim().length <= 0) {
         alert("작성자를 입력해 주세요");
-        $form.find("#userId").focus();
+        $userId.focus();
         return false;
     }
 
-    if ($form.find("#title").val().trim().length <= 0) {
+    const $title = $form.find("#title");
+    if ($title.length === 0 || $title.val()?.trim().length <= 0) {
         alert("제목을 입력해 주세요");
-        $form.find("#title").focus();
+        $title.focus();
         return false;
     }
 
-    if ($form.find("#pass").val().trim().length <= 0) {
-        alert("비밀번호를 입력해 주세요");
-        $form.find("#pass").focus();
-        return false;
-    }
-
-    const pubDate = $form.find("#pub").val();
-    if (pubDate.trim().length <= 0) {
+    const $pub = $form.find("#pub");
+    const pubDate = $pub.val()?.trim();
+    if ($pub.length === 0 || !pubDate) {
         alert("시작일을 입력해 주세요");
-        $form.find("#pub").focus();
+        $pub.focus();
         return false;
     }
 
-    if ($form.find("#content").val().trim().length <= 0) {
+    const $content = $form.find("#content");
+    if ($content.length === 0 || $content.val()?.trim().length <= 0) {
         alert("내용을 입력해 주세요");
-        $form.find("#content").focus();
+        $content.focus();
         return false;
     }
 
-    let ratingVal = parseFloat($form.find("#rating").val());
-    if ($form.find("#rating").val().trim() === "" ||
-        isNaN(ratingVal) || ratingVal < 0 || ratingVal > 10) {
+    const $rating = $form.find("#rating");
+    let ratingVal = parseFloat($rating.val());
+    if ($rating.length === 0 || $rating.val()?.trim() === "" || isNaN(ratingVal) || ratingVal < 0 || ratingVal > 10) {
         alert("평점을 0에서 10 사이의 숫자로 정확히 입력해 주세요");
-        $form.find("#rating").focus();
+        $rating.focus();
         return false;
     }
 
-    if ($form.find("#isbn").val().trim().length <= 0) {
+    const $isbn = $form.find("#isbn");
+    if ($isbn.length === 0 || $isbn.val()?.trim().length <= 0) {
         alert("ISBN 번호를 입력해 주세요");
-        $form.find("#isbn").focus();
+        $isbn.focus();
         return false;
     }
 
-    if ($form.find("#totalPageNum").val().trim().length <= 0) {
+    const $totalPageNum = $form.find("#totalPageNum");
+    if ($totalPageNum.length === 0 || $totalPageNum.val()?.trim().length <= 0) {
         alert("페이지 수를 입력해 주세요");
-        $form.find("#totalPageNum").focus();
+        $totalPageNum.focus();
         return false;
     }
 

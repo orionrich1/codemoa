@@ -36,16 +36,6 @@ public class InformationController {
 	@Autowired
 	private InformationService informationService;
 	
-	@GetMapping("/information")
-	public String informationMain(Model model,
-			@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-			@RequestParam(value = "type", required = false, defaultValue = "null") String type,
-			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword) {
-		
-		model.addAllAttributes(informationService.lectureList(pageNum, type, keyword, 100, 10, "null"));
-		return "views/information/informationMain";
-	}
-	
 	@GetMapping("/information/lecture")
 	public String lectureList(Model model,
 			@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
@@ -79,35 +69,7 @@ public class InformationController {
 		return "views/information/informationList2";
 	}
 	
-	@GetMapping("/information/searchResult")
-	public String searchResult(Model model,
-			@RequestParam(value = "totalSearchText") String keyword,
-			@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-			@RequestParam(value = "type") String type) {
-		
-		log.info(type, "123456");
-		model.addAttribute("lectureMap",informationService.lectureList(pageNum, type, keyword, 100, 10, null));
-		model.addAttribute("contestMap",informationService.contestList(pageNum, type, keyword, 100, 10, null));
-		model.addAttribute("bookMap",informationService.bookList(pageNum, type, keyword, 100, 10, null));
-		
-		model.addAttribute("keyword", keyword);
-		
-		return "views/information/informationSearch";
-	}
-	
-	
 	// lecture 관련
-	
-	@GetMapping("/information/lectureList")
-	public String informationLectureList(Model model,
-			@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-			@RequestParam(value = "type", required = false, defaultValue = "null") String type,
-			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword) {
-		
-		model.addAllAttributes(informationService.lectureList(pageNum, type, keyword, 10, 10, null));
-		
-		return "views/information/informationLectureList";
-	}
 	
 	@GetMapping("/information/lectureDetail")
 	public String informationLectureDetail(Model model, 
@@ -155,10 +117,29 @@ public class InformationController {
 
 		// 비밀번호 맞는지 확인
 		
-		String savedFileName = saveUploadedFile(multipartFile, DEFAULT_PATH);
-		
-	    if (savedFileName != null) {
-	        lecture.setFile1(savedFileName);
+		// 새 파일 업로드가 있는 경우에만 기존 파일 삭제 + 새 파일 저장
+	    if (multipartFile != null && !multipartFile.isEmpty()) {
+	        // 기존 파일명 조회
+	        String existingFileName = informationService.getLecture(lecture.getRecommendNo()).getFile1();
+
+	        // 기존 파일 삭제
+	        if (existingFileName != null) {
+	            File existingFile = new File(DEFAULT_PATH, existingFileName);
+	            if (existingFile.exists()) {
+	                existingFile.delete();
+	                log.info("기존 파일 삭제됨: " + existingFile.getAbsolutePath());
+	            }
+	        }
+
+	        // 새 파일 저장
+	        String savedFileName = saveUploadedFile(multipartFile, DEFAULT_PATH);
+	        if (savedFileName != null) {
+	            lecture.setFile1(savedFileName);  // 새 파일명 설정
+	        }
+	    } else {
+	        // 파일이 업로드되지 않은 경우에는 기존 파일명을 유지
+	        String existingFileName = informationService.getLecture(lecture.getRecommendNo()).getFile1();
+	        lecture.setFile1(existingFileName);
 	    }
 		
 		informationService.updateLecture(lecture);
@@ -215,17 +196,6 @@ public class InformationController {
 	
 	// book 관련
 	
-	@GetMapping("/information/bookList")
-	public String informationBookList(Model model,
-			@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-			@RequestParam(value = "type", required = false, defaultValue = "null") String type,
-			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword) {
-		
-		model.addAllAttributes(informationService.bookList(pageNum, type, keyword, 10, 10, null));
-		
-		return "views/information/informationBookList";
-	}
-	
 	@GetMapping("/information/bookDetail")
 	public String informationBookDetail(Model model, 
 			@RequestParam(value = "no") int no,
@@ -255,7 +225,6 @@ public class InformationController {
 		model.addAttribute("book", book);
 		model.addAttribute("pageNum", pageNum);
 
-
 		return "views/information/informationBookUpdateForm";
 	}
 	
@@ -270,18 +239,30 @@ public class InformationController {
 		log.info(pub);
 		book.setPubDate(Timestamp.valueOf(pub + " 00:00:00"));
 		
-		String savedFileName = saveUploadedFile(multipartFile, DEFAULT_PATH);
-		
-	    if (savedFileName != null) {
-	        book.setFile1(savedFileName);
-	    }
 		// 비밀번호 맞는지 확인
+		
+		if (multipartFile != null && !multipartFile.isEmpty()) {
+	        String existingFileName = informationService.getLecture(book.getBookNo()).getFile1();
+
+	        if (existingFileName != null) {
+	            File existingFile = new File(DEFAULT_PATH, existingFileName);
+	            if (existingFile.exists()) {
+	                existingFile.delete();
+	            }
+	        }
+
+	        String savedFileName = saveUploadedFile(multipartFile, DEFAULT_PATH);
+	        if (savedFileName != null) {
+	            book.setFile1(savedFileName);
+	        }
+	    } else {
+	        String existingFileName = informationService.getBook(book.getBookNo()).getFile1();
+	        book.setFile1(existingFileName);
+	    }
 		
 		informationService.updateBook(book);
 
-		// return "redirect:boardList?pageNum=" + pageNum;
 		reAttrs.addAttribute("pageNum", pageNum);
-		reAttrs.addFlashAttribute("test1", "1회성 파라미터");
 		return "redirect:/information/book";
 	}
 
@@ -298,7 +279,6 @@ public class InformationController {
 
 
 		reAttrs.addAttribute("pageNum", pageNum);
-		reAttrs.addFlashAttribute("test1", "1회성 파라미터");
 		return "redirect:/information/book";
 	}
 	
@@ -322,26 +302,13 @@ public class InformationController {
 	    }
 		
 		informationService.addBook(book);
-		// 게시글 쓰기가 완료되면 게시글 리스트로 리다이렉트 시킨다.
 		
-		// 리다이렉트 : 같은 글이 계속 들어가지 않게
 		return "redirect:/information/book";
 	}
 	
 	
 	
 	// contest 관련 
-	
-	@GetMapping("/information/contestList")
-	public String informationContestList(Model model,
-			@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-			@RequestParam(value = "type", required = false, defaultValue = "null") String type,
-			@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword) {
-		
-		model.addAllAttributes(informationService.contestList(pageNum, type, keyword, 10, 10, null));
-		
-		return "views/information/informationContestList";
-	}
 	
 	@GetMapping("/information/contestDetail")
 	public String informationContestDetail(Model model, 
@@ -388,16 +355,27 @@ public class InformationController {
 		
 		// 비밀번호 맞는지 확인
 		
-		String savedFileName = saveUploadedFile(multipartFile, DEFAULT_PATH);
-		
-	    if (savedFileName != null) {
-	        contest.setFile1(savedFileName);
+		if (multipartFile != null && !multipartFile.isEmpty()) {
+	        String existingFileName = informationService.getContest(contest.getContestNo()).getFile1();
+
+	        if (existingFileName != null) {
+	            File existingFile = new File(DEFAULT_PATH, existingFileName);
+	            if (existingFile.exists()) {
+	                existingFile.delete();
+	            }
+	        }
+
+	        String savedFileName = saveUploadedFile(multipartFile, DEFAULT_PATH);
+	        if (savedFileName != null) {
+	            contest.setFile1(savedFileName);
+	        }
+	    } else {
+	        String existingFileName = informationService.getContest(contest.getContestNo()).getFile1();
+	        contest.setFile1(existingFileName);
 	    }
 		
 		informationService.updateContest(contest);
 
-
-		// return "redirect:boardList?pageNum=" + pageNum;
 		reAttrs.addAttribute("pageNum", pageNum);
 		reAttrs.addFlashAttribute("test1", "1회성 파라미터");
 		return "redirect:/information/contest";
@@ -432,10 +410,7 @@ public class InformationController {
 			throws IOException {
 	    
 		contest.setStartDate(Timestamp.valueOf(LocalDateTime.parse(start)));
-		contest.setEndDate(Timestamp.valueOf(LocalDateTime.parse(end)));
-		
-		System.out.println("originName : " + multipartFile.getOriginalFilename());  // originName : 다운로드.jpg
-		System.out.println("name : " + multipartFile.getName());					// name : addFile (뷰 writeForm의 name)
+		contest.setEndDate(Timestamp.valueOf(LocalDateTime.parse(end)));				
 		
 		String savedFileName = saveUploadedFile(multipartFile, DEFAULT_PATH);
 		
@@ -444,9 +419,7 @@ public class InformationController {
 	    }
 
 		informationService.addContest(contest);
-		// 게시글 쓰기가 완료되면 게시글 리스트로 리다이렉트 시킨다.
-		
-		// 리다이렉트 : 같은 글이 계속 들어가지 않게
+
 		return "redirect:/information/contest";
 	}
 	
@@ -467,14 +440,11 @@ public class InformationController {
 	        String saveName = uid.toString() + "." + extension;
 
 	        File file = new File(parent.getAbsolutePath(), saveName);
-	        log.info("file abs path : " + file.getAbsolutePath());
-	        log.info("file path : " + file.getPath());
 
 	        multipartFile.transferTo(file); // 파일 저장
 
 	        return saveName; // 저장된 파일 이름 반환
 	    } else {
-	        log.info("No file uploaded - 파일이 업로드 되지 않음");
 	        return null;
 	    }
 	}

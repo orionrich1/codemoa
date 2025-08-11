@@ -35,6 +35,7 @@ public class WebConfig implements WebMvcConfigurer{
 		registry.addResourceHandler("/resources/files/**")	
 				// file: 프로토콜을 사용하면 업로드한 이미지가 바로 보인다. 
 				.addResourceLocations("file:./src/main/resources/static/files/")
+				.addResourceLocations("file:./src/main/resources/static/files/information/")
 				.setCachePeriod(1); // 캐쉬 지속시간(초)
 	}
 	

@@ -125,7 +125,7 @@
 					<div class="swiper-slide">
 						<div class="item-gallery-card">
 							<a th:href="@{/information/bookDetail(no=${book.bookNo}, pageNum=${currentPage}, order=${order}, type=${type}, keyword=${keyword})}">
-								<img th:src="@{/files/information/{img}(img=${book.file1})}" alt="이미지" class="item-cover-image">
+								<img th:src="@{/resources/files/information/{img}(img=${book.file1})}" alt="이미지" class="item-cover-image">
 								<div class="item-hover-overlay">
 									<div class="item-hover-content">
 										[[${book.content}]]
