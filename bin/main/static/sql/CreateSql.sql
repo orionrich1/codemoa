@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS community_board;
 DROP TABLE IF EXISTS pointlog;
 DROP TABLE IF EXISTS local_user;
 DROP TABLE IF EXISTS sns_user;
+DROP TABLE IF EXISTS ban_history;
 DROP TABLE IF EXISTS user;
 
 DROP TABLE IF EXISTS lecture;
@@ -84,6 +85,16 @@ CREATE TABLE comment (
     CONSTRAINT fk_comment_user FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE SET NULL,
     CONSTRAINT fk_comment_board FOREIGN KEY (board_no) REFERENCES community_board (board_no) ON DELETE CASCADE
 ) COMMENT '게시판 댓글';
+
+CREATE TABLE ban_history (
+	history_no INT NOT NULL AUTO_INCREMENT,
+    user_id VARCHAR(10) NOT NULL COMMENT '사용자 ID (FK)',
+    ban_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '차단된 날짜',
+    ban_days INT NOT NULL COMMENT '차단한 일일 수',
+    ban_reason VARCHAR(100) NULL COMMENT '차단 사유',
+    PRIMARY KEY (history_no),
+    FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE -- 회원이 삭제되면 같이 삭제
+) COMMENT '회원 차단 기록';
 
 CREATE TABLE pointlog (
     id BIGINT NOT NULL AUTO_INCREMENT COMMENT '로그 ID (PK)',
