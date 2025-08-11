@@ -2,6 +2,7 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/default_layout}">
 	<th:block layout:fragment="content">
+	<script th:src="@{/js/information/formcheck.js}"></script>
   		
   		<!-- content -->
 		<div class="row my-5" id="global-content">
@@ -53,7 +54,7 @@
 						<input type="text" class="form-control" name="contestSource"  id="contestSource">
 					</div>
 					<div class="col-8 offset-md-2 text-center mt-5">
-						<input type="submit" value="등록하기" class="btn btn-primary"/>
+						<input type="submit" value="등록하기" class="btn btn-primary" id="contestWriteForm"/>
 							&nbsp;&nbsp;
 						<input type="button" value="목록보기" 
 							onclick="location.href='contest'" class="btn btn-primary"/>
@@ -63,5 +64,6 @@
 		</div>
 		
 	</th:block>
+	
 </html>
 		
