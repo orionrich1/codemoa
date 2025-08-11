@@ -60,6 +60,8 @@ public class UserService {
 		LocalUser newLocalUser = new LocalUser(newUser, passwordEncoder.encode(request.getPass()));
 		localUserRepository.save(newLocalUser);
 		localUserRepository.flush();
+		
+		addPointsForEvent(newUser.getUserId(), PointEventType.SIGN_UP);
 
 		if (!(snsProvider == null || snsProvider.isBlank() || snsProviderId == null || snsProviderId.isBlank())) {
 			snsUserSerivce.linkSnsAccount(newUser.getUserId(), snsProvider, snsProviderId);
