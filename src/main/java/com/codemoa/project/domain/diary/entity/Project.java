@@ -36,7 +36,7 @@ public class Project {
     @Column(nullable = false)
     private Status status = Status.계획;
 
-    @Column(nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();    
     
 }
