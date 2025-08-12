@@ -13,6 +13,7 @@ public class ProjectChecklist {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "checklist_id")
 	private Integer checklistId;
 
 	@ManyToOne(fetch = FetchType.LAZY)
