@@ -118,6 +118,7 @@
   white-space: normal;       
   word-wrap: break-word;    
   overflow-wrap: break-word; 
+}
 
 .checklist-add {
 	border: 2px dashed #ccc;
