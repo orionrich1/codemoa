@@ -124,8 +124,8 @@
 				<th:block th:each="lecture: ${lList}">
 					<div class="swiper-slide">
 						<div class="item-gallery-card">
-							<a th:href="@{/resources/information/lectureDetail(no=${lecture.recommendNo}, pageNum=${currentPage}, order=${order}, keyword=${keyword})}">
-								<img th:src="@{/files/information/{img}(img=${lecture.file1})}" alt="이미지" class="item-cover-image">
+							<a th:href="@{/information/lectureDetail(no=${lecture.recommendNo}, pageNum=${currentPage}, order=${order}, keyword=${keyword})}">
+								<img th:src="@{/resources/files/information/{img}(img=${lecture.file1})}" alt="이미지" class="item-cover-image">
 								<div class="item-hover-overlay">
 									<div class="item-hover-content">
 										[[${lecture.subtitle}]]
