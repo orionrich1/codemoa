@@ -114,9 +114,10 @@
 }
 
 .ellipsis {
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+  overflow: hidden;
+  white-space: normal;       
+  word-wrap: break-word;    
+  overflow-wrap: break-word; 
 }
 
 .checklist-add {
