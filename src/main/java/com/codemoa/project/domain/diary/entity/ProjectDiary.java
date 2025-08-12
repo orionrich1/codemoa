@@ -16,6 +16,7 @@ public class ProjectDiary {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "diary_id")
     private Integer diaryId;
 
     @ManyToOne(fetch = FetchType.LAZY)
