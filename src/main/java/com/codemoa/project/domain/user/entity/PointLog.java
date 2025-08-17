@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 @Entity
 @Getter
 @Builder
@@ -31,11 +33,8 @@ public class PointLog {
     @Column(nullable = false)
     private PointEventType eventType; // 포인트 이벤트 종류
 
-    @Column(name = "created_at", nullable = false)
+    @CreationTimestamp // @PrePersist 대신 이 어노테이션을 사용합니다.
+    @Column(name = "created_at", nullable = false, updatable = false) // updatable = false 추가
     private LocalDateTime createdAt; // 포인트 로그 생성 시각
-
-    @PrePersist // 엔티티가 저장되기 전에 자동으로 실행
-    public void prePersist() {
-        this.createdAt = LocalDateTime.now();
-    }
+    
 }
