@@ -1,4 +1,4 @@
-// BoardViewController.java
+// BoardViewController.java (최종 수정본 전체 코드)
 package com.codemoa.project.domain.community.controller;
 
 import com.codemoa.project.domain.community.dto.response.BoardDetailResponse;
@@ -14,25 +14,22 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/community") // 모든 경로의 시작점을 /community로 통일합니다.
 public class BoardViewController {
 
     private final CommunityBoardService communityBoardService;
 
-    @GetMapping("/list")
-    public String redirectToList() {
-        return "redirect:/community/free";
-    }
-
     /**
-     * [핵심 수정] @PathVariable에 이름을 명시하여 컴파일러 설정과 무관하게 동작하도록 수정했습니다.
+     * 게시판 목록 페이지
      */
-    @GetMapping("/community/{category}")
+    @GetMapping("/{category}")
     public String boardList(@PathVariable("category") String category,
                             Model model,
                             @RequestParam(value = "searchType", defaultValue = "title_content") String searchType,
@@ -47,8 +44,8 @@ public class BoardViewController {
         if (boardPage.getTotalPages() == 0) endPage = 1;
 
         Map<String, String> categoryNames = Map.of(
-            "free", "자유 게시판", "Java", "Java 게시판", "Python", "Python 게시판",
-            "JavaScript", "JavaScript 게시판", "C#", "C# 게시판", "Kotlin", "Kotlin 게시판", "etc", "기타 언어 게시판"
+                "free", "자유 게시판", "Java", "Java 게시판", "Python", "Python 게시판",
+                "JavaScript", "JavaScript 게시판", "C#", "C# 게시판", "Kotlin", "Kotlin 게시판", "etc", "기타 언어 게시판"
         );
         model.addAttribute("categoryName", categoryNames.getOrDefault(category, "전체 게시판"));
 
@@ -64,30 +61,34 @@ public class BoardViewController {
     }
 
     /**
-     * [핵심 수정] @PathVariable에 이름을 명시하여 컴파일러 설정과 무관하게 동작하도록 수정했습니다.
+     * 게시글 상세 페이지
      */
-    @GetMapping("/boards/{boardNo}")
-    public String boardDetail(@PathVariable("boardNo") Integer boardNo, Model model) {
+    @GetMapping("/{category}/{boardNo}")
+    public String boardDetail(@PathVariable("category") String category, @PathVariable("boardNo") Integer boardNo, Model model) {
         BoardDetailResponse board = communityBoardService.findById(boardNo);
         model.addAttribute("board", board);
         return "views/community/boardDetail";
     }
 
-    @GetMapping("/boards/write")
-    public String boardWrite() {
+    /**
+     * 글쓰기 폼 페이지
+     */
+    @GetMapping("/{category}/write")
+    public String boardWrite(@PathVariable("category") String category, Model model) {
+        model.addAttribute("selectedCategory", category);
         return "views/community/boardWrite";
     }
 
     /**
-     * [핵심 수정] @PathVariable에 이름을 명시하여 컴파일러 설정과 무관하게 동작하도록 수정했습니다.
+     * 글 수정 폼 페이지
      */
-    @GetMapping("/boards/{boardNo}/edit")
-    public String boardEditForm(@PathVariable("boardNo") Integer boardNo, Model model) {
+    @GetMapping("/{category}/{boardNo}/edit")
+    public String boardEditForm(@PathVariable("category") String category, @PathVariable("boardNo") Integer boardNo, Model model) {
         BoardDetailResponse board = communityBoardService.findById(boardNo);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUserId = authentication.getName();
         if (!board.getAuthorId().equals(currentUserId)) {
-            return "redirect:/boards/" + boardNo;
+            return "redirect:/community/" + category + "/" + boardNo; // 경로 수정
         }
         model.addAttribute("board", board);
         return "views/community/boardUpdate";

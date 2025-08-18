@@ -42,7 +42,7 @@ public class CommunityBoardService {
     public CommunityBoardService(
             CommunityBoardRepository communityBoardRepository,
             UserRepository userRepository,
-            @Lazy CommentService commentService, 
+            @Lazy CommentService commentService,
             CommentRepository commentRepository,
             UserService userService) {
         this.communityBoardRepository = communityBoardRepository;
@@ -54,7 +54,6 @@ public class CommunityBoardService {
 
     private static final List<String> MAIN_CATEGORIES = Arrays.asList("Java", "Python", "JavaScript", "C#", "Kotlin");
 
-    @Transactional(readOnly = true)
     public Page<BoardListResponse> findAll(String category, String searchType, String keyword, Pageable pageable) {
         Pageable sortedByBoardNoDesc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "boardNo"));
         Specification<CommunityBoard> spec = search(category, searchType, keyword);
@@ -88,7 +87,7 @@ public class CommunityBoardService {
                         Join<CommunityBoard, User> userJoin = root.join("user", JoinType.INNER);
                         predicates.add(criteriaBuilder.like(userJoin.get("nickname"), "%" + keyword + "%"));
                         break;
-                    default: 
+                    default:
                         predicates.add(criteriaBuilder.or(
                                 criteriaBuilder.like(root.get("title"), "%" + keyword + "%"),
                                 criteriaBuilder.like(root.get("content"), "%" + keyword + "%")
@@ -121,16 +120,21 @@ public class CommunityBoardService {
             user.setTotalPoints(user.getTotalPoints() - pointsToStake);
         }
 
+        // [핵심 수정] 'free'로 들어온 카테고리 값을 '자유'로 변환하여 저장합니다.
+        String categoryToSave = request.getCategory();
+        if ("free".equalsIgnoreCase(categoryToSave)) {
+            categoryToSave = "자유";
+        }
+
         CommunityBoard board = CommunityBoard.create(
                 user,
                 request.getTitle(),
                 request.getContent(),
-                request.getCategory(),
+                categoryToSave, // 변환된 값을 사용
                 postType,
                 pointsToStake
         );
         communityBoardRepository.save(board);
-
         userService.addPointsForEvent(userId, PointEventType.CREATE_POST);
     }
 
@@ -165,10 +169,10 @@ public class CommunityBoardService {
 
     @Transactional
     public void adoptComment(Integer boardNo, Integer commentNo, String currentUserId) {
-        CommunityBoard board = communityBoardRepository.findById(boardNo)
-                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
         Comment comment = commentRepository.findById(commentNo)
                 .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
+        CommunityBoard board = comment.getCommunityBoard();
+        
         User questioner = board.getUser();
         User answerer = comment.getUser();
 
@@ -189,7 +193,6 @@ public class CommunityBoardService {
         answerer.addPoints(points);
     }
     
-    // ▼▼▼ [메인 페이지를 위한 핵심 추가 메서드] ▼▼▼
     @Transactional(readOnly = true)
     public List<CommunityBoard> getLatestPostsByCategory(String category, int size) {
         Specification<CommunityBoard> spec = (root, query, criteriaBuilder) ->
@@ -201,5 +204,4 @@ public class CommunityBoardService {
         
         return boardPage.getContent();
     }
-    // ▲▲▲ [메인 페이지를 위한 핵심 추가 메서드] ▲▲▲
 }

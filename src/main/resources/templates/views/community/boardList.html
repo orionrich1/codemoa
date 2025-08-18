@@ -32,7 +32,7 @@
                 <div class="card shadow-sm border-0">
                     <div class="card-body p-4">
                         <div class="d-flex justify-content-end mb-3">
-                            <a th:href="@{/boards/write(category=${category})}" class="btn btn-primary"><i class="bi bi-pencil-square me-2"></i>글쓰기</a>
+                            <a th:href="@{/community/{category}/write(category=${category})}" class="btn btn-primary"><i class="bi bi-pencil-square me-2"></i>글쓰기</a>
                         </div>
                         <div class="table-responsive-container">
                             <table class="table table-hover align-middle responsive-table">
@@ -52,7 +52,7 @@
                                             <span class="badge rounded-pill text-bg-secondary" th:text="${board.category}">Java</span>
                                         </td>
                                         <td class="td-title">
-                                            <a class="text-dark text-decoration-none" th:href="@{/boards/{boardNo}(boardNo=${board.boardNo})}">
+                                            <a class="text-dark text-decoration-none" th:href="@{/community/{category}/{boardNo}(category=${board.category}, boardNo=${board.boardNo})}">
                                                 [[${board.title}]]
                                             </a>
                                             <span class="badge bg-primary ms-2" th:if="${board.stakedPoints > 0}" th:text="|${board.stakedPoints}P|"></span>

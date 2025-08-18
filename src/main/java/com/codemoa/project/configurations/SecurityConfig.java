@@ -9,7 +9,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -33,14 +32,10 @@ public class SecurityConfig {
     
     @Bean
     public PasswordEncoder passwordEncoder() {
-        // BCrypt를 기본으로 사용하면서, {noop} 등 다른 방식도 지원하도록 변경합니다.
+        // BCrypt를 기본으로 사용하면서, {noop} 등 다른 방식도 지원하도록 설정
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-    /**
-     * 정적 리소스(CSS, JS)들은 Spring Security 필터를 거치지 않도록 설정합니다.
-     * 이 설정은 부트스트랩 깨짐 현상을 가장 확실하게 방지합니다.
-     */
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
@@ -55,8 +50,6 @@ public class SecurityConfig {
 
             // HTTP 요청 권한 설정
             .authorizeHttpRequests(auth -> auth
-                // 1. [핵심 변경] 보호가 필요한 경로들을 먼저 정의합니다.
-                
                 // 관리자 페이지는 'ADMIN' 역할이 필요합니다.
                 .requestMatchers("/admin/**").hasRole("ADMIN")
 
@@ -66,16 +59,20 @@ public class SecurityConfig {
                 // 랭킹페이지는 로그인이 필요합니다.
                 .requestMatchers("/ranking**").authenticated()
 
-                // 글쓰기, 수정, 삭제 등 데이터 변경 API는 로그인이 필요합니다.
+                // [핵심 추가] 모든 글쓰기 및 수정 페이지는 로그인이 필요합니다.
+                // /community/*/write -> 'Java', 'free' 등 모든 카테고리의 글쓰기 페이지를 의미합니다.
+                .requestMatchers("/community/*/write", "/community/*/*/edit").authenticated()
+
+                // 글쓰기, 수정, 삭제 등 데이터 변경 API는 로그인이 필요합니다. (API 경로는 그대로 유지)
                 .requestMatchers(HttpMethod.POST, "/api/boards", "/api/boards/*/comments", "/api/comments/*/adopt").authenticated()
                 .requestMatchers(HttpMethod.PUT, "/api/boards/**").authenticated()
                 .requestMatchers(HttpMethod.DELETE, "/api/boards/**").authenticated()
 
-                // 2. [핵심 변경] 위에서 정의한 제한 외 "나머지는 모두 허용"합니다.
+                // 위에서 정의한 제한 외 "나머지는 모두 허용"합니다.
                 .anyRequest().permitAll()
             )
             
-            // 폼 로그인 및 SNS 로그인 설정 (기존과 동일)
+            // 폼 로그인 및 SNS 로그인 설정
             .formLogin(form -> form
                 .loginPage("/loginForm")
                 .loginProcessingUrl("/login")     
@@ -97,7 +94,7 @@ public class SecurityConfig {
     	        })
     	    )
         
-            // 로그아웃 설정 (기존과 동일)
+            // 로그아웃 설정
             .logout(logout -> logout
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/loginForm")
