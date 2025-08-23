@@ -91,6 +91,7 @@
             headers[header] = token;
         }
 
+        // --- 삭제 버튼 이벤트 핸들러 ---
         const deleteBtn = document.getElementById('delete-btn');
         if (deleteBtn) {
             deleteBtn.addEventListener('click', function () {
@@ -98,13 +99,18 @@
                     return;
                 }
                 const boardNo = /*[[${board.boardNo}]]*/ 0;
+                
+                // [수정] 현재 게시글의 카테고리 정보를 Thymeleaf를 이용해 가져옵니다.
+                const category = /*[[${board.category}]]*/ 'free';
+
                 fetch(`/api/boards/${boardNo}`, {
                     method: 'DELETE',
                     headers: headers
                 }).then(response => {
                     if (response.ok) {
                         alert('게시글이 삭제되었습니다.');
-                        location.href = '/list';
+                        // [수정] 올바른 카테고리 목록 주소로 이동시킵니다.
+                        location.href = '/community/' + category;
                     } else {
                         alert('삭제에 실패했습니다. 권한을 확인해주세요.');
                     }
@@ -112,6 +118,7 @@
             });
         }
 
+        // --- 댓글 폼 이벤트 핸들러 (이하 동일) ---
         const commentForm = document.getElementById('commentForm');
         if(commentForm) {
             commentForm.addEventListener('submit', function(event) {
@@ -143,7 +150,8 @@
                 });
             });
         }
-
+        
+        // --- 채택 버튼 이벤트 핸들러 (이하 동일) ---
         document.querySelectorAll('.adopt-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const commentNo = this.dataset.commentNo;

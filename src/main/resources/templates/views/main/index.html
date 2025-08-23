@@ -42,24 +42,24 @@
         </div>
     </div>
 
-    <div class="bg-light py-5">
-        <div class="container">
-            <h2 class="text-center fw-bold fs-1 mb-5">커뮤니티 최신 글</h2>
-            <div class="row g-4 row-cols-1 row-cols-md-2">
-                <div class="col"><div class="card h-100"><div class="card-header text-center"><strong>자유게시판</strong></div><div class="list-group list-group-flush"><th:block th:if="${#lists.isEmpty(freePosts)}"><span class="list-group-item text-secondary">최신 글이 없습니다.</span></th:block>
-                <a th:each="post : ${freePosts}" th:href="@{/boards/{boardNo}(boardNo=${post.boardNo})}" class="list-group-item list-group-item-action text-truncate" th:text="${post.title}"></a></div></div></div>
-                <div class="col"><div class="card h-100"><div class="card-header text-center"><strong>Java</strong></div><div class="list-group list-group-flush"><th:block th:if="${#lists.isEmpty(javaPosts)}"><span class="list-group-item text-secondary">최신 글이 없습니다.</span></th:block>
-                <a th:each="post : ${javaPosts}" th:href="@{/boards/{boardNo}(boardNo=${post.boardNo})}" class="list-group-item list-group-item-action text-truncate" th:text="${post.title}"></a></div></div></div>
-                <div class="col"><div class="card h-100"><div class="card-header text-center"><strong>JavaScript</strong></div><div class="list-group list-group-flush"><th:block th:if="${#lists.isEmpty(jsPosts)}"><span class="list-group-item text-secondary">최신 글이 없습니다.</span></th:block>
-                <a th:each="post : ${jsPosts}" th:href="@{/boards/{boardNo}(boardNo=${post.boardNo})}" class="list-group-item list-group-item-action text-truncate" th:text="${post.title}"></a></div></div></div>
-                <div class="col"><div class="card h-100"><div class="card-header text-center"><strong>Python</strong></div><div class="list-group list-group-flush"><th:block th:if="${#lists.isEmpty(pythonPosts)}"><span class="list-group-item text-secondary">최신 글이 없습니다.</span></th:block>
-                <a th:each="post : ${pythonPosts}" th:href="@{/boards/{boardNo}(boardNo=${post.boardNo})}" class="list-group-item list-group-item-action text-truncate" th:text="${post.title}"></a></div></div></div>
-            </div>
-            <div class="text-center mt-4">
-                <a th:href="@{/community/free}" class="btn btn-outline-secondary">전체 게시글 보러가기</a>
-            </div>
-        </div>
-    </div>
+	<div class="bg-light py-5">
+	    <div class="container">
+	        <h2 class="text-center fw-bold fs-1 mb-5">커뮤니티 최신 글</h2>
+	        <div class="row g-4 row-cols-1 row-cols-md-2">
+	            <div class="col"><div class="card h-100"><div class="card-header text-center"><strong>자유게시판</strong></div><div class="list-group list-group-flush"><th:block th:if="${#lists.isEmpty(freePosts)}"><span class="list-group-item text-secondary">최신 글이 없습니다.</span></th:block>
+	                <a th:each="post : ${freePosts}" th:href="@{/community/free/{boardNo}(boardNo=${post.boardNo})}" class="list-group-item list-group-item-action text-truncate" th:text="${post.title}"></a></div></div></div>
+	            <div class="col"><div class="card h-100"><div class="card-header text-center"><strong>Java</strong></div><div class="list-group list-group-flush"><th:block th:if="${#lists.isEmpty(javaPosts)}"><span class="list-group-item text-secondary">최신 글이 없습니다.</span></th:block>
+	                <a th:each="post : ${javaPosts}" th:href="@{/community/Java/{boardNo}(boardNo=${post.boardNo})}" class="list-group-item list-group-item-action text-truncate" th:text="${post.title}"></a></div></div></div>
+	            <div class="col"><div class="card h-100"><div class="card-header text-center"><strong>JavaScript</strong></div><div class="list-group list-group-flush"><th:block th:if="${#lists.isEmpty(jsPosts)}"><span class="list-group-item text-secondary">최신 글이 없습니다.</span></th:block>
+	                <a th:each="post : ${jsPosts}" th:href="@{/community/JavaScript/{boardNo}(boardNo=${post.boardNo})}" class="list-group-item list-group-item-action text-truncate" th:text="${post.title}"></a></div></div></div>
+	            <div class="col"><div class="card h-100"><div class="card-header text-center"><strong>Python</strong></div><div class="list-group list-group-flush"><th:block th:if="${#lists.isEmpty(pythonPosts)}"><span class="list-group-item text-secondary">최신 글이 없습니다.</span></th:block>
+	                <a th:each="post : ${pythonPosts}" th:href="@{/community/Python/{boardNo}(boardNo=${post.boardNo})}" class="list-group-item list-group-item-action text-truncate" th:text="${post.title}"></a></div></div></div>
+	        </div>
+	        <div class="text-center mt-4">
+	            <a th:href="@{/community/free}" class="btn btn-outline-secondary">자유 게시글 보러가기</a>
+	        </div>
+	    </div>
+	</div>
     
     <div class="container py-5">
         <h2 class="text-center fw-bold fs-1 pb-2 border-bottom mb-5">추천 강의 정보</h2>
