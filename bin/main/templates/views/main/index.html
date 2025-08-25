@@ -61,34 +61,34 @@
 	    </div>
 	</div>
     
-    <div class="container py-5">
-        <h2 class="text-center fw-bold fs-1 pb-2 border-bottom mb-5">추천 강의 정보</h2>
-        <div class="swiper-container-wrapper">
-            <div class="swiper lectureSwiper">
-                <div class="swiper-wrapper py-3">
-                    <div class="swiper-slide" th:if="${recommendedLectures != null}" th:each="lecture : ${recommendedLectures}">
-                        <a th:href="${lecture.lectureSource}" target="_blank" class="card slider-card h-100">
-                            <img th:src="@{/files/information/{img}(img=${lecture.file1})}" alt="강의 이미지" class="cover-image">
-                            <div class="card-texts">
-                                <strong th:text="${lecture.title}"></strong>
-                                <div class="metadata" th:text="${lecture.userId}"></div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="swiper-slide" th:if="${#lists.isEmpty(recommendedLectures)}">
-                         <div class="card slider-card h-100 justify-content-center align-items-center text-center p-4">
-                            <h5 class="text-secondary">추천 강의가 없습니다.</h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="swiper-pagination mt-5"></div>
-            </div>
-            <div class="swiper-custom-controls">
-                <button class="swiper-custom-button" id="lecture-swiper-prev"><i class="bi bi-arrow-left"></i></button>
-                <button class="swiper-custom-button" id="lecture-swiper-next"><i class="bi bi-arrow-right"></i></button>
-            </div>
-        </div>
-    </div>
+	<div class="container py-5">
+	    <h2 class="text-center fw-bold fs-1 pb-2 border-bottom mb-5">추천 강의 정보</h2>
+	    <div class="swiper-container-wrapper">
+	        <div class="swiper lectureSwiper">
+	            <div class="swiper-wrapper py-3">
+	                <div class="swiper-slide" th:if="${recommendedLectures != null}" th:each="lecture : ${recommendedLectures}">
+	                    <a th:href="${lecture.lectureSource}" target="_blank" class="card slider-card h-100">
+	                        <img th:src="@{/resources/files/information/{img}(img=${lecture.file1})}" alt="강의 이미지" class="cover-image">
+	                        <div class="card-texts">
+	                            <strong th:text="${lecture.title}"></strong>
+	                            <div class="metadata" th:text="${lecture.userId}"></div>
+	                        </div>
+	                    </a>
+	                </div>
+	                <div class="swiper-slide" th:if="${#lists.isEmpty(recommendedLectures)}">
+	                     <div class="card slider-card h-100 justify-content-center align-items-center text-center p-4">
+	                        <h5 class="text-secondary">추천 강의가 없습니다.</h5>
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="swiper-pagination mt-5"></div>
+	        </div>
+	        <div class="swiper-custom-controls">
+	            <button class="swiper-custom-button" id="lecture-swiper-prev"><i class="bi bi-arrow-left"></i></button>
+	            <button class="swiper-custom-button" id="lecture-swiper-next"><i class="bi bi-arrow-right"></i></button>
+	        </div>
+	    </div>
+	</div>
 </div>
 
 <th:block layout:fragment="script">
