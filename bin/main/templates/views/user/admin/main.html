@@ -3,7 +3,7 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/default_layout}">
 
-<div layout:fragment="content">
+<div class="ui-view" layout:fragment="content">
 	<div class="row my-5">
 		<div class="col-3">
 			<button class="btn btn-primary" th:onclick="|location.href='@{users}'|">멤버 관리</button>

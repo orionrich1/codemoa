@@ -1,0 +1,141 @@
+/* 통합 검색 결과 — design-improvement.md P0 */
+
+.page-search__header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.page-search__title {
+    font-size: var(--text-h2);
+    font-weight: 800;
+    margin: 0 0 0.5rem;
+    color: var(--foreground);
+}
+
+.page-search__keyword {
+    color: var(--primary);
+}
+
+.page-search__count {
+    font-size: var(--text-body-sm);
+    color: var(--muted-foreground);
+    margin: 0;
+}
+
+.page-search__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: flex-end;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+    padding: 1rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+}
+
+.page-search__toolbar label {
+    font-size: var(--text-caption);
+    font-weight: 600;
+    color: var(--muted-foreground);
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.page-search__toolbar .form-select {
+    min-width: 10rem;
+    min-height: 44px;
+}
+
+.page-search__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.page-search__card {
+    display: block;
+    padding: 1rem 1.15rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--card);
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    text-align: left;
+    width: 100%;
+    color: inherit;
+}
+
+.page-search__card:hover {
+    border-color: rgba(15, 118, 110, 0.4);
+    box-shadow: var(--shadow-md);
+}
+
+.page-search__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    margin-bottom: 0.35rem;
+}
+
+.page-search__type {
+    font-size: var(--text-caption);
+    font-weight: 600;
+    color: var(--primary);
+    background: var(--accent);
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+}
+
+.page-search__writer {
+    font-size: var(--text-caption);
+    color: var(--muted-foreground);
+}
+
+.page-search__card-title {
+    font-size: var(--text-body-lg);
+    font-weight: 700;
+    margin: 0 0 0.4rem;
+    color: var(--foreground);
+    line-height: 1.35;
+}
+
+.page-search__excerpt {
+    font-size: var(--text-body-sm);
+    color: var(--muted-foreground);
+    margin: 0 0 0.5rem;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.page-search__date {
+    font-size: var(--text-caption);
+    color: var(--muted-foreground);
+}
+
+.ui-empty {
+    text-align: center;
+    padding: 2.5rem 1.25rem;
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+    background: var(--secondary);
+    color: var(--muted-foreground);
+    font-size: var(--text-body);
+}
+
+.ui-empty strong {
+    display: block;
+    font-size: var(--text-body-lg);
+    color: var(--foreground);
+    margin-bottom: 0.35rem;
+}

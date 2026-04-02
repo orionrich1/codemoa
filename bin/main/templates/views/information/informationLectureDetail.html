@@ -3,7 +3,7 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/default_layout}">
 	
-<th:block layout:fragment="content">
+<th:block class="ui-view" layout:fragment="content">
 	<script th:src="@{/js/information/formcheck.js}"></script>
 	<form name="checkForm" id="checkForm" class="d-none">
 		<input type="hidden" name="no" id="no" th:value="${lecture.recommendNo}"/>

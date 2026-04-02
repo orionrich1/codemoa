@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "codeium.codeium",                     
+    "vscjava.vscode-java-pack",            
+    "vmware.vscode-spring-boot",           
+    "vscjava.vscode-spring-boot-dashboard",
+    "esbenp.prettier-vscode",              
+    "dsznajder.es7-react-js-snippets",     
+    "dbaeumer.vscode-eslint",              
+    "ritwickdey.liveserver"                
+  ]
+}

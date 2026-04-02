@@ -45,11 +45,14 @@ public class MainController {
     }
 
 	@GetMapping("/search")
-    public String search(@RequestParam("keyword") String keyword, Model model) {
-		Map<String, Object> map = mainService.searchAll(keyword);
-
+	public String search(
+			@RequestParam("keyword") String keyword,
+			@RequestParam(value = "sort", required = false, defaultValue = "recent") String sort,
+			@RequestParam(value = "type", required = false, defaultValue = "all") String typeFilter,
+			Model model) {
+		Map<String, Object> map = mainService.searchAll(keyword, sort, typeFilter);
 		model.addAllAttributes(map);
-    	model.addAttribute("keyword", keyword);
-    	return "views/main/search";
-    }
+		model.addAttribute("keyword", keyword);
+		return "views/main/search";
+	}
 }

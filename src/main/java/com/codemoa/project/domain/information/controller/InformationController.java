@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -30,11 +31,21 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @Slf4j
 public class InformationController {
-	
-	private static final String DEFAULT_PATH = "src/main/resources/static/files/information/";
+
+	/** application-local.properties 등의 file.upload.dir 하위 information 폴더 (WebConfig와 동일) */
+	@Value("${file.upload.dir}")
+	private String uploadDir;
 
 	@Autowired
 	private InformationService informationService;
+
+	private File informationStorageDir() {
+		File dir = new File(uploadDir, "information");
+		if (!dir.exists()) {
+			dir.mkdirs();
+		}
+		return dir;
+	}
 	
 	@GetMapping("/information/lecture")
 	public String lectureList(Model model,
@@ -124,7 +135,7 @@ public class InformationController {
 
 	        // 기존 파일 삭제
 	        if (existingFileName != null) {
-	            File existingFile = new File(DEFAULT_PATH, existingFileName);
+	            File existingFile = new File(informationStorageDir(), existingFileName);
 	            if (existingFile.exists()) {
 	                existingFile.delete();
 	                log.info("기존 파일 삭제됨: " + existingFile.getAbsolutePath());
@@ -132,7 +143,7 @@ public class InformationController {
 	        }
 
 	        // 새 파일 저장
-	        String savedFileName = saveUploadedFile(multipartFile, DEFAULT_PATH);
+	        String savedFileName = saveUploadedFile(multipartFile, informationStorageDir().getAbsolutePath());
 	        if (savedFileName != null) {
 	            lecture.setFile1(savedFileName);  // 새 파일명 설정
 	        }
@@ -181,7 +192,7 @@ public class InformationController {
 		System.out.println("originName : " + multipartFile.getOriginalFilename());  // originName : 다운로드.jpg
 		System.out.println("name : " + multipartFile.getName());					// name : addFile (뷰 writeForm의 name)
 
-		String savedFileName = saveUploadedFile(multipartFile, DEFAULT_PATH);
+		String savedFileName = saveUploadedFile(multipartFile, informationStorageDir().getAbsolutePath());
 		
 	    if (savedFileName != null) {
 	        lecture.setFile1(savedFileName);
@@ -242,16 +253,16 @@ public class InformationController {
 		// 비밀번호 맞는지 확인
 		
 		if (multipartFile != null && !multipartFile.isEmpty()) {
-	        String existingFileName = informationService.getLecture(book.getBookNo()).getFile1();
+	        String existingFileName = informationService.getBook(book.getBookNo()).getFile1();
 
 	        if (existingFileName != null) {
-	            File existingFile = new File(DEFAULT_PATH, existingFileName);
+	            File existingFile = new File(informationStorageDir(), existingFileName);
 	            if (existingFile.exists()) {
 	                existingFile.delete();
 	            }
 	        }
 
-	        String savedFileName = saveUploadedFile(multipartFile, DEFAULT_PATH);
+	        String savedFileName = saveUploadedFile(multipartFile, informationStorageDir().getAbsolutePath());
 	        if (savedFileName != null) {
 	            book.setFile1(savedFileName);
 	        }
@@ -295,7 +306,7 @@ public class InformationController {
 		book.setPubDate(Timestamp.valueOf(pub + " 00:00:00"));
 		
 
-		String savedFileName = saveUploadedFile(multipartFile, DEFAULT_PATH);
+		String savedFileName = saveUploadedFile(multipartFile, informationStorageDir().getAbsolutePath());
 		
 	    if (savedFileName != null) {
 	        book.setFile1(savedFileName);
@@ -359,13 +370,13 @@ public class InformationController {
 	        String existingFileName = informationService.getContest(contest.getContestNo()).getFile1();
 
 	        if (existingFileName != null) {
-	            File existingFile = new File(DEFAULT_PATH, existingFileName);
+	            File existingFile = new File(informationStorageDir(), existingFileName);
 	            if (existingFile.exists()) {
 	                existingFile.delete();
 	            }
 	        }
 
-	        String savedFileName = saveUploadedFile(multipartFile, DEFAULT_PATH);
+	        String savedFileName = saveUploadedFile(multipartFile, informationStorageDir().getAbsolutePath());
 	        if (savedFileName != null) {
 	            contest.setFile1(savedFileName);
 	        }
@@ -412,7 +423,7 @@ public class InformationController {
 		contest.setStartDate(Timestamp.valueOf(LocalDateTime.parse(start)));
 		contest.setEndDate(Timestamp.valueOf(LocalDateTime.parse(end)));				
 		
-		String savedFileName = saveUploadedFile(multipartFile, DEFAULT_PATH);
+		String savedFileName = saveUploadedFile(multipartFile, informationStorageDir().getAbsolutePath());
 		
 	    if (savedFileName != null) {
 	        contest.setFile1(savedFileName);

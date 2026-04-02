@@ -1,117 +1,161 @@
-<!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/default_layout}">
-
-<head>
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default_layout}">
+  <head>
     <title>CodeMoa: 개발자들을 위한 모든 것</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
-    <style>
-        .slider-card { display: block; text-decoration: none; color: var(--text-primary); }
-        .cover-image { width: 100%; height: 180px; object-fit: cover; border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0; }
-        .card-texts { padding: 1.25rem; }
-        .card-texts strong { font-weight: var(--font-weight-bold); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; min-height: 2.5em; }
-        .card-texts .metadata { font-size: 1.4rem; color: var(--text-secondary); margin-top: 0.5rem; }
-        .swiper-pagination-bullet-active { background-color: var(--brand-primary); }
-        .swiper-container-wrapper { position: relative; }
-        .swiper-custom-controls { display: flex; gap: 0.5rem; margin-top: 1rem; justify-content: flex-end; }
-        .swiper-custom-button { background-color: var(--surface-light); color: var(--text-secondary); border: 1px solid var(--line-default); border-radius: var(--border-radius-md); width: 40px; height: 40px; cursor: pointer; transition: all 0.2s ease; }
-        .swiper-custom-button:hover { background-color: var(--brand-primary); color: var(--text-inverse); border-color: var(--brand-primary); }
-        .swiper-pagination { position: relative !important;}
-    </style>
-</head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link th:href="@{/css/main.css}" rel="stylesheet" />
+  </head>
 
-<div layout:fragment="content">
-    
-    <div class="container text-center py-5 my-md-5">
-        <h1 class="display-4 fw-bold">성장하는 개발자들을 위한<br>모든 것, CodeMoa</h1>
-        <p class="lead text-secondary mt-4">AI와 함께 코딩 문제를 해결하고, 동료들과 지식을 나누며<br class="d-none d-md-block">새로운 기회를 탐색하세요.</p>
-        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mt-5">
-            <a th:href="@{/problems}" class="btn btn-primary btn-lg px-4">AI 코딩 문제 풀기</a>
-            <a th:href="@{/community/free}" class="btn btn-outline-secondary btn-lg px-4">커뮤니티 둘러보기</a>
+  <div layout:fragment="content" class="ui-view">
+    <section class="home-hero" aria-labelledby="home-hero-title">
+      <p class="home-hero__eyebrow">Developer community &amp; AI learning</p>
+      <h1 id="home-hero-title" class="home-hero__title">성장하는 개발자를 위한<br class="d-none d-sm-block" />지식과 기회, CodeMoa</h1>
+      <p class="home-hero__lead">AI와 함께 코딩 실력을 키우고, 동료와 질문·답변을 나누며 채용과 팀 프로젝트까지 탐색하세요.</p>
+      <div class="home-hero__actions">
+        <a th:href="@{/problems}" class="btn btn-primary btn-lg">문제 풀기</a>
+        <a th:href="@{/community/free}" class="btn btn-outline-secondary btn-lg">질문 올리기</a>
+        <a th:href="@{/teamRecruitList}" class="btn btn-outline-secondary btn-lg d-none d-md-inline-flex">팀원 찾기</a>
+      </div>
+    </section>
+
+    <section class="home-section" id="featured-services" aria-labelledby="home-features-title">
+      <h2 id="home-features-title" class="home-section__title">핵심 기능</h2>
+      <p class="home-section__subtitle">학습 · 소통 · 정보 · 커리어를 한곳에서 이어 줍니다.</p>
+      <div class="home-section__rule" aria-hidden="true"></div>
+      <div class="home-features">
+        <a th:href="@{/problems}" class="home-feature-card text-decoration-none">
+          <span class="home-feature-icon" aria-hidden="true"><i class="bi bi-cpu"></i></span>
+          <h3>AI 코딩 문제</h3>
+          <p>난이도별 문제를 풀고 AI 피드백으로 성장하세요.</p>
+        </a>
+        <a th:href="@{/community/free}" class="home-feature-card text-decoration-none">
+          <span class="home-feature-icon" aria-hidden="true"><i class="bi bi-people-fill"></i></span>
+          <h3>개발자 커뮤니티</h3>
+          <p>자유게시판과 언어별 게시판에서 지식을 나누세요.</p>
+        </a>
+        <a th:href="@{/information/lecture}" class="home-feature-card text-decoration-none">
+          <span class="home-feature-icon" aria-hidden="true"><i class="bi bi-archive-fill"></i></span>
+          <h3>IT 정보</h3>
+          <p>도서·강좌·공모전 정보로 학습 로드맵을 잡으세요.</p>
+        </a>
+        <a th:href="@{/employmentList}" class="home-feature-card text-decoration-none">
+          <span class="home-feature-icon" aria-hidden="true"><i class="bi bi-briefcase-fill"></i></span>
+          <h3>채용 · 팀 모집</h3>
+          <p>채용 공고와 사이드 프로젝트 팀원을 찾아보세요.</p>
+        </a>
+      </div>
+    </section>
+
+    <section class="home-community-band" aria-labelledby="home-community-title">
+      <div class="container px-0 px-sm-2">
+        <h2 id="home-community-title" class="home-section__title">커뮤니티 최신 글</h2>
+        <p class="home-section__subtitle">게시판별로 올라온 글을 빠르게 확인하세요.</p>
+        <div class="home-section__rule" aria-hidden="true"></div>
+        <div class="home-community-grid">
+          <article class="card h-100 home-post-card">
+            <div class="card-header text-center border-0 bg-transparent pt-3">자유게시판</div>
+            <div class="list-group list-group-flush">
+              <th:block th:if="${#lists.isEmpty(freePosts)}">
+                <div class="list-group-item border-0 ui-empty-state border-top-0">아직 글이 없습니다.</div>
+              </th:block>
+              <a th:each="post : ${freePosts}"
+                 th:href="@{/community/free/{boardNo}(boardNo=${post.boardNo})}"
+                 class="list-group-item list-group-item-action text-truncate"
+                 th:text="${post.title}"></a>
+            </div>
+          </article>
+          <article class="card h-100 home-post-card">
+            <div class="card-header text-center border-0 bg-transparent pt-3">Java</div>
+            <div class="list-group list-group-flush">
+              <th:block th:if="${#lists.isEmpty(javaPosts)}">
+                <div class="list-group-item border-0 ui-empty-state border-top-0">아직 글이 없습니다.</div>
+              </th:block>
+              <a th:each="post : ${javaPosts}"
+                 th:href="@{/community/Java/{boardNo}(boardNo=${post.boardNo})}"
+                 class="list-group-item list-group-item-action text-truncate"
+                 th:text="${post.title}"></a>
+            </div>
+          </article>
+          <article class="card h-100 home-post-card">
+            <div class="card-header text-center border-0 bg-transparent pt-3">JavaScript</div>
+            <div class="list-group list-group-flush">
+              <th:block th:if="${#lists.isEmpty(jsPosts)}">
+                <div class="list-group-item border-0 ui-empty-state border-top-0">아직 글이 없습니다.</div>
+              </th:block>
+              <a th:each="post : ${jsPosts}"
+                 th:href="@{/community/JavaScript/{boardNo}(boardNo=${post.boardNo})}"
+                 class="list-group-item list-group-item-action text-truncate"
+                 th:text="${post.title}"></a>
+            </div>
+          </article>
+          <article class="card h-100 home-post-card">
+            <div class="card-header text-center border-0 bg-transparent pt-3">Python</div>
+            <div class="list-group list-group-flush">
+              <th:block th:if="${#lists.isEmpty(pythonPosts)}">
+                <div class="list-group-item border-0 ui-empty-state border-top-0">아직 글이 없습니다.</div>
+              </th:block>
+              <a th:each="post : ${pythonPosts}"
+                 th:href="@{/community/Python/{boardNo}(boardNo=${post.boardNo})}"
+                 class="list-group-item list-group-item-action text-truncate"
+                 th:text="${post.title}"></a>
+            </div>
+          </article>
         </div>
-    </div>
-
-    <div class="container px-4 py-5" id="featured-services">
-        <h2 class="text-center fw-bold fs-1 pb-2 border-bottom">핵심 서비스</h2>
-        <div class="row g-4 py-5 row-cols-1 row-cols-md-2 row-cols-lg-4">
-             <div class="col text-center"><a th:href="@{/problems}" class="text-decoration-none"><div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3 rounded-3" style="width: 4.5rem; height: 4.5rem;"><i class="bi bi-cpu"></i></div><h3 class="fs-4 text-primary">AI 코딩 문제</h3><p class="text-secondary">다양한 난이도의 알고리즘 문제를 AI와 함께 해결하며 코딩 실력을 향상시키세요.</p></a></div>
-             <div class="col text-center"><a th:href="@{/community/free}" class="text-decoration-none"><div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3 rounded-3" style="width: 4.5rem; height: 4.5rem;"><i class="bi bi-people-fill"></i></div><h3 class="fs-4 text-primary">개발자 커뮤니티</h3><p class="text-secondary">자유로운 토론과 Q&A를 통해 지식을 공유하고 동료 개발자들과 네트워크를 만드세요.</p></a></div>
-             <div class="col text-center"><a href="/information/book" class="text-decoration-none"><div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3 rounded-3" style="width: 4.5rem; height: 4.5rem;"><i class="bi bi-archive-fill"></i></div><h3 class="fs-4 text-primary">IT 정보 아카이브</h3><p class="text-secondary">엄선된 최신 기술 도서, 강좌, 공모전 정보를 한눈에 확인하고 경쟁력을 키우세요.</p></a></div>
-             <div class="col text-center"><a href="/employmentList" class="text-decoration-none"><div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3 rounded-3" style="width: 4.5rem; height: 4.5rem;"><i class="bi bi-briefcase-fill"></i></div><h3 class="fs-4 text-primary">팀원 & 채용</h3><p class="text-secondary">사이드 프로젝트를 함께할 팀원을 구하거나, 새로운 커리어 기회를 탐색하세요.</p></a></div>
+        <div class="text-center mt-4">
+          <a th:href="@{/community/free}" class="btn btn-outline-secondary">자유게시판 더보기</a>
         </div>
-    </div>
+      </div>
+    </section>
 
-	<div class="bg-light py-5">
-	    <div class="container">
-	        <h2 class="text-center fw-bold fs-1 mb-5">커뮤니티 최신 글</h2>
-	        <div class="row g-4 row-cols-1 row-cols-md-2">
-	            <div class="col"><div class="card h-100"><div class="card-header text-center"><strong>자유게시판</strong></div><div class="list-group list-group-flush"><th:block th:if="${#lists.isEmpty(freePosts)}"><span class="list-group-item text-secondary">최신 글이 없습니다.</span></th:block>
-	                <a th:each="post : ${freePosts}" th:href="@{/community/free/{boardNo}(boardNo=${post.boardNo})}" class="list-group-item list-group-item-action text-truncate" th:text="${post.title}"></a></div></div></div>
-	            <div class="col"><div class="card h-100"><div class="card-header text-center"><strong>Java</strong></div><div class="list-group list-group-flush"><th:block th:if="${#lists.isEmpty(javaPosts)}"><span class="list-group-item text-secondary">최신 글이 없습니다.</span></th:block>
-	                <a th:each="post : ${javaPosts}" th:href="@{/community/Java/{boardNo}(boardNo=${post.boardNo})}" class="list-group-item list-group-item-action text-truncate" th:text="${post.title}"></a></div></div></div>
-	            <div class="col"><div class="card h-100"><div class="card-header text-center"><strong>JavaScript</strong></div><div class="list-group list-group-flush"><th:block th:if="${#lists.isEmpty(jsPosts)}"><span class="list-group-item text-secondary">최신 글이 없습니다.</span></th:block>
-	                <a th:each="post : ${jsPosts}" th:href="@{/community/JavaScript/{boardNo}(boardNo=${post.boardNo})}" class="list-group-item list-group-item-action text-truncate" th:text="${post.title}"></a></div></div></div>
-	            <div class="col"><div class="card h-100"><div class="card-header text-center"><strong>Python</strong></div><div class="list-group list-group-flush"><th:block th:if="${#lists.isEmpty(pythonPosts)}"><span class="list-group-item text-secondary">최신 글이 없습니다.</span></th:block>
-	                <a th:each="post : ${pythonPosts}" th:href="@{/community/Python/{boardNo}(boardNo=${post.boardNo})}" class="list-group-item list-group-item-action text-truncate" th:text="${post.title}"></a></div></div></div>
-	        </div>
-	        <div class="text-center mt-4">
-	            <a th:href="@{/community/free}" class="btn btn-outline-secondary">자유 게시글 보러가기</a>
-	        </div>
-	    </div>
-	</div>
-    
-    <div class="container py-5">
-        <h2 class="text-center fw-bold fs-1 pb-2 border-bottom mb-5">추천 강의 정보</h2>
-        <div class="swiper-container-wrapper">
-            <div class="swiper lectureSwiper">
-                <div class="swiper-wrapper py-3">
-                    <div class="swiper-slide" th:if="${recommendedLectures != null}" th:each="lecture : ${recommendedLectures}">
-                        <a th:href="${lecture.lectureSource}" target="_blank" class="card slider-card h-100">
-                            <img th:src="@{/files/information/{img}(img=${lecture.file1})}" alt="강의 이미지" class="cover-image">
-                            <div class="card-texts">
-                                <strong th:text="${lecture.title}"></strong>
-                                <div class="metadata" th:text="${lecture.userId}"></div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="swiper-slide" th:if="${#lists.isEmpty(recommendedLectures)}">
-                         <div class="card slider-card h-100 justify-content-center align-items-center text-center p-4">
-                            <h5 class="text-secondary">추천 강의가 없습니다.</h5>
-                        </div>
-                    </div>
+    <section class="home-section container" aria-labelledby="home-lecture-title">
+      <h2 id="home-lecture-title" class="home-section__title">추천 강의</h2>
+      <p class="home-section__subtitle">엄선한 강의로 바로 학습을 시작해 보세요.</p>
+      <div class="home-section__rule" aria-hidden="true"></div>
+      <div class="home-lecture-wrap swiper-container-wrapper">
+        <div class="swiper lectureSwiper">
+          <div class="swiper-wrapper py-3">
+            <div class="swiper-slide" th:if="${recommendedLectures != null}" th:each="lecture : ${recommendedLectures}">
+              <a th:href="${lecture.lectureSource}" target="_blank" rel="noopener noreferrer" class="card slider-card h-100">
+                <img th:src="@{/files/information/{img}(img=${lecture.file1})}" alt="" class="cover-image" />
+                <div class="card-texts">
+                  <strong th:text="${lecture.title}"></strong>
+                  <div class="metadata" th:text="${lecture.userId}"></div>
                 </div>
-                <div class="swiper-pagination mt-5"></div>
+              </a>
             </div>
-            <div class="swiper-custom-controls">
-                <button class="swiper-custom-button" id="lecture-swiper-prev"><i class="bi bi-arrow-left"></i></button>
-                <button class="swiper-custom-button" id="lecture-swiper-next"><i class="bi bi-arrow-right"></i></button>
+            <div class="swiper-slide" th:if="${#lists.isEmpty(recommendedLectures)}">
+              <div class="card slider-card h-100 justify-content-center align-items-center text-center p-4 ui-empty-state home-lecture-empty">
+                <strong>추천 강의가 없습니다.</strong>
+                <span>강좌 추천 메뉴에서 콘텐츠를 확인해 보세요.</span>
+              </div>
             </div>
+          </div>
+          <div class="swiper-pagination mt-4"></div>
         </div>
-    </div>
-</div>
+        <div class="swiper-custom-controls">
+          <button type="button" class="swiper-custom-button" id="lecture-swiper-prev" aria-label="이전 슬라이드"><i class="bi bi-arrow-left" aria-hidden="true"></i></button>
+          <button type="button" class="swiper-custom-button" id="lecture-swiper-next" aria-label="다음 슬라이드"><i class="bi bi-arrow-right" aria-hidden="true"></i></button>
+        </div>
+      </div>
+    </section>
+  </div>
 
-<th:block layout:fragment="script">
+  <th:block layout:fragment="script">
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
-        const lectureSwiper = new Swiper(".lectureSwiper", {
-            loop: true,
-            pagination: { el: ".swiper-pagination", clickable: true },
-            slidesPerView: 1.5,
-            spaceBetween: 20,
-            breakpoints: {
-                576: { slidesPerView: 2, spaceBetween: 20 },
-                768: { slidesPerView: 3, spaceBetween: 30 },
-                992: { slidesPerView: 4, spaceBetween: 30 },
-            }
-        });
-
-        document.getElementById('lecture-swiper-prev').addEventListener('click', () => {
-            lectureSwiper.slidePrev();
-        });
-        document.getElementById('lecture-swiper-next').addEventListener('click', () => {
-            lectureSwiper.slideNext();
-        });
+      const lectureSwiper = new Swiper(".lectureSwiper", {
+        loop: true,
+        pagination: { el: ".swiper-pagination", clickable: true },
+        slidesPerView: 1.15,
+        spaceBetween: 16,
+        breakpoints: {
+          576: { slidesPerView: 2, spaceBetween: 16 },
+          768: { slidesPerView: 3, spaceBetween: 20 },
+          992: { slidesPerView: 4, spaceBetween: 20 },
+        },
+      });
+      document.getElementById("lecture-swiper-prev").addEventListener("click", () => lectureSwiper.slidePrev());
+      document.getElementById("lecture-swiper-next").addEventListener("click", () => lectureSwiper.slideNext());
     </script>
-</th:block>
+  </th:block>
 </html>

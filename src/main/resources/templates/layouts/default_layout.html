@@ -14,10 +14,10 @@
     
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
 </head>
-<body>
+<body class="ui-root">
     <header th:replace="~{fragments/header::header}"></header>
 
-    <main class="container my-4">
+    <main class="ui-page-shell">
         <div layout:fragment="content"></div>
     </main>
     

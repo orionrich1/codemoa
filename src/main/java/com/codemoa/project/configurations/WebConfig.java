@@ -1,6 +1,8 @@
 package com.codemoa.project.configurations;
 
-// [수정] @Value 어노테ATION을 사용하기 위해 import 추가
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -23,10 +25,20 @@ public class WebConfig implements WebMvcConfigurer {
     // [수정] addResourceHandlers 메서드를 아래 내용으로 완전히 교체합니다.
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // 1. 웹 요청 주소를 HTML에서 사용하는 '/files/**'로 수정했습니다.
-        // 2. 실제 파일 위치를 @Value로 주입받은 uploadDir 변수를 사용하도록 변경했습니다.
-        // 3. 경로 형식을 'file:///'로 수정하여 Windows와 Linux 양쪽에서 안정적으로 동작하도록 했습니다.
-    	registry.addResourceHandler("/resources/files/**")
-        .addResourceLocations("file:///" + uploadDir);
+        String normalized = uploadDir.replace('\\', '/');
+        if (!normalized.endsWith("/")) {
+            normalized = normalized + "/";
+        }
+        registry.addResourceHandler("/resources/files/**")
+                .addResourceLocations("file:///" + normalized);
+
+        // 정보 영역 썸네일: 업로드 디렉터리 + (선택) 클래스패스 정적 리소스
+        Path informationDir = Paths.get(uploadDir, "information").normalize();
+        String informationLocation = informationDir.toUri().toString();
+        if (!informationLocation.endsWith("/")) {
+            informationLocation = informationLocation + "/";
+        }
+        registry.addResourceHandler("/files/information/**")
+                .addResourceLocations(informationLocation, "classpath:/static/files/information/");
     }
 }

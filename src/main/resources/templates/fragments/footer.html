@@ -1,10 +1,28 @@
-<div th:fragment="footer" class="bg-light border-top mt-5" xmlns:th="http://www.thymeleaf.org">
-    <div class="container">
-        <div class="row">
-            <div class="col text-center py-3 text-muted">
-                <p class="small mb-1">고객상담 전화주문:1234-5678 | 사업자등록번호 :111-11-123456</p>
-                <p class="small mb-1">대표이사: 홍길동 | 통신판매업 서울 제 000000호</p>
-                <p class="small mb-0">Copyright © 2025 CodeMoa Corp. All right Reserved.</p>
+<div th:fragment="footer" class="border-top mt-5 footer-codemoa" xmlns:th="http://www.thymeleaf.org">
+    <div class="container py-4 py-lg-5" style="max-width: 1200px;">
+        <div class="row g-4 text-center text-md-start">
+            <div class="col-md-4">
+                <strong class="d-block mb-2 text-body">CodeMoa</strong>
+                <p class="small text-muted mb-0 lh-base">
+                    AI와 함께하는 코딩 학습과 개발자 지식 공유를 위한 커뮤니티입니다.
+                </p>
+            </div>
+            <div class="col-6 col-md-4">
+                <strong class="d-block mb-2 text-body">바로가기</strong>
+                <ul class="list-unstyled small mb-0">
+                    <li class="mb-1"><a th:href="@{/problems}" class="text-muted">문제 풀기</a></li>
+                    <li class="mb-1"><a th:href="@{/community/free}" class="text-muted">질문 · 게시판</a></li>
+                    <li class="mb-1"><a th:href="@{/teamRecruitList}" class="text-muted">팀원 모집</a></li>
+                    <li><a th:href="@{/support/faq}" class="text-muted">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="col-6 col-md-4">
+                <strong class="d-block mb-2 text-body">문의 · 정책</strong>
+                <ul class="list-unstyled small mb-0">
+                    <li class="mb-1"><a th:href="@{/support/qna}" class="text-muted">Q&amp;A 문의</a></li>
+                    <li class="mb-1"><span class="text-muted">이메일: support@codemoa.example</span></li>
+                    <li><span class="text-muted">© 2025 CodeMoa. All rights reserved.</span></li>
+                </ul>
             </div>
         </div>
     </div>

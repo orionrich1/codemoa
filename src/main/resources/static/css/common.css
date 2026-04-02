@@ -1,133 +1,350 @@
-/*
- * =========================================
- * AI Web Publisher Final Common CSS (v6.0 - Tokenized & Refined)
- * =========================================
- */
-
-/* 1. FONT DEFINITION */
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
-/* 2. ROOT VARIABLES (Design Token System) */
 :root {
-    /* A. Primitive Tokens (원시 값) */
-    --color-neutral-0: #FFFFFF;
-    --color-neutral-50: #f8fafc;
-    --color-neutral-100: #f1f5f9;
-    --color-neutral-200: #e2e8f0;
-    --color-neutral-500: #64748b;
-    --color-neutral-700: #334155;
-    --color-neutral-900: #0f172a;
+    /* Typography scale (design-improvement.md) */
+    --text-display: clamp(1.85rem, 4.5vw, 2.5rem);
+    --text-h1: clamp(1.65rem, 3.5vw, 2rem);
+    --text-h2: clamp(1.35rem, 2.5vw, 1.65rem);
+    --text-h3: 1.125rem;
+    --text-body-lg: 1.0625rem;
+    --text-body: 0.9375rem;
+    --text-body-sm: 0.875rem;
+    --text-caption: 0.8125rem;
 
-    --color-teal-500: #0891B2;
-    --color-teal-700: #0E7490;
+    /* Breakpoints (문서화용 — 미디어쿼리와 맞춤) */
+    --bp-sm: 576px;
+    --bp-md: 768px;
+    --bp-lg: 992px;
+    --bp-xl: 1200px;
 
-    /* B. Semantic Tokens (의미 부여) */
-    --brand-primary: var(--color-teal-500);
-    --brand-primary-rgb: 8, 145, 178;
-    --brand-primary-hover: var(--color-teal-700);
-    
-    --text-primary: var(--color-neutral-900);
-    --text-secondary: var(--color-neutral-500);
-    --text-inverse: var(--color-neutral-0);
-
-    --surface-default: var(--color-neutral-0);
-    --surface-subtle: var(--color-neutral-50);
-    --surface-light: var(--color-neutral-100);
-    
-    --line-default: var(--color-neutral-200);
-    --line-accent: var(--brand-primary);
-
-    --font-sans: 'Pretendard', sans-serif;
-    --font-weight-bold: 700;
-    --font-weight-heavy: 800;
-
-    --border-radius-md: 0.5rem;   /* 8px */
-    --border-radius-lg: 0.75rem;  /* 12px */
-
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    --background: #f8fafc;
+    --foreground: #0f172a;
+    --card: #ffffff;
+    --card-foreground: #0f172a;
+    --popover: #ffffff;
+    --popover-foreground: #0f172a;
+    --primary: #0f766e;
+    --primary-hover: #115e59;
+    --primary-foreground: #f8fafc;
+    --secondary: #f1f5f9;
+    --secondary-foreground: #0f172a;
+    --muted: #e2e8f0;
+    --muted-foreground: #64748b;
+    --accent: #ccfbf1;
+    --accent-foreground: #134e4a;
+    --border: #e2e8f0;
+    --input: #e2e8f0;
+    --ring: #14b8a6;
+    --destructive: #dc2626;
+    --destructive-foreground: #fef2f2;
+    --radius: 0.75rem;
+    --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.08);
+    --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.1);
 }
 
-/* 3. GLOBAL STYLES */
-html { font-size: 14px; }
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+}
+
 body {
-    font-family: var(--font-sans);
-    color: var(--text-primary);
-    background-color: var(--surface-subtle);
-    font-size: 1.2rem;
-    line-height: 1.6;
-}
-h1, h2, h3, h4, h5, h6 { font-weight: var(--font-weight-heavy); }
-a { color: var(--text-primary); text-decoration: none; transition: color 0.2s ease; }
-a:hover { color: var(--brand-primary); }
-
-/* 4. COMPONENT REFINEMENT */
-.card {
-    border: 1px solid var(--line-default);
-    background-color: var(--surface-default);
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow-sm);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.card:hover {
-    box-shadow: var(--shadow-md);
-}
-.card-footer {
-    background-color: var(--surface-light);
-    border-top: 1px solid var(--line-default);
+    margin: 0;
+    font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: var(--foreground);
+    background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+    line-height: 1.5;
 }
 
-.btn {
-    font-weight: var(--font-weight-bold);
-    border-radius: var(--border-radius-md);
-    padding: 1rem 1.6rem;
-    transition: all 0.2s ease;
-}
-.btn-primary {
-    background-color: var(--brand-primary);
-    color: var(--text-inverse);
-    border: none;
-}
-.btn-primary:hover {
-    background-color: var(--brand-primary-hover);
+h1, h2, h3, h4, h5, h6 {
+    color: var(--foreground);
+    font-weight: 700;
+    letter-spacing: -0.01em;
 }
 
-.form-control, .form-select {
-    border: 1px solid var(--line-default);
-    padding: 1rem 1.2rem;
-    border-radius: var(--border-radius-md);
-}
-.form-control:focus, .form-select:focus {
-    border-color: var(--line-accent);
-    box-shadow: 0 0 0 0.2rem rgba(var(--brand-primary-rgb), 0.25);
-}
-.pagination .page-item.active .page-link {
-    background-color: var(--brand-primary);
-    border-color: var(--brand-primary);
+h1 {
+    font-size: var(--text-h1);
+    line-height: 1.2;
 }
 
-/* 5. RESPONSIVE TABLE */
-@media (max-width: 767px) {
-    .responsive-table, .responsive-table thead, .responsive-table tbody, .responsive-table th, .responsive-table td, .responsive-table tr { display: block; }
-    .responsive-table thead { display: none; }
-    .responsive-table tr {
-        border: 1px solid var(--line-default);
-        border-radius: var(--border-radius-lg);
-        margin-bottom: 1rem;
-        padding: 1.25rem;
-        display: grid;
-        grid-template-columns: 1fr auto;
-        grid-template-rows: auto auto;
-        gap: 0.5rem;
+h2 {
+    font-size: var(--text-h2);
+    line-height: 1.25;
+}
+
+h3 {
+    font-size: var(--text-h3);
+    line-height: 1.3;
+}
+
+p,
+li {
+    font-size: var(--text-body);
+}
+
+small,
+.text-small {
+    font-size: var(--text-caption);
+}
+
+/* 터치 타깃 권장 (모바일 네비·버튼) */
+@media (max-width: 991.98px) {
+    .navbar .nav-link:not(.dropdown-toggle) {
+        min-height: 44px;
+        display: flex;
         align-items: center;
     }
-    .responsive-table .td-title { grid-column: 1 / 3; grid-row: 1; margin-bottom: 0.5rem; }
-    .responsive-table .td-title a { font-size: 1.1rem; font-weight: var(--font-weight-heavy); line-height: 1.4; }
-    .responsive-table .td-author { grid-column: 1; grid-row: 2; font-size: 0.9rem; color: var(--text-secondary); }
-    .responsive-table .td-author .d-flex { justify-content: flex-start !important; }
-    .responsive-table .td-category { grid-column: 2; grid-row: 2; justify-self: end; }
-    .responsive-table .td-no, .responsive-table .td-date { display: none; }
-    .responsive-table td { border: none; padding: 0 !important; }
-    .responsive-table td:before { display: none; }
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.ui-page-shell {
+    max-width: 1200px;
+    margin: 1.25rem auto 2.5rem;
+    padding: 0 0.75rem;
+}
+
+.ui-view {
+    background: transparent;
+}
+
+[layout\:fragment="content"] {
+    border-radius: var(--radius);
+}
+
+.ui-card,
+.card,
+.modal-content {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background-color: var(--card);
+    color: var(--card-foreground);
+    box-shadow: var(--shadow-sm);
+}
+
+.card-header,
+.card-footer {
+    border-color: var(--border);
+    background-color: #fcfdff;
+}
+
+.ui-btn,
+.btn {
+    border-radius: calc(var(--radius) - 0.2rem);
+    font-weight: 600;
+    transition: 0.2s ease;
+}
+
+.btn:focus-visible,
+.form-control:focus,
+.form-select:focus,
+.form-check-input:focus,
+.page-link:focus {
+    outline: none;
+    border-color: var(--ring);
+    box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.25);
+}
+
+.btn-primary,
+.ui-btn-primary {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: var(--primary-foreground);
+}
+
+.btn-primary:hover,
+.btn-primary:active,
+.ui-btn-primary:hover {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+    color: var(--primary-foreground);
+}
+
+.btn-outline-secondary {
+    border-color: var(--border);
+    color: var(--muted-foreground);
+}
+
+.btn-outline-secondary:hover {
+    border-color: var(--primary);
+    background-color: var(--secondary);
+    color: var(--primary-hover);
+}
+
+.form-control,
+.form-select,
+.input-group-text {
+    border: 1px solid var(--input);
+    border-radius: calc(var(--radius) - 0.2rem);
+    min-height: 2.625rem;
+    font-size: var(--text-body);
+}
+
+.btn-sm {
+    min-height: 36px;
+}
+
+.btn:not(.btn-sm):not(.btn-lg) {
+    min-height: 40px;
+    padding-top: 0.45rem;
+    padding-bottom: 0.45rem;
+    font-size: var(--text-body-sm);
+}
+
+.btn-lg {
+    min-height: 48px;
+    font-size: var(--text-body-lg);
+}
+
+.form-label {
+    font-weight: 600;
+    color: var(--foreground);
+}
+
+.table {
+    border-color: var(--border);
+    background-color: var(--card);
+}
+
+.table thead th {
+    background: #f8fafc;
+    color: #334155;
+    font-weight: 600;
+    border-bottom: 1px solid var(--border);
+}
+
+.table > :not(caption) > * > * {
+    border-color: var(--border);
+    vertical-align: middle;
+}
+
+.badge {
+    border-radius: 999px;
+    font-weight: 600;
+    padding: 0.4em 0.75em;
+}
+
+.alert {
+    border-radius: var(--radius);
+    border-color: var(--border);
+}
+
+.pagination .page-link {
+    border-color: var(--border);
+    color: var(--muted-foreground);
+}
+
+.pagination .page-item.active .page-link {
+    color: var(--primary-foreground);
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.dropdown-menu {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+}
+
+.dropdown-item {
+    border-radius: 0.5rem;
+}
+
+.dropdown-item:hover {
+    background-color: var(--secondary);
+    color: var(--foreground);
+}
+
+/* 헤더 검색 · 모바일 아코디언 네비 */
+.navbar-brand img {
+    height: 32px;
+    width: auto;
+    display: block;
+}
+
+.header-search .form-control {
+    min-height: 44px;
+}
+
+.header-search .btn {
+    min-height: 44px;
+    min-width: 44px;
+    padding-left: 0.65rem;
+    padding-right: 0.65rem;
+}
+
+.nav-accordion-mobile .accordion-button {
+    font-weight: 700;
+    font-size: var(--text-body);
+    padding: 0.85rem 1rem;
+    min-height: 48px;
+}
+
+.nav-accordion-mobile .accordion-body {
+    padding: 0.5rem 1rem 1rem;
+}
+
+.nav-accordion-mobile .accordion-body a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0.25rem 0;
+    font-size: var(--text-body-sm);
+    color: var(--foreground);
+    border-bottom: 1px solid var(--border);
+}
+
+.nav-accordion-mobile .accordion-body a:last-child {
+    border-bottom: none;
+}
+
+.nav-accordion-mobile .accordion-body .text-muted.small {
+    font-size: var(--text-caption);
+    margin: 0.5rem 0 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.desktop-nav-lg .nav-link {
+    font-size: var(--text-body-sm);
+}
+
+/* 공통 빈 상태 */
+.ui-empty-state {
+    padding: 2rem 1.25rem;
+    text-align: center;
+    color: var(--muted-foreground);
+    font-size: var(--text-body-sm);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+    background: var(--secondary);
+}
+
+.footer-codemoa {
+    background-color: var(--secondary);
+    border-color: var(--border) !important;
+}
+
+@media (max-width: 768px) {
+    .ui-page-shell {
+        margin-top: 0.75rem;
+        padding: 0 0.5rem;
+    }
+
+    .table-responsive {
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--card);
+    }
+
+    [layout\:fragment="content"] {
+        border-radius: calc(var(--radius) - 0.25rem);
+    }
 }
