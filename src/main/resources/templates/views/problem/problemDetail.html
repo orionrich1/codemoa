@@ -1,81 +1,188 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{layouts/default_layout}">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layouts/default_layout}">
 
-<div layout:fragment="content" class="ui-view">
-	<style>
-		/* 답안 입력창을 코드 에디터처럼 보이게 하는 스타일 */
-		.code-editor-textarea {
-			font-family: 'D2Coding', monospace; /* 코딩용 고정폭 글꼴 */
-			color: #abb2bf; /* 밝은 텍스트 */
-			border: none;
-			border-radius: var(--border-radius-md);
-			height: 100%;
-			resize: none;
-		}
-	</style>
-	
-	<div class="container my-5">
-		<div class="text-center mb-4">
-			<h2 class="fw-bold fs-2">문제 풀기</h2>
-			<div class="d-none" id="hint">[[${problem.hint}]]</div>
-		</div>
+<th:block layout:fragment="extra-head">
+    <link rel="stylesheet" th:href="@{/css/problem.css}" />
+</th:block>
 
-		<div class="row g-4">
-			<div class="col-lg-6">
-				<div class="card h-100">
-					<div class="card-body d-flex flex-column p-4">
-						<div class="border-bottom pb-3 mb-3">
-							<div class="d-flex justify-content-between align-items-center mb-2">
-								<span class="badge text-bg-dark fs-6">[[${problem.category}]]</span>
-								<span th:if="${problem.difficulty == '상'}" class="badge bg-danger fs-6">상</span>
-								<span th:if="${problem.difficulty == '중'}" class="badge bg-warning text-dark fs-6">중</span>
-								<span th:if="${problem.difficulty == '하'}" class="badge bg-success fs-6">하</span>
-							</div>
-							<h4 class="card-title">[[${problem.title}]]</h4>
-						</div>
-						
-						<div class="flex-grow-1" style="overflow-y: auto;">
-							<p class="fw-bold">문제 내용</p>
-							<pre class="bg-light p-3 rounded" th:text="${problem.content}" style="white-space: pre-wrap;"></pre>
-						</div>
+<div layout:fragment="content" class="ui-view ai-page">
+    <!-- JS용 숨겨진 데이터 -->
+    <div class="d-none">
+        <span id="hint"            th:text="${problem.hint}"></span>
+        <span id="problemCategoryForAi" th:text="${problem.category}"></span>
+        <span id="problemTitleForAi"    th:text="${problem.title}"></span>
+    </div>
 
-						<div class="mt-3 text-end">
-							<button type="button" class="btn btn-sm btn-outline-secondary" id="showHintBtn">
-								<i class="bi bi-lightbulb-fill me-1"></i> 힌트 보기
-							</button>
-						</div>
-					</div>
-				</div>
-			</div>
+    <div class="container-fluid px-4 my-4">
+        <div class="text-center mb-3">
+            <p class="ai-page__kicker mb-1">AI Coding</p>
+            <h2 class="ai-page__title mb-0">문제 풀기</h2>
+        </div>
 
-			<div class="col-lg-6">
-				<div class="card h-100">
-					<form id="problemForm" method="post" th:action="@{problemResult}" class="d-flex flex-column h-100">
-						<input type="hidden" name="no" th:value="${problem.problemId}">
-						<div class="card-body d-flex flex-column p-4">
-							<label for="answer" class="form-label fw-bold">답안 입력</label>
-							<textarea id="answer" name="answer" class="form-control useTabkey code-editor-textarea flex-grow-1"
-								placeholder="답안을 여기에 입력하세요..."></textarea>
-						</div>
-						<div class="card-footer d-flex justify-content-end gap-2 p-3">
-							<button type="button" class="btn btn-secondary" onclick="location.href='/problems'">돌아가기</button>
-							<button type="submit" class="btn btn-primary">제출</button>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
+        <!-- 모바일: 문제 내용 접기/펼치기 토글 버튼 -->
+        <div class="d-lg-none mb-2">
+            <button class="btn btn-outline-secondary w-100" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#problemContentCollapse"
+                    aria-expanded="false" aria-controls="problemContentCollapse">
+                <i class="bi bi-file-text me-1" aria-hidden="true"></i>문제 내용 보기/숨기기
+            </button>
+        </div>
 
-		<div class="row text-center mt-4" sec:authorize="hasRole('ROLE_ADMIN')">
-			<div class="col d-flex justify-content-center gap-2">
-				<button type="button" class="btn btn-warning" th:onclick="|location.href='@{problemUpdate(no=${problem.problemId})}'|">수정</button>
-				<button type="button" class="btn btn-danger" th:onclick="|location.href='@{problemDelete(no=${problem.problemId})}'|">삭제</button>
-			</div>
-		</div>
-	</div>
-	
-	<script th:src="@{/js/problem.js}"></script>
+        <div class="row g-3 ds-problem-layout">
+            <!-- 왼쪽: 문제 내용 패널 (모바일에서 collapse) -->
+            <div class="col-lg-5 ds-problem-pane">
+                <div id="problemContentCollapse" class="collapse d-lg-block h-100">
+                    <div class="card ai-card h-100">
+                        <div class="card-body ai-card__body d-flex flex-column">
+                            <div class="border-bottom pb-3 mb-3">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="badge text-bg-dark" th:text="${problem.category}">언어</span>
+                                    <span th:if="${problem.difficulty == '상'}"
+                                          class="badge bg-danger">상</span>
+                                    <span th:if="${problem.difficulty == '중'}"
+                                          class="badge bg-warning text-dark">중</span>
+                                    <span th:if="${problem.difficulty == '하'}"
+                                          class="badge bg-success">하</span>
+                                </div>
+                                <h4 class="card-title mb-0" th:text="${problem.title}">문제 제목</h4>
+                            </div>
+
+                            <div class="flex-grow-1 ds-problem-pane">
+                                <p class="fw-bold mb-2">문제 내용</p>
+                                <pre class="ai-code" th:text="${problem.content}">내용</pre>
+                            </div>
+
+                            <div class="mt-3 d-flex justify-content-between align-items-center">
+                                <button type="button" class="btn btn-sm btn-outline-secondary" id="showHintBtn"
+                                        aria-label="힌트 보기">
+                                    <i class="bi bi-lightbulb-fill me-1" aria-hidden="true"></i>힌트 보기
+                                </button>
+                                <!-- 인라인 AI 질문 버튼 -->
+                                <button type="button" class="btn btn-sm home-ds-cta-secondary ds-inline-ai-btn" id="inlineAiBtn"
+                                        sec:authorize="isAuthenticated()"
+                                        data-bs-toggle="modal" data-bs-target="#inlineAiModal"
+                                        aria-label="AI에게 질문하기">
+                                    <i class="bi bi-robot me-1" aria-hidden="true"></i>AI에게 질문
+                                    <span class="badge text-bg-secondary ms-1" id="inlineAiCountBadge">5</span>
+                                </button>
+                                <a th:href="@{/loginForm}" sec:authorize="isAnonymous()"
+                                   class="btn btn-sm btn-outline-secondary">
+                                    <i class="bi bi-robot me-1" aria-hidden="true"></i>로그인 후 AI 질문
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 오른쪽: 답안 입력 패널 -->
+            <div class="col-lg-7 ds-code-pane">
+                <div class="card ai-card h-100">
+                    <form id="problemForm" method="post" th:action="@{problemResult}" class="d-flex flex-column h-100">
+                        <input type="hidden" name="no" th:value="${problem.problemId}">
+                        <div class="card-body ai-card__body d-flex flex-column gap-2 flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <label for="answer" class="form-label fw-bold mb-0">답안 입력</label>
+                                <span class="text-secondary small" th:text="${problem.category} + ' 코드를 입력하세요'">언어 코드를 입력하세요</span>
+                            </div>
+                            <div class="code-editor-wrapper flex-grow-1">
+                                <div class="code-line-numbers" id="lineNumbers" aria-hidden="true">1</div>
+                                <textarea id="answer" name="answer"
+                                          class="useTabkey code-editor-textarea ds-answer-textarea"
+                                          th:placeholder="${problem.category} + ' 코드를 입력하세요...'"
+                                          spellcheck="false"></textarea>
+                            </div>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between align-items-center gap-2 p-3">
+                            <a th:href="@{/problems/}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-1" aria-hidden="true"></i>목록
+                            </a>
+                            <!-- 비로그인 시 제출 차단 -->
+                            <button type="submit" class="btn btn-primary home-ds-cta-primary"
+                                    sec:authorize="isAuthenticated()">
+                                <i class="bi bi-send me-1" aria-hidden="true"></i>제출
+                            </button>
+                            <a th:href="@{/loginForm}" class="btn btn-primary home-ds-cta-primary"
+                               sec:authorize="isAnonymous()">
+                                <i class="bi bi-lock me-1" aria-hidden="true"></i>로그인 후 제출
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- 관리자: 수정·삭제 버튼 -->
+        <div class="row text-center mt-4" sec:authorize="hasRole('ROLE_ADMIN')">
+            <div class="col d-flex justify-content-center gap-2">
+                <button type="button" class="btn btn-warning"
+                        th:onclick="|location.href='@{problemUpdate(no=${problem.problemId})}'|">
+                    <i class="bi bi-pencil me-1" aria-hidden="true"></i>수정
+                </button>
+                <button type="button" class="btn btn-danger"
+                        data-bs-toggle="modal" data-bs-target="#deleteProblemModal">
+                    <i class="bi bi-trash me-1" aria-hidden="true"></i>삭제
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 삭제 확인 모달 -->
+    <div class="modal fade" id="deleteProblemModal" tabindex="-1"
+         aria-labelledby="deleteProblemModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteProblemModalLabel">문제 삭제</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+                </div>
+                <div class="modal-body">
+                    정말 이 문제를 삭제하시겠습니까? 삭제 후에는 복구할 수 없습니다.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
+                    <a class="btn btn-danger"
+                       th:href="@{/problems/problemDelete(no=${problem.problemId})}">
+                        <i class="bi bi-trash me-1" aria-hidden="true"></i>삭제
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── 인라인 AI 질문 모달 ── -->
+    <div class="modal fade" id="inlineAiModal" tabindex="-1"
+         aria-labelledby="inlineAiModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content ai-card">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title" id="inlineAiModalLabel">
+                        <i class="bi bi-robot me-2" aria-hidden="true"></i>AI에게 질문하기
+                        <small class="text-secondary fw-normal ms-2">
+                            남은 횟수: <span id="inlineAiCountModal" class="fw-semibold">5</span>회
+                        </small>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-secondary small mb-2">
+                        현재 문제(<strong th:text="${problem.title}">제목</strong>)에 대한 코딩 질문을 입력하세요.
+                        <kbd>Ctrl+Enter</kbd>로도 전송할 수 있습니다.
+                    </p>
+                    <textarea id="inlineAiQuestion" class="form-control code-editor-textarea mb-3"
+                              rows="4" placeholder="예: 이 문제에서 반복문을 어떻게 활용해야 하나요?"></textarea>
+                    <button id="inlineAiSendBtn" class="btn btn-primary w-100 home-ds-cta-primary" type="button">
+                        <i class="bi bi-send me-2" aria-hidden="true"></i>질문 전송
+                    </button>
+                    <div id="inlineAiAnswer" class="mt-3 ai-code d-none ds-inline-ai-response"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/problem.js}"></script>
 </div>
 </html>

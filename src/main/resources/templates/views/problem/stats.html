@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+
+<th:block layout:fragment="extra-head">
+    <link rel="stylesheet" th:href="@{/css/problem.css}" />
+</th:block>
+
+<div layout:fragment="content" class="ui-view ai-page">
+    <div class="container my-5">
+
+        <!-- 헤더 -->
+        <div class="text-center mb-5">
+            <p class="ai-page__kicker mb-2">My Stats</p>
+            <h2 class="ai-page__title mb-0">내 학습 통계</h2>
+        </div>
+
+        <!-- 데이터 없음 -->
+        <div th:if="${stats.totalSubmissions() == 0}"
+             class="text-center py-5">
+            <i class="bi bi-bar-chart fs-1 d-block mb-3 text-muted"></i>
+            <p class="text-secondary mb-3">아직 제출 이력이 없습니다.</p>
+            <a th:href="@{/problems/}" class="btn btn-primary home-ds-cta-primary">
+                <i class="bi bi-code-slash me-1" aria-hidden="true"></i>문제 풀러 가기
+            </a>
+        </div>
+
+        <th:block th:unless="${stats.totalSubmissions() == 0}">
+
+            <!-- 상단 요약 카드 3개 -->
+            <div class="row g-3 mb-4">
+                <div class="col-4">
+                    <div class="card ai-card text-center">
+                        <div class="card-body ai-card__body py-4">
+                            <div class="ai-result-score-num" th:text="${stats.totalSubmissions()}">0</div>
+                            <p class="ai-result-score-denom mt-1 mb-0">총 제출 수</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="card ai-card text-center">
+                        <div class="card-body ai-card__body py-4">
+                            <div class="ai-result-score-num"
+                                 th:text="${#numbers.formatDecimal(stats.avgScore(), 1, 1)}">0</div>
+                            <p class="ai-result-score-denom mt-1 mb-0">평균 점수</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="card ai-card text-center">
+                        <div class="card-body ai-card__body py-4">
+                            <div class="ai-result-score-num" th:text="${stats.maxScore()}">0</div>
+                            <p class="ai-result-score-denom mt-1 mb-0">최고 점수</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <!-- 언어별 평균 점수 -->
+                <div class="col-lg-6">
+                    <div class="card ai-card h-100">
+                        <div class="card-body ai-card__body">
+                            <h5 class="fw-semibold mb-3">
+                                <i class="bi bi-translate me-2" aria-hidden="true"></i>언어별 평균 점수
+                            </h5>
+                            <div th:if="${#lists.isEmpty(stats.byLang())}"
+                                 class="text-center text-muted py-3">
+                                데이터 없음
+                            </div>
+                            <div th:each="s : ${stats.byLang()}" class="mb-3">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <span class="badge text-bg-dark" th:text="${s.category}">언어</span>
+                                    <span class="fw-semibold"
+                                          th:text="${#numbers.formatDecimal(s.avgScore, 1, 1)} + '점'">0점</span>
+                                </div>
+                                <div class="progress ds-progress-sm" role="progressbar"
+                                     th:attr="aria-valuenow=${s.avgScore}, aria-valuemin=0, aria-valuemax=100">
+                                    <div class="progress-bar ds-progress-w"
+                                         th:style="'--progress-w:' + ${s.avgScore} + '%'"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 난이도별 정답률 -->
+                <div class="col-lg-6">
+                    <div class="card ai-card h-100">
+                        <div class="card-body ai-card__body">
+                            <h5 class="fw-semibold mb-3">
+                                <i class="bi bi-award me-2" aria-hidden="true"></i>난이도별 정답률
+                                <small class="fw-normal text-secondary">(70점↑ 기준)</small>
+                            </h5>
+                            <div th:if="${#lists.isEmpty(stats.byDifficulty())}"
+                                 class="text-center text-muted py-3">
+                                데이터 없음
+                            </div>
+                            <div th:each="d : ${stats.byDifficulty()}" class="mb-3">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span th:if="${d.difficulty == '상'}" class="badge bg-danger">상</span>
+                                        <span th:if="${d.difficulty == '중'}" class="badge bg-warning text-dark">중</span>
+                                        <span th:if="${d.difficulty == '하'}" class="badge bg-success">하</span>
+                                        <span class="text-secondary small"
+                                              th:text="'시도 ' + ${d.totalCount} + '회 중 ' + ${d.passCount} + '회 통과'"></span>
+                                    </div>
+                                    <span class="fw-semibold"
+                                          th:text="${d.totalCount > 0} ? ${#numbers.formatDecimal(d.passCount * 100.0 / d.totalCount, 1, 0)} + '%' : '0%'">0%</span>
+                                </div>
+                                <div class="progress ds-progress-sm" role="progressbar"
+                                     th:attr="aria-valuenow=${d.passCount}, aria-valuemax=${d.totalCount}">
+                                    <div class="progress-bar ds-progress-w"
+                                         th:style="${d.totalCount > 0} ? '--progress-w:' + ${d.passCount * 100 / d.totalCount} + '%' : '--progress-w:0%'"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 최근 7일 제출 현황 -->
+                <div class="col-12">
+                    <div class="card ai-card">
+                        <div class="card-body ai-card__body">
+                            <h5 class="fw-semibold mb-3">
+                                <i class="bi bi-calendar-week me-2" aria-hidden="true"></i>최근 7일 제출 현황
+                            </h5>
+                            <div th:if="${#lists.isEmpty(stats.recentDaily())}"
+                                 class="text-center text-muted py-3">최근 7일 내 제출 없음</div>
+                            <div th:unless="${#lists.isEmpty(stats.recentDaily())}"
+                                 class="d-flex gap-3 align-items-end ds-stat-chart">
+                                <div th:each="d : ${stats.recentDaily()}"
+                                     class="d-flex flex-column align-items-center flex-grow-1 gap-1">
+                                    <span class="small text-secondary fw-semibold" th:text="${d.count}">0</span>
+                                    <div class="ds-stat-bar"
+                                         th:style="'--bar-h:' + ${d.count * 10 > 80 ? 80 : d.count * 10} + 'px'"></div>
+                                    <span class="small text-muted"
+                                          th:text="${#strings.substring(d.day, 5)}">MM-dd</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </th:block>
+
+        <div class="text-center mt-4 d-flex justify-content-center gap-3">
+            <a th:href="@{/problems/myHistory}" class="btn btn-outline-secondary">
+                <i class="bi bi-clock-history me-1" aria-hidden="true"></i>풀이 이력
+            </a>
+            <a th:href="@{/problems/}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-1" aria-hidden="true"></i>문제 목록으로
+            </a>
+        </div>
+    </div>
+</div>
+</html>

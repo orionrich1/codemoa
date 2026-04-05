@@ -8,7 +8,7 @@
 	<link rel="stylesheet" th:href="@{/css/admin/users.css}" />
 	
 	<form class="row g-2 align-items-center my-5 mx-auto" action="/admin/users"
-		style="max-width: 700px;" id="searchForm">
+		class="ds-form-medium" id="searchForm">
 		<div class="col-auto flex-grow-1 me-3">
 			<input type="text" class="form-control" name="keyword" required
 				placeholder="검색할 아이디를 입력하세요" />
@@ -38,7 +38,7 @@
 		<tbody>
 			<th:block th:if="${userList != null && !#lists.isEmpty(userList)}">
 				<th:block th:each="user : ${userList}">
-					<tr class="users" style="cursor: pointer;" th:data-id="${user.userId}">
+					<tr class="users ds-cursor-pointer" th:data-id="${user.userId}">
 						<td>[[${user.userId}]]</td>
 						<td>[[${user.name}]]</td>
 						<td>[[${user.nickname}]]</td>

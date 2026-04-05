@@ -1,103 +1,145 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{layouts/default_layout}">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layouts/default_layout}">
 
-<div layout:fragment="content" class="ui-view">
-    <style>
-        .problem-list-item {
-            transition: background-color 0.2s ease-in-out;
-        }
-        .problem-title {
-            font-size: 1.8rem; /* 18px */
-            font-weight: var(--font-weight-bold);
-            color: var(--text-primary);
-        }
-        .problem-meta {
-            font-size: 1.4rem; /* 14px */
-            color: var(--text-secondary);
-        }
-    </style>
+<th:block layout:fragment="extra-head">
+    <link rel="stylesheet" th:href="@{/css/problem.css}" />
+</th:block>
 
-	<div class="container my-5">
+<div layout:fragment="content" class="ui-view ai-page">
+    <div class="container my-5">
         <div class="row justify-content-center">
             <div class="col-lg-10">
 
                 <div class="text-center mb-4">
-                    <h2 class="fw-bold fs-2">문제 목록</h2>
+                    <p class="ai-page__kicker mb-2">AI Coding</p>
+                    <h2 class="ai-page__title mb-0">문제 목록</h2>
                 </div>
 
-                <div class="card">
-                    <div class="card-body p-4">
+                <!-- 진행 요약 (로그인 사용자만) -->
+                <div th:if="${solvedCount != null}"
+                     class="text-center mb-3 text-secondary small">
+                    전체 <strong th:text="${totalCount}">0</strong>개 중
+                    <strong th:text="${solvedCount}">0</strong>개 풀었습니다
+                    <span th:if="${totalCount > 0}"
+                          th:text="'(' + ${#numbers.formatDecimal(solvedCount * 100.0 / totalCount, 1, 0)} + '%)'">(%)</span>
+                </div>
 
-						<div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
-							<div class="d-flex align-items-center gap-3 flex-wrap">
-								<div class="btn-group" role="group" aria-label="Language filter">
-									<input type="checkbox" class="btn-check typeFilter" id="leftJAVA" value="1">
-									<label class="btn btn-outline-primary" for="leftJAVA">JAVA</label>
-								
-									<input type="checkbox" class="btn-check typeFilter" id="leftJavascript" value="2">
-									<label class="btn btn-outline-primary" for="leftJavascript">Javascript</label>
-								
-									<input type="checkbox" class="btn-check typeFilter" id="leftPython" value="3">
-									<label class="btn btn-outline-primary" for="leftPython">Python</label>
-								</div>
-								<div class="btn-group" role="group" aria-label="Difficulty filter">
-									<input type="checkbox" class="btn-check difficultyFilter" id="rightHigh" value="1">
-									<label class="btn btn-outline-primary" for="rightHigh">상</label>
-								
-									<input type="checkbox" class="btn-check difficultyFilter" id="rightMiddle" value="2">
-									<label class="btn btn-outline-primary" for="rightMiddle">중</label>
-								
-									<input type="checkbox" class="btn-check difficultyFilter" id="rightLow" value="3">
-									<label class="btn btn-outline-primary" for="rightLow">하</label>
-								</div>
-							</div>
-							<div sec:authorize="hasRole('ROLE_ADMIN')">
-								<a th:href="@{problemWrite}" class="btn btn-primary">
-									<i class="bi bi-pencil-square me-2"></i>문제 작성
-								</a>
-							</div>
-						</div>
+                <div class="card ai-card">
+                    <div class="card-body ai-card__body">
 
-						<ul class="list-group list-group-flush" id="problemTableBody">
-							<th:block th:if="${problemList != null && !#lists.isEmpty(problemList)}">
-								<th:block th:each="problem : ${problemList}">
-									<li class="list-group-item list-group-item-action problem-list-item p-3" style="cursor: pointer;"
-										th:onclick="@{|location.href='problemDetail?problemId=${problem.problemId}'|}">
+                        <!-- 필터 + 검색 + 관리자 버튼 -->
+                        <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-3">
+                            <div class="d-flex flex-column gap-2 flex-grow-1">
+                                <!-- 키워드 검색 -->
+                                <div class="input-group ds-problem-search-cap">
+                                    <span class="input-group-text bg-white border-end-0">
+                                        <i class="bi bi-search text-secondary" aria-hidden="true"></i>
+                                    </span>
+                                    <input type="search" id="problemSearch" class="form-control border-start-0 ps-1"
+                                           placeholder="문제 제목 검색..." aria-label="문제 검색" autocomplete="off" />
+                                </div>
+                                <!-- 필터 -->
+                                <div class="d-flex align-items-center gap-2 flex-wrap ai-filter">
+                                    <div class="btn-group" role="group" aria-label="언어 필터">
+                                        <input type="checkbox" class="btn-check typeFilter" id="filterJAVA"       value="1">
+                                        <label class="btn" for="filterJAVA">JAVA</label>
+
+                                        <input type="checkbox" class="btn-check typeFilter" id="filterJavascript" value="2">
+                                        <label class="btn" for="filterJavascript">JavaScript</label>
+
+                                        <input type="checkbox" class="btn-check typeFilter" id="filterPython"     value="3">
+                                        <label class="btn" for="filterPython">Python</label>
+
+                                        <input type="checkbox" class="btn-check typeFilter" id="filterKotlin"     value="4">
+                                        <label class="btn" for="filterKotlin">Kotlin</label>
+                                    </div>
+                                    <div class="btn-group" role="group" aria-label="난이도 필터">
+                                        <input type="checkbox" class="btn-check difficultyFilter" id="filterHigh"   value="1">
+                                        <label class="btn" for="filterHigh">상</label>
+
+                                        <input type="checkbox" class="btn-check difficultyFilter" id="filterMiddle" value="2">
+                                        <label class="btn" for="filterMiddle">중</label>
+
+                                        <input type="checkbox" class="btn-check difficultyFilter" id="filterLow"    value="3">
+                                        <label class="btn" for="filterLow">하</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div sec:authorize="hasRole('ROLE_ADMIN')">
+                                <a th:href="@{problemWrite}" class="btn btn-primary">
+                                    <i class="bi bi-pencil-square me-2" aria-hidden="true"></i>문제 작성
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- 문제 목록 -->
+                        <ul class="list-group list-group-flush" id="problemTableBody">
+                            <th:block th:if="${problemList != null && !#lists.isEmpty(problemList)}">
+                                <th:block th:each="problem : ${problemList}">
+                                    <li class="list-group-item list-group-item-action ai-list-item p-3 ds-cursor-pointer"
+                                        th:onclick="@{|location.href='problemDetail?problemId=${problem.problemId}'|}">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="flex-grow-1">
                                                 <div class="d-flex align-items-center gap-3">
-                                                    <span class="badge text-bg-dark" style="width: 90px;" th:text="${problem.category}"></span>
-                                                    <span class="problem-title">[[${problem.title}]]</span>
+                                                    <span class="badge text-bg-dark ds-problem-cat-badge"
+                                                          th:text="${problem.category}"></span>
+                                                    <span class="ai-problem-title" th:text="${problem.title}">제목</span>
                                                 </div>
-                                                <div class="d-flex align-items-center gap-3 problem-meta mt-2">
-                                                    <div style="width: 90px;"></div> <span>[[${problem.userId}]]</span>
-                                                    <span>[[${#temporals.format(problem.regDate, 'yyyy-MM-dd')}]]</span>
+                                                <div class="d-flex align-items-center gap-3 ai-problem-meta mt-2">
+                                                    <div class="ds-problem-meta-spacer" aria-hidden="true"></div>
+                                                    <span th:text="${problem.userId}">작성자</span>
+                                                    <span th:text="${#temporals.format(problem.regDate, 'yyyy-MM-dd')}">날짜</span>
                                                 </div>
                                             </div>
-                                            <div class="flex-shrink-0">
-                                                <span th:if="${problem.difficulty == '상'}" class="badge bg-danger fs-6">상</span>
-                                                <span th:if="${problem.difficulty == '중'}" class="badge bg-warning text-dark fs-6">중</span>
-                                                <span th:if="${problem.difficulty == '하'}" class="badge bg-success fs-6">하</span>
+                                            <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                                                <!-- 풀이 상태 배지 (로그인 사용자만) -->
+                                                <th:block th:if="${bestScores != null and bestScores[problem.problemId] != null}">
+                                                    <span class="badge"
+                                                          th:classappend="${bestScores[problem.problemId] >= 90} ? 'text-bg-success' : (${bestScores[problem.problemId] >= 70} ? 'text-bg-primary' : (${bestScores[problem.problemId] >= 50} ? 'text-bg-warning' : 'text-bg-danger'))"
+                                                          th:text="'✓ ' + ${bestScores[problem.problemId]} + '점'">✓ 점</span>
+                                                </th:block>
+                                                <span th:if="${problem.difficulty == '상'}"
+                                                      class="badge bg-danger fs-6">상</span>
+                                                <span th:if="${problem.difficulty == '중'}"
+                                                      class="badge bg-warning text-dark fs-6">중</span>
+                                                <span th:if="${problem.difficulty == '하'}"
+                                                      class="badge bg-success fs-6">하</span>
                                             </div>
                                         </div>
-									</li>
-								</th:block>
-							</th:block>
+                                    </li>
+                                </th:block>
+                            </th:block>
 
-							<th:block th:unless="${problemList != null && !#lists.isEmpty(problemList)}">
-								<li class="list-group-item text-center p-5 text-secondary">
-									문제가 존재하지 않습니다. 관리자에게 문의해주세요.
-								</li>
-							</th:block>
-						</ul>
-					</div>
+                            <th:block th:unless="${problemList != null && !#lists.isEmpty(problemList)}">
+                                <li class="list-group-item text-center p-5 text-secondary">
+                                    <i class="bi bi-inbox me-2" aria-hidden="true"></i>
+                                    문제가 없습니다. 관리자에게 문의해 주세요.
+                                </li>
+                            </th:block>
+                        </ul>
+
+                        <!-- 검색 결과 없음 -->
+                        <div id="problemSearchEmpty" class="text-center p-4 text-secondary d-none">
+                            <i class="bi bi-search me-2" aria-hidden="true"></i>
+                            검색 결과가 없습니다. 다른 키워드를 입력해 보세요.
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-	
-	<script th:src="@{/js/problem.js}"></script>
+
+    <!-- 로그인 사용자 최고 점수 맵을 JS 전역 변수로 노출 (필터 AJAX 후에도 배지 유지) -->
+    <script th:if="${bestScores != null}" th:inline="javascript">
+        window.BEST_SCORES = /*[[${bestScores}]]*/ {};
+    </script>
+    <script th:if="${bestScores == null}">
+        window.BEST_SCORES = {};
+    </script>
+    <script th:src="@{/js/problem.js}"></script>
 </div>
 </html>

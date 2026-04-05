@@ -2,7 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org"
 xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 layout:decorate="~{layouts/default_layout}">
-
+<head>
+	<title th:text="${teamRecruit.title} + ' · 팀 모집'">팀 모집 상세</title>
+</head>
+<body>
 <th:block layout:fragment="content" class="ui-view">
 	<div class = "row my-5" id="global-content">
 		<div class="col-10 offset-1">
@@ -34,14 +37,13 @@ layout:decorate="~{layouts/default_layout}">
 					<div class="border p-2 text-center mt-2" id="contestPreviewWrapper">
 						
 						<!--  미리보기 카드 -->
-						<div class="card p-3 text-center mx-auto" style="max-width:400px;">
+						<div class="card p-3 text-center mx-auto ds-team-poster">
 						
 						<!-- 미리보기 이미지 -->
 						<img id="contestPreviewImage"
 								src=""
-								class="card-img-top"
-								alt="공모전 미리보기 이미지"
-								style="display:none">
+								class="card-img-top d-none"
+								alt="공모전 미리보기 이미지">
 						
 						<div class="card-body">
 						<!-- 타이틀 -->
@@ -53,8 +55,7 @@ layout:decorate="~{layouts/default_layout}">
 							<a id="contestPreviewLink"
 								th:href="${teamRecruit.contestTitle}" 
 								target="_blank" 
-								class="btn btn-outline-primary"
-								style="margin-top:10px;">공모전 바로가기</a>
+								class="btn btn-outline-primary mt-2">공모전 바로가기</a>
 						</div>
 					</div>
 				</div>
@@ -101,7 +102,7 @@ layout:decorate="~{layouts/default_layout}">
 			<div class="card mb-4">
 				<div class="card-body">
 				<h4 th:text="${teamRecruit.title}" class="fw-bold mb-3"></h4>
-				<div class="mb-3" style="white-space: pre-wrap; line-height:1.6;" th:text="${teamRecruit.content}"></div>
+				<div class="mb-3 ds-content-pre ds-team-body" th:text="${teamRecruit.content}"></div>
 				</div>
 			</div>
 				
@@ -124,7 +125,7 @@ layout:decorate="~{layouts/default_layout}">
 				</div>
 				
 		<div class="text-center my-4" th:if="${loginId == teamRecruit.userId}">
-		  <div style="display: flex; justify-content: center; gap: 20px;">
+		  <div class="ds-team-actions">
 		    <button type="button" class="btn btn-warning" id="detailUpdate">수정</button>
 		    <button type="button" class="btn btn-danger" id="detailDelete">삭제</button>
 		  </div>
@@ -135,7 +136,8 @@ layout:decorate="~{layouts/default_layout}">
 </div>
 		
 		<!-- script 구문 -->
-		<script src="/js/recruitDetail.js" defer></script>
+		<script th:src="@{/js/recruitDetail.js}" defer></script>
 	</th:block>
+</body>
 </html>
 

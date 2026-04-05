@@ -25,5 +25,10 @@ public interface PointLogRepository extends JpaRepository<PointLog, Integer> {
 		       "ORDER BY SUM(pl.points) DESC")
 		List<WeeklyPointSummary> findWeeklyTopRankers(@Param("startDate") LocalDateTime startDate, Pageable pageable);
 
+	@Query("SELECT COALESCE(SUM(pl.points), 0) FROM PointLog pl WHERE pl.user.userId = :userId AND pl.createdAt >= :startDate")
+	long sumWeeklyPointsByUser(@Param("userId") String userId, @Param("startDate") LocalDateTime startDate);
+
+	@Query("SELECT COUNT(DISTINCT pl.user.userId) FROM PointLog pl WHERE pl.createdAt >= :startDate")
+	long countActiveUsersSince(@Param("startDate") LocalDateTime startDate);
 
 }

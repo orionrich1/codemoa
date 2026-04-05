@@ -30,6 +30,11 @@ public class DiaryService {
 	public List<Project> getProjectList(String userId) {
 		return diaryMapper.getProjectList(userId);
 	}
+
+	// 메인 페이지용: 전체 최신 프로젝트
+	public List<Project> findLatestProjects(int limit) {
+		return diaryMapper.findLatestProjects(limit);
+	}
 	
 	public List<Project> searchProjectList(String userId, String keyword) {
 		return diaryMapper.searchProjectList(userId, keyword);
@@ -95,15 +100,48 @@ public class DiaryService {
 	
 	public ProjectDiary saveDiary(SaveDiaryRequest request) {
 		if (request.getDiaryId() == 0) {
+			// B-2: addDiary 호출 후 MyBatis useGeneratedKeys로 request.diaryId에 생성된 PK가 세팅됨
 			diaryMapper.addDiary(request);
-		}
-		else {
+			// request.getDiaryId()는 이제 실제 생성된 ID를 가짐
+		} else {
 			diaryMapper.updateDiary(request);
 		}
 		return diaryMapper.getDiary(request.getDiaryId());
 	}
-	
+
 	public void deleteDiary(int diaryId) {
 		diaryMapper.deleteDiary(diaryId);
+	}
+
+	// ======================================
+	// 소유권 검증 헬퍼 (C-9)
+	// ======================================
+
+	/**
+	 * 프로젝트가 해당 userId 소유인지 확인. 아니면 IllegalStateException 발생.
+	 */
+	public void verifyProjectOwnership(int projectId, String userId) {
+		Project project = diaryMapper.getProjectDetail(projectId);
+		if (project == null || !userId.equals(project.getUserId())) {
+			throw new IllegalStateException("해당 프로젝트에 대한 권한이 없습니다.");
+		}
+	}
+
+	/** 체크리스트 → 프로젝트 소유권 확인 */
+	public void verifyChecklistOwnership(int checklistId, String userId) {
+		Integer projectId = diaryMapper.getProjectIdByChecklistId(checklistId);
+		if (projectId == null) {
+			throw new IllegalArgumentException("존재하지 않는 체크리스트입니다.");
+		}
+		verifyProjectOwnership(projectId, userId);
+	}
+
+	/** 다이어리 → 프로젝트 소유권 확인 */
+	public void verifyDiaryOwnership(int diaryId, String userId) {
+		Integer projectId = diaryMapper.getProjectIdByDiaryId(diaryId);
+		if (projectId == null) {
+			throw new IllegalArgumentException("존재하지 않는 다이어리입니다.");
+		}
+		verifyProjectOwnership(projectId, userId);
 	}
 }

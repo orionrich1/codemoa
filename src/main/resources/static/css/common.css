@@ -1,13 +1,16 @@
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
 :root {
+    /* ElevenLabs display 역할 — default_layout에서 Cormorant Garamond 300 로드 */
+    --font-display: "Cormorant Garamond", "Georgia", "Times New Roman", serif;
     /* Typography scale (design-improvement.md) */
     --text-display: clamp(1.85rem, 4.5vw, 2.5rem);
     --text-h1: clamp(1.65rem, 3.5vw, 2rem);
     --text-h2: clamp(1.35rem, 2.5vw, 1.65rem);
     --text-h3: 1.125rem;
     --text-body-lg: 1.0625rem;
-    --text-body: 0.9375rem;
+    /* DS: 본문 기준 16px (design-system.md, main-page-ds-checklist P0) */
+    --text-body: 1rem;
     --text-body-sm: 0.875rem;
     --text-caption: 0.8125rem;
 
@@ -37,6 +40,12 @@
     --ring: #14b8a6;
     --destructive: #dc2626;
     --destructive-foreground: #fef2f2;
+    /* DS §11 선택 토큰 (문서·컴포넌트 공통) */
+    --foreground-subtle: #94a3b8;
+    --success: #16a34a;
+    --success-foreground: #f0fdf4;
+    --warning: #d97706;
+    --warning-foreground: #fffbeb;
     --radius: 0.75rem;
     --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.08);
     --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.1);
@@ -56,7 +65,8 @@ body {
     margin: 0;
     font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     color: var(--foreground);
-    background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+    /* ElevenLabs: 거의 단색에 가까운 라이트 그레이 캔버스 */
+    background: #f5f5f5;
     line-height: 1.5;
 }
 
@@ -108,7 +118,8 @@ a {
 .ui-page-shell {
     max-width: 1200px;
     margin: 1.25rem auto 2.5rem;
-    padding: 0 0.75rem;
+    /* DS: 좌우 16~20px 근접 (main-page-ds-checklist P0) */
+    padding: 0 clamp(1rem, 3vw, 1.25rem);
 }
 
 .ui-view {
@@ -146,25 +157,12 @@ a {
 .form-control:focus,
 .form-select:focus,
 .form-check-input:focus,
-.page-link:focus {
+.page-link:focus,
+.accordion-button:focus,
+.navbar-toggler:focus {
     outline: none;
-    border-color: var(--ring);
-    box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.25);
-}
-
-.btn-primary,
-.ui-btn-primary {
-    background-color: var(--primary);
-    border-color: var(--primary);
-    color: var(--primary-foreground);
-}
-
-.btn-primary:hover,
-.btn-primary:active,
-.ui-btn-primary:hover {
-    background-color: var(--primary-hover);
-    border-color: var(--primary-hover);
-    color: var(--primary-foreground);
+    border-color: rgba(0, 0, 0, 0.12);
+    box-shadow: 0 0 0 3px rgba(147, 197, 253, 0.45);
 }
 
 .btn-outline-secondary {
@@ -173,9 +171,9 @@ a {
 }
 
 .btn-outline-secondary:hover {
-    border-color: var(--primary);
+    border-color: rgba(0, 0, 0, 0.12);
     background-color: var(--secondary);
-    color: var(--primary-hover);
+    color: var(--foreground);
 }
 
 .form-control,
@@ -332,10 +330,93 @@ a {
     border-color: var(--border) !important;
 }
 
+.footer-codemoa__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2.5rem clamp(1rem, 3vw, 1.25rem) 2rem;
+}
+
+.footer-codemoa__inner .row {
+    --bs-gutter-x: 1.5rem;
+}
+
+.footer-codemoa__brand {
+    max-width: 20rem;
+}
+
+.footer-codemoa__heading {
+    font-size: var(--text-body-sm);
+    font-weight: 700;
+    color: var(--foreground);
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.01em;
+}
+
+.footer-codemoa__inner a.text-muted:hover {
+    color: #000000 !important;
+    text-decoration: underline;
+}
+
+/* ==========================================================================
+   ElevenLabs global button / nav overrides
+   - 전체 사이트 버튼/네비 색을 흰/검정/웜스톤/그레이 팔레트로 통일
+   - 로고 이미지를 제외한 틸/기존 primary 색은 버튼에서 제거
+   ========================================================================== */
+
+/* Bootstrap는 .btn.btn-primary(특이도 0,2,0) — 단일 .btn-primary만으로는 틸이 남음 */
+.btn.btn-primary,
+.btn-primary,
+.ui-btn-primary {
+    background-color: #000000 !important;
+    border-color: #000000 !important;
+    color: #ffffff !important;
+    border-radius: 9999px;
+    border-style: solid;
+    border-width: 1px;
+    padding-inline: 1.1rem;
+    box-shadow:
+        0 0 1px rgba(0, 0, 0, 0.4),
+        0 4px 4px rgba(0, 0, 0, 0.04);
+}
+
+.btn.btn-primary:hover,
+.btn.btn-primary:focus,
+.btn.btn-primary:active,
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.ui-btn-primary:hover {
+    background-color: #111111 !important;
+    border-color: #111111 !important;
+    color: #ffffff !important;
+}
+
+.btn-outline-secondary {
+    background-color: #ffffff;
+    color: #000000;
+    border-radius: 9999px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.06),
+        0 1px 2px rgba(0, 0, 0, 0.04),
+        0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.btn-outline-secondary:hover,
+.btn-outline-secondary:focus {
+    background-color: #f5f5f5;
+    color: #000000;
+}
+
+.navbar .nav-link.fw-bold {
+    font-weight: 500;
+    letter-spacing: 0.15px;
+}
+
 @media (max-width: 768px) {
     .ui-page-shell {
         margin-top: 0.75rem;
-        padding: 0 0.5rem;
+        padding: 0 clamp(1rem, 4vw, 1.25rem);
     }
 
     .table-responsive {

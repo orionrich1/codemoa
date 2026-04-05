@@ -56,7 +56,7 @@
 				</th:block>
                 
 		        <li class="list-group-item checklist-add" data-bs-toggle="collapse" data-bs-target="#checklistForm">
-		            <div class="text-center" style="font-size: 1.5rem; color: #888;">＋</div>
+		            <div class="text-center ds-add-placeholder">＋</div>
 		        </li>
             </ul>
             
@@ -64,7 +64,7 @@
 			    <div class="card card-body">
 			        <form id="checklistAddForm" class="d-flex gap-2" th:data-id="${project.projectId}">
 			            <input type="text" name="content" id="newContent" class="form-control" placeholder="할 일 입력" required />
-			            <select name="priority" id="newPriority" class="form-select" style="width: 120px;">
+			            <select name="priority" id="newPriority" class="form-select ds-select-priority">
 			                <option value="1">높음</option>
 			                <option value="2">중간</option>
 			                <option value="3">낮음</option>

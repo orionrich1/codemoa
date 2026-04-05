@@ -1,6 +1,7 @@
 //도영
 package com.codemoa.project.domain.problem.controller;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,10 +12,13 @@ import java.util.List;
 import java.util.Map;
 
 import com.codemoa.project.domain.problem.dto.request.CodeSubmitRequest;
+import com.codemoa.project.domain.problem.dto.request.SaveSubmissionRequest;
 import com.codemoa.project.domain.problem.dto.request.SearchListRequest;
-import com.codemoa.project.domain.problem.entity.Problem;
+import com.codemoa.project.domain.problem.dto.response.ProblemListResponse;
+import com.codemoa.project.domain.problem.dto.response.SaveSubmissionResponse;
 import com.codemoa.project.domain.problem.service.AiSupportService;
 import com.codemoa.project.domain.problem.service.ProblemService;
+import com.codemoa.project.domain.user.security.CustomUserDetails;
 
 import com.google.genai.types.GenerateContentResponse;
 
@@ -30,9 +34,9 @@ public class ProblemRestController {
 
 	// 검색 필터 체크로 인한 리스트 업데이트
 	@PostMapping("/listUpdate")
-	public Map<String, List<Problem>> getFilterList(@RequestBody SearchListRequest request) {
-		Map<String, List<Problem>> map = new HashMap<>();
-		map.put("result", problemService.searchProblemList(request));
+	public Map<String, List<ProblemListResponse>> getFilterList(@RequestBody SearchListRequest request) {
+		Map<String, List<ProblemListResponse>> map = new HashMap<>();
+		map.put("result", problemService.searchProblemListAsDto(request));
 		return map;
 	}
 
@@ -53,5 +57,16 @@ public class ProblemRestController {
 		GenerateContentResponse response = aiSupportService.apiQuestion(question);
 		map.put("result", response.text());
 		return map;
+	}
+
+	// 풀이 이력 저장 + 포인트 지급 (기능 1, 8)
+	@PostMapping("/saveSubmission")
+	public SaveSubmissionResponse saveSubmission(
+			@RequestBody SaveSubmissionRequest request,
+			@AuthenticationPrincipal CustomUserDetails user) {
+		if (user == null) {
+			return new SaveSubmissionResponse(0, 0, false, "로그인이 필요합니다.");
+		}
+		return problemService.saveSubmission(request, user.getUsername());
 	}
 }

@@ -4,6 +4,7 @@ import com.codemoa.project.domain.support.entity.Faq;
 import com.codemoa.project.domain.support.entity.Qna;
 import com.codemoa.project.domain.support.entity.QnaReply;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -18,6 +19,13 @@ public interface SupportMapper {
     // Q&A
     int getQnaCount(Map<String, Object> params);
     List<Qna> findQnaList(Map<String, Object> params);
+
+    int countUnansweredQna();
+
+    int countMyUnansweredQna(@Param("userId") String userId);
+
+    List<Qna> findLatestQnaForMain(@Param("limit") int limit);
+
     Optional<Qna> findQnaById(Long qnaId);
     void insertQna(Qna qna);
     void updateQna(Qna qna);

@@ -30,7 +30,8 @@ public interface TeamRecruitMapper {
 
 	public void insertTeamRecruit(TeamRecruit teamRecruit);
 	
-	public List<TeamRecruit> TeamRecruitList(Map<String, Object> params);
+	// 1-3: TeamRecruitList (PascalCase) → findList 로 수정
+	public List<TeamRecruit> findList(Map<String, Object> params);
 	
 	public int getTeamRecruitCount();
 	

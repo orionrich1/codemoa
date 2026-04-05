@@ -87,16 +87,21 @@ public class MyPageController {
 
 	@ResponseBody
 	@PostMapping("/checkPass")
-	public Map<String, String> checkPass(UserPassUpdateRequest request) {
+	public Map<String, String> checkPass(UserPassUpdateRequest request,
+			@AuthenticationPrincipal CustomUserDetails principal) {
 		Map<String, String> map = new HashMap<>();
-
+		// C-2: 클라이언트가 보낸 userId를 무시하고 세션의 인증된 userId를 사용
+		request.setUserId(principal.getUsername());
 		String result = myPageService.checkPass(request);
 		map.put("result", result);
 		return map;
 	}
 
 	@PostMapping("/updateUser")
-	public String updateUser(UserUpdateRequest request) {
+	public String updateUser(UserUpdateRequest request,
+			@AuthenticationPrincipal CustomUserDetails principal) {
+		// C-1: 클라이언트 request에서 userId를 받지 않고 인증된 세션의 userId로 강제 교체
+		request.setUserId(principal.getUsername());
 		userService.updateUser(request);
 
 		User updatedUser = userRepository.findById(request.getUserId()).orElseThrow();
@@ -108,7 +113,8 @@ public class MyPageController {
 		return "redirect:/my-pages/";
 	}
 
-	@GetMapping("/deleteUser")
+	// C-4: GET → POST 로 변경하여 링크 클릭만으로 계정 삭제되는 취약점 방지
+	@PostMapping("/deleteUser")
 	public String deleteUser(HttpServletRequest request, HttpServletResponse response, Authentication authentication,
 			@AuthenticationPrincipal CustomUserDetails principal) {
 		User user = principal.getUser();
@@ -172,8 +178,8 @@ public class MyPageController {
 		return "redirect:/my-pages/";
 	}
 
-	// 프로젝트 삭제 요청
-	@GetMapping("/deleteProject/{projectId}")
+	// C-4: GET → POST 로 변경
+	@PostMapping("/deleteProject/{projectId}")
 	public String deleteProject(@PathVariable(value = "projectId") int projectId, RedirectAttributes redirectAttributes,
 			@AuthenticationPrincipal CustomUserDetails principal) {
 		Project project = diaryService.getProjectDetail(projectId);

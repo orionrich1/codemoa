@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -26,6 +27,25 @@ public class RankingService {
 
     private final PointLogRepository pointLogRepository;
     private final UserRepository userRepository;
+
+    /**
+     * 로그인 없이 메인 등에 노출할 주간 포인트 랭킹 상위 N명
+     */
+    public List<UserRankingResponse> getWeeklyTopForPublic(int limit) {
+        LocalDateTime startOfWeek = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).atStartOfDay();
+        List<WeeklyPointSummary> summaries = pointLogRepository.findWeeklyTopRankers(startOfWeek, PageRequest.of(0, limit));
+        AtomicInteger rank = new AtomicInteger(1);
+        return summaries.stream()
+                .map(summary -> {
+                    User user = userRepository.findByUserId(summary.getUserId()).orElse(null);
+                    if (user == null) {
+                        return null;
+                    }
+                    return new UserRankingResponse(rank.getAndIncrement(), user, summary.getWeeklyPoints());
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
 
     public RankingPageResponse getRankingPageData(String currentUserId) {
         // 1. 주간 TOP 10 랭킹 목록 조회
@@ -43,6 +63,16 @@ public class RankingService {
                 .build();
     }
     
+    public long countActiveUsersThisWeek() {
+        LocalDateTime startOfWeek = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).atStartOfDay();
+        return pointLogRepository.countActiveUsersSince(startOfWeek);
+    }
+
+    public long getWeeklyPointsByUser(String userId) {
+        LocalDateTime startOfWeek = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).atStartOfDay();
+        return pointLogRepository.sumWeeklyPointsByUser(userId, startOfWeek);
+    }
+
     private List<UserRankingResponse> getWeeklyTop10() {
         // 이번 주 월요일 0시 0분 계산
         LocalDateTime startOfWeek = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).atStartOfDay();

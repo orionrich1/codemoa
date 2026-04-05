@@ -55,13 +55,15 @@ public class AdminController {
 		return "redirect:users?userId=" + request.getUserId();
 	}
 
-	@GetMapping("/unbanUser")
-	public String banUser(@RequestParam("userId") String userId) {
+	// C-4: GET → POST 로 변경
+	@PostMapping("/unbanUser")
+	public String unbanUser(@RequestParam("userId") String userId) {
 		adminService.unbanUser(userId);
 		return "redirect:users?userId=" + userId;
 	}
 
-	@GetMapping("/deleteUser")
+	// C-4: GET → POST 로 변경
+	@PostMapping("/deleteUser")
 	public String deleteUser(@RequestParam("userId") String userId) {
 		adminService.deleteUser(userId);
 		return "redirect:users";

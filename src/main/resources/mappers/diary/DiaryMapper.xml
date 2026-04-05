@@ -11,6 +11,10 @@
 		SELECT * FROM project WHERE user_id=#{userID} ORDER BY project_id DESC
 	</select>
 	
+	<select id="findLatestProjects" resultType="Project">
+		SELECT * FROM project ORDER BY project_id DESC LIMIT #{limit}
+	</select>
+
 	<select id="searchProjectList" resultType="Project">
 		SELECT * FROM project
 		WHERE user_id=#{userId} AND name LIKE CONCAT('%', #{keyword}, '%')
@@ -77,6 +81,10 @@
 		DELETE FROM project_checklist WHERE checklist_id=#{checklistId};
 	</delete>
 
+	<select id="getProjectIdByChecklistId" resultType="int">
+		SELECT project_id FROM project_checklist WHERE checklist_id=#{checklistId}
+	</select>
+
 
 <!-- 
 	===============================
@@ -103,4 +111,8 @@
 	<delete id="deleteDiary">
 		DELETE FROM project_diary WHERE diary_id=#{diaryId}
 	</delete>
+
+	<select id="getProjectIdByDiaryId" resultType="int">
+		SELECT project_id FROM project_diary WHERE diary_id=#{diaryId}
+	</select>
 </mapper>

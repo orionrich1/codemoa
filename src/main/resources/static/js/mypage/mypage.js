@@ -3,10 +3,10 @@ $(function() {
 	// 회원 정보 수정 페이지에서, 패스워드도 변경하겠다고 체크하는 경우
 	$("#changePasswordCheck").on("change", function() {
 		if ($(this).is(":checked")) {
-			$("#passwordSection").show();
+			$("#passwordSection").removeClass("d-none");
 			$("#isPassChange").val("1");
 		} else {
-			$("#passwordSection").hide();
+			$("#passwordSection").addClass("d-none");
 			$("#isPassChange").val("0");
 		}
 	});

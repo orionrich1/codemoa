@@ -73,7 +73,7 @@
 		WHERE r.recruit_id = #{recruitId}
 	</select>
 
-	<select id="TeamRecruitList" parameterType="map" resultMap="TeamRecruitResult">
+	<select id="findList" parameterType="map" resultMap="TeamRecruitResult">
 		SELECT 
 		r.recruit_id,
 		r.title,

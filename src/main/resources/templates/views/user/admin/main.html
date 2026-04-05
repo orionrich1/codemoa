@@ -1,21 +1,33 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{layouts/default_layout}">
-
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+<head>
+    <title>관리자</title>
+</head>
+<body>
 <div layout:fragment="content" class="ui-view">
-	<div class="row my-5">
-		<div class="col-3">
-			<button class="btn btn-primary" th:onclick="|location.href='@{users}'|">멤버 관리</button>
-		</div>
-
-		<div class="col-3">
-			<button class="btn btn-secondary" th:onclick="|location.href='@{banners}'|">배너 관리</button>
-		</div>
-
-		<div class="col-3">
-			<button class="btn btn-warning" th:onclick="|location.href='@{contents}'|">컨텐츠 관리</button>
-		</div>
-	</div>
+    <div class="ds-admin-dashboard py-4">
+        <h1 class="text-center mb-2">관리자 홈</h1>
+        <p class="ds-admin-dashboard__intro">운영 메뉴를 선택하세요. 각 항목은 회원·배너·콘텐츠 관리로 이동합니다.</p>
+        <div class="ds-admin-dashboard__grid">
+            <button type="button" class="ds-admin-dashboard__action border-0 w-100 text-start"
+                    th:onclick="|location.href='@{/admin/users}'|">
+                멤버 관리
+                <p class="ds-admin-dashboard__action-desc">가입 회원 목록·상세·권한</p>
+            </button>
+            <button type="button" class="ds-admin-dashboard__action border-0 w-100 text-start"
+                    th:onclick="|location.href='@{/admin/banners}'|">
+                배너 관리
+                <p class="ds-admin-dashboard__action-desc">메인 등 노출 배너 설정</p>
+            </button>
+            <button type="button" class="ds-admin-dashboard__action border-0 w-100 text-start"
+                    th:onclick="|location.href='@{/admin/contents}'|">
+                콘텐츠 관리
+                <p class="ds-admin-dashboard__action-desc">사이트 콘텐츠 편집</p>
+            </button>
+        </div>
+    </div>
 </div>
+</body>
 </html>

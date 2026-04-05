@@ -262,3 +262,16 @@ CREATE TABLE problems(
     category VARCHAR(20) NOT NULL,
     reg_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS problem_submissions (
+    submission_id   INT AUTO_INCREMENT PRIMARY KEY,
+    user_id         VARCHAR(10) NOT NULL,
+    problem_id      INT NOT NULL,
+    submitted_answer TEXT NOT NULL,
+    ai_score        INT NOT NULL DEFAULT 0,
+    ai_feedback     TEXT,
+    submitted_at    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    point_awarded   INT NOT NULL DEFAULT 0,
+    FOREIGN KEY (user_id)    REFERENCES user(user_id)    ON DELETE CASCADE,
+    FOREIGN KEY (problem_id) REFERENCES problems(problem_id) ON DELETE CASCADE
+);

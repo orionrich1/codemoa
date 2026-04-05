@@ -2,81 +2,91 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" 
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
       layout:decorate="~{layouts/default_layout}">
-
+<head>
+    <title th:text="${board.title} + ' · 커뮤니티'">게시글</title>
+    <th:block layout:fragment="extra-head">
+        <link rel="stylesheet" th:href="@{/css/community.css}" />
+    </th:block>
+</head>
 <body>
-
-<div layout:fragment="content" class="ui-view">
-    <div class="container my-5">
+<div layout:fragment="content" class="ui-view community-ds community-ui">
+    <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
-
-                <div class="card">
-                    <div class="card-body p-4 p-md-5">
-                        <div class="border-bottom pb-3 mb-4">
-                            <div class="d-flex align-items-center mb-3">
-                                <h1 class="h3 mb-0" th:text="${board.title}">게시글 제목</h1>
-                                <span class="badge bg-primary ms-2" th:if="${board.stakedPoints > 0}" th:text="|${board.stakedPoints}P|"></span>
+                <article class="community-card mb-4">
+                    <div class="community-card__body community-card__body--spacious">
+                        <header class="border-bottom pb-3 mb-4 ds-border-bottom-subtle">
+                            <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                                <h1 class="community-post__title mb-0" th:text="${board.title}">게시글 제목</h1>
+                                <span class="community-ds-chip community-ds-chip--dark" th:if="${board.stakedPoints > 0}" th:text="|${board.stakedPoints}P|"></span>
                             </div>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center" style="gap: 16px;">
+                            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+                                <div class="d-flex align-items-center flex-wrap ds-gap-16">
                                     <div th:replace="~{fragments/_userProfile :: userProfile(nickname=${board.authorNickname}, iconName=${board.authorGradeIconName})}"></div>
-                                    <span class="text-secondary small" th:text="'작성일 ' + ${#temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm')}">작성일</span>
+                                    <span class="community-caption mb-0" th:text="'작성일 ' + ${#temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm')}">작성일</span>
                                 </div>
-                                <span class="badge text-bg-secondary" th:text="${board.category}">카테고리</span>
+                                <span class="community-ds-chip" th:text="${board.category}">카테고리</span>
                             </div>
-                        </div>
-                        
-                        <div class="py-4" style="min-height: 200px;" th:utext="${board.content}">
+                        </header>
+
+                        <div class="community-post-body py-4 ds-post-body-minh" th:utext="${board.content}">
                             본문 내용
                         </div>
                     </div>
-                    <div class="card-footer bg-white p-3 d-flex justify-content-end align-items-center gap-2">
-                        <div th:if="${#authentication.name == board.authorId}">
-                            <a th:href="@{/boards/{boardNo}/edit(boardNo=${board.boardNo})}" class="btn btn-outline-secondary">수정</a>
-                            <button id="delete-btn" class="btn btn-danger">삭제</button>
+                    <div class="community-card__footer community-card__footer--inset d-flex flex-wrap justify-content-end align-items-center gap-2">
+                        <div th:if="${#authentication.name == board.authorId}" class="d-flex flex-wrap gap-2">
+                            <a th:href="@{/boards/{boardNo}/edit(boardNo=${board.boardNo})}" class="community-ds-cta-ghost">수정</a>
+                            <button type="button" id="delete-btn" class="community-ds-cta-danger border-0">삭제</button>
                         </div>
-                        <a href="/list" class="btn btn-primary"><i class="bi bi-list-ul"></i> 목록으로</a>
+                        <a th:href="@{/community/{category}(category=${board.category})}" class="community-ds-cta-primary">
+                            <i class="bi bi-list-ul" aria-hidden="true"></i> 목록으로
+                        </a>
                     </div>
-                </div>
+                </article>
 
-                <div class="card mt-4">
-                    <div class="card-header bg-white">
-                        <h5 class="mb-0"><i class="bi bi-chat-dots-fill"></i> 댓글 <span th:text="${#lists.size(board.comments)}">0</span>개</h5>
+                <article class="community-card mb-4">
+                    <div class="community-card__header d-flex align-items-center gap-2">
+                        <h2 class="community-card__heading mb-0">
+                            <i class="bi bi-chat-dots-fill me-2" aria-hidden="true"></i>댓글 <span th:text="${#lists.size(board.comments)}">0</span>개
+                        </h2>
                     </div>
-                    <div class="card-body">
-                        <div th:if="${#lists.isEmpty(board.comments)}" class="text-center py-4 text-secondary">등록된 댓글이 없습니다.</div>
+                    <div class="community-card__body">
+                        <div th:if="${#lists.isEmpty(board.comments)}" class="community-empty py-4">등록된 댓글이 없습니다.</div>
                         <ul class="list-group list-group-flush" th:unless="${#lists.isEmpty(board.comments)}">
-                            <li class="list-group-item px-0 py-3" th:each="comment : ${board.comments}">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <div class="d-flex align-items-center" style="gap: 16px;">
+                            <li class="list-group-item community-comment-item" th:each="comment : ${board.comments}">
+                                <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+                                    <div class="d-flex align-items-center flex-wrap ds-gap-12">
                                         <div th:replace="~{fragments/_userProfile :: userProfile(nickname=${comment.authorNickname}, iconName=${comment.authorGradeIconName})}"></div>
-                                        <small class="text-secondary ms-2" th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}"></small>
+                                        <small class="community-caption mb-0" th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}"></small>
                                     </div>
-                                    <span th:if="${comment.isAdopted}" class="badge bg-success">채택됨</span>
+                                    <span th:if="${comment.isAdopted}" class="community-ds-chip community-ds-chip--dark">채택됨</span>
                                 </div>
-                                <p class="mt-2 mb-0" th:text="${comment.content}">댓글 내용입니다.</p>
-                                <div class.text-end th:if="${board.stakedPoints > 0 and !board.isResolved and !comment.isAdopted and #authentication.name == board.authorId}">
-                                    <button th:attr="data-comment-no=${comment.commentNo}" class="btn btn-sm btn-outline-success adopt-btn">
-                                        <i class="bi bi-check-circle"></i> 채택
+                                <p class="community-comment-body mt-2 mb-0" th:text="${comment.content}">댓글 내용입니다.</p>
+                                <div class="text-end mt-2" th:if="${board.stakedPoints > 0 and !board.isResolved and !comment.isAdopted and #authentication.name == board.authorId}">
+                                    <button type="button" th:attr="data-comment-no=${comment.commentNo}" class="community-ds-cta-warm community-ds-cta-sm adopt-btn border-0">
+                                        <i class="bi bi-check-circle" aria-hidden="true"></i> 채택
                                     </button>
                                 </div>
                             </li>
                         </ul>
                     </div>
-                </div>
+                </article>
 
-                <div class="card mt-4" th:if="${!board.isResolved}">
-                    <div class="card-body p-4">
+                <article class="community-card" th:if="${!board.isResolved}">
+                    <div class="community-card__body community-card__body--spacious">
                         <form id="commentForm">
                             <div class="mb-3">
+                                <label class="form-label" for="commentContent">댓글 작성</label>
                                 <textarea class="form-control" id="commentContent" rows="3" placeholder="댓글을 입력하세요" required></textarea>
                             </div>
                             <div class="text-end">
-                                <button type="submit" class="btn btn-primary"><i class="bi bi-pencil-square"></i> 등록</button>
+                                <button type="submit" class="community-ds-cta-primary border-0">
+                                    <i class="bi bi-pencil-square" aria-hidden="true"></i> 등록
+                                </button>
                             </div>
                         </form>
                     </div>
-                </div>
+                </article>
             </div>
         </div>
     </div>
@@ -91,7 +101,6 @@
             headers[header] = token;
         }
 
-        // --- 삭제 버튼 이벤트 핸들러 ---
         const deleteBtn = document.getElementById('delete-btn');
         if (deleteBtn) {
             deleteBtn.addEventListener('click', function () {
@@ -99,8 +108,6 @@
                     return;
                 }
                 const boardNo = /*[[${board.boardNo}]]*/ 0;
-                
-                // [수정] 현재 게시글의 카테고리 정보를 Thymeleaf를 이용해 가져옵니다.
                 const category = /*[[${board.category}]]*/ 'free';
 
                 fetch(`/api/boards/${boardNo}`, {
@@ -109,7 +116,6 @@
                 }).then(response => {
                     if (response.ok) {
                         alert('게시글이 삭제되었습니다.');
-                        // [수정] 올바른 카테고리 목록 주소로 이동시킵니다.
                         location.href = '/community/' + category;
                     } else {
                         alert('삭제에 실패했습니다. 권한을 확인해주세요.');
@@ -118,7 +124,6 @@
             });
         }
 
-        // --- 댓글 폼 이벤트 핸들러 (이하 동일) ---
         const commentForm = document.getElementById('commentForm');
         if(commentForm) {
             commentForm.addEventListener('submit', function(event) {
@@ -151,7 +156,6 @@
             });
         }
         
-        // --- 채택 버튼 이벤트 핸들러 (이하 동일) ---
         document.querySelectorAll('.adopt-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const commentNo = this.dataset.commentNo;
@@ -179,6 +183,5 @@
         });
     </script>
 </th:block>
-
 </body>
 </html>

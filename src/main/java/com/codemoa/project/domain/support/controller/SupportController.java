@@ -4,7 +4,6 @@ import com.codemoa.project.domain.support.dto.QnaCreateRequest;
 import com.codemoa.project.domain.support.dto.QnaReplyRequest;
 import com.codemoa.project.domain.support.entity.Faq;
 import com.codemoa.project.domain.support.entity.Qna;
-import com.codemoa.project.domain.support.mapper.SupportMapper;
 import com.codemoa.project.domain.support.service.SupportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,13 +19,13 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
+// Q-2: Controller는 Service만 의존 — Mapper 직접 주입 제거
 @Controller
 @RequestMapping("/support")
 @RequiredArgsConstructor
 public class SupportController {
 
     private final SupportService supportService;
-    private final SupportMapper supportMapper;
 
     // FAQ 목록 페이지
     @GetMapping("/faq")
@@ -75,7 +74,7 @@ public class SupportController {
     public String qnaDetail(@PathVariable("qnaId") Long qnaId, Model model) {
         Qna qna = supportService.getQnaWithReplies(qnaId);
         model.addAttribute("qna", qna);
-        model.addAttribute("replyList", supportMapper.findRepliesByQnaId(qnaId));
+        model.addAttribute("replyList", supportService.findRepliesByQnaId(qnaId));
         return "views/support/qna-detail";
     }
 

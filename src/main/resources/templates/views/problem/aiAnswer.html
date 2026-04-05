@@ -1,54 +1,60 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default_layout}">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
 
-<head>
-<style>
-/* 예시 코드 블록 스타일 */
-.code-block {
-	background-color: #282c34;
-	color: #abb2bf;
-	padding: 1.5rem;
-	border-radius: 0.5rem;
-	white-space: pre-wrap;
-	word-wrap: break-word;
-	font-family: 'D2Coding', monospace; /* 코딩용 폰트 (설치 필요) */
-}
-</style>
-</head>
-
-<th:block layout:fragment="content" class="ui-view">
-	<div class="container my-5">
-		<div class="row justify-content-center">
-			<div class="col-lg-9 col-xl-8">
-
-				<div class="card shadow-sm border-0 mb-4">
-					<div class="card-body p-4">
-						<h3 class="card-title fw-bold mb-3">AI에게 질문하기</h3>
-						<form id="questionForm">
-							<div class="mb-3">
-								<textarea class="form-control" rows="6" style="resize: none;" id="questionText"
-									 placeholder="궁금한 점을 여기에 입력하세요..."></textarea>
-							</div>
-							<div class="text-end">
-								<button type="submit" class="btn btn-primary px-4">
-									<i class="bi bi-send-fill me-2"></i>답변 생성하기
-								</button>
-							</div>
-						</form>
-					</div>
-				</div>
-
-				<div class="card shadow-sm border-0">
-					<div class="card-body p-4 p-sm-5">
-						<h2 class="card-title fw-bold border-bottom pb-3 mb-4">AI 답변</h2>
-						<pre class="code-block">
-                        	<code class="language-python">무엇이든 질문해주세요.</code>
-						</pre>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<script th:src="@{/js/problem.js}"></script>
+<th:block layout:fragment="extra-head">
+    <link rel="stylesheet" th:href="@{/css/problem.css}" />
 </th:block>
+
+<div layout:fragment="content" class="ui-view ai-page">
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-xl-7">
+
+                <!-- 페이지 헤더 (다른 AI 페이지와 동일한 계층구조) -->
+                <div class="text-center mb-5">
+                    <p class="ai-page__kicker mb-2">AI Assistant</p>
+                    <h2 class="ai-page__title mb-0">AI에게 질문하기</h2>
+                </div>
+
+                <!-- 질문 입력 카드 -->
+                <div class="card ai-card mb-3">
+                    <div class="card-body ai-card__body">
+                        <form id="questionForm">
+                            <label for="questionText" class="form-label fw-semibold mb-2">질문 입력</label>
+                            <textarea class="form-control ds-textarea-code" rows="6" id="questionText"
+                                      placeholder="궁금한 점을 여기에 입력하세요..."></textarea>
+                            <div class="d-flex justify-content-end mt-3">
+                                <button type="submit" class="btn btn-primary home-ds-cta-primary">
+                                    <i class="bi bi-send-fill me-2" aria-hidden="true"></i>답변 생성하기
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- AI 답변 카드 -->
+                <div class="card ai-card">
+                    <div class="card-body ai-card__body">
+                        <p class="ai-page__kicker mb-3">
+                            <i class="bi bi-robot me-1" aria-hidden="true"></i>AI 답변
+                        </p>
+
+                        <!-- 빈 상태 (초기, 답변 도착 전) -->
+                        <div id="aiAnswerEmpty" class="ui-empty-state text-center py-5 rounded-3">
+                            <i class="bi bi-chat-square-dots fs-1 d-block mb-2" aria-hidden="true"></i>
+                            <p class="mb-0">무엇이든 질문해주세요.</p>
+                        </div>
+
+                        <!-- 답변 결과 (JS 로 채움, 초기 숨김) -->
+                        <div class="code-block d-none" id="aiAnswerBlock"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script th:src="@{/js/problem.js}"></script>
+</div>
 </html>

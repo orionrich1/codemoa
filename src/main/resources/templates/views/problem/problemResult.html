@@ -1,37 +1,150 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{layouts/default_layout}">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
 
-<div layout:fragment="content" class="ui-view">
-	<!-- 임시 css 사용중 -->
-	<link rel="stylesheet" th:href="@{/css/problem.css}" />
+<th:block layout:fragment="extra-head">
+    <link rel="stylesheet" th:href="@{/css/problem.css}" />
+</th:block>
 
+<div layout:fragment="content" class="ui-view ai-page">
 
-	<h4 id="problemTitle">[[${problem.title}]]</h4>
-	<h5 id="problemCategory">[[${problem.category}]]</h5>
-	<pre id="problemContent">[[${problem.content}]]</pre>
-	<hr>
-	<h5>모범 답안</h5>
-	<pre id="problemAnswer">[[${problem.answer}]]</pre>
-	<hr>
-	<h5>제출 답안</h5>
-	<pre id="userAnswer">[[${answer}]]</pre>
-	<hr>
+    <!-- 숨겨진 데이터 (JS에서 읽음) -->
+    <div class="d-none">
+        <span id="resultProblemId"    th:text="${problem.problemId}"></span>
+        <span id="resultProblemTitle" th:text="${problem.title}"></span>
+        <span id="resultCategory"     th:text="${problem.category}"></span>
+        <span id="resultContent"      th:text="${problem.content}"></span>
+        <span id="resultAnswer"       th:text="${problem.answer}"></span>
+        <span id="resultUserAnswer"   th:text="${answer}"></span>
+    </div>
 
-	<pre id="result">결과 받아오는 중 . . .</pre>
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-9">
 
-	<div class="row text-center my-5">
-		<div class="col">
-			<input type="button" class="formBtns btn btn-secondary" value="돌아가기"
-				th:onclick="|location.href='@{/problems}'|">
-		</div>
-	</div>
+                <!-- 페이지 헤더 -->
+                <div class="text-center mb-4">
+                    <p class="ai-page__kicker mb-2">AI Coding</p>
+                    <h2 class="ai-page__title mb-1" th:text="${problem.title}">문제 제목</h2>
+                    <div class="d-flex justify-content-center align-items-center gap-2 mt-2">
+                        <span class="badge text-bg-dark" th:text="${problem.category}">언어</span>
+                        <span th:if="${problem.difficulty == '상'}" class="badge bg-danger">상</span>
+                        <span th:if="${problem.difficulty == '중'}" class="badge bg-warning text-dark">중</span>
+                        <span th:if="${problem.difficulty == '하'}" class="badge bg-success">하</span>
+                    </div>
+                </div>
 
-	<script th:src="@{/js/problem.js}"></script>
-	<script>
-		requestApi();
-	</script>
+                <!-- 점수 카드 -->
+                <div class="card ai-card ai-result-score-card mb-4">
+                    <div class="card-body ai-card__body text-center py-4">
+                        <div id="scoreSpinner" class="d-flex justify-content-center align-items-center gap-2 text-secondary mb-3">
+                            <div class="spinner-border spinner-border-sm" role="status" aria-label="채점 중"></div>
+                            <span>AI가 채점하고 있습니다...</span>
+                        </div>
+                        <div id="scoreSection" class="d-none">
+                            <div class="ai-result-score-num" id="scoreDisplay">--</div>
+                            <div class="ai-result-score-denom">/ 100</div>
+                            <div class="mt-2">
+                                <span id="gradeBadge" class="badge ai-result-grade-badge fs-6 px-3 py-2">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 탭 패널 -->
+                <div class="card ai-card mb-4">
+                    <div class="card-body ai-card__body p-0">
+                        <ul class="nav nav-pills ai-result-tabs px-3 pt-3 gap-2" id="resultTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="tab-feedback" data-bs-toggle="pill"
+                                        data-bs-target="#pane-feedback" type="button" role="tab"
+                                        aria-controls="pane-feedback" aria-selected="true">
+                                    <i class="bi bi-robot me-1" aria-hidden="true"></i>AI 피드백
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="tab-my-answer" data-bs-toggle="pill"
+                                        data-bs-target="#pane-my-answer" type="button" role="tab"
+                                        aria-controls="pane-my-answer" aria-selected="false">
+                                    <i class="bi bi-code-slash me-1" aria-hidden="true"></i>제출 답안
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="tab-problem" data-bs-toggle="pill"
+                                        data-bs-target="#pane-problem" type="button" role="tab"
+                                        aria-controls="pane-problem" aria-selected="false">
+                                    <i class="bi bi-file-text me-1" aria-hidden="true"></i>문제 내용
+                                </button>
+                            </li>
+                        </ul>
+                        <div class="tab-content px-3 pb-3 pt-2">
+                            <!-- AI 피드백 탭 -->
+                            <div class="tab-pane fade show active" id="pane-feedback" role="tabpanel"
+                                 aria-labelledby="tab-feedback" tabindex="0">
+                                <div id="aiFeedbackContent" class="ai-result-feedback-loading">
+                                    <i class="bi bi-hourglass-split me-2" aria-hidden="true"></i>피드백을 받아오는 중입니다...
+                                </div>
+                            </div>
+                            <!-- 제출 답안 탭 -->
+                            <div class="tab-pane fade" id="pane-my-answer" role="tabpanel"
+                                 aria-labelledby="tab-my-answer" tabindex="0">
+                                <pre class="ai-code mt-2" th:text="${answer}">제출 답안</pre>
+                            </div>
+                            <!-- 문제 내용 탭 -->
+                            <div class="tab-pane fade" id="pane-problem" role="tabpanel"
+                                 aria-labelledby="tab-problem" tabindex="0">
+                                <pre class="ai-code mt-2" th:text="${problem.content}">문제 내용</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 모범 답안 (기본 숨김) -->
+                <div class="mb-4">
+                    <button class="btn w-100 ai-result-answer-toggle collapsed" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#modelAnswerCollapse"
+                            aria-expanded="false" aria-controls="modelAnswerCollapse">
+                        <i class="bi bi-eye me-2" aria-hidden="true"></i>모범 답안 보기
+                        <i class="bi bi-chevron-down ms-auto ai-toggle-icon" aria-hidden="true"></i>
+                    </button>
+                    <div class="collapse mt-2" id="modelAnswerCollapse">
+                        <pre class="ai-code" th:text="${problem.answer}">모범 답안</pre>
+                    </div>
+                </div>
+
+                <!-- 포인트 획득 메시지 (기능 8, JS에서 채움) -->
+                <div id="pointMessage" class="text-center mb-3 d-none">
+                    <span id="pointMessageText" class="badge text-bg-warning fs-6 px-3 py-2"></span>
+                </div>
+
+                <!-- 하단 액션 버튼 -->
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                    <a th:href="@{/problems/problemDetail(problemId=${problem.problemId})}"
+                       class="btn btn-primary btn-lg home-ds-cta-primary">
+                        <i class="bi bi-arrow-repeat me-2" aria-hidden="true"></i>다시 풀기
+                    </a>
+                    <a th:href="@{/problems/}"
+                       class="btn btn-lg home-ds-cta-secondary">
+                        <i class="bi bi-list-ul me-2" aria-hidden="true"></i>다른 문제 풀기
+                    </a>
+                    <a th:href="@{/problems/myHistory}"
+                       class="btn btn-lg btn-outline-secondary">
+                        <i class="bi bi-clock-history me-2" aria-hidden="true"></i>내 이력 보기
+                    </a>
+                    <a th:href="@{/problems/stats}"
+                       class="btn btn-lg btn-outline-secondary">
+                        <i class="bi bi-bar-chart me-2" aria-hidden="true"></i>학습 통계
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/problem.js}"></script>
+    <th:block layout:fragment="script">
+        <script>requestApi();</script>
+    </th:block>
 </div>
-
 </html>

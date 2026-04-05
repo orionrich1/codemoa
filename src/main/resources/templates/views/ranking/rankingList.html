@@ -2,7 +2,10 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/default_layout}">
-
+<head>
+    <title>랭킹 · 명예의 전당</title>
+</head>
+<body>
 <div layout:fragment="content" class="ui-view">
     <div class="container my-5">
 
@@ -21,7 +24,7 @@
                             <div>
                                 <h5 class="card-title d-flex align-items-center">
                                     <img th:src="@{/images/rank/{icon}.png(icon=${rankingData.myRankingInfo.currentGradeIconName})}"
-                                         th:alt="${rankingData.myRankingInfo.currentGradeName}" class="me-2" style="width: 32px; height: 32px;">
+                                         th:alt="${rankingData.myRankingInfo.currentGradeName}" class="me-2 ds-rank-icon-lg">
                                     <span th:text="${rankingData.myRankingInfo.currentGradeName}">현재 등급</span>
                                 </h5>
                                 <p class="card-text text-secondary mb-0" th:text="|현재 누적 포인트: ${#numbers.formatInteger(rankingData.myRankingInfo.totalPoints, 3, 'COMMA')} P|">현재 누적 포인트</p>
@@ -32,7 +35,7 @@
                         </div>
 
                         <div th:if="${rankingData.myRankingInfo.nextGradeName != '최고 등급'}">
-                            <div class="progress" style="height: 25px;">
+                            <div class="progress ds-progress-ranking">
                                 <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
                                      th:with="progress=${(rankingData.myRankingInfo.nextGradeMinPoints - rankingData.myRankingInfo.currentGradeMinPoints == 0) ? 100 : ((rankingData.myRankingInfo.totalPoints - rankingData.myRankingInfo.currentGradeMinPoints) * 100.0) / (rankingData.myRankingInfo.nextGradeMinPoints - rankingData.myRankingInfo.currentGradeMinPoints)}"
                                      th:style="|width: ${progress}%;|"
@@ -71,9 +74,9 @@
                             <tr th:each="user : ${rankingData.weeklyTop10}">
                                 <td class="fw-bold" th:text="${user.rank}">1</td>
                                 <td th:text="${user.nickname}">Nickname</td>
-                                <td class="d-flex justify-content-center align-items-center" style="gap: 8px;">
+                                <td class="ds-grade-cell">
                                     <img th:src="@{/images/rank/{icon}.png(icon=${user.gradeIconName})}"
-                                         th:alt="${user.gradeName}" style="width: 24px; height: 24px;">
+                                         th:alt="${user.gradeName}" class="ds-rank-icon-sm">
                                     <span th:text="${user.gradeName}">Grade</span>
                                 </td>
                                 <td class="text-primary fw-bold" th:text="|+ ${#numbers.formatInteger(user.weeklyPoints, 3, 'COMMA')} P|">+1,234 P</td>
@@ -117,4 +120,5 @@
         </div>
     </div>
 </div>
+</body>
 </html>

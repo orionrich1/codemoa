@@ -2,21 +2,29 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" 
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
       layout:decorate="~{layouts/default_layout}">
-
-<div layout:fragment="content" class="ui-view">
-    <div class="container my-5">
+<head>
+    <title>커뮤니티 · 새 글 작성</title>
+    <th:block layout:fragment="extra-head">
+        <link rel="stylesheet" th:href="@{/css/community.css}" />
+        <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+    </th:block>
+</head>
+<body>
+<div layout:fragment="content" class="ui-view community-ds community-ui">
+    <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <div class="text-center mb-4">
-                    <h2 class="fw-bold fs-2">새 글 작성</h2>
+                    <p class="community-page__kicker mb-0">Community</p>
+                    <h1 class="community-page__title mb-0">새 글 작성</h1>
                 </div>
                 
-                <div class="card">
-                    <div class="card-body p-4 p-md-5">
+                <article class="community-card">
+                    <div class="community-card__body community-card__body--spacious">
                         <form id="writeForm">
                             <div class="row g-3">
                                 <div class="col-md-6">
-                                    <label for="category" class="form-label fw-bold">카테고리</label> 
+                                    <label for="category" class="form-label">카테고리</label> 
                                     <select class="form-select" id="category" name="category" required>
                                         <option value="" disabled th:selected="${selectedCategory == null}">카테고리를 선택하세요</option>
                                         <option value="Java"       th:selected="${#strings.equalsIgnoreCase(selectedCategory, 'Java')}">Java</option>
@@ -27,8 +35,8 @@
                                     </select>
                                 </div>
 
-                                <div id="pointsDiv" class="col-md-6" style="display: none;">
-                                    <label for="stakedPoints" class="form-label fw-bold">질문 포인트</label>
+                                <div id="pointsDiv" class="col-md-6 d-none">
+                                    <label for="stakedPoints" class="form-label">질문 포인트</label>
                                     <select class="form-select" id="stakedPoints" name="stakedPoints">
                                         <option value="10">10 포인트</option>
                                         <option value="30">30 포인트</option>
@@ -38,30 +46,31 @@
                                 </div>
 
                                 <div class="col-12">
-                                    <label for="title" class="form-label fw-bold">제목</label> 
+                                    <label for="title" class="form-label">제목</label> 
                                     <input type="text" class="form-control" id="title" name="title" placeholder="제목을 입력하세요" required>
                                 </div>
 
                                 <div class="col-12">
-                                    <label for="content" class="form-label fw-bold">내용</label>
+                                    <label for="content" class="form-label">내용</label>
                                     <div id="summernote"></div>
-                                    <textarea id="content" name="content" style="display: none;"></textarea>
+                                    <textarea id="content" name="content" class="d-none" aria-hidden="true" tabindex="-1"></textarea>
                                 </div>
                             </div>
                             
-                            <div class="d-flex justify-content-end gap-2 mt-4">
-                                <a th:href="@{/community/{category}(category=${selectedCategory}, page=0)}" class="btn btn-secondary">취소</a>
-                                <button type="submit" class="btn btn-primary">저장하기</button>
+                            <div class="d-flex justify-content-end flex-wrap gap-2 mt-4">
+                                <a th:href="@{/community/{category}(category=${selectedCategory}, page=0)}" class="community-ds-cta-warm">취소</a>
+                                <button type="submit" class="community-ds-cta-primary border-0">저장하기</button>
                             </div>
                         </form>
                     </div>
-                </div>
+                </article>
             </div>
         </div>
     </div>
 </div>
 
 <th:block layout:fragment="script">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
     <script>
         $(document).ready(function() {
             $('#summernote').summernote({
@@ -83,26 +92,23 @@
     </script>
     
     <script>
-        // 카테고리 변경 시 포인트 드롭다운 보이기/숨기기
         document.getElementById('category').addEventListener('change', function() {
             const pointsDiv = document.getElementById('pointsDiv');
-            if (this.value === 'free' || this.value === '') { // '자유' -> 'free' 로 변경
-                pointsDiv.style.display = 'none';
+            if (this.value === 'free' || this.value === '') {
+                pointsDiv.classList.add('d-none');
             } else {
-                pointsDiv.style.display = 'block';
+                pointsDiv.classList.remove('d-none');
             }
         });
         
-        // 페이지 로드 시 초기 카테고리 값에 따라 포인트 드롭다운 상태 설정
         document.addEventListener('DOMContentLoaded', function() {
             const categorySelect = document.getElementById('category');
             const pointsDiv = document.getElementById('pointsDiv');
-            if (categorySelect.value !== 'free' && categorySelect.value !== '') { // '자유' -> 'free' 로 변경
-                pointsDiv.style.display = 'block';
+            if (categorySelect.value !== 'free' && categorySelect.value !== '') {
+                pointsDiv.classList.remove('d-none');
             }
         });
 
-        // 폼 전송 로직
         document.getElementById('writeForm').addEventListener('submit', function(event) {
             event.preventDefault();
 
@@ -113,7 +119,7 @@
             const category = document.getElementById('category').value;
             const content = document.getElementById('content').value;
             const stakedPoints = document.getElementById('stakedPoints').value;
-            const categoryIsQuestion = document.getElementById('category').value !== 'free'; // '자유' -> 'free' 로 변경
+            const categoryIsQuestion = document.getElementById('category').value !== 'free';
 
             const data = {
                 title: title,
@@ -137,7 +143,6 @@
             .then(response => {
                 if (response.ok) {
                     alert("게시글이 성공적으로 등록되었습니다.");
-                    // 성공 시 게시판 목록의 첫 페이지로 이동합니다.
                     location.href = `/community/${category}?page=0`; 
                 } else {
                     response.text().then(text => {
@@ -157,4 +162,5 @@
         });
     </script>
 </th:block>
+</body>
 </html>

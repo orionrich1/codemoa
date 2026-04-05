@@ -24,6 +24,21 @@ public class SupportService {
         return supportMapper.findAllFaqs();
     }
 
+    @Transactional(readOnly = true)
+    public int countUnansweredQna() {
+        return supportMapper.countUnansweredQna();
+    }
+
+    @Transactional(readOnly = true)
+    public int countMyUnansweredQna(String userId) {
+        return supportMapper.countMyUnansweredQna(userId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Qna> findLatestQnaForMain(int limit) {
+        return supportMapper.findLatestQnaForMain(limit);
+    }
+
     // Q&A 목록 조회 (페이지네이션 포함)
     @Transactional(readOnly = true)
     public Map<String, Object> getQnaList(int page, int pageSize, String type, String keyword) {
@@ -93,7 +108,12 @@ public class SupportService {
     @Transactional
     public void createReply(QnaReply reply) {
         supportMapper.insertReply(reply);
-        // 답변이 달리면, 원본 Q&A 게시글의 상태를 '답변완료'로 변경
         supportMapper.updateQnaAnsweredStatus(reply.getQnaId());
+    }
+
+    // Q-2: SupportController가 Mapper를 직접 호출하는 계층 위반 해소
+    @Transactional(readOnly = true)
+    public List<QnaReply> findRepliesByQnaId(Long qnaId) {
+        return supportMapper.findRepliesByQnaId(qnaId);
     }
 }

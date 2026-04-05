@@ -24,7 +24,7 @@
                             <span>작성일: <span th:text="${#temporals.format(qna.createdAt, 'yyyy-MM-dd HH:mm')}"></span></span> |
                             <span>조회수: <span th:text="${qna.viewCount}"></span></span>
                         </div>
-                        <div style="white-space: pre-wrap; min-height: 150px;" th:text="${qna.content}"></div>
+                        <div class="ds-content-pre ds-block-minh-150" th:text="${qna.content}"></div>
                     </div>
                 </div>
 
@@ -37,7 +37,7 @@
                             <span>답변자: <span th:text="${reply.writerNickname}"></span> (관리자)</span> |
                             <span>답변일: <span th:text="${#temporals.format(reply.createdAt, 'yyyy-MM-dd HH:mm')}"></span></span>
                         </div>
-                        <div style="white-space: pre-wrap;" th:text="${reply.content}"></div>
+                        <div class="ds-content-pre" th:text="${reply.content}"></div>
                     </div>
                 </div>
 

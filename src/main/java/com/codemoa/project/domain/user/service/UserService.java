@@ -49,6 +49,10 @@ public class UserService {
 	// 회원가입
 	@Transactional
 	public String signUp(UserSignUpRequest request, String snsProvider, String snsProviderId) {
+		if (!request.getPass().equals(request.getPassConfirm())) {
+			throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+		}
+
 		if (userRepository.existsById(request.getUserId())) {
 			throw new IllegalArgumentException("이미 사용 중인 아이디입니다.");
 		}
@@ -98,9 +102,10 @@ public class UserService {
 		if (!isPassFind) {
 			user = userMapper.findId(name, phone);
 		} else {
+			// B-1: 동일 쿼리를 두 번 실행하는 버그 수정 — 첫 조회 결과를 재사용
 			User u = userMapper.findPass(id, name, phone);
 			if (u != null) {
-				user.add(userMapper.findPass(id, name, phone));
+				user.add(u);
 			}
 		}
 		return user;
@@ -108,6 +113,9 @@ public class UserService {
 
 	// 비밀번호 찾기 이 후 비밀번호 재설정하기
 	public void updatePass(UserPassUpdateRequest request) {
+		if (!request.getPass().equals(request.getPassConfirm())) {
+			throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+		}
 		userMapper.updatePass(request.getUserId(), passwordEncoder.encode(request.getPass()));
 	}
 
@@ -131,12 +139,35 @@ public class UserService {
 	}
 
 	@Transactional(readOnly = true)
+	public long countAllUsers() {
+		return userRepository.count();
+	}
+
+	@Transactional(readOnly = true)
 	public UserResponse getUserInfo(String userId) {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다. id=" + userId));
 		return new UserResponse(user);
 	}
 	
+	/** 점수 기반 커스텀 포인트 지급 (AI 코딩 문제 제출 등 가변 포인트 이벤트에 사용) */
+	@Transactional
+	public void addCustomPoints(String userId, int points, String description, PointEventType eventType) {
+		Optional<User> optionalUser = userRepository.findByUserId(userId);
+		if (optionalUser.isEmpty() || points <= 0) return;
+		User user = optionalUser.get();
+
+		PointLog newPointLog = PointLog.builder()
+				.user(user)
+				.eventType(eventType)
+				.points(points)
+				.description(description)
+				.build();
+		pointLogRepository.save(newPointLog);
+		user.addPoints(points);
+		userRepository.save(user);
+	}
+
 	@Transactional
 	public void addPointsForEvent(String userId, PointEventType eventType) {
 	    Optional<User> optionalUser = userRepository.findByUserId(userId);

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.codemoa.project.domain.problem.mapper.SubmissionMapper">
+
+    <insert id="insertSubmission" parameterType="ProblemSubmission"
+            useGeneratedKeys="true" keyProperty="submissionId">
+        INSERT INTO problem_submissions (user_id, problem_id, submitted_answer, ai_score, ai_feedback, point_awarded)
+        VALUES (#{userId}, #{problemId}, #{submittedAnswer}, #{aiScore}, #{aiFeedback}, #{pointAwarded})
+    </insert>
+
+    <update id="updatePointAwarded">
+        UPDATE problem_submissions
+        SET point_awarded = #{points}
+        WHERE submission_id = #{submissionId}
+    </update>
+
+    <select id="existsTodayPointForProblem" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM problem_submissions
+        WHERE user_id = #{userId}
+          AND problem_id = #{problemId}
+          AND point_awarded > 0
+          AND DATE(submitted_at) = CURDATE()
+    </select>
+
+    <select id="findMyHistory" resultType="ProblemSubmission">
+        SELECT ps.*, p.title AS problem_title, p.category, p.difficulty
+        FROM problem_submissions ps
+        JOIN problems p ON ps.problem_id = p.problem_id
+        WHERE ps.user_id = #{userId}
+        ORDER BY ps.submitted_at DESC
+    </select>
+
+    <select id="findBestScore" resultType="java.lang.Integer">
+        SELECT MAX(ai_score)
+        FROM problem_submissions
+        WHERE user_id = #{userId}
+          AND problem_id = #{problemId}
+    </select>
+
+    <select id="findBestScorePerProblem" resultType="ProblemSubmission">
+        SELECT problem_id, MAX(ai_score) AS ai_score
+        FROM problem_submissions
+        WHERE user_id = #{userId}
+        GROUP BY problem_id
+    </select>
+
+    <select id="countSolvedProblems" resultType="int">
+        SELECT COUNT(DISTINCT problem_id)
+        FROM problem_submissions
+        WHERE user_id = #{userId}
+    </select>
+
+    <!-- ─── 기능 7: 학습 통계 쿼리 ─────────────────────────────── -->
+
+    <select id="countTotalSubmissions" resultType="int">
+        SELECT COUNT(*) FROM problem_submissions WHERE user_id = #{userId}
+    </select>
+
+    <select id="avgScore" resultType="java.lang.Double">
+        SELECT AVG(ai_score) FROM problem_submissions WHERE user_id = #{userId}
+    </select>
+
+    <select id="maxScore" resultType="java.lang.Integer">
+        SELECT MAX(ai_score) FROM problem_submissions WHERE user_id = #{userId}
+    </select>
+
+    <select id="avgScoreByLang" resultType="LangStat">
+        SELECT p.category, AVG(ps.ai_score) AS avg_score
+        FROM problem_submissions ps
+        JOIN problems p ON ps.problem_id = p.problem_id
+        WHERE ps.user_id = #{userId}
+        GROUP BY p.category
+        ORDER BY avg_score DESC
+    </select>
+
+    <select id="statsByDifficulty" resultType="DiffStat">
+        SELECT p.difficulty,
+               COUNT(*) AS total_count,
+               SUM(CASE WHEN ps.ai_score >= 70 THEN 1 ELSE 0 END) AS pass_count
+        FROM problem_submissions ps
+        JOIN problems p ON ps.problem_id = p.problem_id
+        WHERE ps.user_id = #{userId}
+        GROUP BY p.difficulty
+        ORDER BY FIELD(p.difficulty, '상', '중', '하')
+    </select>
+
+    <select id="recentDailyCount" resultType="DailyStat">
+        SELECT DATE(submitted_at) AS day, COUNT(*) AS count
+        FROM problem_submissions
+        WHERE user_id = #{userId}
+          AND submitted_at >= DATE_SUB(CURDATE(), INTERVAL 6 DAY)
+        GROUP BY DATE(submitted_at)
+        ORDER BY day ASC
+    </select>
+
+</mapper>

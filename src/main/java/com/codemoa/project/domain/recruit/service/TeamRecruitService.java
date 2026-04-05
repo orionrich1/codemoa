@@ -31,9 +31,9 @@ public interface TeamRecruitService {
 
     void addTeamRecruit(TeamRecruit teamRecruit);
 
-    TeamRecruit getTeamRecruit(int recruitId);	
-	
-	void insertTeamRecruit(TeamRecruit teamRecruit);
+    TeamRecruit getTeamRecruit(int recruitId);
+
+    // 2-4: insertTeamRecruit 제거 — addTeamRecruit 으로 통일
 	
 	void increaseViewCount(int recruitId);
 }

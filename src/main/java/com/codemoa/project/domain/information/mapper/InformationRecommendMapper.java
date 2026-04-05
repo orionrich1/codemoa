@@ -19,6 +19,14 @@ public interface InformationRecommendMapper {
 	 * @return Lecture 리스트
 	 */
 	List<Lecture> findLatestLectures(@Param("limit") int limit);
+
+	List<Book> findLatestBooks(@Param("limit") int limit);
+
+	List<Contest> findLatestContests(@Param("limit") int limit);
+
+	int countContestsEndingWithinDays(@Param("days") int days);
+
+	List<Contest> findContestsEndingSoon(@Param("limit") int limit, @Param("days") int days);
 	// ▲▲▲ [메인 페이지용 메서드 추가] ▲▲▲
 
 	// 강좌 관련

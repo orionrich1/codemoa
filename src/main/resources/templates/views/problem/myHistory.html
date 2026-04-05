@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+
+<th:block layout:fragment="extra-head">
+    <link rel="stylesheet" th:href="@{/css/problem.css}" />
+</th:block>
+
+<div layout:fragment="content" class="ui-view ai-page">
+    <div class="container my-5">
+
+        <!-- 헤더 -->
+        <div class="text-center mb-5">
+            <p class="ai-page__kicker mb-2">My Progress</p>
+            <h2 class="ai-page__title mb-0">내 풀이 이력</h2>
+        </div>
+
+        <!-- 진행 요약 카드 -->
+        <div class="row justify-content-center mb-4">
+            <div class="col-lg-6">
+                <div class="card ai-card">
+                    <div class="card-body ai-card__body text-center">
+                        <p class="text-secondary small mb-1">전체 진행 현황</p>
+                        <p class="fs-5 mb-0">
+                            <strong class="fw-semibold" th:text="${solvedCount}">0</strong>
+                            <span class="text-secondary"> / </span>
+                            <span th:text="${totalCount}">0</span>
+                            <span class="text-secondary ms-1">문제 풀었습니다</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 필터 탭 -->
+        <div class="d-flex gap-2 mb-3 flex-wrap" id="historyFilter">
+            <button class="btn ai-pill active" data-filter="all">전체</button>
+            <button class="btn ai-pill" data-filter="90">우수 (90점↑)</button>
+            <button class="btn ai-pill" data-filter="50under">재도전 필요 (50점↓)</button>
+        </div>
+
+        <!-- 이력 목록 -->
+        <div th:if="${#lists.isEmpty(historyList)}"
+             class="text-center py-5 text-muted">
+            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+            <p class="mb-3">아직 푼 문제가 없습니다.</p>
+            <a th:href="@{/problems/}" class="btn btn-primary home-ds-cta-primary">
+                첫 문제 도전하기
+            </a>
+        </div>
+
+        <div th:unless="${#lists.isEmpty(historyList)}"
+             class="card ai-card" id="historyList">
+            <ul class="list-group list-group-flush">
+                <li th:each="item : ${historyList}"
+                    th:attr="data-score=${item.aiScore()}"
+                    class="list-group-item ai-list-item px-4 py-3">
+                    <div class="row align-items-center">
+                        <!-- 문제 정보 -->
+                        <div class="col-md-5">
+                            <p class="ai-problem-title mb-1" th:text="${item.problemTitle()}">문제 제목</p>
+                            <div class="d-flex gap-2">
+                                <span class="badge text-bg-dark small" th:text="${item.category()}">언어</span>
+                                <span th:if="${item.difficulty() == '상'}" class="badge bg-danger small">상</span>
+                                <span th:if="${item.difficulty() == '중'}" class="badge bg-warning text-dark small">중</span>
+                                <span th:if="${item.difficulty() == '하'}" class="badge bg-success small">하</span>
+                            </div>
+                        </div>
+                        <!-- 점수 -->
+                        <div class="col-4 col-md-2 text-center">
+                            <span class="fs-4 fw-light"
+                                  th:classappend="${item.aiScore() >= 90} ? 'ds-score-grade-a' : (${item.aiScore() >= 70} ? 'ds-score-grade-b' : (${item.aiScore() >= 50} ? 'ds-score-grade-c' : 'ds-score-grade-d'))"
+                                  th:text="${item.aiScore()}">0</span>
+                            <span class="text-secondary small"> / 100</span>
+                        </div>
+                        <!-- 포인트 -->
+                        <div class="col-4 col-md-2 text-center">
+                            <span th:if="${item.pointAwarded() > 0}"
+                                  class="badge text-bg-warning"
+                                  th:text="'+ ' + ${item.pointAwarded()} + 'P'">+60P</span>
+                            <span th:if="${item.pointAwarded() == 0}"
+                                  class="text-muted small">-</span>
+                        </div>
+                        <!-- 날짜 -->
+                        <div class="col-4 col-md-2 text-center">
+                            <span class="ai-problem-meta"
+                                  th:text="${#temporals.format(item.submittedAt(), 'MM.dd HH:mm')}">날짜</span>
+                        </div>
+                        <!-- 다시 풀기 -->
+                        <div class="col-md-1 text-end">
+                            <a class="btn btn-sm btn-outline-secondary"
+                               th:href="@{/problems/problemDetail(problemId=${item.problemId()})}"
+                               aria-label="다시 풀기">
+                                <i class="bi bi-arrow-repeat" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 빈 결과 (필터 적용 후 0건) -->
+        <div id="historyEmpty" class="text-center py-4 text-muted d-none">
+            <i class="bi bi-funnel fs-2 d-block mb-2"></i>
+            <p>해당 조건의 이력이 없습니다.</p>
+        </div>
+
+        <div class="text-center mt-4">
+            <a th:href="@{/problems/}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-1" aria-hidden="true"></i>문제 목록으로
+            </a>
+        </div>
+    </div>
+
+    <script>
+    document.querySelectorAll('#historyFilter .btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            document.querySelectorAll('#historyFilter .btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            const filter = this.dataset.filter;
+            const rows = document.querySelectorAll('#historyList li');
+            let visible = 0;
+            rows.forEach(row => {
+                const score = parseInt(row.dataset.score);
+                let show = true;
+                if (filter === '90')      show = score >= 90;
+                if (filter === '50under') show = score < 50;
+                row.style.display = show ? '' : 'none';
+                if (show) visible++;
+            });
+            document.getElementById('historyEmpty').classList.toggle('d-none', visible > 0);
+        });
+    });
+    </script>
+</div>
+</html>

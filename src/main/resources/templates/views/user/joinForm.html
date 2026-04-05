@@ -15,11 +15,13 @@
 							<p class="text-secondary">CodeMoa의 회원이 되어보세요.</p>
 						</div>
 
-						<form action="/join" method="POST" id="userJoinForm">
+						<div th:if="${error != null}" class="alert alert-danger" role="alert" th:text="${error}"></div>
+
+						<form th:action="@{/join}" method="POST" id="userJoinForm">
 							<div class="form-floating mb-3">
 								<input type="text" class="form-control" id="userId" name="userId" placeholder="아이디" required>
 								<label for="userId">아이디</label>
-								<div class="form-text ps-2">영문, 숫자 조합 6~12자로 입력해주세요.</div>
+								<div class="form-text ps-2">영문·숫자 조합 4~20자로 입력해주세요.</div>
 							</div>
 			
 							<div class="form-floating mb-3">
@@ -66,6 +68,11 @@
  	<script>
  		// AI 웹 퍼블리셔: 이 스크립트 블록은 기능의 핵심이므로 절대 삭제하거나 수정하지 않습니다.
  		$(function(){
+ 			function readXsrfToken() {
+ 				const m = document.cookie.match(/XSRF-TOKEN=([^;]+)/);
+ 				return m ? decodeURIComponent(m[1].trim()) : '';
+ 			}
+
  			// Form 제출될 때 
  			$('#userJoinForm').submit(function(e){
  				e.preventDefault();
@@ -84,7 +91,10 @@
 				  method: 'POST',           	
 				  data: { userId: userId },   	
 				  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-				  dataType: 'json',         	
+				  dataType: 'json',
+				  beforeSend: function (xhr) {
+				    xhr.setRequestHeader('X-XSRF-TOKEN', readXsrfToken());
+				  },
 				  success: function(response) {
 				    if(response){
 	 					alert("이미 존재하는 아이디입니다.");

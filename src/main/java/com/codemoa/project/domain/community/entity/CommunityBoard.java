@@ -19,12 +19,13 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import com.codemoa.project.domain.main.support.CommunityPostPreview;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "community_board")
-public class CommunityBoard {
+public class CommunityBoard implements CommunityPostPreview {
 
     public enum PostType {
         NORMAL, QUESTION

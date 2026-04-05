@@ -9,6 +9,32 @@
 		ORDER BY reg_date DESC 
 		LIMIT #{limit}
 	</select>
+
+	<select id="findLatestBooks" parameterType="int" resultType="com.codemoa.project.domain.information.entity.Book">
+		SELECT * FROM book
+		ORDER BY reg_date DESC
+		LIMIT #{limit}
+	</select>
+
+	<select id="findLatestContests" parameterType="int" resultType="com.codemoa.project.domain.information.entity.Contest">
+		SELECT * FROM contest
+		ORDER BY reg_date DESC
+		LIMIT #{limit}
+	</select>
+
+	<select id="countContestsEndingWithinDays" resultType="int">
+		SELECT COUNT(*) FROM contest
+		WHERE end_date &gt;= NOW()
+		  AND DATE(end_date) &lt;= DATE_ADD(CURDATE(), INTERVAL #{days} DAY)
+	</select>
+
+	<select id="findContestsEndingSoon" resultType="com.codemoa.project.domain.information.entity.Contest">
+		SELECT * FROM contest
+		WHERE end_date &gt;= NOW()
+		  AND DATE(end_date) &lt;= DATE_ADD(CURDATE(), INTERVAL #{days} DAY)
+		ORDER BY end_date ASC
+		LIMIT #{limit}
+	</select>
 	<select id="getLecture">
 		select * from lecture where recommend_no = #{no}
 	</select>

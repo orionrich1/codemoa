@@ -13,7 +13,8 @@ public enum PointEventType {
     SIGN_UP("회원가입", 1000),
     DAILY_LOGIN("일일 로그인", 100),
     CREATE_POST("게시글 작성", 15),
-    CREATE_COMMENT("댓글 작성", 5);
+    CREATE_COMMENT("댓글 작성", 5),
+    PROBLEM_SUBMIT("AI 코딩 문제 제출", 0); // 실제 지급량은 점수 기준으로 동적 계산
 
     private final String description; // 설명
     private final int points;         // 지급/차감 포인트

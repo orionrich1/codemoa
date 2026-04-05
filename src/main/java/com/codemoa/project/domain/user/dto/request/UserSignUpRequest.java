@@ -3,6 +3,7 @@ package com.codemoa.project.domain.user.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +18,9 @@ public class UserSignUpRequest {
     @NotBlank(message = "비밀번호는 필수 입력 값입니다.")
     private String pass;
 
+    @NotBlank(message = "비밀번호 확인을 입력해주세요.")
+    private String passConfirm;
+
     @NotBlank(message = "이름은 필수 입력 값입니다.")
     private String name;
 
@@ -27,6 +31,8 @@ public class UserSignUpRequest {
     @Email(message = "이메일 형식에 맞지 않습니다.")
     private String email;
 
+    @NotBlank(message = "휴대폰 번호는 필수 입력 값입니다.")
+    @Pattern(regexp = "^[0-9]+$", message = "휴대폰 번호는 숫자만 입력해주세요.")
     private String mobile;
     
 

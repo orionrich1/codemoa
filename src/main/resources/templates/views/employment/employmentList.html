@@ -4,11 +4,9 @@
       layout:decorate="~{layouts/default_layout}">
 
 <head>
-    <meta charset="UTF-8" />
-    <title>채용 공고 리스트</title>
-    <script src="/js/employmentList.js" defer></script>
+    <title>채용 공고</title>
 </head>
-
+<body>
 <div layout:fragment="content" class="ui-view">
     <div class="container my-5">
         <div class="row justify-content-center">
@@ -21,7 +19,7 @@
                     <div class="card-body p-4">
                         <form method="get" th:action="@{/employmentList}">
                             <div class="d-flex flex-wrap gap-2 mb-2">
-                                <div class="flex-shrink-0" style="width: 180px;">
+                                <div class="flex-shrink-0 ds-filter-w-180">
                                     <select id="type" name="type" class="form-select">
                                         <option th:value="''" th:selected="${type == null or type == ''}">고용 형태 선택</option>
                                         <option th:value="'정규직'" th:selected="${type == '정규직'}">정규직</option>
@@ -54,11 +52,11 @@
 
                         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
                             <div class="col" th:each="post : ${employmentList}">
-                               <div class="card employment-card h-100" style="cursor:pointer;" th:attr="data-url=${post.url}">
+                               <div class="card employment-card h-100" th:attr="data-url=${post.url}">
                                   <div class="card-body d-flex flex-column p-4">
                                         <div>
                                             <h6 class="card-subtitle mb-2 text-secondary">[[${post.company}]]</h6>
-                                            <h5 class="card-title fw-bold" style="min-height: 3rem;">[[${post.title}]]</h5>
+                                            <h5 class="card-title fw-bold ds-employment-card-title">[[${post.title}]]</h5>
                                         </div>
                                         
                                         <div class="mt-auto border-top pt-3">
@@ -102,4 +100,9 @@
         </div>
     </div>
 </div>
+
+<th:block layout:fragment="script">
+    <script th:src="@{/js/employmentList.js}" defer></script>
+</th:block>
+</body>
 </html>

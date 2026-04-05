@@ -25,6 +25,9 @@ public interface DiaryMapper {
 
 	public List<Project> searchProjectList(@Param("userId") String userId, @Param("keyword") String keyword);
 
+	/** 메인 페이지용: 전체 사용자의 최신 프로젝트 목록 */
+	public List<Project> findLatestProjects(@Param("limit") int limit);
+
 	public Project getProjectDetail(Integer projectId);
 
 	public void addProject(SaveProjectRequest request);
@@ -48,6 +51,9 @@ public interface DiaryMapper {
 
 	public void deleteChecklist(int checklistId);
 
+	/** 체크리스트가 속한 프로젝트 ID 조회 (소유권 검증용) */
+	public Integer getProjectIdByChecklistId(int checklistId);
+
 	// ======================================
 	// 프로젝트 다이어리 (ProjectDiary) 관련 기능
 	// ======================================
@@ -60,4 +66,7 @@ public interface DiaryMapper {
 	public ProjectDiary getDiary(int diaryId);
 
 	public void deleteDiary(int diaryId);
+
+	/** 다이어리가 속한 프로젝트 ID 조회 (소유권 검증용) */
+	public Integer getProjectIdByDiaryId(int diaryId);
 }

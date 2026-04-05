@@ -6,9 +6,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.codemoa.project.domain.employment.dto.response.EmploymentDto;
 import com.codemoa.project.domain.employment.entity.Employment;
@@ -50,6 +52,18 @@ public class EmploymentService {
 		return employmentList.stream()
 				 	.map(EmploymentDto::fromEntity)
 					.collect(Collectors.toList());
+	}
+
+	public List<EmploymentDto> findLatestEmployments(int limit) {
+		Pageable pageable = PageRequest.of(0, limit, Sort.by(Sort.Direction.DESC, "recruitNo"));
+		return employmentRepository.findAll(pageable).stream()
+				.map(EmploymentDto::fromEntity)
+				.collect(Collectors.toList());
+	}
+
+	@Transactional(readOnly = true)
+	public long countAllEmployments() {
+		return employmentRepository.count();
 	}
 	
 	public Page<EmploymentDto> getEmploymentWithFilters(String type, String keyword, Pageable pageable){

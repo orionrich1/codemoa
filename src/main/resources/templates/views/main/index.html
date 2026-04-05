@@ -1,162 +1,719 @@
 <!doctype html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default_layout}">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" layout:decorate="~{layouts/default_layout}">
   <head>
     <title>CodeMoa: 개발자들을 위한 모든 것</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <link th:href="@{/css/main.css}" rel="stylesheet" />
+    <th:block layout:fragment="extra-head">
+      <link th:href="@{/css/main.css}" rel="stylesheet" />
+    </th:block>
   </head>
 
-  <div layout:fragment="content" class="ui-view">
-    <section class="home-hero" aria-labelledby="home-hero-title">
-      <p class="home-hero__eyebrow">Developer community &amp; AI learning</p>
-      <h1 id="home-hero-title" class="home-hero__title">성장하는 개발자를 위한<br class="d-none d-sm-block" />지식과 기회, CodeMoa</h1>
-      <p class="home-hero__lead">AI와 함께 코딩 실력을 키우고, 동료와 질문·답변을 나누며 채용과 팀 프로젝트까지 탐색하세요.</p>
-      <div class="home-hero__actions">
-        <a th:href="@{/problems}" class="btn btn-primary btn-lg">문제 풀기</a>
-        <a th:href="@{/community/free}" class="btn btn-outline-secondary btn-lg">질문 올리기</a>
-        <a th:href="@{/teamRecruitList}" class="btn btn-outline-secondary btn-lg d-none d-md-inline-flex">팀원 찾기</a>
-      </div>
-    </section>
+  <div layout:fragment="content" class="ui-view home-portal home-ds">
 
-    <section class="home-section" id="featured-services" aria-labelledby="home-features-title">
-      <h2 id="home-features-title" class="home-section__title">핵심 기능</h2>
-      <p class="home-section__subtitle">학습 · 소통 · 정보 · 커리어를 한곳에서 이어 줍니다.</p>
-      <div class="home-section__rule" aria-hidden="true"></div>
-      <div class="home-features">
-        <a th:href="@{/problems}" class="home-feature-card text-decoration-none">
-          <span class="home-feature-icon" aria-hidden="true"><i class="bi bi-cpu"></i></span>
-          <h3>AI 코딩 문제</h3>
-          <p>난이도별 문제를 풀고 AI 피드백으로 성장하세요.</p>
-        </a>
-        <a th:href="@{/community/free}" class="home-feature-card text-decoration-none">
-          <span class="home-feature-icon" aria-hidden="true"><i class="bi bi-people-fill"></i></span>
-          <h3>개발자 커뮤니티</h3>
-          <p>자유게시판과 언어별 게시판에서 지식을 나누세요.</p>
-        </a>
-        <a th:href="@{/information/lecture}" class="home-feature-card text-decoration-none">
-          <span class="home-feature-icon" aria-hidden="true"><i class="bi bi-archive-fill"></i></span>
-          <h3>IT 정보</h3>
-          <p>도서·강좌·공모전 정보로 학습 로드맵을 잡으세요.</p>
-        </a>
-        <a th:href="@{/employmentList}" class="home-feature-card text-decoration-none">
-          <span class="home-feature-icon" aria-hidden="true"><i class="bi bi-briefcase-fill"></i></span>
-          <h3>채용 · 팀 모집</h3>
-          <p>채용 공고와 사이드 프로젝트 팀원을 찾아보세요.</p>
-        </a>
-      </div>
-    </section>
+    <!-- ① 히어로 -->
+    <section class="home-hero home-ds-hero" aria-labelledby="home-hero-title">
+      <div class="home-ds-hero__inner">
 
-    <section class="home-community-band" aria-labelledby="home-community-title">
-      <div class="container px-0 px-sm-2">
-        <h2 id="home-community-title" class="home-section__title">커뮤니티 최신 글</h2>
-        <p class="home-section__subtitle">게시판별로 올라온 글을 빠르게 확인하세요.</p>
-        <div class="home-section__rule" aria-hidden="true"></div>
-        <div class="home-community-grid">
-          <article class="card h-100 home-post-card">
-            <div class="card-header text-center border-0 bg-transparent pt-3">자유게시판</div>
-            <div class="list-group list-group-flush">
-              <th:block th:if="${#lists.isEmpty(freePosts)}">
-                <div class="list-group-item border-0 ui-empty-state border-top-0">아직 글이 없습니다.</div>
-              </th:block>
-              <a th:each="post : ${freePosts}"
-                 th:href="@{/community/free/{boardNo}(boardNo=${post.boardNo})}"
-                 class="list-group-item list-group-item-action text-truncate"
-                 th:text="${post.title}"></a>
-            </div>
-          </article>
-          <article class="card h-100 home-post-card">
-            <div class="card-header text-center border-0 bg-transparent pt-3">Java</div>
-            <div class="list-group list-group-flush">
-              <th:block th:if="${#lists.isEmpty(javaPosts)}">
-                <div class="list-group-item border-0 ui-empty-state border-top-0">아직 글이 없습니다.</div>
-              </th:block>
-              <a th:each="post : ${javaPosts}"
-                 th:href="@{/community/Java/{boardNo}(boardNo=${post.boardNo})}"
-                 class="list-group-item list-group-item-action text-truncate"
-                 th:text="${post.title}"></a>
-            </div>
-          </article>
-          <article class="card h-100 home-post-card">
-            <div class="card-header text-center border-0 bg-transparent pt-3">JavaScript</div>
-            <div class="list-group list-group-flush">
-              <th:block th:if="${#lists.isEmpty(jsPosts)}">
-                <div class="list-group-item border-0 ui-empty-state border-top-0">아직 글이 없습니다.</div>
-              </th:block>
-              <a th:each="post : ${jsPosts}"
-                 th:href="@{/community/JavaScript/{boardNo}(boardNo=${post.boardNo})}"
-                 class="list-group-item list-group-item-action text-truncate"
-                 th:text="${post.title}"></a>
-            </div>
-          </article>
-          <article class="card h-100 home-post-card">
-            <div class="card-header text-center border-0 bg-transparent pt-3">Python</div>
-            <div class="list-group list-group-flush">
-              <th:block th:if="${#lists.isEmpty(pythonPosts)}">
-                <div class="list-group-item border-0 ui-empty-state border-top-0">아직 글이 없습니다.</div>
-              </th:block>
-              <a th:each="post : ${pythonPosts}"
-                 th:href="@{/community/Python/{boardNo}(boardNo=${post.boardNo})}"
-                 class="list-group-item list-group-item-action text-truncate"
-                 th:text="${post.title}"></a>
-            </div>
-          </article>
+        <!-- 비로그인 히어로 -->
+        <div sec:authorize="isAnonymous()">
+          <p class="home-hero__eyebrow">Developer community &amp; AI learning</p>
+          <h1 id="home-hero-title" class="home-hero__title">성장하는 개발자를 위한<br class="d-none d-sm-block" />지식과 기회, CodeMoa</h1>
+          <p class="home-hero__lead d-none d-md-block">AI와 함께 코딩 실력을 키우고, 동료와 질문·답변을 나누며 채용과 팀 프로젝트까지 탐색하세요.</p>
+          <p class="home-hero__lead d-md-none small text-secondary mb-0">AI 학습 · 커뮤니티 · 채용·팀까지 한곳에서.</p>
+          <div class="home-hero__actions">
+            <a th:href="@{/problems}" class="btn btn-primary btn-lg home-ds-cta-primary">AI 문제 풀기</a>
+            <a th:href="@{/community/free}" class="btn btn-lg home-ds-cta-secondary">커뮤니티</a>
+          </div>
+          <!-- 서비스 가치 3줄 -->
+          <ul class="home-hero-values list-unstyled d-flex flex-wrap justify-content-center gap-3 mt-4 mb-2">
+            <li class="home-hero-value-item"><i class="bi bi-cpu me-1" aria-hidden="true"></i>AI 피드백</li>
+            <li class="home-hero-value-item"><i class="bi bi-people me-1" aria-hidden="true"></i>개발자 커뮤니티</li>
+            <li class="home-hero-value-item"><i class="bi bi-briefcase me-1" aria-hidden="true"></i>채용 정보</li>
+          </ul>
+          <!-- 회원가입 유도 -->
+          <p class="home-hero-signup-hint mt-2 mb-0">
+            아직 계정이 없으신가요? <a th:href="@{/joinForm}" class="fw-semibold">가입하기</a>
+          </p>
         </div>
-        <div class="text-center mt-4">
-          <a th:href="@{/community/free}" class="btn btn-outline-secondary">자유게시판 더보기</a>
+
+        <!-- 로그인 맞춤 웰컴 배너 -->
+        <div sec:authorize="isAuthenticated()" class="home-hero-welcome">
+          <p class="home-hero__eyebrow">Welcome back</p>
+          <h1 id="home-hero-title" class="home-hero__title home-hero__title--welcome">
+            안녕하세요, <span sec:authentication="principal.user.nickname" class="home-hero-welcome__name">닉네임</span>님!
+            <span class="home-hero-welcome__grade-badge">
+              <img th:src="@{/images/rank/{icon}.png(icon=${#authentication.getPrincipal().getUser().getGrade().name().toLowerCase()})}"
+                   th:alt="${#authentication.getPrincipal().getUser().getGrade().getGradeName()}"
+                   width="28" height="28" class="align-middle" loading="eager" />
+            </span>
+          </h1>
+          <p class="home-hero__lead home-hero-welcome__stats">
+            <span class="home-hero-welcome__stat-item">
+              <i class="bi bi-award me-1"></i>등급: <strong sec:authentication="principal.user.grade.gradeName">브론즈</strong>
+            </span>
+            <span class="home-hero-welcome__divider">·</span>
+            <span class="home-hero-welcome__stat-item">
+              <i class="bi bi-coin me-1"></i>누적 포인트: <strong sec:authentication="principal.user.totalPoints">0</strong>P
+            </span>
+          </p>
+          <div class="home-hero__actions">
+            <a th:href="@{/my-pages/myPageMain}" class="btn btn-primary btn-lg home-ds-cta-primary">내 프로젝트 보기</a>
+            <a th:href="@{/problems}" class="btn btn-lg home-ds-cta-secondary">문제 풀기</a>
+          </div>
         </div>
+
+        <!-- 통합 검색창 (히어로 하단) -->
+        <form th:action="@{/search}" method="get" class="home-hero-search mt-4" role="search" aria-label="통합 검색">
+          <div class="home-hero-search__inner">
+            <input type="search" name="keyword" class="home-hero-search__input form-control"
+                   placeholder="게시글, 강의, 공모전, 채용 검색..." aria-label="검색어 입력" autocomplete="off" />
+            <button type="submit" class="home-hero-search__btn btn btn-primary" aria-label="검색">
+              <i class="bi bi-search" aria-hidden="true"></i>
+            </button>
+          </div>
+        </form>
       </div>
     </section>
 
-    <section class="home-section container" aria-labelledby="home-lecture-title">
-      <h2 id="home-lecture-title" class="home-section__title">추천 강의</h2>
-      <p class="home-section__subtitle">엄선한 강의로 바로 학습을 시작해 보세요.</p>
-      <div class="home-section__rule" aria-hidden="true"></div>
-      <div class="home-lecture-wrap swiper-container-wrapper">
-        <div class="swiper lectureSwiper">
-          <div class="swiper-wrapper py-3">
-            <div class="swiper-slide" th:if="${recommendedLectures != null}" th:each="lecture : ${recommendedLectures}">
-              <a th:href="${lecture.lectureSource}" target="_blank" rel="noopener noreferrer" class="card slider-card h-100">
-                <img th:if="${lecture.file1 != null and !#strings.isEmpty(lecture.file1)}"
-                     th:src="@{/files/information/{img}(img=${lecture.file1})}" alt="" class="cover-image" />
-                <div class="card-texts">
-                  <strong th:text="${lecture.title}"></strong>
-                  <div class="metadata" th:text="${lecture.userId}"></div>
+    <!-- ② 로그인 사용자 개인화 요약 카드 (데이터 있을 때만 노출) -->
+    <div sec:authorize="isAuthenticated()"
+         th:if="${personalWeeklyPoints != null and (personalWeeklyPoints == 0 or personalMyUnansweredQna > 0)}"
+         class="home-personal-card container px-2 px-sm-3" aria-label="내 활동 요약">
+      <div class="home-personal-card__inner">
+        <!-- 이번 주 포인트 0: 첫 문제 도전 CTA -->
+        <a th:if="${personalWeeklyPoints == 0}"
+           th:href="@{/problems}"
+           class="home-personal-card__item home-personal-card__item--cta">
+          <i class="bi bi-lightning-charge-fill me-2" aria-hidden="true"></i>
+          <span>이번 주 첫 문제 도전하기</span>
+          <i class="bi bi-arrow-right ms-auto" aria-hidden="true"></i>
+        </a>
+        <!-- 내 미답변 QNA 있을 때 -->
+        <a th:if="${personalMyUnansweredQna > 0}"
+           th:href="@{/support/qna}"
+           class="home-personal-card__item">
+          <i class="bi bi-question-circle me-2" aria-hidden="true"></i>
+          <span>내 질문에 답변을 기다리는 항목이 <strong th:text="${personalMyUnansweredQna}">0</strong>건 있습니다</span>
+          <i class="bi bi-arrow-right ms-auto" aria-hidden="true"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- ③ 플랫폼 신뢰 통계 바 -->
+    <div class="home-stats-bar container px-2 px-sm-3" aria-label="서비스 통계">
+      <div class="home-stats-bar__inner">
+        <div class="home-stats-bar__item">
+          <span class="home-stats-bar__num" th:text="${#numbers.formatInteger(statsUserCount, 0, 'COMMA')}">0</span>
+          <span class="home-stats-bar__label">총 회원</span>
+        </div>
+        <div class="home-stats-bar__sep" aria-hidden="true">|</div>
+        <div class="home-stats-bar__item">
+          <span class="home-stats-bar__num" th:text="${#numbers.formatInteger(statsTotalProblems, 0, 'COMMA')}">0</span>
+          <span class="home-stats-bar__label">등록 문제</span>
+        </div>
+        <div class="home-stats-bar__sep" aria-hidden="true">|</div>
+        <div class="home-stats-bar__item">
+          <span class="home-stats-bar__num" th:text="${#numbers.formatInteger(statsTotalPosts, 0, 'COMMA')}">0</span>
+          <span class="home-stats-bar__label">총 게시글</span>
+        </div>
+        <div class="home-stats-bar__sep" aria-hidden="true">|</div>
+        <div class="home-stats-bar__item">
+          <span class="home-stats-bar__num" th:text="${#numbers.formatInteger(statsContestCount, 0, 'COMMA')}">0</span>
+          <span class="home-stats-bar__label">공모전 정보</span>
+        </div>
+        <div class="home-stats-bar__sep d-none d-sm-block" aria-hidden="true">|</div>
+        <div class="home-stats-bar__item" th:if="${statsActiveUsersThisWeek != null and statsActiveUsersThisWeek > 0}">
+          <span class="home-stats-bar__num" th:text="${#numbers.formatInteger(statsActiveUsersThisWeek, 0, 'COMMA')}">0</span>
+          <span class="home-stats-bar__label">이번 주 활동자</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ④ 오늘의 AI 문제 위젯 (통계 바 바로 아래로 이동) -->
+    <section class="home-daily-problem container px-2 px-sm-3" aria-labelledby="home-daily-problem-title" th:if="${dailyProblem != null}">
+      <div class="home-daily-problem__card">
+        <div class="home-daily-problem__icon" aria-hidden="true"><i class="bi bi-cpu-fill"></i></div>
+        <div class="home-daily-problem__body">
+          <p class="home-daily-problem__eyebrow">오늘의 추천 문제</p>
+          <h2 id="home-daily-problem-title" class="home-daily-problem__title" th:text="${dailyProblem.title}">문제 제목</h2>
+          <p class="home-daily-problem__desc text-truncate" th:text="${dailyProblem.content}">문제 설명</p>
+        </div>
+        <div class="home-daily-problem__meta">
+          <span class="badge home-daily-problem__badge"
+                th:classappend="${dailyProblem.difficulty == '상'} ? ' text-bg-danger' : (${dailyProblem.difficulty == '중'} ? ' text-bg-warning text-dark' : ' text-bg-success')"
+                th:text="${dailyProblem.difficulty}">중</span>
+          <span class="badge text-bg-light border ms-1" th:text="${dailyProblem.category}">JAVA</span>
+        </div>
+        <a th:href="@{/problems/problemDetail(problemId=${dailyProblem.problemId})}" class="btn btn-primary home-daily-problem__cta stretched-link">
+          바로 풀기 <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i>
+        </a>
+      </div>
+    </section>
+
+    <!-- ⑤ DS 칩 트레이 (오늘의 AI 문제 아래로 이동) -->
+    <div class="home-ds-chip-tray container px-2 px-sm-3" role="navigation" aria-label="포털 하이라이트">
+      <a th:href="|@{/}#home-portal-feed|" class="home-ds-chip">
+        인기 피드 <span class="home-ds-chip__stat" th:text="${#lists.size(popularPosts)} + '건'">0건</span>
+      </a>
+      <a th:href="@{/information/contest}" class="home-ds-chip">
+        마감 임박 공모전 <span class="home-ds-chip__stat" th:text="${ribbonContestEndingSoonCount} + '건'">0건</span>
+      </a>
+      <a th:href="@{/employmentList}" class="home-ds-chip">
+        채용 공고 <span class="home-ds-chip__stat" th:text="${ribbonEmploymentTotal} + '건'">0건</span>
+      </a>
+      <a th:href="@{/support/qna}" class="home-ds-chip">
+        미답변 Q&amp;A <span class="home-ds-chip__stat" th:text="${ribbonQnaUnansweredCount} + '건'">0건</span>
+      </a>
+      <a th:href="@{/information/lecture}" class="home-ds-chip home-ds-chip--ghost">강좌·도서</a>
+    </div>
+
+    <p th:if="${mainShowDemoNotice}" class="home-demo-banner container px-2 px-sm-3 mb-0" role="status">
+      DB에 게시글이 없어 <strong>샘플 데이터</strong>로 메인을 채워 두었습니다. 글이 쌓이면 자동으로 실제 데이터로 바뀝니다.
+    </p>
+
+    <!-- ⑤ 본문 1행: 커뮤니티 피드 + 사이드 -->
+    <section id="home-portal-feed" class="home-portal-main container px-2 px-sm-3" aria-labelledby="home-feed-title">
+      <div class="row g-4">
+        <div class="col-lg-8">
+          <article class="home-ds-panel home-ds-inset-card">
+            <header class="home-ds-panel__head">
+              <div>
+                <div class="home-ds-section-label">01 / Community</div>
+                <h2 id="home-feed-title" class="home-ds-panel__title mb-1">커뮤니티 피드</h2>
+                <p class="home-ds-kicker mb-0">댓글·추천 기준 인기와 전체 최신 글</p>
+              </div>
+              <a th:href="@{/community/free}" class="home-section__more">더보기</a>
+            </header>
+            <div class="home-ds-panel__body">
+              <ul class="nav nav-pills home-feed-tabs home-ds-seg gap-2 mb-3" id="homeFeedTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active" id="tab-popular" data-bs-toggle="pill" data-bs-target="#pane-popular" type="button" role="tab" aria-controls="pane-popular" aria-selected="true">인기</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="tab-latest" data-bs-toggle="pill" data-bs-target="#pane-latest" type="button" role="tab" aria-controls="pane-latest" aria-selected="false">최신</button>
+                </li>
+              </ul>
+              <div class="tab-content">
+                <div class="tab-pane fade show active" id="pane-popular" role="tabpanel" aria-labelledby="tab-popular" tabindex="0">
+                  <ul class="home-feed-list list-unstyled mb-0">
+                    <li th:if="${#lists.isEmpty(popularPosts)}" class="home-empty-hint">
+                      아직 인기 글이 없습니다. <a th:href="@{/community/free/write}">첫 글 남기기</a>
+                    </li>
+                    <li th:each="post : ${popularPosts}">
+                      <a class="home-feed-row" th:href="${post.stub} ? @{/community/free} : @{/community/{cat}/{no}(cat=${T(com.codemoa.project.domain.main.support.CommunityCategoryPaths).toUrlSegment(post.category)}, no=${post.boardNo})}">
+                        <span class="home-feed-row__title text-truncate" th:text="${post.title}">제목</span>
+                        <span class="home-feed-row__meta">
+                          <span class="badge rounded-pill text-bg-light border" th:text="${post.category}">자유</span>
+                          <span th:text="${post.recommend != null ? post.recommend : 0} + ' 추천'">0 추천</span>
+                        </span>
+                      </a>
+                    </li>
+                  </ul>
                 </div>
-              </a>
+                <div class="tab-pane fade" id="pane-latest" role="tabpanel" aria-labelledby="tab-latest" tabindex="0">
+                  <ul class="home-feed-list list-unstyled mb-0">
+                    <li th:if="${#lists.isEmpty(latestPostsAll)}" class="home-empty-hint">
+                      최신 글이 없습니다. <a th:href="@{/community/free}">게시판 둘러보기</a>
+                    </li>
+                    <li th:each="post : ${latestPostsAll}">
+                      <a class="home-feed-row" th:href="${post.stub} ? @{/community/free} : @{/community/{cat}/{no}(cat=${T(com.codemoa.project.domain.main.support.CommunityCategoryPaths).toUrlSegment(post.category)}, no=${post.boardNo})}">
+                        <span class="home-feed-row__title text-truncate" th:text="${post.title}">제목</span>
+                        <span class="home-feed-row__meta">
+                          <span class="badge rounded-pill text-bg-light border" th:text="${post.category}">자유</span>
+                          <span th:text="${post.createdAt != null} ? ${#temporals.format(post.createdAt, 'MM.dd HH:mm')} : '-'">01.01</span>
+                        </span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
-            <div class="swiper-slide" th:if="${#lists.isEmpty(recommendedLectures)}">
-              <div class="card slider-card h-100 justify-content-center align-items-center text-center p-4 ui-empty-state home-lecture-empty">
-                <strong>추천 강의가 없습니다.</strong>
-                <span>강좌 추천 메뉴에서 콘텐츠를 확인해 보세요.</span>
+          </article>
+        </div>
+
+        <aside class="col-lg-4 home-ds-aside">
+          <div class="home-sidebar-card home-ds-panel home-ds-panel--compact mb-4">
+            <header class="home-ds-panel__head home-ds-panel__head--compact">
+              <h3 class="home-sidebar-card__title mb-0">주간 랭킹 TOP 5</h3>
+              <a th:href="@{/ranking}" class="home-section__more">전체</a>
+            </header>
+            <div class="home-ds-panel__body home-ds-panel__body--flush">
+              <ul class="home-rank-list list-unstyled mb-0">
+                <li th:if="${#lists.isEmpty(weeklyRanking)}" class="home-empty-hint small">
+                  이번 주 집계 데이터가 없습니다.
+                  <a th:href="@{/problems}">문제 풀고 포인트 쌓기</a> ·
+                  <a th:href="@{/ranking}">랭킹 보기</a>
+                </li>
+                <li th:each="row, iter : ${weeklyRanking}" class="home-rank-row home-rank-row--with-grade">
+                  <span class="home-rank-row__num" th:text="${row.rank}">1</span>
+                  <img class="home-rank-row__icon" th:src="@{/images/rank/{icon}.png(icon=${row.gradeIconName})}" th:alt="${row.gradeName}" width="22" height="22" loading="lazy" />
+                  <span class="home-rank-row__name text-truncate" th:text="${row.nickname}">닉네임</span>
+                  <span class="home-rank-row__grade text-truncate d-none d-md-inline" th:text="${row.gradeName}">등급</span>
+                  <span class="home-rank-row__pts" th:text="${row.weeklyPoints} + 'P'">0P</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Q&A 하이라이트: 미답변 우선 + 경과 시간 + 질문하기 CTA -->
+          <div class="home-sidebar-card home-ds-panel home-ds-panel--compact mb-4">
+            <header class="home-ds-panel__head home-ds-panel__head--compact">
+              <h3 class="home-sidebar-card__title mb-0">
+                Q&amp;A 하이라이트
+                <span th:if="${ribbonQnaUnansweredCount > 0}"
+                      class="badge text-bg-warning text-dark ms-1 fs-small"
+                      th:text="|미답변 ${ribbonQnaUnansweredCount}건|">미답변 0건</span>
+              </h3>
+              <a th:href="@{/support/qna}" class="home-section__more">목록</a>
+            </header>
+            <div class="home-ds-panel__body home-ds-panel__body--flush">
+              <ul class="home-qna-hint list-unstyled mb-0">
+                <li th:if="${#lists.isEmpty(highlightQnas)}" class="home-empty-hint small">
+                  등록된 질문이 없습니다.
+                </li>
+                <li th:each="q : ${highlightQnas}">
+                  <a th:href="${q.qnaId > 0} ? @{/support/qna/{id}(id=${q.qnaId})} : @{/support/qna}" class="home-qna-hint__row">
+                    <span class="text-truncate" th:text="${q.title}">제목</span>
+                    <span class="home-qna-hint__meta d-flex align-items-center gap-1 flex-shrink-0">
+                      <th:block th:if="${q.createdAt != null}"
+                                th:with="now=${T(java.time.LocalDateTime).now()},
+                                         hrs=${T(java.time.temporal.ChronoUnit).HOURS.between(q.createdAt, now)},
+                                         dys=${T(java.time.temporal.ChronoUnit).DAYS.between(q.createdAt, now)}">
+                        <span class="home-qna-hint__time text-muted small"
+                              th:if="${hrs < 1}">방금 전</span>
+                        <span class="home-qna-hint__time text-muted small"
+                              th:if="${hrs >= 1 and hrs < 24}"
+                              th:text="|${hrs}시간 전|">1시간 전</span>
+                        <span class="home-qna-hint__time text-muted small"
+                              th:if="${dys >= 1 and dys < 7}"
+                              th:text="|${dys}일 전|">1일 전</span>
+                        <span class="home-qna-hint__time text-muted small"
+                              th:if="${dys >= 7}"
+                              th:text="${#temporals.format(q.createdAt, 'MM.dd')}">01.01</span>
+                      </th:block>
+                      <span th:if="${q.isAnswered}" class="badge text-bg-success">답변완료</span>
+                      <span th:unless="${q.isAnswered}" class="badge text-bg-warning text-dark">미답변</span>
+                    </span>
+                  </a>
+                </li>
+              </ul>
+              <!-- 질문하기 CTA -->
+              <div class="home-qna-cta px-0 pb-2 pt-2">
+                <a th:href="@{/support/qna/write}" sec:authorize="isAuthenticated()"
+                   class="btn btn-sm w-100 home-ds-cta-secondary">
+                  <i class="bi bi-pencil-square me-1" aria-hidden="true"></i>질문하기
+                </a>
+                <a th:href="@{/loginForm}" sec:authorize="isAnonymous()"
+                   class="btn btn-sm w-100 home-ds-cta-secondary">
+                  <i class="bi bi-pencil-square me-1" aria-hidden="true"></i>로그인 후 질문하기
+                </a>
               </div>
             </div>
           </div>
-          <div class="swiper-pagination mt-4"></div>
+
+          <!-- 실시간 채팅방 위젯 -->
+          <div class="home-sidebar-card home-ds-panel home-ds-panel--compact mb-4">
+            <header class="home-ds-panel__head home-ds-panel__head--compact">
+              <h3 class="home-sidebar-card__title mb-0"><i class="bi bi-chat-dots-fill me-1 text-primary" aria-hidden="true"></i>실시간 채팅방</h3>
+              <a th:href="@{/chat/rooms}" class="home-section__more">더보기</a>
+            </header>
+            <div class="home-ds-panel__body home-ds-panel__body--flush">
+              <ul class="home-chat-rooms list-unstyled mb-0">
+                <li th:if="${#lists.isEmpty(sidebarChatRooms)}" class="home-empty-hint small">
+                  채팅방이 없습니다. <a th:href="@{/chat/rooms}">만들기</a>
+                </li>
+                <li th:each="room : ${sidebarChatRooms}">
+                  <a th:href="@{/chat/rooms/{id}(id=${room.roomId})}" class="home-chat-rooms__row">
+                    <i class="bi bi-hash me-1 text-secondary" aria-hidden="true"></i>
+                    <span class="text-truncate" th:text="${room.name}">방 이름</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- 퀵 링크 -->
+          <div class="home-sidebar-card home-ds-panel home-ds-panel--compact">
+            <header class="home-ds-panel__head home-ds-panel__head--compact">
+              <h3 class="home-sidebar-card__title mb-0">퀵 링크</h3>
+            </header>
+            <div class="home-ds-panel__body home-ds-panel__body--flush">
+              <ul class="home-quick-links list-unstyled mb-0">
+                <li><a th:href="@{/support/qna}"><i class="bi bi-question-circle me-2" aria-hidden="true"></i>Q&amp;A</a></li>
+                <li><a th:href="@{/support/faq}"><i class="bi bi-info-circle me-2" aria-hidden="true"></i>FAQ</a></li>
+                <li><a th:href="@{/teamRecruitList}"><i class="bi bi-people me-2" aria-hidden="true"></i>팀 모집</a></li>
+                <li><a th:href="@{/employmentList}"><i class="bi bi-briefcase me-2" aria-hidden="true"></i>채용</a></li>
+              </ul>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ⑥ IT 정보 허브 3열 -->
+    <section class="home-section container px-2 px-sm-3" aria-labelledby="home-hub-title">
+      <header class="home-section__header">
+        <h2 id="home-hub-title" class="home-section__title home-section__title--left mb-0">IT 정보 허브</h2>
+        <a th:href="@{/information/lecture}" class="home-section__more">정보 홈</a>
+      </header>
+      <div class="row g-4 mt-1">
+        <div class="col-md-4">
+          <div class="home-hub-column">
+            <header class="home-hub-column__head">
+              <h3>강좌 추천</h3>
+              <a th:href="@{/information/lecture}" class="home-section__more">더보기</a>
+            </header>
+            <div class="home-hub-stack">
+              <th:block th:if="${#lists.isEmpty(hubLectures)}">
+                <div class="home-empty-hint small"><i class="bi bi-play-btn me-1"></i>등록된 강의가 없습니다. <a th:href="@{/information/lectureAdd}">등록하기</a></div>
+              </th:block>
+              <a th:each="lecture : ${hubLectures}"
+                 class="home-thumb-card text-decoration-none"
+                 th:href="${lecture.recommendNo > 0} ? (${lecture.lectureSource != null and !#strings.isEmpty(lecture.lectureSource)} ? ${lecture.lectureSource} : @{/information/lectureDetail(no=${lecture.recommendNo})}) : @{/information/lecture}"
+                 th:target="${lecture.recommendNo > 0 and lecture.lectureSource != null and !#strings.isEmpty(lecture.lectureSource)} ? '_blank'"
+                 th:rel="${lecture.recommendNo > 0 and lecture.lectureSource != null and !#strings.isEmpty(lecture.lectureSource)} ? 'noopener noreferrer'">
+                <div class="home-thumb-card__media">
+                  <img th:if="${lecture.file1 != null and !#strings.isEmpty(lecture.file1)}"
+                       th:src="@{/files/information/{img}(img=${lecture.file1})}"
+                       th:alt="|강좌 썸네일: ${lecture.title}|" />
+                  <div th:unless="${lecture.file1 != null and !#strings.isEmpty(lecture.file1)}" class="home-thumb-card__placeholder"><i class="bi bi-play-btn" aria-hidden="true"></i></div>
+                </div>
+                <div class="home-thumb-card__body">
+                  <strong class="home-thumb-card__title text-truncate" th:text="${lecture.title}">제목</strong>
+                  <span class="home-thumb-card__meta" th:text="${lecture.userId}">작성자</span>
+                </div>
+              </a>
+            </div>
+          </div>
         </div>
-        <div class="swiper-custom-controls">
-          <button type="button" class="swiper-custom-button" id="lecture-swiper-prev" aria-label="이전 슬라이드"><i class="bi bi-arrow-left" aria-hidden="true"></i></button>
-          <button type="button" class="swiper-custom-button" id="lecture-swiper-next" aria-label="다음 슬라이드"><i class="bi bi-arrow-right" aria-hidden="true"></i></button>
+        <div class="col-md-4">
+          <div class="home-hub-column">
+            <header class="home-hub-column__head">
+              <h3>도서 추천</h3>
+              <a th:href="@{/information/book}" class="home-section__more">더보기</a>
+            </header>
+            <div class="home-hub-stack">
+              <th:block th:if="${#lists.isEmpty(hubBooks)}">
+                <div class="home-empty-hint small"><i class="bi bi-book me-1"></i>등록된 도서가 없습니다. <a th:href="@{/information/bookAdd}">등록하기</a></div>
+              </th:block>
+              <a th:each="book : ${hubBooks}" th:href="${book.bookNo > 0} ? @{/information/bookDetail(no=${book.bookNo})} : @{/information/book}" class="home-thumb-card text-decoration-none">
+                <div class="home-thumb-card__media">
+                  <img th:if="${book.file1 != null and !#strings.isEmpty(book.file1)}"
+                       th:src="@{/files/information/{img}(img=${book.file1})}"
+                       th:alt="|도서 썸네일: ${book.title}|" />
+                  <div th:unless="${book.file1 != null and !#strings.isEmpty(book.file1)}" class="home-thumb-card__placeholder"><i class="bi bi-book" aria-hidden="true"></i></div>
+                </div>
+                <div class="home-thumb-card__body">
+                  <strong class="home-thumb-card__title text-truncate" th:text="${book.title}">제목</strong>
+                  <span class="home-thumb-card__meta" th:text="${book.publisher}">출판사</span>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="home-hub-column">
+            <header class="home-hub-column__head">
+              <h3>공모전 <span class="home-hub-column__sub text-secondary fw-normal small">마감 임박 우선</span></h3>
+              <a th:href="@{/information/contest}" class="home-section__more">더보기</a>
+            </header>
+            <div class="home-hub-stack">
+              <th:block th:if="${#lists.isEmpty(hubContests)}">
+                <div class="home-empty-hint small"><i class="bi bi-trophy me-1"></i>등록된 공모전이 없습니다. <a th:href="@{/information/contestAdd}">등록하기</a></div>
+              </th:block>
+              <a th:each="c : ${hubContests}"
+                 th:href="${c.contestNo > 0} ? @{/information/contestDetail(no=${c.contestNo})} : @{/information/contest}"
+                 class="home-thumb-card text-decoration-none"
+                 th:classappend="${c.endDate != null and T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), c.endDate.toLocalDateTime().toLocalDate()) >= 0 and T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), c.endDate.toLocalDateTime().toLocalDate()) <= 7} ? ' home-thumb-card--urgent'">
+                <div class="home-thumb-card__media">
+                  <img th:if="${c.file1 != null and !#strings.isEmpty(c.file1)}"
+                       th:src="@{/files/information/{img}(img=${c.file1})}"
+                       th:alt="|공모전 썸네일: ${c.title}|" />
+                  <div th:unless="${c.file1 != null and !#strings.isEmpty(c.file1)}" class="home-thumb-card__placeholder"><i class="bi bi-trophy" aria-hidden="true"></i></div>
+                  <th:block th:if="${c.endDate != null}" th:with="ed=${c.endDate.toLocalDateTime().toLocalDate()}, today=${T(java.time.LocalDate).now()}, dleft=${T(java.time.temporal.ChronoUnit).DAYS.between(today, ed)}">
+                    <span th:if="${dleft < 0}" class="home-thumb-card__badge badge text-bg-secondary">마감</span>
+                    <span th:if="${dleft >= 0 and dleft <= 30}" class="home-thumb-card__badge badge" th:classappend="${dleft <= 7} ? ' text-bg-warning' : ' text-bg-light'" th:text="|D-${dleft}|">D-3</span>
+                    <span th:if="${dleft > 30}" class="home-thumb-card__badge badge text-bg-light border" th:text="|D-${dleft}|">D-40</span>
+                  </th:block>
+                </div>
+                <div class="home-thumb-card__body">
+                  <strong class="home-thumb-card__title text-truncate" th:text="${c.title}">제목</strong>
+                  <span class="home-thumb-card__meta text-truncate" th:text="${c.hostOrganization}">주최</span>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑦ 채용 & 팀 (Warm stone 섹션) -->
+    <section class="home-jobs-team container px-2 px-sm-3 home-ds-warm-section" aria-labelledby="home-jobs-title">
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <header class="home-section__header">
+            <h2 id="home-jobs-title" class="home-section__title home-section__title--left mb-0">채용 최신</h2>
+            <a th:href="@{/employmentList}" class="home-section__more">더보기</a>
+          </header>
+          <ul class="home-mini-list list-unstyled mb-0 mt-3">
+            <li th:if="${#lists.isEmpty(latestEmployments)}" class="home-empty-hint small">
+              채용 공고가 없습니다. <a th:href="@{/employmentList}">채용 목록</a>에서 확인하거나, 관리자 정책에 따라 공고를 등록해 주세요.
+            </li>
+            <li th:each="job : ${latestEmployments}" th:with="extUrl=${job.url != null and !#strings.isEmpty(job.url)}">
+              <a class="home-mini-row"
+                 th:href="${job.recruitNo != null and job.recruitNo > 0} ? (${extUrl} ? ${job.url} : @{/employmentList}) : @{/employmentList}"
+                 th:attr="target=${job.recruitNo != null and job.recruitNo > 0 and extUrl} ? '_blank' : null, rel=${job.recruitNo != null and job.recruitNo > 0 and extUrl} ? 'noopener noreferrer' : null">
+                <span class="home-mini-row__title text-truncate" th:text="${job.title}">제목</span>
+                <span class="home-mini-row__meta text-truncate"
+                      th:text="${job.region != null and !#strings.isEmpty(job.region)} ? |${job.company} · ${job.region}| : ${job.company}">회사</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-lg-6">
+          <header class="home-section__header">
+            <h2 class="home-section__title home-section__title--left mb-0">팀 모집</h2>
+            <a th:href="@{/teamRecruitList}" class="home-section__more">더보기</a>
+          </header>
+          <ul class="home-mini-list list-unstyled mb-0 mt-3">
+            <li th:if="${#lists.isEmpty(latestTeamRecruits)}" class="home-empty-hint small">모집 글이 없습니다. <a th:href="@{/teamRecruitList}">목록 보기</a></li>
+            <li th:each="tr : ${latestTeamRecruits}">
+              <a class="home-mini-row" th:href="${tr.recruitId > 0} ? @{/teamRecruitDetail(recruitId=${tr.recruitId})} : @{/teamRecruitList}">
+                <span class="home-mini-row__title text-truncate" th:text="${tr.title}">제목</span>
+                <span class="home-mini-row__meta text-truncate" th:text="${tr.techStack != null ? tr.techStack : tr.recruitTypeName}">스택</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑧ 게시판별 최신 — 탭형 UX (채용·팀 아래로 이동) -->
+    <section class="home-community-section" aria-labelledby="home-community-title">
+      <div class="container px-2 px-sm-3">
+        <header class="home-section__header">
+          <div>
+            <h2 id="home-community-title" class="home-section__title home-section__title--left mb-1">게시판별 최신</h2>
+            <p class="home-section__subtitle home-section__subtitle--left mb-0">자유 · Java · JavaScript · Python · Kotlin</p>
+          </div>
+        </header>
+
+        <!-- 게시판 탭 헤더 (가로 스크롤 지원) -->
+        <div class="home-board-tabs-wrap mt-3">
+          <ul class="nav nav-pills home-board-tabs home-ds-seg gap-1 mb-3 flex-nowrap overflow-x-auto" id="homeBoardTabs" role="tablist">
+            <li class="nav-item flex-shrink-0" role="presentation">
+              <button class="nav-link active" id="tab-board-free" data-bs-toggle="pill" data-bs-target="#pane-board-free" type="button" role="tab" aria-controls="pane-board-free" aria-selected="true">
+                자유
+              </button>
+            </li>
+            <li class="nav-item flex-shrink-0" role="presentation">
+              <button class="nav-link" id="tab-board-java" data-bs-toggle="pill" data-bs-target="#pane-board-java" type="button" role="tab" aria-controls="pane-board-java" aria-selected="false">
+                Java
+              </button>
+            </li>
+            <li class="nav-item flex-shrink-0" role="presentation">
+              <button class="nav-link" id="tab-board-js" data-bs-toggle="pill" data-bs-target="#pane-board-js" type="button" role="tab" aria-controls="pane-board-js" aria-selected="false">
+                JavaScript
+              </button>
+            </li>
+            <li class="nav-item flex-shrink-0" role="presentation">
+              <button class="nav-link" id="tab-board-python" data-bs-toggle="pill" data-bs-target="#pane-board-python" type="button" role="tab" aria-controls="pane-board-python" aria-selected="false">
+                Python
+              </button>
+            </li>
+            <li class="nav-item flex-shrink-0" role="presentation">
+              <button class="nav-link" id="tab-board-kotlin" data-bs-toggle="pill" data-bs-target="#pane-board-kotlin" type="button" role="tab" aria-controls="pane-board-kotlin" aria-selected="false">
+                Kotlin
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <div class="tab-content home-board-tab-content">
+          <!-- 자유 -->
+          <div class="tab-pane fade show active" id="pane-board-free" role="tabpanel" aria-labelledby="tab-board-free" tabindex="0">
+            <div th:if="${#lists.isEmpty(freePosts)}" class="home-empty-hint">
+              <i class="bi bi-inbox me-1"></i>아직 글이 없습니다. <a th:href="@{/community/free/write}">첫 글 쓰기</a>
+            </div>
+            <ul th:unless="${#lists.isEmpty(freePosts)}" class="home-feed-list list-unstyled mb-0">
+              <li th:each="post : ${freePosts}">
+                <a class="home-feed-row"
+                   th:href="${post.stub} ? @{/community/free} : @{/community/free/{boardNo}(boardNo=${post.boardNo})}">
+                  <span class="home-feed-row__title text-truncate" th:text="${post.title}">제목</span>
+                  <span class="home-feed-row__meta">
+                    <span th:text="${post.recommend != null ? post.recommend : 0} + ' 추천'">0 추천</span>
+                    <span th:text="${post.createdAt != null} ? ${#temporals.format(post.createdAt, 'MM.dd')} : '-'">01.01</span>
+                  </span>
+                </a>
+              </li>
+            </ul>
+            <div class="home-board-more-wrap mt-2 text-end">
+              <a th:href="@{/community/free}" class="home-section__more">자유게시판 더보기 <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i></a>
+            </div>
+          </div>
+
+          <!-- Java -->
+          <div class="tab-pane fade" id="pane-board-java" role="tabpanel" aria-labelledby="tab-board-java" tabindex="0">
+            <div th:if="${#lists.isEmpty(javaPosts)}" class="home-empty-hint">
+              <i class="bi bi-inbox me-1"></i>아직 글이 없습니다. <a th:href="@{/community/Java/write}">첫 글 쓰기</a>
+            </div>
+            <ul th:unless="${#lists.isEmpty(javaPosts)}" class="home-feed-list list-unstyled mb-0">
+              <li th:each="post : ${javaPosts}">
+                <a class="home-feed-row"
+                   th:href="${post.stub} ? @{/community/Java} : @{/community/Java/{boardNo}(boardNo=${post.boardNo})}">
+                  <span class="home-feed-row__title text-truncate" th:text="${post.title}">제목</span>
+                  <span class="home-feed-row__meta">
+                    <span th:text="${post.recommend != null ? post.recommend : 0} + ' 추천'">0 추천</span>
+                    <span th:text="${post.createdAt != null} ? ${#temporals.format(post.createdAt, 'MM.dd')} : '-'">01.01</span>
+                  </span>
+                </a>
+              </li>
+            </ul>
+            <div class="home-board-more-wrap mt-2 text-end">
+              <a th:href="@{/community/Java}" class="home-section__more">Java 게시판 더보기 <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i></a>
+            </div>
+          </div>
+
+          <!-- JavaScript -->
+          <div class="tab-pane fade" id="pane-board-js" role="tabpanel" aria-labelledby="tab-board-js" tabindex="0">
+            <div th:if="${#lists.isEmpty(jsPosts)}" class="home-empty-hint">
+              <i class="bi bi-inbox me-1"></i>아직 글이 없습니다. <a th:href="@{/community/JavaScript/write}">첫 글 쓰기</a>
+            </div>
+            <ul th:unless="${#lists.isEmpty(jsPosts)}" class="home-feed-list list-unstyled mb-0">
+              <li th:each="post : ${jsPosts}">
+                <a class="home-feed-row"
+                   th:href="${post.stub} ? @{/community/JavaScript} : @{/community/JavaScript/{boardNo}(boardNo=${post.boardNo})}">
+                  <span class="home-feed-row__title text-truncate" th:text="${post.title}">제목</span>
+                  <span class="home-feed-row__meta">
+                    <span th:text="${post.recommend != null ? post.recommend : 0} + ' 추천'">0 추천</span>
+                    <span th:text="${post.createdAt != null} ? ${#temporals.format(post.createdAt, 'MM.dd')} : '-'">01.01</span>
+                  </span>
+                </a>
+              </li>
+            </ul>
+            <div class="home-board-more-wrap mt-2 text-end">
+              <a th:href="@{/community/JavaScript}" class="home-section__more">JavaScript 게시판 더보기 <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i></a>
+            </div>
+          </div>
+
+          <!-- Python -->
+          <div class="tab-pane fade" id="pane-board-python" role="tabpanel" aria-labelledby="tab-board-python" tabindex="0">
+            <div th:if="${#lists.isEmpty(pythonPosts)}" class="home-empty-hint">
+              <i class="bi bi-inbox me-1"></i>아직 글이 없습니다. <a th:href="@{/community/Python/write}">첫 글 쓰기</a>
+            </div>
+            <ul th:unless="${#lists.isEmpty(pythonPosts)}" class="home-feed-list list-unstyled mb-0">
+              <li th:each="post : ${pythonPosts}">
+                <a class="home-feed-row"
+                   th:href="${post.stub} ? @{/community/Python} : @{/community/Python/{boardNo}(boardNo=${post.boardNo})}">
+                  <span class="home-feed-row__title text-truncate" th:text="${post.title}">제목</span>
+                  <span class="home-feed-row__meta">
+                    <span th:text="${post.recommend != null ? post.recommend : 0} + ' 추천'">0 추천</span>
+                    <span th:text="${post.createdAt != null} ? ${#temporals.format(post.createdAt, 'MM.dd')} : '-'">01.01</span>
+                  </span>
+                </a>
+              </li>
+            </ul>
+            <div class="home-board-more-wrap mt-2 text-end">
+              <a th:href="@{/community/Python}" class="home-section__more">Python 게시판 더보기 <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i></a>
+            </div>
+          </div>
+
+          <!-- Kotlin -->
+          <div class="tab-pane fade" id="pane-board-kotlin" role="tabpanel" aria-labelledby="tab-board-kotlin" tabindex="0">
+            <div th:if="${#lists.isEmpty(kotlinPosts)}" class="home-empty-hint">
+              <i class="bi bi-inbox me-1"></i>아직 글이 없습니다. <a th:href="@{/community/Kotlin/write}">첫 글 쓰기</a>
+            </div>
+            <ul th:unless="${#lists.isEmpty(kotlinPosts)}" class="home-feed-list list-unstyled mb-0">
+              <li th:each="post : ${kotlinPosts}">
+                <a class="home-feed-row"
+                   th:href="${post.stub} ? @{/community/Kotlin} : @{/community/Kotlin/{boardNo}(boardNo=${post.boardNo})}">
+                  <span class="home-feed-row__title text-truncate" th:text="${post.title}">제목</span>
+                  <span class="home-feed-row__meta">
+                    <span th:text="${post.recommend != null ? post.recommend : 0} + ' 추천'">0 추천</span>
+                    <span th:text="${post.createdAt != null} ? ${#temporals.format(post.createdAt, 'MM.dd')} : '-'">01.01</span>
+                  </span>
+                </a>
+              </li>
+            </ul>
+            <div class="home-board-more-wrap mt-2 text-end">
+              <a th:href="@{/community/Kotlin}" class="home-section__more">Kotlin 게시판 더보기 <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑨ 프로젝트 다이어리 섹션 -->
+    <section class="home-section container px-2 px-sm-3" aria-labelledby="home-diary-title">
+      <header class="home-section__header">
+        <div>
+          <h2 id="home-diary-title" class="home-section__title home-section__title--left mb-1">최근 프로젝트 다이어리</h2>
+          <p class="home-section__subtitle home-section__subtitle--left mb-0">개발자들의 진행 중인 프로젝트를 둘러보세요</p>
+        </div>
+        <a th:href="@{/my-pages/myPageMain}" class="home-section__more">더보기</a>
+      </header>
+      <div class="home-diary-grid mt-3">
+        <th:block th:if="${#lists.isEmpty(latestProjects)}">
+          <div class="home-empty-hint">
+            <i class="bi bi-folder2-open me-1"></i>아직 프로젝트가 없습니다.
+            <a sec:authorize="isAuthenticated()" th:href="@{/my-pages/myPageMain}">내 프로젝트 시작하기</a>
+            <a sec:authorize="isAnonymous()" th:href="@{/loginForm}">로그인 후 시작하기</a>
+          </div>
+        </th:block>
+        <article th:each="project : ${latestProjects}" class="home-diary-card">
+          <a th:href="@{/my-pages/projectDetail(projectId=${project.projectId})}" class="home-diary-card__link text-decoration-none stretched-link">
+            <div class="home-diary-card__thumb" aria-hidden="true">
+              <i class="bi bi-folder2-open"></i>
+            </div>
+            <div class="home-diary-card__body">
+              <span class="home-diary-card__status badge"
+                    th:classappend="${project.status != null and project.status.name() == '진행중'} ? ' text-bg-primary' : (${project.status != null and project.status.name() == '종료'} ? ' text-bg-secondary' : ' text-bg-light border text-dark')"
+                    th:text="${project.status != null ? project.status.name() : '계획'}">진행중</span>
+              <h3 class="home-diary-card__title text-truncate" th:text="${project.name}">프로젝트명</h3>
+              <p class="home-diary-card__desc text-truncate" th:text="${project.description}">설명</p>
+              <span class="home-diary-card__author small text-secondary">
+                <i class="bi bi-person me-1" aria-hidden="true"></i><span th:text="${project.userId}">작성자</span>
+              </span>
+            </div>
+          </a>
+        </article>
+      </div>
+    </section>
+
+    <!-- ⑩ FAQ -->
+    <section class="home-faq container px-2 px-sm-3 mb-5" aria-labelledby="home-faq-title">
+      <header class="home-section__header">
+        <h2 id="home-faq-title" class="home-section__title home-section__title--left mb-0">자주 묻는 질문</h2>
+        <a th:href="@{/support/faq}" class="home-section__more">전체 FAQ</a>
+      </header>
+      <div class="accordion home-faq-accordion mt-3" id="homeFaqAccordion">
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="true" aria-controls="faq1">CodeMoa는 어떤 서비스인가요?</button>
+          </h3>
+          <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#homeFaqAccordion">
+            <div class="accordion-body text-secondary small">AI 코딩 문제, 커뮤니티, IT 정보(강의·도서·공모전), 채용·팀 모집을 한곳에서 연결하는 개발자 허브입니다.</div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" aria-expanded="false" aria-controls="faq2">질문은 어디에 올리면 되나요?</button>
+          </h3>
+          <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion">
+            <div class="accordion-body text-secondary small">자유게시판이나 언어별 게시판에 올리거나, <a th:href="@{/support/qna}">Q&amp;A</a>를 이용할 수 있습니다.</div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" aria-expanded="false" aria-controls="faq3">랭킹은 어떻게 산정되나요?</button>
+          </h3>
+          <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion">
+            <div class="accordion-body text-secondary small">주간 활동(포인트 로그)을 기준으로 집계됩니다. 자세한 순위는 <a th:href="@{/ranking}">랭킹 페이지</a>에서 확인하세요.</div>
+          </div>
         </div>
       </div>
     </section>
   </div>
 
   <th:block layout:fragment="script">
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script>
-      const lectureSwiper = new Swiper(".lectureSwiper", {
-        loop: true,
-        pagination: { el: ".swiper-pagination", clickable: true },
-        slidesPerView: 1.15,
-        spaceBetween: 16,
-        breakpoints: {
-          576: { slidesPerView: 2, spaceBetween: 16 },
-          768: { slidesPerView: 3, spaceBetween: 20 },
-          992: { slidesPerView: 4, spaceBetween: 20 },
-        },
-      });
-      document.getElementById("lecture-swiper-prev").addEventListener("click", () => lectureSwiper.slidePrev());
-      document.getElementById("lecture-swiper-next").addEventListener("click", () => lectureSwiper.slideNext());
-    </script>
   </th:block>
 </html>

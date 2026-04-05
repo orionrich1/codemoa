@@ -1,5 +1,8 @@
 package com.codemoa.project.domain.recruit.service;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -10,31 +13,30 @@ import com.codemoa.project.domain.recruit.dto.response.OgPreviewResponse;
 @Service
 public class OgPreviewService {
 
-	
-	 // 주어진 URL에서 OG 메타데이터를 추출하는 메서드
+	private static final OgPreviewResponse FAILURE = OgPreviewResponse.builder()
+			.success(false).title("").description("").imageUrl("").build();
+
 	public OgPreviewResponse fetchOgData(String url) {
+		// C-7: SSRF 방지 — http/https 프로토콜만 허용하고 사설 IP 차단
+		if (!isSafeUrl(url)) {
+			return FAILURE;
+		}
 		try {
-			//1. URL 연결(User-Agent를 지정해 봇 차단 방지)
 			Document doc = Jsoup.connect(url)
-					.userAgent("Mozilla/5.0 (compatible; CodemoaBot/1.0 )")
+					.userAgent("Mozilla/5.0 (compatible; CodemoaBot/1.0)")
 					.timeout(5000)
 					.get();
-			
-			//2. OG 메타 제목 추출, 없으면 <title> 태그 값 사용
+
 			String title = extractMetaContent(doc, "og:title");
 			if (title == null || title.isEmpty()) title = doc.title();
-			
-			// 3. OG 메타 태그에서 설명 추출, 없으면 <meta name="description"> 내용 사용
+
 			String description = extractMetaContent(doc, "og:description");
-			if(description == null || description.isEmpty()) {
-				//<meta name = "description"... > 에서 가져오기 시도
+			if (description == null || description.isEmpty()) {
 				description = doc.select("meta[name=description]").attr("content");
 			}
-			
-			// 4. OG 메타 태그에서 이미지 URL 추출
+
 			String imageUrl = extractMetaContent(doc, "og:image");
-			
-			// 5. 추출한 데이터를 DTO에 담아 성공 응답 반환
+
 			return OgPreviewResponse.builder()
 					.success(true)
 					.title(title)
@@ -42,18 +44,49 @@ public class OgPreviewService {
 					.imageUrl(imageUrl)
 					.build();
 		} catch (Exception e) {
-			// 예외 발생시 실패 응답 반환
-			return OgPreviewResponse.builder()
-					.success(false)
-					.title("")
-					.description("")
-					.imageUrl("")
-					.build();
+			return FAILURE;
 		}
 	}
-	 // Document에서 지정한 OG 메타 태그의 content 값을 추출하는 헬퍼 메서드
+
+	/**
+	 * C-7: http/https 이외 프로토콜과 사설 IP 대역을 차단합니다.
+	 */
+	private boolean isSafeUrl(String rawUrl) {
+		if (rawUrl == null || rawUrl.isBlank()) return false;
+		try {
+			URL url = new URL(rawUrl);
+			String protocol = url.getProtocol();
+			if (!protocol.equals("http") && !protocol.equals("https")) return false;
+
+			String host = url.getHost().toLowerCase();
+			// 루프백 및 사설 IP 패턴 차단
+			if (host.equals("localhost") || host.startsWith("127.")
+					|| host.startsWith("10.")
+					|| host.startsWith("192.168.")
+					|| host.startsWith("169.254.")  // AWS 메타데이터
+					|| host.equals("0.0.0.0")
+					|| host.equals("[::1]")) {
+				return false;
+			}
+			// 172.16.0.0/12 대역
+			if (host.startsWith("172.")) {
+				String[] parts = host.split("\\.");
+				if (parts.length >= 2) {
+					int second = Integer.parseInt(parts[1]);
+					if (second >= 16 && second <= 31) return false;
+				}
+			}
+			return true;
+		} catch (MalformedURLException | NumberFormatException e) {
+			return false;
+		}
+	}
+
+	/**
+	 * B-3: og:title 등 콜론이 포함된 property 값을 CSS 셀렉터에서 안전하게 처리하기 위해 따옴표로 감쌈
+	 */
 	private String extractMetaContent(Document doc, String property) {
-		Element metaTag = doc.selectFirst("meta[property=" + property + "]");
+		Element metaTag = doc.selectFirst("meta[property='" + property + "']");
 		return metaTag != null ? metaTag.attr("content") : null;
 	}
 }

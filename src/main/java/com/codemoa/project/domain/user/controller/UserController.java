@@ -8,6 +8,7 @@ import com.codemoa.project.domain.user.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -52,7 +53,7 @@ public class UserController {
 	}
 
 	@PostMapping("/join")
-	public String join(UserSignUpRequest request, HttpServletRequest httpRequest) {
+	public String join(@Valid UserSignUpRequest request, HttpServletRequest httpRequest) {
 		HttpSession session = httpRequest.getSession(false);
 		String snsProvider = "";
 		String snsId = "";
@@ -122,16 +123,19 @@ public class UserController {
 
 	// 비밀번호 재설정
 	@PostMapping("/updatePass")
-	public String updatePass(UserPassUpdateRequest request) {
+	public String updatePass(@Valid UserPassUpdateRequest request) {
 		userService.updatePass(request);
 		return "redirect:/loginForm";
 	}
 
 	@ExceptionHandler(IllegalArgumentException.class)
-	public String handleException(IllegalArgumentException exception, RedirectAttributes redirectAttributes) {
+	public String handleException(IllegalArgumentException exception, RedirectAttributes redirectAttributes,
+			HttpServletRequest request) {
 		redirectAttributes.addFlashAttribute("error", exception.getMessage());
-		// 어떤 예외가 발생했는지에 따라 리다이렉트 경로를 다르게 할 수 있습니다.
-		// 여기서는 간단하게 joinForm으로 통일합니다.
+		String path = request.getServletPath();
+		if (path != null && path.contains("updatePass")) {
+			return "redirect:/findPass";
+		}
 		return "redirect:/joinForm";
 	}
 }

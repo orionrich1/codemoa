@@ -30,22 +30,22 @@
 									<h3 class="fw-bold mt-2">비밀번호 재설정</h3>
 								</div>
 
-					            <form action="/updatePass" method="POST">
+					            <form th:action="@{/updatePass}" method="POST" id="updatePassForm">
 									<input type="hidden" name="userId" th:value="${user.userId}">
 					
 					                <div class="mb-3">
 					                    <label for="pass" class="form-label">비밀번호</label>
 					                    <div class="input-group">
-					                        <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
-					                        <input type="password" class="form-control" id="pass" name="pass" placeholder="비밀번호를 입력하세요" required>
+					                        <span class="input-group-text" aria-hidden="true"><i class="bi bi-lock"></i></span>
+					                        <input type="password" class="form-control" id="pass" name="pass" placeholder="비밀번호를 입력하세요" required autocomplete="new-password">
 					                    </div>
 					                </div>
 					
 					                <div class="mb-4">
 					                    <label for="passConfirm" class="form-label">비밀번호 확인</label>
 					                    <div class="input-group">
-					                        <span class="input-group-text"><i class="fa-solid fa-check"></i></span>
-					                        <input type="password" class="form-control" id="passConfirm" name="passConfirm" placeholder="비밀번호를 다시 한번 입력하세요" required>
+					                        <span class="input-group-text" aria-hidden="true"><i class="bi bi-check-lg"></i></span>
+					                        <input type="password" class="form-control" id="passConfirm" name="passConfirm" placeholder="비밀번호를 다시 한번 입력하세요" required autocomplete="new-password">
 					                    </div>
 					                </div>
 					
@@ -68,14 +68,25 @@
 						</th:block>
 
 						<div class="d-grid mb-3">
-							<button class="btn btn-primary btn-lg fw-bold"
-								th:onclick="|location.href='@{/loginForm}'|">로그인 화면으로 돌아가기</button>
+							<a th:href="@{/loginForm}" class="btn btn-primary btn-lg fw-bold text-center">로그인 화면으로 돌아가기</a>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+	<script th:inline="javascript">
+		document.getElementById('updatePassForm')?.addEventListener('submit', function (e) {
+			const p = document.getElementById('pass');
+			const c = document.getElementById('passConfirm');
+			if (!p || !c) return;
+			if (p.value !== c.value) {
+				e.preventDefault();
+				alert('비밀번호가 일치하지 않습니다.');
+				p.focus();
+			}
+		});
+	</script>
 </div>
 
 </html>

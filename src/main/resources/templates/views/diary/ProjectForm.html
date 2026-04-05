@@ -34,7 +34,7 @@
 	
 	    <div class="form-actions">
 	        <button type="submit" th:text="${projectId != 0} ? '수정하기' : '등록하기'"></button>
-	        <a href="/my-pages/diary/">취소</a>
+	        <a th:href="@{/my-pages/diary/}">취소</a>
 	    </div>
 	</form>
 

@@ -1,74 +1,353 @@
 @charset "UTF-8";
 
-table, th, td {
-	border: 1px solid grey;
-	border-collapse: collapse;
+/* AI 코딩 페이지 ElevenLabs 스타일 */
+.ai-page {
+    color: var(--ds-text);
 }
 
-td {
-	height: 60px;
+.ai-page .container {
+    max-width: 1140px;
 }
 
-.problems:hover td {
-	background-color: #EEEEFF;
+.ai-page__title {
+    font-family: var(--font-display), "Georgia", serif;
+    font-size: 2.25rem;
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    color: var(--ds-text);
 }
 
-.formBtns {
-	width: 100%;
-	height: 50px;
-	padding: 10px;
+.ai-page__kicker {
+    font-family: "Inter", "Pretendard", sans-serif;
+    font-size: 0.95rem;
+    letter-spacing: 0.16px;
+    color: var(--ds-text-muted);
 }
 
-pre {
-	white-space: pre-wrap; /* 줄바꿈 허용 (기본 pre는 줄바꿈 안 됨) */
-	word-wrap: break-word; /* 긴 단어도 줄바꿈 */
-	overflow-x: hidden; /* 가로 스크롤 방지 */
+.ai-card {
+    background: var(--ds-surface);
+    border: none;
+    border-radius: 18px;
+    box-shadow: var(--ds-shadow-card);
 }
 
-#leftJAVA.form-check-input {
-  border: 2px solid #f44336; /* 빨강 테두리 */
+.ai-card__body {
+    padding: 1.5rem;
 }
 
-#leftJavascript.form-check-input {
-  border: 2px solid #2196f3; /* 파랑 테두리 */
+.ai-pill,
+.ai-filter .btn {
+    background: var(--ds-surface);
+    color: var(--ds-text-secondary);
+    border: 1px solid var(--ds-border-subtle);
+    border-radius: 9999px;
+    min-height: 44px;
+    padding: 0.5rem 0.95rem;
+    font-family: "Inter", "Pretendard", sans-serif;
+    font-size: 0.94rem;
+    letter-spacing: 0.15px;
 }
 
-#leftPython.form-check-input {
-  border: 2px solid #4caf50; /* 초록 테두리 */
+.ai-filter .btn-check:checked + .btn,
+.ai-filter .btn:hover {
+    background: var(--ds-text);
+    color: var(--ds-surface);
+    border-color: var(--ds-text);
 }
 
-#rightHigh.form-check-input {
-  border: 2px solid #ff9800; /* 주황 테두리 */
+.ai-list-item {
+    border: 0;
+    border-bottom: 1px solid var(--ds-border-subtle);
+    min-height: 48px;
+    transition: background-color 0.16s ease;
 }
 
-#rightMiddle.form-check-input {
-  border: 2px solid #9c27b0; /* 보라 테두리 */
+.ai-list-item:hover {
+    background: var(--ds-surface-subtle);
 }
 
-#rightLow.form-check-input {
-  border: 2px solid #05c1d9; /* 청록 테두리 */
+.ai-problem-title {
+    font-family: "Inter", "Pretendard", sans-serif;
+    font-size: 1.08rem;
+    font-weight: 500;
+    letter-spacing: 0.16px;
+    color: var(--ds-text);
 }
 
-label[for="leftJAVA"] {
-  color: #f44336;
+.ai-problem-meta {
+    font-family: "Inter", "Pretendard", sans-serif;
+    font-size: 0.88rem;
+    letter-spacing: 0.16px;
+    color: var(--ds-text-muted);
 }
 
-label[for="leftJavascript"] {
-  color: #2196f3;
+.ai-code,
+.code-editor-textarea,
+.code-block {
+    font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    letter-spacing: 0;
 }
 
-label[for="leftPython"] {
-  color: #4caf50;
+.ai-code {
+    background: var(--ds-surface-subtle);
+    border-radius: 16px;
+    border: 1px solid var(--ds-border);
+    padding: 1rem;
+    white-space: pre-wrap;
 }
 
-label[for="rightHigh"] {
-  color: #ff9800;
+.code-editor-textarea {
+    color: var(--ds-text);
+    border: 1px solid var(--ds-border);
+    border-radius: 16px;
+    resize: none;
 }
 
-label[for="rightMiddle"] {
-  color: #9c27b0;
+.code-block {
+    background: var(--ds-text);
+    color: var(--ds-surface-subtle);
+    padding: 1.25rem;
+    border-radius: 16px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
 }
 
-label[for="rightLow"] {
-  color: #05c1d9;
+/* ── 결과 페이지 (기능 5) ── */
+.ai-result-score-card {
+    text-align: center;
+}
+
+.ai-result-score-num {
+    font-family: var(--font-display, "Georgia"), serif;
+    font-size: 5rem;
+    font-weight: 300;
+    line-height: 1;
+    color: var(--ds-text);
+    letter-spacing: -0.03em;
+}
+
+.ai-result-score-denom {
+    font-size: 1.1rem;
+    color: var(--ds-text-muted);
+    margin-top: -0.25rem;
+}
+
+.ai-result-grade-badge {
+    font-size: 1rem !important;
+}
+
+.ai-result-tabs .nav-link {
+    border-radius: 9999px;
+    color: var(--ds-text-secondary);
+    font-size: 0.94rem;
+    min-height: 44px;
+    padding: 0.5rem 1rem;
+}
+
+.ai-result-tabs .nav-link.active {
+    background: var(--ds-text);
+    color: var(--ds-surface);
+}
+
+.ai-result-feedback-loading {
+    color: var(--ds-text-muted);
+    padding: 1.5rem 0;
+    font-size: 0.95rem;
+}
+
+.ai-result-answer-toggle {
+    display: flex;
+    align-items: center;
+    background: var(--ds-warm);
+    border: none;
+    border-radius: var(--radius, 12px);
+    box-shadow: var(--ds-shadow-outline);
+    color: var(--ds-text);
+    font-size: 0.94rem;
+    padding: 0.75rem 1rem;
+    min-height: 48px;
+    transition: background 0.15s;
+}
+
+.ai-result-answer-toggle:hover {
+    background: var(--ds-warm);
+    filter: brightness(0.97);
+    color: var(--ds-text);
+}
+
+.ai-toggle-icon {
+    transition: transform 0.2s;
+}
+
+.ai-result-answer-toggle:not(.collapsed) .ai-toggle-icon {
+    transform: rotate(180deg);
+}
+
+/* ── 코드 에디터: 줄 번호 래퍼 (기능 3) ── */
+.code-editor-wrapper {
+    display: flex;
+    overflow: hidden;
+    border: 1px solid var(--ds-border);
+    border-radius: 16px;
+    flex: 1;
+    min-height: 320px;
+}
+
+.code-line-numbers {
+    min-width: 44px;
+    padding: 0.625rem 0.5rem;
+    background: var(--ds-surface-subtle);
+    color: var(--ds-text-muted);
+    font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    text-align: right;
+    user-select: none;
+    overflow: hidden;
+    white-space: pre;
+    border-right: 1px solid var(--ds-border);
+    flex-shrink: 0;
+}
+
+.code-editor-wrapper .code-editor-textarea {
+    /* 래퍼가 보더·라디우스를 담당 */
+    border: none !important;
+    border-radius: 0 !important;
+    flex: 1;
+    min-width: 0;
+    padding: 0.625rem 0.75rem;
+    line-height: 1.6;
+    resize: none;
+}
+
+/* ── problemDetail — 인라인 스타일 대체 클래스 ── */
+.ds-answer-textarea {
+    min-height: 320px;
+}
+
+.ds-inline-ai-btn {
+    border-radius: 18px;
+}
+
+.ds-inline-ai-response {
+    min-height: 80px;
+}
+
+/* ── 문제 상세 — 뷰포트 고정 (기능 3) ── */
+.ds-problem-layout {
+    height: calc(100vh - 120px);
+    min-height: 500px;
+}
+
+.ds-problem-pane {
+    height: 100%;
+    overflow-y: auto;
+}
+
+.ds-code-pane {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.ds-code-pane .ds-answer-textarea {
+    flex: 1;
+    min-height: 0;
+}
+
+/* 모바일 — 문제 내용 패널 접기/펼치기 (기능 3) */
+@media (max-width: 767.98px) {
+    .ds-problem-layout {
+        height: auto;
+    }
+
+    .ds-problem-pane,
+    .ds-code-pane {
+        height: auto;
+        overflow-y: visible;
+    }
+
+    .ds-code-pane .ds-answer-textarea {
+        min-height: 320px;
+    }
+}
+
+/* 커서 포인터 */
+.ds-cursor-pointer { cursor: pointer; }
+
+/* 문제 패널 내부 스크롤 */
+.ds-problem-pane-scroll {
+    overflow-y: auto;
+    max-height: 420px;
+}
+
+/* 카테고리 배지 최소 너비 */
+.ds-problem-cat-badge {
+    min-width: 80px;
+    text-align: center;
+}
+
+/* 메타 스페이서 (카테고리 배지 너비 맞춤) */
+.ds-problem-meta-spacer {
+    width: 80px;
+}
+
+/* ── 문제 목록 — 검색 입력 너비 캡 ── */
+.ds-problem-search-cap {
+    max-width: 360px;
+}
+
+/* ── 통계 페이지 — 프로그레스 바 ── */
+
+/* 컴팩트 높이(8px) 프로그레스 바 */
+.ds-progress-sm {
+    height: 8px;
+}
+
+/* AI 코딩 페이지 내 progress-bar: DS 무채색 통일 + 둥근 끝 */
+.ai-page .progress-bar {
+    background: var(--ds-text) !important;
+    border-radius: 9999px;
+}
+
+/* 데이터 드리븐 너비 (CSS 커스텀 프로퍼티 경유) */
+.ds-progress-w {
+    width: var(--progress-w, 0%);
+}
+
+/* ── 통계 페이지 — 막대 차트 ── */
+
+/* 최근 7일 막대 차트 컨테이너 */
+.ds-stat-chart {
+    height: 100px;
+}
+
+/* 개별 막대 (CSS 커스텀 프로퍼티로 높이 제어, th:style="'--bar-h:Npx'" 와 함께 사용) */
+.ds-stat-bar {
+    height: var(--bar-h, 4px);
+    min-height: 4px;
+    background: var(--ds-text);
+    border-radius: 4px 4px 0 0;
+    width: 100%;
+    transition: height 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ── 풀이 이력 — 점수 등급 표시 ── */
+/* site-ds.css 가 text-success/warning/danger 를 모두 --ds-text-secondary 로 덮으므로
+   DS 전용 등급 클래스로 명도만 차별화한다 */
+.ds-score-grade-a {
+    color: var(--ds-text) !important;
+    font-weight: 500 !important;
+}
+
+.ds-score-grade-b {
+    color: var(--ds-text) !important;
+}
+
+.ds-score-grade-c {
+    color: var(--ds-text-secondary) !important;
+}
+
+.ds-score-grade-d {
+    color: var(--ds-text-muted) !important;
 }

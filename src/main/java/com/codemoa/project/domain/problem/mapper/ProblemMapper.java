@@ -22,4 +22,9 @@ public interface ProblemMapper {
 	void updateProblem(Problem problem);
 
 	void deleteProblem(int no);
+
+	/** 오늘의 추천 문제 (날짜 기반으로 일관된 문제 선택) */
+	Problem findDailyProblem(@Param("offset") int offset);
+
+	int countProblems();
 }

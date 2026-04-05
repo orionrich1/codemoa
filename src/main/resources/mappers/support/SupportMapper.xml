@@ -34,6 +34,24 @@
         <include refid="qnaSearchCondition" />
     </select>
 
+    <select id="countUnansweredQna" resultType="int">
+        SELECT COUNT(*) FROM qna WHERE COALESCE(is_answered, 0) = 0
+    </select>
+
+    <select id="countMyUnansweredQna" resultType="int">
+        SELECT COUNT(*) FROM qna WHERE writer_id = #{userId} AND COALESCE(is_answered, 0) = 0
+    </select>
+
+    <select id="findLatestQnaForMain" resultType="com.codemoa.project.domain.support.entity.Qna">
+        SELECT
+            q.qna_id, q.title, q.writer_id, q.created_at, q.is_answered, q.view_count,
+            u.nickname AS writerNickname
+        FROM qna q
+        LEFT JOIN user u ON q.writer_id = u.user_id
+        ORDER BY COALESCE(q.is_answered, 0) ASC, q.qna_id DESC
+        LIMIT #{limit}
+    </select>
+
     <select id="findQnaList" parameterType="map" resultType="com.codemoa.project.domain.support.entity.Qna">
         SELECT
             q.qna_id, q.title, q.writer_id, q.created_at, q.is_answered, q.view_count,

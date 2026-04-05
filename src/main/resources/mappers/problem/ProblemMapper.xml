@@ -28,7 +28,8 @@
 		SELECT * FROM problems WHERE problem_id=#{no}
 	</select>
 	
-	<insert id="addProblem" parameterType="Problem" >
+	<insert id="addProblem" parameterType="Problem"
+			useGeneratedKeys="true" keyProperty="problemId">
 		INSERT INTO problems(user_id, title, content, answer, hint, difficulty, category)
 		VALUES (#{userId}, #{title}, #{content}, #{answer}, #{hint}, #{difficulty}, #{category})
 	</insert>
@@ -42,4 +43,12 @@
 	<delete id="deleteProblem">
 		DELETE FROM problems WHERE problem_id=#{no}
 	</delete>
+
+	<select id="findDailyProblem" resultType="Problem">
+		SELECT * FROM problems ORDER BY problem_id LIMIT 1 OFFSET #{offset}
+	</select>
+
+	<select id="countProblems" resultType="int">
+		SELECT COUNT(*) FROM problems
+	</select>
 </mapper>

@@ -48,7 +48,7 @@
                         </button>
                     </h2>
                     <div th:id="'collapse' + ${iterStat.count}" class="accordion-collapse collapse" th:aria-labelledby="'heading' + ${iterStat.count}" data-bs-parent="#faqAccordion">
-                        <div class="accordion-body" style="white-space: pre-wrap;" th:text="${faq.answer}">
+                        <div class="accordion-body ds-faq-answer" th:text="${faq.answer}">
                         </div>
                     </div>
                 </div>

@@ -2,113 +2,119 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" 
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
       layout:decorate="~{layouts/default_layout}">
-
+<head>
+    <title>커뮤니티 · 게시글 수정</title>
+    <th:block layout:fragment="extra-head">
+        <link rel="stylesheet" th:href="@{/css/community.css}" />
+        <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+    </th:block>
+</head>
 <body>
-    <div layout:fragment="content" class="ui-view">
-        <div class="container my-5">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="text-center mb-4">
-                        <h2 class="fw-bold fs-2">게시글 수정</h2>
-                    </div>
-                    
-                    <div class="card">
-                        <div class="card-body p-4 p-md-5">
-                            <form id="editForm">
-                                <div class="mb-3">
-                                    <label for="title" class="form-label fw-bold">제목</label>
-                                    <input type="text" class="form-control" id="title" name="title" th:value="${board.title}" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="category" class="form-label fw-bold">카테고리</label>
-                                    <select class="form-select" id="category" name="category" required>
-                                        <option value="Java" th:selected="${board.category == 'Java'}">Java</option>
-                                        <option value="Python" th:selected="${board.category == 'Python'}">Python</option>
-                                        <option value="JavaScript" th:selected="${board.category == 'JavaScript'}">JavaScript</option>
-                                        <option value="Kotlin" th:selected="${board.category == 'Kotlin'}">Kotlin</option>
-                                        <option value="자유" th:selected="${board.category == '자유'}">자유</option>
-                                    </select>
-                                </div>
-                                <div class="mb-4">
-                                    <label for="content" class="form-label fw-bold">내용</label>
-                                    <textarea id="content" name="content" th:text="${board.content}"></textarea>
-                                </div>
-                                <div class="d-flex justify-content-end gap-2 mt-4">
-                                    <a th:href="@{/boards/{boardNo}(boardNo=${board.boardNo})}" class="btn btn-secondary">취소</a>
-                                    <button type="submit" class="btn btn-primary">수정 완료</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+<div layout:fragment="content" class="ui-view community-ds community-ui">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="text-center mb-4">
+                    <p class="community-page__kicker mb-0">Community</p>
+                    <h1 class="community-page__title mb-0">게시글 수정</h1>
                 </div>
+                
+                <article class="community-card">
+                    <div class="community-card__body community-card__body--spacious">
+                        <form id="editForm">
+                            <div class="mb-3">
+                                <label for="title" class="form-label">제목</label>
+                                <input type="text" class="form-control" id="title" name="title" th:value="${board.title}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="category" class="form-label">카테고리</label>
+                                <select class="form-select" id="category" name="category" required>
+                                    <option value="Java" th:selected="${board.category == 'Java'}">Java</option>
+                                    <option value="Python" th:selected="${board.category == 'Python'}">Python</option>
+                                    <option value="JavaScript" th:selected="${board.category == 'JavaScript'}">JavaScript</option>
+                                    <option value="Kotlin" th:selected="${board.category == 'Kotlin'}">Kotlin</option>
+                                    <option value="자유" th:selected="${board.category == '자유'}">자유</option>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label for="content" class="form-label">내용</label>
+                                <textarea id="content" name="content" th:text="${board.content}"></textarea>
+                            </div>
+                            <div class="d-flex justify-content-end flex-wrap gap-2 mt-4">
+                                <a th:href="@{/boards/{boardNo}(boardNo=${board.boardNo})}" class="community-ds-cta-warm">취소</a>
+                                <button type="submit" class="community-ds-cta-primary border-0">수정 완료</button>
+                            </div>
+                        </form>
+                    </div>
+                </article>
             </div>
         </div>
     </div>
+</div>
 
-    <th:block layout:fragment="script">
-        <script th:inline="javascript">
-            // Summernote 에디터 초기화
-            $(document).ready(function() {
-                $('#content').summernote({
-                    height: 350,
-                    minHeight: null,
-                    maxHeight: null,
-                    focus: true,
-                    lang: "ko-KR",
-                    toolbar: [
-                        ['style', ['style']],
-                        ['font', ['bold', 'underline', 'clear']],
-                        ['color', ['color']],
-                        ['para', ['ul', 'ol', 'paragraph']],
-                        ['table', ['table']],
-                        ['insert', ['link', 'picture', 'video']],
-                        ['view', ['fullscreen', 'codeview', 'help']]
-                    ]
+<th:block layout:fragment="script">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+    <script th:inline="javascript">
+        $(document).ready(function() {
+            $('#content').summernote({
+                height: 350,
+                minHeight: null,
+                maxHeight: null,
+                focus: true,
+                lang: "ko-KR",
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'underline', 'clear']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture', 'video']],
+                    ['view', ['fullscreen', 'codeview', 'help']]
+                ]
+            });
+        });
+
+        const token = document.querySelector("meta[name='_csrf']")?.content;
+        const header = document.querySelector("meta[name='_csrf_header']")?.content;
+        const headers = { 'Content-Type': 'application/json' };
+        if (token && header) {
+            headers[header] = token;
+        }
+
+        const editForm = document.getElementById('editForm');
+        if (editForm) {
+            editForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const boardNo = /*[[${board.boardNo}]]*/ 0;
+                const title = document.getElementById('title').value;
+                const content = $('#content').summernote('code');
+                const category = document.getElementById('category').value;
+                
+                const data = {
+                    title: title,
+                    content: content,
+                    category: category
+                };
+
+                fetch(`/api/boards/${boardNo}`, {
+                    method: 'PUT',
+                    headers: headers,
+                    body: JSON.stringify(data)
+                }).then(response => {
+                    if (response.ok) {
+                        alert('게시글이 성공적으로 수정되었습니다.');
+                        location.href = `/boards/${boardNo}`;
+                    } else {
+                        alert('수정에 실패했습니다. 입력 내용을 확인해주세요.');
+                    }
+                }).catch(error => {
+                    console.error('Error:', error);
+                    alert('오류가 발생했습니다.');
                 });
             });
-
-            // 폼 전송 로직
-			const token = document.querySelector("meta[name='_csrf']")?.content;
-			const header = document.querySelector("meta[name='_csrf_header']")?.content;
-			const headers = { 'Content-Type': 'application/json' };
-			if (token && header) {
-				headers[header] = token;
-			}
-
-            const editForm = document.getElementById('editForm');
-            if (editForm) {
-                editForm.addEventListener('submit', function(event) {
-                    event.preventDefault();
-
-                    const boardNo = /*[[${board.boardNo}]]*/ 0;
-                    const title = document.getElementById('title').value;
-                    const content = $('#content').summernote('code');
-                    const category = document.getElementById('category').value;
-                    
-                    const data = {
-                        title: title,
-                        content: content,
-                        category: category
-                    };
-
-                    fetch(`/api/boards/${boardNo}`, {
-                        method: 'PUT',
-                        headers: headers,
-                        body: JSON.stringify(data)
-                    }).then(response => {
-                        if (response.ok) {
-                            alert('게시글이 성공적으로 수정되었습니다.');
-                            location.href = `/boards/${boardNo}`;
-                        } else {
-                            alert('수정에 실패했습니다. 입력 내용을 확인해주세요.');
-                        }
-                    }).catch(error => {
-                        console.error('Error:', error);
-                        alert('오류가 발생했습니다.');
-                    });
-                });
-            }
-        </script>
-    </th:block>
+        }
+    </script>
+</th:block>
 </body>
 </html>

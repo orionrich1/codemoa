@@ -11,13 +11,17 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 
 import com.codemoa.project.domain.user.security.CustomLoginSuccessHandler;
 import com.codemoa.project.domain.user.security.CustomOAuth2UserService;
 
 @Configuration
 @EnableWebSecurity
+@org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 public class SecurityConfig {
 
 	@Lazy
@@ -25,14 +29,16 @@ public class SecurityConfig {
 	private CustomOAuth2UserService customOAuth2UserService;
 	
     private final CustomLoginSuccessHandler customLoginSuccessHandler;
+    private final UserDetailsService userDetailsService;
 
-    public SecurityConfig(@Lazy CustomLoginSuccessHandler customLoginSuccessHandler) {
+    public SecurityConfig(@Lazy CustomLoginSuccessHandler customLoginSuccessHandler,
+            UserDetailsService userDetailsService) {
         this.customLoginSuccessHandler = customLoginSuccessHandler;
+        this.userDetailsService = userDetailsService;
     }
     
     @Bean
     public PasswordEncoder passwordEncoder() {
-        // BCrypt를 기본으로 사용하면서, {noop} 등 다른 방식도 지원하도록 설정
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
@@ -45,8 +51,36 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            // CSRF 보호 비활성화
-            .csrf(csrf -> csrf.disable())
+            // CSRF: 쿠키 기반 활성화.
+            // CookieCsrfTokenRepository + CsrfTokenRequestAttributeHandler 조합 사용.
+            // XorCsrfTokenRequestAttributeHandler(지연 로딩)와 조합하면 GET 응답에
+            // Set-Cookie 헤더가 누락되어 POST 시 403이 발생하므로 사용 금지.
+            .csrf(csrf -> csrf
+                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
+                .ignoringRequestMatchers(
+                    // 체크리스트·다이어리 REST API
+                    "/my-pages/updateCheckBox",
+                    "/my-pages/addChecklist",
+                    "/my-pages/updateChecklist",
+                    "/my-pages/deleteChecklist",
+                    "/my-pages/saveDiary",
+                    "/my-pages/deleteDiary/**",
+                    // AI 문제 REST API
+                    "/problems/apiRequest",
+                    "/problems/apiQuestion",
+                    "/problems/listUpdate",
+                    // 채용 REST API
+                    "/employmentfetch",
+                    "/employment/crawl",
+                    // 커뮤니티 REST API
+                    "/api/**",
+                    // 정보 추천 REST API
+                    "/information/**",
+                    // 소켓
+                    "/ws/**"
+                )
+            )
 
             // HTTP 요청 권한 설정
             .authorizeHttpRequests(auth -> auth
@@ -57,18 +91,23 @@ public class SecurityConfig {
                 .requestMatchers("/my-pages/**").authenticated()
                 
                 // 랭킹페이지는 로그인이 필요합니다.
-                .requestMatchers("/ranking**").authenticated()
+                .requestMatchers("/ranking/**", "/ranking").authenticated()
 
-                // [핵심 추가] 모든 글쓰기 및 수정 페이지는 로그인이 필요합니다.
-                // /community/*/write -> 'Java', 'free' 등 모든 카테고리의 글쓰기 페이지를 의미합니다.
+                // AI API 엔드포인트: 로그인 필요 (과금 방지)
+                .requestMatchers("/problems/apiRequest", "/problems/apiQuestion").authenticated()
+
+                // 채용 크롤링 엔드포인트: ADMIN 전용
+                .requestMatchers("/employmentfetch", "/employment/crawl").hasRole("ADMIN")
+
+                // 글쓰기·수정·삭제 페이지는 로그인이 필요합니다.
                 .requestMatchers("/community/*/write", "/community/*/*/edit").authenticated()
 
-                // 글쓰기, 수정, 삭제 등 데이터 변경 API는 로그인이 필요합니다. (API 경로는 그대로 유지)
+                // 커뮤니티 데이터 변경 API
                 .requestMatchers(HttpMethod.POST, "/api/boards", "/api/boards/*/comments", "/api/comments/*/adopt").authenticated()
                 .requestMatchers(HttpMethod.PUT, "/api/boards/**").authenticated()
                 .requestMatchers(HttpMethod.DELETE, "/api/boards/**").authenticated()
 
-                // 위에서 정의한 제한 외 "나머지는 모두 허용"합니다.
+                // 나머지는 모두 허용
                 .anyRequest().permitAll()
             )
             
@@ -99,6 +138,12 @@ public class SecurityConfig {
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/loginForm")
                 .invalidateHttpSession(true)
+            )
+
+            .rememberMe(remember -> remember
+                    .key("codemoa-remember-me")
+                    .tokenValiditySeconds(14 * 24 * 60 * 60)
+                    .userDetailsService(userDetailsService)
             );
 
         return http.build();

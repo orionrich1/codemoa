@@ -204,4 +204,26 @@ public class CommunityBoardService {
         
         return boardPage.getContent();
     }
+
+    /**
+     * 메인 인기 피드: 댓글 수 우선, 다음으로 추천수·글번호(최신).
+     * 게시글 조회수 컬럼이 없어 문서의 ‘인기’ 축을 참여(댓글)·추천으로 구현합니다.
+     */
+    @Transactional(readOnly = true)
+    public List<CommunityBoard> getPopularPosts(int size) {
+        return communityBoardRepository.findPopularByEngagement(size);
+    }
+
+    /** 메인: 전체 게시판 통합 최신 글 */
+    @Transactional(readOnly = true)
+    public List<CommunityBoard> getLatestPostsAllCategories(int size) {
+        Pageable pageable = PageRequest.of(0, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        return communityBoardRepository.findAll(pageable).getContent();
+    }
+
+    /** 플랫폼 통계: 전체 게시글 수 */
+    @Transactional(readOnly = true)
+    public long countAllPosts() {
+        return communityBoardRepository.count();
+    }
 }
