@@ -14,11 +14,29 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
+                <nav class="mb-3" aria-label="breadcrumb">
+                    <ol class="breadcrumb community-breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a th:href="@{/}">홈</a></li>
+                        <li class="breadcrumb-item"><a th:href="@{/community/free}">커뮤니티</a></li>
+                        <li class="breadcrumb-item">
+                            <a th:href="@{/community/{seg}(seg=${board.categoryUrlSegment})}" th:text="${boardListTitle}">게시판</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a th:href="@{/community/{seg}/{no}(seg=${board.categoryUrlSegment}, no=${board.boardNo})}"
+                               class="community-breadcrumb__title text-truncate d-inline-block"
+                               th:text="${board.title}">제목</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">수정</li>
+                    </ol>
+                </nav>
+                <div id="communityToast" class="community-toast alert d-none" role="alert" aria-live="polite"></div>
+                <p id="editFormError" class="text-danger small mt-2 d-none" role="alert"></p>
                 <div class="text-center mb-4">
                     <p class="community-page__kicker mb-0">Community</p>
                     <h1 class="community-page__title mb-0">게시글 수정</h1>
+                    <p class="community-caption mb-0 mt-1" th:text="${boardListTitle}">게시판</p>
                 </div>
-                
+
                 <article class="community-card">
                     <div class="community-card__body community-card__body--spacious">
                         <form id="editForm">
@@ -33,6 +51,8 @@
                                     <option value="Python" th:selected="${board.category == 'Python'}">Python</option>
                                     <option value="JavaScript" th:selected="${board.category == 'JavaScript'}">JavaScript</option>
                                     <option value="Kotlin" th:selected="${board.category == 'Kotlin'}">Kotlin</option>
+                                    <option value="C#" th:selected="${board.category == 'C#'}">C#</option>
+                                    <option value="기타" th:selected="${board.category == '기타'}">기타 언어</option>
                                     <option value="자유" th:selected="${board.category == '자유'}">자유</option>
                                 </select>
                             </div>
@@ -41,7 +61,7 @@
                                 <textarea id="content" name="content" th:text="${board.content}"></textarea>
                             </div>
                             <div class="d-flex justify-content-end flex-wrap gap-2 mt-4">
-                                <a th:href="@{/boards/{boardNo}(boardNo=${board.boardNo})}" class="community-ds-cta-warm">취소</a>
+                                <a th:href="@{/community/{seg}/{boardNo}(seg=${board.categoryUrlSegment}, boardNo=${board.boardNo})}" class="community-ds-cta-warm">취소</a>
                                 <button type="submit" class="community-ds-cta-primary border-0">수정 완료</button>
                             </div>
                         </form>
@@ -74,6 +94,22 @@
             });
         });
 
+        function showCommunityError(message) {
+            const el = document.getElementById('communityToast');
+            const errEl = document.getElementById('editFormError');
+            if (errEl) {
+                errEl.textContent = message;
+                errEl.classList.remove('d-none');
+            }
+            if (!el) return;
+            el.textContent = message;
+            el.classList.remove('d-none', 'alert-success');
+            el.classList.add('alert-danger');
+            setTimeout(function () {
+                el.classList.add('d-none');
+            }, 5000);
+        }
+
         const token = document.querySelector("meta[name='_csrf']")?.content;
         const header = document.querySelector("meta[name='_csrf_header']")?.content;
         const headers = { 'Content-Type': 'application/json' };
@@ -81,10 +117,23 @@
             headers[header] = token;
         }
 
+        function listSegmentFromDbCategory(cat) {
+            if (cat === '자유') return 'free';
+            if (cat === '기타') return 'etc';
+            return cat;
+        }
+
         const editForm = document.getElementById('editForm');
         if (editForm) {
             editForm.addEventListener('submit', function(event) {
                 event.preventDefault();
+                const errLine = document.getElementById('editFormError');
+                if (errLine) {
+                    errLine.textContent = '';
+                    errLine.classList.add('d-none');
+                }
+                const submitBtn = editForm.querySelector('button[type="submit"]');
+                if (submitBtn) submitBtn.disabled = true;
 
                 const boardNo = /*[[${board.boardNo}]]*/ 0;
                 const title = document.getElementById('title').value;
@@ -97,20 +146,29 @@
                     category: category
                 };
 
-                fetch(`/api/boards/${boardNo}`, {
+                fetch('/api/boards/' + boardNo, {
                     method: 'PUT',
                     headers: headers,
                     body: JSON.stringify(data)
                 }).then(response => {
                     if (response.ok) {
-                        alert('게시글이 성공적으로 수정되었습니다.');
-                        location.href = `/boards/${boardNo}`;
+                        const seg = listSegmentFromDbCategory(category);
+                        location.href = '/community/' + encodeURIComponent(seg) + '/' + boardNo;
                     } else {
-                        alert('수정에 실패했습니다. 입력 내용을 확인해주세요.');
+                        response.text().then(function (text) {
+                            try {
+                                var err = JSON.parse(text);
+                                showCommunityError('수정 실패: ' + (err.message || '입력 내용을 확인해주세요.'));
+                            } catch (e) {
+                                showCommunityError('수정에 실패했습니다. 입력 내용을 확인해주세요.');
+                            }
+                            if (submitBtn) submitBtn.disabled = false;
+                        });
                     }
                 }).catch(error => {
                     console.error('Error:', error);
-                    alert('오류가 발생했습니다.');
+                    showCommunityError('오류가 발생했습니다.');
+                    if (submitBtn) submitBtn.disabled = false;
                 });
             });
         }

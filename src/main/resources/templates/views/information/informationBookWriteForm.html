@@ -2,7 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/default_layout}">
-	<th:block layout:fragment="content" class="ui-view">
+	<div layout:fragment="content" class="ui-view">
 	<script th:src="@{/js/information/formcheck.js}"></script>
   		
 		<div class="container my-5">
@@ -15,9 +15,9 @@
 
 					<div class="card shadow-sm border-0">
 						<div class="card-body p-4 p-sm-5">
-							<form name="bookWriteForm" action="bookWrite" id="bookWriteForm" 
+							<form name="bookWriteForm" th:action="@{/information/bookWrite}" id="bookWriteForm" 
 								method="post" enctype="multipart/form-data">
-							
+								<input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 								<div class="row g-3">
 									<div class="col-md-6">
 										<label for="userId" class="form-label">글쓴이</label>
@@ -51,6 +51,7 @@
 									<div class="col-12">
 										<label for="addFile" class="form-label">대표 이미지</label>
 										<input type="file" class="form-control" name="addFile" id="addFile" >
+										<p class="form-text text-secondary mb-0">가로형(약 16:9) JPG·PNG·WebP 권장. 파일당 5MB 이하. 저장 후 <code>/files/information</code> 썸네일.</p>
 									</div>
 
 									<div class="col-md-4">
@@ -67,9 +68,8 @@
 									</div>
 
 									<div class="col-12 text-center mt-5">
-										<input type="submit" value="등록하기" class="btn btn-primary btn-lg px-5"/>
-										<input type="button" value="목록보기" 
-											onclick="location.href='book'" class="btn btn-secondary btn-lg px-5"/>
+										<input type="submit" value="등록하기" class="btn btn-primary btn-lg px-5">
+										<a th:href="@{/information/book}" class="btn btn-secondary btn-lg px-5" role="button">목록보기</a>
 									</div>
 								</div>	
 							</form>
@@ -79,6 +79,6 @@
 			</div>
 		</div>
 		
-	</th:block>
+	</div>
 	
 </html>

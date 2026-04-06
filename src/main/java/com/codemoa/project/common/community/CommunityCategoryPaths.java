@@ -1,4 +1,4 @@
-package com.codemoa.project.domain.main.support;
+package com.codemoa.project.common.community;
 
 import org.springframework.util.StringUtils;
 

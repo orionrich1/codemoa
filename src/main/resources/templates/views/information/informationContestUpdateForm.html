@@ -1,7 +1,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/default_layout}">
-	<th:block layout:fragment="content" class="ui-view">
+	<div layout:fragment="content" class="ui-view">
 	<script th:src="@{/js/information/formcheck.js}"></script>
   		
   		<!-- content -->
@@ -12,8 +12,9 @@
 						<h2 class="fs-3 fw-bold">공모전 추천글 수정하기</h2>
 					</div>
 				</div>  
-				<form name="contestUpdateForm" action="contestUpdate" id="contestUpdateForm" 
+				<form name="contestUpdateForm" th:action="@{/information/contestUpdate}" id="contestUpdateForm" 
 					class="row g-3 border-primary" method="post" enctype="multipart/form-data">
+					<input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 					<input type="hidden" name="contestNo" th:value="${contest.contestNo}">
 
 					<div class="col-8 offset-md-2"> 
@@ -32,11 +33,11 @@
 					</div>
 					<div class="col-8 offset-md-2">
 						<label for="start" class="form-label">시작일</label>
-						<input type="datetime-local" class="form-control" name="start"  id="start" th:value="${contest.startDate}">
+						<input type="datetime-local" class="form-control" name="start"  id="start" th:value="${#dates.format(contest.startDate, 'yyyy-MM-dd''T''HH:mm')}">
 					</div>
 					<div class="col-8 offset-md-2">
 						<label for="end" class="form-label">마감일</label>
-						<input type="datetime-local" class="form-control" name="end"  id="end" th:value="${contest.endDate}">
+						<input type="datetime-local" class="form-control" name="end"  id="end" th:value="${#dates.format(contest.endDate, 'yyyy-MM-dd''T''HH:mm')}">
 					</div>
 					<div class="col-8 offset-md-2">
 						<label for="content" class="form-label">내 용 </label>
@@ -45,6 +46,7 @@
 					<div class="col-8 offset-md-2">
 						<label for="addFile" class="form-label">업로드 할 이미지</label>
 						<input type="file" class="form-control" name="addFile" id="addFile" >
+						<p class="form-text text-secondary mb-0">가로형(약 16:9) JPG·PNG·WebP 권장. 파일당 5MB 이하.</p>
 					</div>
 					<div class="col-8 offset-md-2">
 						<label for="contestSource" class="form-label">출 처</label>
@@ -52,16 +54,14 @@
 					</div>
 					
 					<div class="col-8 offset-md-2 text-center mt-5">
-						<input type="submit" value="수정하기" class="btn btn-primary" id="contestUpdateForm"/>
-							&nbsp;&nbsp;
-						<input type="button" value="목록보기" 
-							onclick="location.href='contest'" class="btn btn-primary"/>
+						<input type="submit" value="수정하기" class="btn btn-primary">
+						<a th:href="@{/information/contest}" class="btn btn-primary ms-2" role="button">목록보기</a>
 					</div>	
 				</form>
 			</div>
 		</div>
 		
-	</th:block>
+	</div>
 	
 </html>
 		

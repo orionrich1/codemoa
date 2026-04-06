@@ -55,7 +55,23 @@ public class InformationService {
 
 	@Transactional(readOnly = true)
 	public int countAllContests() {
-		return informationRecommendMapper.getContestCount(null, null);
+		return informationRecommendMapper.getContestCount(null, null, null);
+	}
+
+	@Transactional(readOnly = true)
+	public List<Lecture> findRelatedLectures(int excludeNo, String category, int limit) {
+		String cat = (category != null && !category.isBlank()) ? category : null;
+		return informationRecommendMapper.findRelatedLectures(excludeNo, cat, limit);
+	}
+
+	@Transactional(readOnly = true)
+	public List<Book> findRelatedBooks(int excludeNo, int limit) {
+		return informationRecommendMapper.findRelatedBooks(excludeNo, limit);
+	}
+
+	@Transactional(readOnly = true)
+	public List<Contest> findRelatedContests(int excludeNo, int limit) {
+		return informationRecommendMapper.findRelatedContests(excludeNo, limit);
 	}
 
 	@Transactional(readOnly = true)
@@ -87,12 +103,15 @@ public class InformationService {
 	 * 2-1: 페이지 계산 로직을 PageCalculator로 위임.
 	 */
 	public Map<String, Object> lectureList(int pageNum, String type, String keyword, int pageSize, int pageGroup, String order) {
-		log.debug("lectureList pageNum={}, type={}, keyword={}, order={}", pageNum, type, keyword, order);
+		String qType = normalizeQueryToken(type);
+		String qKeyword = normalizeQueryToken(keyword);
+		String qOrder = normalizeQueryToken(order);
+		log.debug("lectureList pageNum={}, type={}, keyword={}, order={}", pageNum, qType, qKeyword, qOrder);
 
-		int totalCount = informationRecommendMapper.getLectureCount(type, keyword);
+		int totalCount = informationRecommendMapper.getLectureCount(qType, qKeyword);
 		PageInfo page = PageCalculator.calculate(pageNum, totalCount, pageSize, pageGroup);
 
-		List<Lecture> lectureList = informationRecommendMapper.getlectureList(page.getOffset(), pageSize, type, keyword, order);
+		List<Lecture> lectureList = informationRecommendMapper.getlectureList(page.getOffset(), pageSize, qType, qKeyword, qOrder);
 
 		Map<String, Object> modelMap = new HashMap<>();
 		modelMap.put("lectureList", lectureList);
@@ -102,8 +121,9 @@ public class InformationService {
 		modelMap.put("currentPage", page.getCurrentPage());
 		modelMap.put("pageGroup", page.getPageGroup());
 		modelMap.put("listCount", page.getTotalCount());
-		modelMap.put("order", order);
-		modelMap.put("keyword", keyword);
+		modelMap.put("order", emptyIfNull(qOrder));
+		modelMap.put("keyword", emptyIfNull(qKeyword));
+		modelMap.put("type", emptyIfNull(qType));
 		return modelMap;
 	}
 
@@ -130,12 +150,15 @@ public class InformationService {
 	 * 1-4: pageGrop → pageGroup 오타 수정. 맵 키 bList → bookList 로 통일.
 	 */
 	public Map<String, Object> bookList(int pageNum, String type, String keyword, int pageSize, int pageGroup, String order) {
-		log.debug("bookList pageNum={}, type={}, keyword={}, order={}", pageNum, type, keyword, order);
+		String qType = normalizeQueryToken(type);
+		String qKeyword = normalizeQueryToken(keyword);
+		String qOrder = normalizeQueryToken(order);
+		log.debug("bookList pageNum={}, type={}, keyword={}, order={}", pageNum, qType, qKeyword, qOrder);
 
-		int totalCount = informationRecommendMapper.getBookCount(type, keyword);
+		int totalCount = informationRecommendMapper.getBookCount(qType, qKeyword);
 		PageInfo page = PageCalculator.calculate(pageNum, totalCount, pageSize, pageGroup);
 
-		List<Book> bookList = informationRecommendMapper.getBookList(page.getOffset(), pageSize, type, keyword, order);
+		List<Book> bookList = informationRecommendMapper.getBookList(page.getOffset(), pageSize, qType, qKeyword, qOrder);
 
 		Map<String, Object> modelMap = new HashMap<>();
 		modelMap.put("bookList", bookList);
@@ -145,8 +168,9 @@ public class InformationService {
 		modelMap.put("currentPage", page.getCurrentPage());
 		modelMap.put("pageGroup", page.getPageGroup());
 		modelMap.put("listCount", page.getTotalCount());
-		modelMap.put("order", order);
-		modelMap.put("keyword", keyword);
+		modelMap.put("order", emptyIfNull(qOrder));
+		modelMap.put("keyword", emptyIfNull(qKeyword));
+		modelMap.put("type", emptyIfNull(qType));
 		return modelMap;
 	}
 
@@ -171,14 +195,23 @@ public class InformationService {
 
 	/**
 	 * 1-4: pageGrop → pageGroup 오타 수정. 맵 키 cList → contestList 로 통일.
+	 * 공모전 상태 필터: all | ongoing | soon | closed (soon = 마감 14일 이내)
 	 */
-	public Map<String, Object> contestList(int pageNum, String type, String keyword, int pageSize, int pageGroup, String order) {
-		log.debug("contestList pageNum={}, type={}, keyword={}, order={}", pageNum, type, keyword, order);
+	public Map<String, Object> contestList(int pageNum, String type, String keyword, int pageSize, int pageGroup, String order,
+			String contestFilter) {
+		String qType = normalizeQueryToken(type);
+		String qKeyword = normalizeQueryToken(keyword);
+		String qOrder = normalizeQueryToken(order);
+		String statusForSql = normalizeContestStatus(contestFilter);
+		String contestFilterUi = (statusForSql == null) ? "all" : statusForSql;
+		log.debug("contestList pageNum={}, type={}, keyword={}, order={}, contestFilter={}", pageNum, qType, qKeyword, qOrder,
+				contestFilterUi);
 
-		int totalCount = informationRecommendMapper.getContestCount(type, keyword);
+		int totalCount = informationRecommendMapper.getContestCount(qType, qKeyword, statusForSql);
 		PageInfo page = PageCalculator.calculate(pageNum, totalCount, pageSize, pageGroup);
 
-		List<Contest> contestList = informationRecommendMapper.getContestList(page.getOffset(), pageSize, type, keyword, order);
+		List<Contest> contestList = informationRecommendMapper.getContestList(page.getOffset(), pageSize, qType, qKeyword, qOrder,
+				statusForSql);
 
 		Map<String, Object> modelMap = new HashMap<>();
 		modelMap.put("contestList", contestList);
@@ -188,9 +221,38 @@ public class InformationService {
 		modelMap.put("currentPage", page.getCurrentPage());
 		modelMap.put("pageGroup", page.getPageGroup());
 		modelMap.put("listCount", page.getTotalCount());
-		modelMap.put("order", order);
-		modelMap.put("keyword", keyword);
+		modelMap.put("order", emptyIfNull(qOrder));
+		modelMap.put("keyword", emptyIfNull(qKeyword));
+		modelMap.put("type", emptyIfNull(qType));
+		modelMap.put("contestFilter", contestFilterUi);
 		return modelMap;
+	}
+
+	private static String normalizeQueryToken(String value) {
+		if (value == null) {
+			return null;
+		}
+		String v = value.trim();
+		if (v.isEmpty() || "null".equalsIgnoreCase(v)) {
+			return null;
+		}
+		return v;
+	}
+
+	private static String emptyIfNull(String value) {
+		return value == null ? "" : value;
+	}
+
+	private static String normalizeContestStatus(String contestFilter) {
+		String raw = normalizeQueryToken(contestFilter);
+		if (raw == null) {
+			return null;
+		}
+		String f = raw.toLowerCase();
+		if ("ongoing".equals(f) || "soon".equals(f) || "closed".equals(f)) {
+			return f;
+		}
+		return null;
 	}
 
 	@Transactional

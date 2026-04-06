@@ -13,11 +13,13 @@ import com.codemoa.project.support.fixture.UserFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -58,6 +60,25 @@ class CommunityBoardServiceTest {
 
             // then
             verify(communityBoardRepository).save(any(CommunityBoard.class));
+        }
+
+        @Test
+        @DisplayName("작성 시 본문의 script 등 위험 마크업은 제거되어 저장된다")
+        void 작성_시_본문_sanitize_후_저장된다() {
+            User user = UserFixture.createWithGrade(UserGrade.GOLD);
+            given(userRepository.findByUserId("user01")).willReturn(Optional.of(user));
+
+            CreateBoardRequest request = new CreateBoardRequest();
+            request.setTitle("제목");
+            request.setContent("<p>안녕</p><script>evil()</script>");
+            request.setCategory("Java");
+
+            sut.create(request, "user01");
+
+            ArgumentCaptor<CommunityBoard> captor = ArgumentCaptor.forClass(CommunityBoard.class);
+            verify(communityBoardRepository).save(captor.capture());
+            assertThat(captor.getValue().getContent()).doesNotContain("script");
+            assertThat(captor.getValue().getContent()).contains("안녕");
         }
 
         @Test

@@ -6,16 +6,19 @@ import com.codemoa.project.domain.user.repository.UserRepository;
 import com.codemoa.project.support.annotation.RepositoryTest;
 import com.codemoa.project.support.fixture.CommunityBoardFixture;
 import com.codemoa.project.support.fixture.UserFixture;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RepositoryTest
+@Transactional
 @DisplayName("CommunityBoardRepository 슬라이스 테스트")
 class CommunityBoardRepositoryTest {
 
@@ -50,19 +53,18 @@ class CommunityBoardRepositoryTest {
     @Test
     @DisplayName("카테고리로 게시글을 필터링할 수 있다")
     void 카테고리_필터링() {
-        // given
-        sut.save(CommunityBoardFixture.createWithCategory(savedUser, "Java"));
+        // 로컬 DB에 동일 카테고리 데이터가 있을 수 있어 테스트 전용 카테고리로 격리
+        String isolationCat = "REPO_TEST_" + UUID.randomUUID();
+        sut.save(CommunityBoardFixture.createWithCategory(savedUser, isolationCat));
         sut.save(CommunityBoardFixture.createWithCategory(savedUser, "Python"));
-        sut.save(CommunityBoardFixture.createWithCategory(savedUser, "Java"));
+        sut.save(CommunityBoardFixture.createWithCategory(savedUser, isolationCat));
 
-        // when
-        Page<CommunityBoard> javaBoards = sut.findAll(
-                (root, query, cb) -> cb.equal(root.get("category"), "Java"),
+        Page<CommunityBoard> filtered = sut.findAll(
+                (root, query, cb) -> cb.equal(root.get("category"), isolationCat),
                 PageRequest.of(0, 10)
         );
 
-        // then
-        assertThat(javaBoards.getTotalElements()).isEqualTo(2);
+        assertThat(filtered.getTotalElements()).isEqualTo(2);
     }
 
     @Test

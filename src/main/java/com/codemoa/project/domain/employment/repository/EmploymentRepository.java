@@ -5,15 +5,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import com.codemoa.project.domain.employment.entity.Employment;
+
+import java.util.Optional;
 
 public interface EmploymentRepository extends JpaRepository<Employment, Long> {
 	// 기본 CRUD + 페이징, 정렬, 쿼리 메서드 등 JPA가 알아서 제공
  
 	boolean existsByUrl(String url);
+
+	Optional<Employment> findFirstByOrderByRecruitNoDesc();
 	
 	
 	@Query("SELECT e FROM Employment e WHERE " +

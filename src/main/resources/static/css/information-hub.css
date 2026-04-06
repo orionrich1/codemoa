@@ -1,0 +1,80 @@
+/* IT 정보 허브 — 색상은 site-ds CSS 변수만 사용 */
+body.site-ds .information-hub .hub-eyebrow {
+	color: var(--ds-text-muted);
+	font-size: 0.875rem;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+
+body.site-ds .information-hub .hub-card {
+	background: var(--ds-surface);
+	border: 1px solid var(--ds-border-subtle);
+	border-radius: var(--border-radius-md);
+	box-shadow: var(--ds-shadow-card);
+	transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+body.site-ds .information-hub .hub-card:hover {
+	box-shadow: var(--ds-shadow-warm);
+	transform: translateY(-2px);
+}
+
+body.site-ds .information-hub .hub-card-link {
+	color: inherit;
+	text-decoration: none;
+}
+
+body.site-ds .information-hub .hub-card-link:hover {
+	color: inherit;
+}
+
+body.site-ds .information-hub .hub-thumb-wrap {
+	aspect-ratio: 16 / 10;
+	background: var(--ds-surface-subtle);
+	border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;
+	overflow: hidden;
+}
+
+body.site-ds .information-hub .hub-thumb {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+body.site-ds .information-hub .hub-pill {
+	background: var(--ds-surface-subtle);
+	border: 1px solid var(--ds-border);
+	border-radius: 999px;
+	font-size: 0.8125rem;
+	padding: 0.25rem 0.65rem;
+	color: var(--ds-text-secondary);
+}
+
+body.site-ds .information-hub .hub-dday-soon {
+	color: var(--ds-text);
+	font-weight: 500;
+}
+
+body.site-ds .information-hub .filter-pills .nav-link {
+	border-radius: 999px;
+	color: var(--ds-text-secondary);
+}
+
+body.site-ds .information-hub .filter-pills .nav-link.active {
+	background: var(--ds-text);
+	color: var(--text-inverse);
+}
+
+body.site-ds .information-hub .contest-dday-badge {
+	font-size: 0.75rem;
+	font-weight: 500;
+	padding: 0.2rem 0.5rem;
+	border-radius: 6px;
+	background: var(--ds-surface-subtle);
+	border: 1px solid var(--ds-border);
+}
+
+body.site-ds .information-hub .contest-dday-urgent {
+	border-color: var(--ds-text);
+	background: var(--ds-warm);
+}

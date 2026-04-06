@@ -1,5 +1,6 @@
 package com.codemoa.project.domain.community.service;
 
+import com.codemoa.project.common.util.CommunityHtmlSanitizer;
 import com.codemoa.project.domain.community.dto.request.CreateBoardRequest;
 import com.codemoa.project.domain.community.dto.request.UpdateBoardRequest;
 import com.codemoa.project.domain.community.dto.response.BoardDetailResponse;
@@ -13,9 +14,13 @@ import com.codemoa.project.domain.user.entity.PointEventType;
 import com.codemoa.project.domain.user.entity.User;
 import com.codemoa.project.domain.user.repository.UserRepository;
 import com.codemoa.project.domain.user.service.UserService;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.Subquery;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -54,49 +59,84 @@ public class CommunityBoardService {
 
     private static final List<String> MAIN_CATEGORIES = Arrays.asList("Java", "Python", "JavaScript", "C#", "Kotlin");
 
-    public Page<BoardListResponse> findAll(String category, String searchType, String keyword, Pageable pageable) {
-        Pageable sortedByBoardNoDesc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "boardNo"));
-        Specification<CommunityBoard> spec = search(category, searchType, keyword);
-        Page<CommunityBoard> boardPage = communityBoardRepository.findAll(spec, sortedByBoardNoDesc);
-        return boardPage.map(BoardListResponse::new);
+    public Page<BoardListResponse> findAll(String category, String searchType, String keyword, String sort,
+            Pageable pageable) {
+        Specification<CommunityBoard> spec = boardListSpecification(category, searchType, keyword, sort);
+        Pageable withoutSort = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
+        return communityBoardRepository.findAll(spec, withoutSort).map(BoardListResponse::new);
     }
 
-    private Specification<CommunityBoard> search(String category, String searchType, String keyword) {
-        return (root, query, criteriaBuilder) -> {
-            query.distinct(true);
-            List<Predicate> predicates = new ArrayList<>();
-
-            if ("free".equalsIgnoreCase(category)) {
-                predicates.add(criteriaBuilder.equal(root.get("category"), "자유"));
-            } else if ("etc".equalsIgnoreCase(category)) {
-                predicates.add(root.get("category").in(MAIN_CATEGORIES).not());
-                predicates.add(criteriaBuilder.notEqual(root.get("category"), "자유"));
-            } else if (StringUtils.hasText(category) && !"all".equalsIgnoreCase(category)) {
-                predicates.add(criteriaBuilder.equal(root.get("category"), category));
+    private Specification<CommunityBoard> boardListSpecification(String category, String searchType, String keyword,
+            String sort) {
+        return (root, query, cb) -> {
+            boolean isCountQuery = Long.class.equals(query.getResultType()) || long.class.equals(query.getResultType());
+            if (!isCountQuery) {
+                query.distinct(true);
+                applyBoardListSort(root, query, cb, sort);
             }
-
-            if (StringUtils.hasText(keyword)) {
-                switch (searchType) {
-                    case "title":
-                        predicates.add(criteriaBuilder.like(root.get("title"), "%" + keyword + "%"));
-                        break;
-                    case "content":
-                        predicates.add(criteriaBuilder.like(root.get("content"), "%" + keyword + "%"));
-                        break;
-                    case "author":
-                        Join<CommunityBoard, User> userJoin = root.join("user", JoinType.INNER);
-                        predicates.add(criteriaBuilder.like(userJoin.get("nickname"), "%" + keyword + "%"));
-                        break;
-                    default:
-                        predicates.add(criteriaBuilder.or(
-                                criteriaBuilder.like(root.get("title"), "%" + keyword + "%"),
-                                criteriaBuilder.like(root.get("content"), "%" + keyword + "%")
-                        ));
-                        break;
-                }
-            }
-            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+            List<Predicate> predicates = buildFilterPredicates(root, query, cb, category, searchType, keyword);
+            return cb.and(predicates.toArray(new Predicate[0]));
         };
+    }
+
+    private List<Predicate> buildFilterPredicates(Root<CommunityBoard> root, CriteriaQuery<?> query, CriteriaBuilder cb,
+            String category, String searchType, String keyword) {
+        List<Predicate> predicates = new ArrayList<>();
+        if ("free".equalsIgnoreCase(category)) {
+            predicates.add(cb.equal(root.get("category"), "자유"));
+        } else if ("etc".equalsIgnoreCase(category)) {
+            predicates.add(root.get("category").in(MAIN_CATEGORIES).not());
+            predicates.add(cb.notEqual(root.get("category"), "자유"));
+        } else if (StringUtils.hasText(category) && !"all".equalsIgnoreCase(category)) {
+            predicates.add(cb.equal(root.get("category"), category));
+        }
+        if (StringUtils.hasText(keyword)) {
+            switch (searchType) {
+                case "title":
+                    predicates.add(cb.like(root.get("title"), "%" + keyword + "%"));
+                    break;
+                case "content":
+                    predicates.add(cb.like(root.get("content"), "%" + keyword + "%"));
+                    break;
+                case "author":
+                    Join<CommunityBoard, User> userJoin = root.join("user", JoinType.INNER);
+                    predicates.add(cb.like(userJoin.get("nickname"), "%" + keyword + "%"));
+                    break;
+                default:
+                    predicates.add(cb.or(
+                            cb.like(root.get("title"), "%" + keyword + "%"),
+                            cb.like(root.get("content"), "%" + keyword + "%")
+                    ));
+                    break;
+            }
+        }
+        return predicates;
+    }
+
+    /**
+     * 조회수 컬럼이 없어 {@code recommend} 내림차순을 '추천·관심' 정렬로 제공합니다.
+     * {@code comments}는 댓글 수 기준입니다.
+     */
+    private void applyBoardListSort(Root<CommunityBoard> root, CriteriaQuery<?> query, CriteriaBuilder cb, String sort) {
+        String s = (sort == null || sort.isBlank()) ? "board" : sort.trim().toLowerCase();
+        switch (s) {
+            case "recent":
+                query.orderBy(cb.desc(root.get("createdAt")), cb.desc(root.get("boardNo")));
+                break;
+            case "comments":
+                Subquery<Long> sub = query.subquery(Long.class);
+                Root<Comment> cr = sub.from(Comment.class);
+                sub.select(cb.count(cr));
+                sub.where(cb.equal(cr.get("communityBoard"), root));
+                query.orderBy(cb.desc(sub), cb.desc(root.get("boardNo")));
+                break;
+            case "recommend":
+            case "popular":
+                query.orderBy(cb.desc(cb.coalesce(root.get("recommend"), cb.literal(0))), cb.desc(root.get("boardNo")));
+                break;
+            default:
+                query.orderBy(cb.desc(root.get("boardNo")));
+        }
     }
 
     @Transactional
@@ -129,7 +169,7 @@ public class CommunityBoardService {
         CommunityBoard board = CommunityBoard.create(
                 user,
                 request.getTitle(),
-                request.getContent(),
+                CommunityHtmlSanitizer.sanitize(request.getContent()),
                 categoryToSave, // 변환된 값을 사용
                 postType,
                 pointsToStake
@@ -154,7 +194,7 @@ public class CommunityBoardService {
         if (!board.getUser().getUserId().equals(currentUserId)) {
             throw new IllegalStateException("수정 권한이 없습니다.");
         }
-        board.update(request.getTitle(), request.getContent(), request.getCategory());
+        board.update(request.getTitle(), CommunityHtmlSanitizer.sanitize(request.getContent()), request.getCategory());
     }
 
     @Transactional

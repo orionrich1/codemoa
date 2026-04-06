@@ -13,22 +13,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.codemoa.project.domain.employment.dto.response.EmploymentDto;
-import com.codemoa.project.domain.employment.repository.EmploymentRepository;
 import com.codemoa.project.domain.employment.service.EmploymentApiService;
 import com.codemoa.project.domain.employment.service.EmploymentService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-// Q-1: System.out.println → Slf4j 로거
-// Q-5: @RequiredArgsConstructor 으로 수동 생성자 교체
 @Slf4j
 @Controller
 @RequiredArgsConstructor
 public class EmploymentController {
 
+	private static final int PAGE_SIZE = 9;
+	private static final int PAGE_GROUP = 10;
+
 	private final EmploymentApiService employmentApiService;
-	private final EmploymentRepository employmentRepository;
 	private final EmploymentService employmentService;
 
 	@PostMapping("/employmentfetch")
@@ -47,23 +46,42 @@ public class EmploymentController {
 			@RequestParam(value = "page", defaultValue = "1") int page,
 			Model model) {
 
-		int pageSize = 9;
-		Pageable pageable = PageRequest.of(page - 1, pageSize, Sort.by("recruitNo").descending());
+		type = normalizeQuery(type);
+		keyword = normalizeQuery(keyword);
+		int safePage = Math.max(1, page);
+
+		Pageable pageable = PageRequest.of(safePage - 1, PAGE_SIZE, Sort.unsorted());
 		Page<EmploymentDto> employmentPage = employmentService.getEmploymentWithFilters(type, keyword, pageable);
-		Map<String, Integer> pagination = employmentService.getPaginationInfo(page);
+		Map<String, Integer> pagination = employmentService.buildPagination(safePage,
+				(int) employmentPage.getTotalPages(), PAGE_GROUP);
 
 		log.debug("채용 목록 조회 — page={}, totalPages={}, totalElements={}",
-				page, employmentPage.getTotalPages(), employmentPage.getTotalElements());
+				safePage, employmentPage.getTotalPages(), employmentPage.getTotalElements());
 
 		model.addAttribute("employmentList", employmentPage.getContent());
-		model.addAttribute("type", type);
-		model.addAttribute("keyword", keyword);
+		model.addAttribute("type", type != null ? type : "");
+		model.addAttribute("keyword", keyword != null ? keyword : "");
 		model.addAttribute("pagination", pagination);
+		model.addAttribute("latestDatasetRegDt", employmentService.getLatestDatasetRegDt().orElse(null));
 
 		return "views/employment/employmentList";
 	}
 
-	@PostMapping("/employment/crawl")
+	private static String normalizeQuery(String value) {
+		if (value == null) {
+			return null;
+		}
+		String v = value.trim();
+		if (v.isEmpty() || "null".equalsIgnoreCase(v)) {
+			return null;
+		}
+		return v;
+	}
+
+	/**
+	 * 목록의 「정보 갱신」은 GET 폼으로 호출. Spring Security 에서 ROLE_ADMIN 만 허용.
+	 */
+	@GetMapping("/employment/crawl")
 	public String crawlEmploymentData() {
 		employmentApiService.fetchAndSaveEmploymentList(1, 300);
 		return "redirect:/employmentList";

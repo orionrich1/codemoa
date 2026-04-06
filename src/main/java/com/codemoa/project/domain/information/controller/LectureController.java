@@ -8,14 +8,18 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.codemoa.project.common.service.FileStorageService;
+import com.codemoa.project.domain.information.dto.request.LectureFormRequest;
 import com.codemoa.project.domain.information.entity.Lecture;
 import com.codemoa.project.domain.information.service.InformationService;
+import com.codemoa.project.domain.information.support.InformationFormMapper;
+import com.codemoa.project.domain.information.support.InformationWebUtils;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,11 +58,17 @@ public class LectureController {
 			@RequestParam(value = "type", defaultValue = "null") String type,
 			@RequestParam(value = "keyword", defaultValue = "null") String keyword,
 			@RequestParam(value = "order", defaultValue = "null") String order) {
+		Lecture lecture = informationService.getLecture(no);
+		if (lecture == null) {
+			throw new IllegalArgumentException("강좌를 찾을 수 없습니다.");
+		}
 		model.addAttribute("pageNum", pageNum);
-		model.addAttribute(informationService.getLecture(no));
+		model.addAttribute("lecture", lecture);
+		model.addAttribute("relatedLectures", informationService.findRelatedLectures(no, lecture.getCategory(), 3));
 		model.addAttribute("order", order);
 		model.addAttribute("type", type);
 		model.addAttribute("keyword", keyword);
+		model.addAttribute("searchOption", InformationWebUtils.hasSearchContext(type, keyword));
 		return "views/information/informationLectureDetail";
 	}
 
@@ -70,10 +80,10 @@ public class LectureController {
 
 	@PostMapping("/information/lectureWrite")
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	public String addLecture(Lecture lecture,
+	public String addLecture(@ModelAttribute LectureFormRequest request,
 			@RequestParam(value = "addFile", required = false) MultipartFile multipartFile) throws IOException {
 		String savedFileName = fileStorageService.store(multipartFile, SUB_DIR);
-		if (savedFileName != null) lecture.setFile1(savedFileName);
+		Lecture lecture = InformationFormMapper.toLectureForInsert(request, savedFileName);
 		informationService.addLecture(lecture);
 		return "redirect:/information/lecture";
 	}
@@ -91,16 +101,18 @@ public class LectureController {
 
 	@PostMapping("/information/lectureUpdate")
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	public String updateLecture(Lecture lecture,
+	public String updateLecture(@ModelAttribute LectureFormRequest request,
 			@RequestParam(value = "addFile", required = false) MultipartFile multipartFile) throws IOException {
+		Lecture existing = informationService.getLecture(request.getRecommendNo());
+		String file1 = existing.getFile1();
 		if (multipartFile != null && !multipartFile.isEmpty()) {
-			String existing = informationService.getLecture(lecture.getRecommendNo()).getFile1();
-			fileStorageService.delete(SUB_DIR, existing);
+			fileStorageService.delete(SUB_DIR, existing.getFile1());
 			String savedFileName = fileStorageService.store(multipartFile, SUB_DIR);
-			if (savedFileName != null) lecture.setFile1(savedFileName);
-		} else {
-			lecture.setFile1(informationService.getLecture(lecture.getRecommendNo()).getFile1());
+			if (savedFileName != null) {
+				file1 = savedFileName;
+			}
 		}
+		Lecture lecture = InformationFormMapper.toLectureForUpdate(request, existing.getRegDate(), file1);
 		informationService.updateLecture(lecture);
 		return "redirect:/information/lecture";
 	}
@@ -115,8 +127,7 @@ public class LectureController {
 		if (lecture != null) fileStorageService.delete(SUB_DIR, lecture.getFile1());
 		informationService.deleteLecture(no);
 
-		boolean searchOption = !type.equals("null") && !keyword.equals("null");
-		if (searchOption) {
+		if (InformationWebUtils.hasSearchContext(type, keyword)) {
 			reAttrs.addAttribute("type", type);
 			reAttrs.addAttribute("keyword", keyword);
 		}

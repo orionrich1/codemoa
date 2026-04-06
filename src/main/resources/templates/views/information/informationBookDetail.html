@@ -3,21 +3,30 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/default_layout}">
 	
-<th:block layout:fragment="content" class="ui-view">
+<div layout:fragment="content" class="ui-view">
 	<script th:src="@{/js/information/formcheck.js}"></script>
-	<form name="checkForm" id="checkForm" class="d-none">
-		<input type="hidden" name="no" id="no" th:value="${book.bookNo}"/>
-		<input type="hidden" name="pass" id="rPass" />
-		<input type="hidden" name="pageNum" th:value="${pageNum}" />
+	<form name="checkForm" id="checkForm" class="d-none" method="post">
+		<input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+		<input type="hidden" name="no" id="no" th:value="${book.bookNo}">
+		<input type="hidden" name="pass" id="rPass">
+		<input type="hidden" name="pageNum" th:value="${pageNum}">
 		<th:block th:if="${searchOption}">
-			<input type="hidden" name="type" th:value="${type}" />
-			<input type="hidden" name="keyword" th:value="${keyword}" />
+			<input type="hidden" name="type" th:value="${type}">
+			<input type="hidden" name="keyword" th:value="${keyword}">
 		</th:block>
 	</form>
 
 	<div class="container my-5">
 		<div class="row justify-content-center">
 			<div class="col-lg-9 col-xl-8">
+
+				<nav aria-label="breadcrumb" class="mb-3">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a th:href="@{/information}">IT 정보</a></li>
+						<li class="breadcrumb-item"><a th:href="@{/information/book}">도서 추천</a></li>
+						<li class="breadcrumb-item active" aria-current="page">상세</li>
+					</ol>
+				</nav>
 
 				<div class="text-center mb-4">
 					<h2 class="fw-bold fs-2">IT 도서 정보</h2>
@@ -45,8 +54,11 @@
 								</span>
 								<span>
 									<b class="fw-bold">출판일:</b>
-									<span th:text="${book.pubDate}"></span>
+									<span th:text="${book.pubDate != null ? #dates.format(book.pubDate, 'yyyy-MM-dd') : '-'}"></span>
 								</span>
+							</div>
+							<div class="mt-2" th:if="${book.bookSource != null and !book.bookSource.isEmpty()}">
+								<a class="small" th:href="${book.bookSource}" target="_blank" rel="noopener noreferrer">도서·구매 링크 열기</a>
 							</div>
 						</div>
 
@@ -56,7 +68,7 @@
 
 						<div class="py-4 border-top text-center">
 							<th:block th:if="${book.file1}">
-								<img th:src="@{/resources/files/information/{img}(img=${book.file1})}" alt="첨부 이미지" class="img-fluid rounded">
+								<img th:src="@{/files/information/{img}(img=${book.file1})}" th:alt="|도서 표지: ${book.title}|" class="img-fluid rounded">
 							</th:block>
 							<th:block th:unless="${book.file1}">
 								<p class="text-secondary">업로드 된 이미지가 없습니다.</p>
@@ -78,19 +90,40 @@
 					</div>
 				</div>
 
+				<section th:if="${relatedBooks != null and !#lists.isEmpty(relatedBooks)}" class="mt-5" aria-labelledby="related-books">
+					<h3 id="related-books" class="h5 fw-normal mb-3">다른 도서</h3>
+					<ul class="list-group list-group-flush border rounded-3">
+						<li th:each="rel : ${relatedBooks}" class="list-group-item d-flex justify-content-between align-items-center">
+							<a th:href="@{/information/bookDetail(no=${rel.bookNo}, pageNum=1)}" th:text="${rel.title}">제목</a>
+							<span class="text-secondary small" th:text="${rel.publisher}">출판사</span>
+						</li>
+					</ul>
+				</section>
+
 				<div class="row mt-4">
 					<div class="col text-center">
-						<th:block th:unless="${order}">
-							<a class="btn btn-secondary px-5" th:href="@{|/information/book?pageNum=${pageNum}&keyword=${keyword}&type=${type}|}">목록</a>
-						</th:block>						
-						<th:block th:if="${order}">
-							<a class="btn btn-secondary px-5" th:href="@{|/information/book?pageNum=${pageNum}&order=${order}&keyword=${keyword}&type=${type}|}">목록</a>
-						</th:block>						
+						<a class="btn btn-secondary px-5" th:href="@{/information/book(pageNum=${pageNum}, order=${order}, keyword=${keyword}, type=${type})}">목록</a>
 					</div>
 				</div>
 
 			</div>
 		</div>
 	</div>
-</th:block>
+
+	<div class="modal fade" id="bookDeleteModal" tabindex="-1" aria-labelledby="bookDeleteModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="bookDeleteModalLabel">도서 글 삭제</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+				</div>
+				<div class="modal-body">정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
+					<button type="button" class="btn btn-danger" id="confirmBookDelete" aria-label="삭제 확인">삭제</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 </html>

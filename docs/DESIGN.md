@@ -4,19 +4,20 @@
 
 ElevenLabs' website is a study in restrained elegance — a near-white canvas (`#ffffff`, `#f5f5f5`) where typography and subtle shadows do all the heavy lifting. The design feels like a premium audio product brochure: clean, spacious, and confident enough to let the content speak (literally, given ElevenLabs makes voice AI). There's an almost Apple-like quality to the whitespace strategy, but warmer — the occasional warm stone tint (`#f5f2ef`, `#777169`) prevents the purity from feeling clinical.
 
-The typography system is built on a fascinating duality: Waldenburg at weight 300 (light) for display headings creates ethereal, whisper-thin titles that feel like sound waves rendered in type — delicate, precise, and surprisingly impactful at large sizes. This light-weight display approach is the design's signature — where most sites use bold headings to grab attention, ElevenLabs uses lightness to create intrigue. Inter handles all body and UI text with workmanlike reliability, using slight positive letter-spacing (0.14px–0.18px) that gives body text an airy, well-spaced quality. WaldenburgFH appears as a bold uppercase variant for specific button labels.
+**CodeMoa 전역 정책:** 표제·본문·내비·버튼·폼 등 UI 전역에서 **명조·세리프 계열을 사용하지 않는다.** (웹폰트·`font-family` 폴백에 `Georgia`, `Times` 등 세리프 금지.) 대형 제목도 **Inter / Pretendard** 고딕 스택에서 가중치 300·자간으로 위계를 만든다. 본문·UI는 Inter(또는 Pretendard)에 양(+) 자간(0.14px–0.18px)으로 가독성을 유지한다. 코드·터미널은 **JetBrains Mono** 또는 `ui-monospace` 계열만 사용한다.
 
 What makes ElevenLabs distinctive is its multi-layered shadow system. Rather than simple box-shadows, elements use complex stacks: inset border-shadows (`rgba(0,0,0,0.075) 0px 0px 0px 0.5px inset`), outline shadows (`rgba(0,0,0,0.06) 0px 0px 0px 1px`), and soft elevation shadows (`rgba(0,0,0,0.04) 0px 4px 4px`) — all at remarkably low opacities. The result is a design where surfaces seem to barely exist, floating just above the page with the lightest possible touch. Pill-shaped buttons (9999px) with warm-tinted backgrounds (`rgba(245,242,239,0.8)`) and warm shadows (`rgba(78,50,23,0.04)`) add a tactile, physical quality.
 
 **Key Characteristics:**
 - Near-white canvas with warm undertones (`#f5f5f5`, `#f5f2ef`)
-- Waldenburg weight 300 (light) for display — ethereal, whisper-thin headings
+- **Sans-serif only** — Inter / Pretendard for display + body; no serif display faces
+- Inter weight 300 (light) for large display headings — airy hierarchy without serifs
 - Inter with positive letter-spacing (0.14–0.18px) for body — airy readability
 - Multi-layered shadow stacks at sub-0.1 opacity — surfaces barely exist
 - Pill buttons (9999px) with warm stone-tinted backgrounds
-- WaldenburgFH bold uppercase for specific CTA labels
+- Inter weight 700 + uppercase for specific CTA labels (when needed)
 - Warm shadow tints: `rgba(78, 50, 23, 0.04)` — shadows have color, not just darkness
-- Geist Mono / ui-monospace for code snippets
+- JetBrains Mono / ui-monospace for code snippets
 
 ## 2. Color Palette & Roles
 
@@ -49,37 +50,39 @@ What makes ElevenLabs distinctive is its multi-layered shadow system. Rather tha
 
 ## 3. Typography Rules
 
+### 전역 규칙 (필수)
+- **세리프·명조 미사용:** `font-family`에 세리프 계열(예: Georgia, Times, 명조 계열 웹폰트)을 넣지 않는다. CSS 변수 `--font-display`는 본문과 동일한 **고딕 스택**으로 정의한다 (`site-ds.css`, `common.css`).
+- **구현 참조:** `default_layout.html`에서 세리프 웹폰트(Cormorant, DM Serif 등)를 로드하지 않는다. Inter(300–600) + JetBrains Mono만 로드.
+
 ### Font Families
-- **Display**: `Waldenburg`, fallback: `Waldenburg Fallback`
-- **Display Bold**: `WaldenburgFH`, fallback: `WaldenburgFH Fallback`
-- **Body / UI**: `Inter`, fallback: `Inter Fallback`
-- **Monospace**: `Geist Mono` or `ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas`
+- **Display / Body / UI (통합 고딕 스택)**: `"Inter", "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif`
+- **Monospace**: `JetBrains Mono`, `ui-monospace`, SFMono-Regular, Menlo, Monaco, Consolas
 
 ### Hierarchy
 
 | Role | Font | Size | Weight | Line Height | Letter Spacing | Notes |
 |------|------|------|--------|-------------|----------------|-------|
-| Display Hero | Waldenburg | 48px (3.00rem) | 300 | 1.08 (tight) | -0.96px | Whisper-thin, ethereal |
-| Section Heading | Waldenburg | 36px (2.25rem) | 300 | 1.17 (tight) | normal | Light display |
-| Card Heading | Waldenburg | 32px (2.00rem) | 300 | 1.13 (tight) | normal | Light card titles |
+| Display Hero | Inter | 48px (3.00rem) | 300 | 1.08 (tight) | -0.96px | Light sans display |
+| Section Heading | Inter | 36px (2.25rem) | 300 | 1.17 (tight) | normal | Same stack as body |
+| Card Heading | Inter | 32px (2.00rem) | 300 | 1.13 (tight) | normal | Light card titles |
 | Body Large | Inter | 20px (1.25rem) | 400 | 1.35 | normal | Introductions |
 | Body | Inter | 18px (1.13rem) | 400 | 1.44–1.60 | 0.18px | Standard reading text |
 | Body Standard | Inter | 16px (1.00rem) | 400 | 1.50 | 0.16px | UI text |
 | Body Medium | Inter | 16px (1.00rem) | 500 | 1.50 | 0.16px | Emphasized body |
 | Nav / UI | Inter | 15px (0.94rem) | 500 | 1.33–1.47 | 0.15px | Navigation links |
 | Button | Inter | 15px (0.94rem) | 500 | 1.47 | normal | Button labels |
-| Button Uppercase | WaldenburgFH | 14px (0.88rem) | 700 | 1.10 (tight) | 0.7px | `text-transform: uppercase` |
+| Button Uppercase | Inter | 14px (0.88rem) | 700 | 1.10 (tight) | 0.7px | `text-transform: uppercase` |
 | Caption | Inter | 14px (0.88rem) | 400–500 | 1.43–1.50 | 0.14px | Metadata |
 | Small | Inter | 13px (0.81rem) | 500 | 1.38 | normal | Tags, badges |
-| Code | Geist Mono | 13px (0.81rem) | 400 | 1.85 (relaxed) | normal | Code blocks |
+| Code | JetBrains Mono | 13px (0.81rem) | 400 | 1.85 (relaxed) | normal | Code blocks |
 | Micro | Inter | 12px (0.75rem) | 500 | 1.33 | normal | Tiny labels |
 | Tiny | Inter | 10px (0.63rem) | 400 | 1.60 (relaxed) | normal | Fine print |
 
 ### Principles
-- **Light as the hero weight**: Waldenburg at 300 is the defining typographic choice. Where other design systems use bold for impact, ElevenLabs uses lightness — thin strokes that feel like audio waveforms, creating intrigue through restraint.
-- **Positive letter-spacing on body**: Inter uses +0.14px to +0.18px tracking across body text, creating an airy, well-spaced reading rhythm that contrasts with the tight display tracking (-0.96px).
-- **WaldenburgFH for emphasis**: A bold (700) uppercase variant of Waldenburg appears only in specific CTA button labels with 0.7px letter-spacing — the one place where the type system gets loud.
-- **Monospace as ambient**: Geist Mono at relaxed line-height (1.85) for code blocks feels unhurried and readable.
+- **Light sans for display**: Inter at 300 for large headings keeps the “whisper” rhythm without introducing serifs.
+- **Positive letter-spacing on body**: Inter uses +0.14px to +0.18px tracking on body text; display can use tighter negative tracking for large sizes.
+- **Inter 700 + uppercase for rare CTAs**: Only where a bold uppercase label is required.
+- **Monospace for code**: JetBrains Mono (or system mono stack) at relaxed line-height for code blocks.
 
 ## 4. Component Stylings
 
@@ -107,8 +110,8 @@ What makes ElevenLabs distinctive is its multi-layered shadow system. Rather tha
 - Shadow: `rgba(78, 50, 23, 0.04) 0px 6px 16px` (warm-tinted)
 - Use: Featured CTA, hero action — the signature warm button
 
-**Uppercase Waldenburg Button**
-- Font: WaldenburgFH 14px weight 700
+**Uppercase CTA Label**
+- Font: Inter 14px weight 700
 - Text-transform: uppercase
 - Letter-spacing: 0.7px
 - Use: Specific bold CTA labels
@@ -165,7 +168,7 @@ What makes ElevenLabs distinctive is its multi-layered shadow system. Rather tha
 ### Whitespace Philosophy
 - **Apple-like generosity**: Massive vertical spacing between sections creates a premium, unhurried pace. Each section is an exhibit.
 - **Warm emptiness**: The whitespace isn't cold — the warm stone undertones and warm shadows give empty space a tactile, physical quality.
-- **Typography-led rhythm**: The light-weight Waldenburg headings create visual "whispers" that draw the eye through vast white space.
+- **Typography-led rhythm**: Light-weight Inter (300) headings create visual "whispers" that draw the eye through vast white space — without serifs.
 
 ### Border Radius Scale
 - Minimal (2px): Small links, inline elements
@@ -194,17 +197,19 @@ What makes ElevenLabs distinctive is its multi-layered shadow system. Rather tha
 ## 7. Do's and Don'ts
 
 ### Do
-- Use Waldenburg weight 300 for all display headings — the lightness IS the brand
+- Use **Inter / Pretendard only** for UI and headings; keep `--font-display` as the same sans-serif stack
+- Use Inter weight 300 for large display headings where the spec calls for light display type
 - Apply multi-layer shadows (inset + outline + elevation) at sub-0.1 opacity
 - Use warm stone tints (`#f5f2ef`, `rgba(245,242,239,0.8)`) for featured elements
 - Apply positive letter-spacing (+0.14px to +0.18px) on Inter body text
 - Use 9999px radius for primary buttons — pill shape is standard
 - Use warm-tinted shadows (`rgba(78,50,23,0.04)`) on featured CTAs
 - Keep the page predominantly white with subtle gray section differentiation
-- Use WaldenburgFH bold uppercase ONLY for specific CTA button labels
+- Use Inter 700 + uppercase only for specific CTA labels when needed
 
 ### Don't
-- Don't use bold (700) Waldenburg for headings — weight 300 is non-negotiable
+- **Don't use serif / 명조** fonts anywhere (including Georgia/Times fallbacks on headings)
+- Don't default display headings to bold (700) — prefer 300 for hero/section scale unless a page explicitly needs heavier weight
 - Don't use heavy shadows (>0.1 opacity) — the ethereal quality requires whisper-level depth
 - Don't use cool gray borders — the system is warm-tinted throughout
 - Don't skip the inset shadow component — half-pixel inset borders define edges
@@ -250,15 +255,15 @@ What makes ElevenLabs distinctive is its multi-layered shadow system. Rather tha
 - Border: `#e5e5e5` or `rgba(0,0,0,0.05)`
 
 ### Example Component Prompts
-- "Create a hero on white background. Headline at 48px Waldenburg weight 300, line-height 1.08, letter-spacing -0.96px, black text. Subtitle at 18px Inter weight 400, line-height 1.60, letter-spacing 0.18px, #4e4e4e text. Two pill buttons: black (9999px, 0px 14px padding) and warm stone (rgba(245,242,239,0.8), 30px radius, 12px 20px padding, warm shadow rgba(78,50,23,0.04) 0px 6px 16px)."
-- "Design a card: white background, 20px radius. Shadow: rgba(0,0,0,0.06) 0px 0px 0px 1px, rgba(0,0,0,0.04) 0px 1px 2px, rgba(0,0,0,0.04) 0px 2px 4px. Title at 32px Waldenburg weight 300, body at 16px Inter weight 400 letter-spacing 0.16px, #4e4e4e."
+- "Create a hero on white background. Headline at 48px **Inter** weight 300, line-height 1.08, letter-spacing -0.96px, black text (sans-serif only). Subtitle at 18px Inter weight 400, line-height 1.60, letter-spacing 0.18px, #4e4e4e text. Two pill buttons: black (9999px, 0px 14px padding) and warm stone (rgba(245,242,239,0.8), 30px radius, 12px 20px padding, warm shadow rgba(78,50,23,0.04) 0px 6px 16px)."
+- "Design a card: white background, 20px radius. Shadow: rgba(0,0,0,0.06) 0px 0px 0px 1px, rgba(0,0,0,0.04) 0px 1px 2px, rgba(0,0,0,0.04) 0px 2px 4px. Title at 32px **Inter** weight 300, body at 16px Inter weight 400 letter-spacing 0.16px, #4e4e4e."
 - "Build a white pill button: white bg, 9999px radius. Shadow: rgba(0,0,0,0.4) 0px 0px 1px, rgba(0,0,0,0.04) 0px 4px 4px. Text at 15px Inter weight 500."
-- "Create an uppercase CTA label: 14px WaldenburgFH weight 700, text-transform uppercase, letter-spacing 0.7px."
+- "Create an uppercase CTA label: 14px Inter weight 700, text-transform uppercase, letter-spacing 0.7px."
 - "Design navigation: white sticky header. Inter 15px weight 500. Black pill CTA right-aligned. Border-bottom: rgba(0,0,0,0.05)."
 
 ### Iteration Guide
 1. Start with white — the warm undertone comes from shadows and stone surfaces, not backgrounds
-2. Waldenburg 300 for headings — never bold, the lightness is the identity
+2. **Inter 300** for large display headings — sans-serif only; no serif faces or fallbacks
 3. Multi-layer shadows: always include inset + outline + elevation at sub-0.1 opacity
 4. Positive letter-spacing on Inter body (+0.14px to +0.18px) — the airy reading quality
 5. Warm stone CTA is the signature — `rgba(245,242,239,0.8)` with `rgba(78,50,23,0.04)` shadow

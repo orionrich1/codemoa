@@ -3,22 +3,31 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/default_layout}">
 	
-	<th:block layout:fragment="content" class="ui-view">
-		
+	<div layout:fragment="content" class="ui-view">
 		<script th:src="@{/js/information/formcheck.js}"></script>
-		<form name="checkForm" id="checkForm" class="d-none">
-			<input type="hidden" name="no" id="no" th:value="${contest.contestNo}"/>
-			<input type="hidden" name="pass" id="rPass" />
-			<input type="hidden" name="pageNum" th:value="${pageNum}" />
+		<form name="checkForm" id="checkForm" class="d-none" method="post">
+			<input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+			<input type="hidden" name="no" id="no" th:value="${contest.contestNo}">
+			<input type="hidden" name="pass" id="rPass">
+			<input type="hidden" name="pageNum" th:value="${pageNum}">
+			<input type="hidden" name="contestFilter" th:value="${contestFilter}">
 			<th:block th:if="${searchOption}">
-				<input type="hidden" name="type" th:value="${type}" />
-				<input type="hidden" name="keyword" th:value="${keyword}" />
+				<input type="hidden" name="type" th:value="${type}">
+				<input type="hidden" name="keyword" th:value="${keyword}">
 			</th:block>
 		</form>
 
 		<div class="container my-5">
 			<div class="row justify-content-center">
 				<div class="col-lg-9 col-xl-8">
+
+					<nav aria-label="breadcrumb" class="mb-3">
+						<ol class="breadcrumb">
+							<li class="breadcrumb-item"><a th:href="@{/information}">IT 정보</a></li>
+							<li class="breadcrumb-item"><a th:href="@{/information/contest}">공모전 정보</a></li>
+							<li class="breadcrumb-item active" aria-current="page">상세</li>
+						</ol>
+					</nav>
 
 					<div class="text-center mb-4">
 						<h2 class="fw-bold fs-2">공모전 정보</h2>
@@ -39,15 +48,24 @@
 										<span>[[${#dates.format(contest.regDate, 'yyyy-MM-dd HH:mm')}]]</span>
 									</span>
 								</div>
-								<div class="d-flex justify-content-between text-secondary small mt-2">
+								<div class="d-flex flex-column flex-sm-row justify-content-between text-secondary small mt-2 gap-2">
 									<span>
 										<b class="fw-bold">주최기관:</b>
 										<span th:text="${contest.hostOrganization}"></span>
 									</span>
 									<span>
 										<b class="fw-bold">접수기간:</b>
-										<span th:text="|${contest.startDate} ~ ${contest.endDate}|"></span>
+										<span th:text="|${#dates.format(contest.startDate, 'yyyy-MM-dd HH:mm')} ~ ${#dates.format(contest.endDate, 'yyyy-MM-dd HH:mm')}|"></span>
 									</span>
+								</div>
+								<div class="mt-2" th:with="d=${T(com.codemoa.project.domain.information.support.InformationDisplayUtils).daysUntilEnd(contest.endDate)}">
+									<span th:if="${d != null and d >= 0}" class="badge rounded-pill text-bg-light border">
+										<th:block th:text="${d == 0} ? '오늘 마감' : |마감까지 ${d}일|">D-day</th:block>
+									</span>
+									<span th:if="${d != null and d < 0}" class="badge rounded-pill text-bg-secondary">마감됨</span>
+								</div>
+								<div class="mt-2" th:if="${contest.contestSource != null and !contest.contestSource.isEmpty()}">
+									<a class="small" th:href="${contest.contestSource}" target="_blank" rel="noopener noreferrer">공식 공고·접수 링크 열기</a>
 								</div>
 							</div>
 
@@ -57,7 +75,7 @@
 
 							<div class="py-4 border-top text-center">
 								<th:block th:if="${contest.file1}">
-									<img th:src="@{/resources/files/information/{img}(img=${contest.file1})}" alt="첨부 이미지" class="img-fluid rounded">
+									<img th:src="@{/files/information/{img}(img=${contest.file1})}" th:alt="|공모전 포스터: ${contest.title}|" class="img-fluid rounded">
 								</th:block>
 								<th:block th:unless="${contest.file1}">
 									<p class="text-secondary">업로드 된 이미지가 없습니다.</p>
@@ -79,17 +97,38 @@
 						</div>
 					</div>
 
+					<section th:if="${relatedContests != null and !#lists.isEmpty(relatedContests)}" class="mt-5" aria-labelledby="related-contests">
+						<h3 id="related-contests" class="h5 fw-normal mb-3">다른 공모전</h3>
+						<ul class="list-group list-group-flush border rounded-3">
+							<li th:each="rel : ${relatedContests}" class="list-group-item d-flex justify-content-between align-items-center">
+								<a th:href="@{/information/contestDetail(no=${rel.contestNo}, pageNum=1, contestFilter=${contestFilter})}" th:text="${rel.title}">제목</a>
+								<span class="text-secondary small" th:text="${rel.hostOrganization}">주최</span>
+							</li>
+						</ul>
+					</section>
+
 					<div class="text-center mt-4">
-						<th:block th:unless="${order}">
-							<a class="btn btn-secondary px-5" th:href="@{|/information/contest?pageNum=${pageNum}|}">목록</a>
-						</th:block>						
-						<th:block th:if="${order}">
-							<a class="btn btn-secondary px-5" th:href="@{|/information/contest?pageNum=${pageNum}&order=${order}|}">목록</a>
-						</th:block>						
+						<a class="btn btn-secondary px-5" th:href="@{/information/contest(pageNum=${pageNum}, order=${order}, keyword=${keyword}, type=${type}, contestFilter=${contestFilter})}">목록</a>
 					</div>
 
 				</div>
 			</div>
 		</div>
-	</th:block>
+
+		<div class="modal fade" id="contestDeleteModal" tabindex="-1" aria-labelledby="contestDeleteModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="contestDeleteModalLabel">공모전 글 삭제</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+					</div>
+					<div class="modal-body">정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
+						<button type="button" class="btn btn-danger" id="confirmContestDelete" aria-label="삭제 확인">삭제</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </html>

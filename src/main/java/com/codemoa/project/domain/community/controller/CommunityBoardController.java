@@ -49,8 +49,9 @@ public class CommunityBoardController {
             @RequestParam(value = "category", required = false, defaultValue = "all") String category,
             @RequestParam(value = "searchType", required = false, defaultValue = "title_content") String searchType,
             @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+            @RequestParam(value = "sort", required = false, defaultValue = "board") String sort,
             @PageableDefault(size = 10) Pageable pageable) {
-        Page<BoardListResponse> response = communityBoardService.findAll(category, searchType, keyword, pageable);
+        Page<BoardListResponse> response = communityBoardService.findAll(category, searchType, keyword, sort, pageable);
         return ResponseEntity.ok(response);
     }
 

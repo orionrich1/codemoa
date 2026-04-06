@@ -27,7 +27,7 @@
 }
 
 .community-ds .community-page__title {
-    font-family: var(--font-display), "Georgia", serif;
+    font-family: var(--font-display);
     font-size: 2.25rem;
     font-weight: 300;
     line-height: 1.17;
@@ -36,7 +36,7 @@
 }
 
 .community-ds .community-post__title {
-    font-family: var(--font-display), "Georgia", serif;
+    font-family: var(--font-display);
     font-size: 2rem;
     font-weight: 300;
     line-height: 1.2;
@@ -45,7 +45,7 @@
 }
 
 .community-ds .community-card__heading {
-    font-family: var(--font-display), "Georgia", serif;
+    font-family: var(--font-display);
     font-size: 1.25rem;
     font-weight: 300;
     line-height: 1.25;
@@ -260,6 +260,46 @@
     border-radius: 12px;
     overflow: hidden;
     border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.community-ds .community-table-wrap .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.community-ds .community-breadcrumb {
+    font-size: 0.88rem;
+}
+
+.community-ds .community-breadcrumb__title {
+    max-width: 12rem;
+}
+
+.community-ds .community-toolbar {
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.community-ds .community-table__row {
+    cursor: pointer;
+}
+
+.community-ds .community-table__row:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.community-ds .community-toast {
+    position: fixed;
+    top: 5.5rem;
+    right: 1rem;
+    z-index: 1080;
+    max-width: min(22rem, 90vw);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+    transition: opacity 0.2s ease;
+}
+
+.community-ds .community-toast.show {
+    opacity: 1;
 }
 
 .community-ds .community-table {

@@ -1,6 +1,7 @@
 package com.codemoa.project.domain.community.dto.response;
 
 import com.codemoa.project.domain.community.entity.CommunityBoard;
+import com.codemoa.project.common.community.CommunityCategoryPaths;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -13,6 +14,8 @@ public class BoardDetailResponse {
     private final String title;
     private final String content;
     private final String category;
+    /** {@code /community/{segment}/...} 경로용 (DB 값 자유·Java 등 → free·Java 등). */
+    private final String categoryUrlSegment;
     private final String authorId;
     private final String authorNickname;
     private final LocalDateTime createdAt;
@@ -27,6 +30,7 @@ public class BoardDetailResponse {
         this.title = board.getTitle();
         this.content = board.getContent();
         this.category = board.getCategory();
+        this.categoryUrlSegment = CommunityCategoryPaths.toUrlSegment(board.getCategory());
         this.authorNickname = board.getUser().getNickname();
         this.authorId = board.getUser().getUserId();
         this.authorGradeIconName = board.getUser().getGrade().name().toLowerCase();

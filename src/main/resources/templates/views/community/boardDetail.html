@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" 
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layouts/default_layout}">
 <head>
     <title th:text="${board.title} + ' · 커뮤니티'">게시글</title>
@@ -13,6 +14,17 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
+                <nav class="mb-3" aria-label="breadcrumb">
+                    <ol class="breadcrumb community-breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a th:href="@{/}">홈</a></li>
+                        <li class="breadcrumb-item"><a th:href="@{/community/free}">커뮤니티</a></li>
+                        <li class="breadcrumb-item"><a th:href="@{/community/{seg}(seg=${board.categoryUrlSegment})}" th:text="${boardListTitle}">게시판</a></li>
+                        <li class="breadcrumb-item active text-truncate community-breadcrumb__title" aria-current="page" th:text="${board.title}">제목</li>
+                    </ol>
+                </nav>
+
+                <div id="communityToast" class="community-toast alert alert-success d-none" role="status" aria-live="polite"></div>
+
                 <article class="community-card mb-4">
                     <div class="community-card__body community-card__body--spacious">
                         <header class="border-bottom pb-3 mb-4 ds-border-bottom-subtle">
@@ -34,17 +46,17 @@
                         </div>
                     </div>
                     <div class="community-card__footer community-card__footer--inset d-flex flex-wrap justify-content-end align-items-center gap-2">
-                        <div th:if="${#authentication.name == board.authorId}" class="d-flex flex-wrap gap-2">
-                            <a th:href="@{/boards/{boardNo}/edit(boardNo=${board.boardNo})}" class="community-ds-cta-ghost">수정</a>
-                            <button type="button" id="delete-btn" class="community-ds-cta-danger border-0">삭제</button>
+                        <div sec:authorize="isAuthenticated()" th:if="${#authentication.name == board.authorId}" class="d-flex flex-wrap gap-2">
+                            <a th:href="@{/community/{seg}/{boardNo}/edit(seg=${board.categoryUrlSegment}, boardNo=${board.boardNo})}" class="community-ds-cta-ghost">수정</a>
+                            <button type="button" id="delete-btn" class="community-ds-cta-danger border-0" data-bs-toggle="modal" data-bs-target="#deleteBoardModal" aria-label="게시글 삭제">삭제</button>
                         </div>
-                        <a th:href="@{/community/{category}(category=${board.category})}" class="community-ds-cta-primary">
+                        <a th:href="@{/community/{seg}(seg=${board.categoryUrlSegment})}" class="community-ds-cta-primary">
                             <i class="bi bi-list-ul" aria-hidden="true"></i> 목록으로
                         </a>
                     </div>
                 </article>
 
-                <article class="community-card mb-4">
+                <article id="community-comments" class="community-card mb-4">
                     <div class="community-card__header d-flex align-items-center gap-2">
                         <h2 class="community-card__heading mb-0">
                             <i class="bi bi-chat-dots-fill me-2" aria-hidden="true"></i>댓글 <span th:text="${#lists.size(board.comments)}">0</span>개
@@ -62,8 +74,13 @@
                                     <span th:if="${comment.isAdopted}" class="community-ds-chip community-ds-chip--dark">채택됨</span>
                                 </div>
                                 <p class="community-comment-body mt-2 mb-0" th:text="${comment.content}">댓글 내용입니다.</p>
-                                <div class="text-end mt-2" th:if="${board.stakedPoints > 0 and !board.isResolved and !comment.isAdopted and #authentication.name == board.authorId}">
-                                    <button type="button" th:attr="data-comment-no=${comment.commentNo}" class="community-ds-cta-warm community-ds-cta-sm adopt-btn border-0">
+                                <div class="text-end mt-2" sec:authorize="isAuthenticated()" th:if="${board.stakedPoints > 0 and !board.isResolved and !comment.isAdopted and #authentication.name == board.authorId}">
+                                    <button type="button"
+                                            th:attr="data-comment-no=${comment.commentNo}"
+                                            class="community-ds-cta-warm community-ds-cta-sm adopt-open-btn border-0"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#adoptCommentModal"
+                                            aria-label="이 답변 채택">
                                         <i class="bi bi-check-circle" aria-hidden="true"></i> 채택
                                     </button>
                                 </div>
@@ -72,7 +89,7 @@
                     </div>
                 </article>
 
-                <article class="community-card" th:if="${!board.isResolved}">
+                <article class="community-card" th:if="${!board.isResolved}" sec:authorize="isAuthenticated()">
                     <div class="community-card__body community-card__body--spacious">
                         <form id="commentForm">
                             <div class="mb-3">
@@ -80,18 +97,57 @@
                                 <textarea class="form-control" id="commentContent" rows="3" placeholder="댓글을 입력하세요" required></textarea>
                             </div>
                             <div class="text-end">
-                                <button type="submit" class="community-ds-cta-primary border-0">
+                                <button type="submit" id="commentSubmitBtn" class="community-ds-cta-primary border-0">
                                     <i class="bi bi-pencil-square" aria-hidden="true"></i> 등록
                                 </button>
                             </div>
                         </form>
                     </div>
                 </article>
+
+                <div class="community-card mb-4" sec:authorize="isAnonymous()" th:if="${!board.isResolved}">
+                    <div class="community-card__body py-4 text-center">
+                        <p class="text-muted mb-3">댓글을 작성하려면 로그인이 필요합니다.</p>
+                        <a class="community-ds-cta-primary text-decoration-none" th:href="@{/loginForm}">로그인하기</a>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="deleteBoardModal" tabindex="-1" aria-labelledby="deleteBoardModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h2 class="modal-title fs-5" id="deleteBoardModalLabel">게시글 삭제</h2>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+                            </div>
+                            <div class="modal-body">정말 이 게시글을 삭제하시겠습니까? 삭제 후에는 복구할 수 없습니다.</div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
+                                <button type="button" class="btn btn-danger" id="confirmDeleteBoard">삭제</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="adoptCommentModal" tabindex="-1" aria-labelledby="adoptCommentModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h2 class="modal-title fs-5" id="adoptCommentModalLabel">답변 채택</h2>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+                            </div>
+                            <div class="modal-body">이 답변을 채택하시겠습니까? 채택 후에는 변경할 수 없습니다.</div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
+                                <button type="button" class="btn btn-primary" id="confirmAdoptComment">채택하기</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
-    
+
 <th:block layout:fragment="script">
     <script th:inline="javascript">
         const token = document.querySelector("meta[name='_csrf']")?.content;
@@ -101,86 +157,145 @@
             headers[header] = token;
         }
 
-        const deleteBtn = document.getElementById('delete-btn');
-        if (deleteBtn) {
-            deleteBtn.addEventListener('click', function () {
-                if (!confirm('정말로 삭제하시겠습니까?')) {
-                    return;
-                }
-                const boardNo = /*[[${board.boardNo}]]*/ 0;
-                const category = /*[[${board.category}]]*/ 'free';
+        const boardNo = /*[[${board.boardNo}]]*/ 0;
+        const categorySegment = /*[[${board.categoryUrlSegment}]]*/ 'free';
 
-                fetch(`/api/boards/${boardNo}`, {
+        function showCommunityToast(message) {
+            const el = document.getElementById('communityToast');
+            if (!el) return;
+            el.textContent = message;
+            el.classList.remove('d-none', 'alert-danger');
+            el.classList.add('alert-success');
+            el.classList.add('show');
+            setTimeout(function () {
+                el.classList.add('d-none');
+                el.classList.remove('show');
+            }, 2800);
+        }
+
+        function showCommunityError(message) {
+            const el = document.getElementById('communityToast');
+            if (!el) {
+                alert(message);
+                return;
+            }
+            el.textContent = message;
+            el.classList.remove('d-none', 'alert-success');
+            el.classList.add('alert-danger');
+            setTimeout(function () {
+                el.classList.add('d-none');
+            }, 4000);
+        }
+
+        const confirmDeleteBoard = document.getElementById('confirmDeleteBoard');
+        if (confirmDeleteBoard) {
+            confirmDeleteBoard.addEventListener('click', function () {
+                fetch('/api/boards/' + boardNo, {
                     method: 'DELETE',
                     headers: headers
-                }).then(response => {
-                    if (response.ok) {
-                        alert('게시글이 삭제되었습니다.');
-                        location.href = '/community/' + category;
-                    } else {
-                        alert('삭제에 실패했습니다. 권한을 확인해주세요.');
+                }).then(function (response) {
+                    const modalEl = document.getElementById('deleteBoardModal');
+                    if (modalEl && window.bootstrap) {
+                        bootstrap.Modal.getInstance(modalEl)?.hide();
                     }
-                }).catch(error => console.error('Error:', error));
+                    if (response.ok) {
+                        window.location.href = '/community/' + encodeURIComponent(categorySegment);
+                    } else {
+                        showCommunityError('삭제에 실패했습니다. 권한을 확인해주세요.');
+                    }
+                }).catch(function (e) {
+                    console.error(e);
+                    showCommunityError('삭제 중 오류가 발생했습니다.');
+                });
             });
         }
 
         const commentForm = document.getElementById('commentForm');
-        if(commentForm) {
-            commentForm.addEventListener('submit', function(event) {
+        if (commentForm) {
+            commentForm.addEventListener('submit', function (event) {
                 event.preventDefault();
-                const boardNo = /*[[${board.boardNo}]]*/ 0;
+                const submitBtn = document.getElementById('commentSubmitBtn');
+                if (submitBtn) submitBtn.disabled = true;
                 const content = document.getElementById('commentContent').value;
 
                 if (!content || content.trim() === "") {
-                    alert("댓글 내용을 입력해주세요.");
+                    showCommunityError("댓글 내용을 입력해주세요.");
+                    if (submitBtn) submitBtn.disabled = false;
                     return;
                 }
-                const data = { content: content };
-                fetch(`/api/boards/${boardNo}/comments`, {
+                fetch('/api/boards/' + boardNo + '/comments', {
                     method: 'POST',
                     headers: headers,
-                    body: JSON.stringify(data)
+                    body: JSON.stringify({ content: content })
                 })
-                .then(response => {
-                    if (response.ok) {
-                        alert("댓글이 성공적으로 등록되었습니다.");
-                        location.reload();
-                    } else {
-                        alert("댓글 등록에 실패했습니다.");
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert("오류가 발생했습니다.");
-                });
-            });
-        }
-        
-        document.querySelectorAll('.adopt-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const commentNo = this.dataset.commentNo;
-                if (confirm("이 답변을 채택하시겠습니까? 채택 후에는 변경할 수 없습니다.")) {
-                    fetch(`/api/comments/${commentNo}/adopt`, {
-                        method: 'POST',
-                        headers: headers
-                    })
-                    .then(response => {
+                    .then(function (response) {
                         if (response.ok) {
-                            alert("답변이 채택되었습니다.");
-                            location.reload();
+                            showCommunityToast("댓글이 등록되었습니다.");
+                            setTimeout(function () { location.reload(); }, 600);
                         } else {
-                            response.text().then(text => {
-                                alert("채택 실패: " + text);
-                            });
+                            showCommunityError("댓글 등록에 실패했습니다. 로그인 여부를 확인해주세요.");
+                            if (submitBtn) submitBtn.disabled = false;
                         }
                     })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert("채택 중 오류가 발생했습니다.");
+                    .catch(function (error) {
+                        console.error(error);
+                        showCommunityError("오류가 발생했습니다.");
+                        if (submitBtn) submitBtn.disabled = false;
                     });
-                }
             });
-        });
+        }
+
+        let adoptTriggerButton = null;
+        const adoptModalEl = document.getElementById('adoptCommentModal');
+        if (adoptModalEl) {
+            adoptModalEl.addEventListener('show.bs.modal', function (ev) {
+                adoptTriggerButton = ev.relatedTarget;
+            });
+        }
+        const confirmAdoptComment = document.getElementById('confirmAdoptComment');
+        if (confirmAdoptComment) {
+            confirmAdoptComment.addEventListener('click', function () {
+                const button = adoptTriggerButton;
+                const commentNo = button && button.dataset ? button.dataset.commentNo : null;
+                if (!commentNo) {
+                    return;
+                }
+                if (button) {
+                    button.disabled = true;
+                }
+                confirmAdoptComment.disabled = true;
+                fetch('/api/comments/' + commentNo + '/adopt', {
+                    method: 'POST',
+                    headers: headers
+                })
+                    .then(function (response) {
+                        if (adoptModalEl && window.bootstrap) {
+                            bootstrap.Modal.getInstance(adoptModalEl)?.hide();
+                        }
+                        if (response.ok) {
+                            showCommunityToast("답변이 채택되었습니다.");
+                            setTimeout(function () { location.reload(); }, 600);
+                        } else {
+                            response.text().then(function (text) {
+                                showCommunityError("채택 실패: " + text);
+                            });
+                            if (button) {
+                                button.disabled = false;
+                            }
+                        }
+                    })
+                    .catch(function (error) {
+                        console.error(error);
+                        showCommunityError("채택 중 오류가 발생했습니다.");
+                        if (button) {
+                            button.disabled = false;
+                        }
+                    })
+                    .finally(function () {
+                        confirmAdoptComment.disabled = false;
+                    });
+            });
+        }
     </script>
 </th:block>
 </body>

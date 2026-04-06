@@ -2,8 +2,10 @@ package com.codemoa.project.domain.community.dto.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @NoArgsConstructor // JSON 처리를 위해 기본 생성자가 있는 것이 좋습니다.
 public class CreateBoardRequest {
 

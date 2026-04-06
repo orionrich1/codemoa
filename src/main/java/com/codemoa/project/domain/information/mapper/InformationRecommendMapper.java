@@ -65,11 +65,20 @@ public interface InformationRecommendMapper {
 	// 공모전 관련
 	
 	List<Contest> getContestList(@Param("startRow") int startRow, @Param("num") int num,
-			@Param("type") String type, @Param("keyword") String keyword, @Param("order") String order);
+			@Param("type") String type, @Param("keyword") String keyword, @Param("order") String order,
+			@Param("statusFilter") String statusFilter);
 
 	Contest getContest(int no);
 	
-	int getContestCount(@Param("type") String type, @Param("keyword") String keyword);
+	int getContestCount(@Param("type") String type, @Param("keyword") String keyword,
+			@Param("statusFilter") String statusFilter);
+
+	List<Lecture> findRelatedLectures(@Param("excludeNo") int excludeNo, @Param("category") String category,
+			@Param("limit") int limit);
+
+	List<Book> findRelatedBooks(@Param("excludeNo") int excludeNo, @Param("limit") int limit);
+
+	List<Contest> findRelatedContests(@Param("excludeNo") int excludeNo, @Param("limit") int limit);
 	
 	void updateContest(Contest contest);
 	

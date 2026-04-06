@@ -1,143 +1,148 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-layout:decorate="~{layouts/default_layout}">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
 <head>
-	<title th:text="${teamRecruit.title} + ' · 팀 모집'">팀 모집 상세</title>
+	<title th:text="${teamRecruit.title} + ' · 팀 모집'">팀 모집</title>
 </head>
 <body>
 <th:block layout:fragment="content" class="ui-view">
-	<div class = "row my-5" id="global-content">
-		<div class="col-10 offset-1">
-		
-			<form name="checkForm" id="checkForm">
-				<input type="hidden" name="no" id="no" th:value="${teamRecruit.recruitId}"/>
-				<input type="hidden" name="pass" id="rPass" />
-			</form>
-			<!-- 제목 -->
-				<!--
-				<div class="row text-center">
-					<div class="col">
-						<h2 class="fs-3 fw-bold text-center fw-bold mb-4" >게시글 상세보기</h2>
-					</div>
-				</div>
-				-->
+	<div class="container my-5">
+		<div class="row justify-content-center">
+			<div class="col-lg-9 col-xl-8">
+
 				<div class="text-center mb-4">
-					<h2 class="fw-bold fs-3" >게시글 상세보기</h2>
+					<h2 class="fw-bold fs-3 mb-0">팀 모집 상세</h2>
 				</div>
-				
-				<!--  작성자 / 공모전 정보 -->
-				<div class="card mb-4">
-					<div class="card-body">	
-						<div class="mb-3">
-						<strong>작성자 : </strong><span th:text="${teamRecruit.nickname}"></span></div>
-				</div>
-				<div class="mb-3">
-					<strong>공모전 정보 : </strong>
-					<div class="border p-2 text-center mt-2" id="contestPreviewWrapper">
-						
-						<!--  미리보기 카드 -->
-						<div class="card p-3 text-center mx-auto ds-team-poster">
-						
-						<!-- 미리보기 이미지 -->
-						<img id="contestPreviewImage"
-								src=""
-								class="card-img-top d-none"
-								alt="공모전 미리보기 이미지">
-						
-						<div class="card-body">
-						<!-- 타이틀 -->
-						<h5 id="contestPreviewTitle" class="card-title">미리보기</h5>
-							<!-- 미리보기 설명 -->
-							<div id="contestPreviewDesc" class="card-text"></div>
-							
-							<!-- 바로가기 버튼 -->
-							<a id="contestPreviewLink"
-								th:href="${teamRecruit.contestTitle}" 
-								target="_blank" 
-								class="btn btn-outline-primary mt-2">공모전 바로가기</a>
+
+				<input type="hidden" id="no" th:value="${teamRecruit.recruitId}"/>
+				<input type="hidden" id="contestUrlValue" th:value="${teamRecruit.contestTitle}"/>
+
+				<section class="card mb-4" aria-labelledby="recruit-author-heading">
+					<div class="card-body">
+						<h3 id="recruit-author-heading" class="h6 text-muted text-uppercase small mb-2">작성자</h3>
+						<p class="mb-0" th:text="${teamRecruit.nickname}">닉네임</p>
+					</div>
+				</section>
+
+				<section class="card mb-4" aria-labelledby="recruit-contest-heading">
+					<div class="card-body">
+						<h3 id="recruit-contest-heading" class="h6 text-muted text-uppercase small mb-3">공모전 연계</h3>
+						<div id="contestPreviewWrapper">
+							<div class="card p-3 text-center mx-auto ds-team-poster">
+								<img id="contestPreviewImage" src="" alt="" class="card-img-top d-none">
+								<div class="card-body">
+									<h4 id="contestPreviewTitle" class="card-title h5">미리보기</h4>
+									<div id="contestPreviewDesc" class="card-text text-secondary small mb-3"></div>
+									<th:block th:with="cu=${teamRecruit.contestTitle}">
+										<a th:if="${cu != null and #strings.startsWith(cu, 'http')}"
+											 id="contestPreviewLink"
+											 th:href="${cu}"
+											 target="_blank"
+											 rel="noopener noreferrer"
+											 class="btn btn-outline-primary">공모전 바로가기</a>
+										<th:block th:unless="${cu != null and #strings.startsWith(cu, 'http')}">
+											<p class="text-secondary small mb-2">공모전 링크 없음</p>
+											<p class="small text-muted mb-0">http 또는 https 로 시작하는 공모전 URL을 등록하면 미리보기와 바로가기가 활성화됩니다.</p>
+										</th:block>
+									</th:block>
+								</div>
+							</div>
 						</div>
 					</div>
-				</div>
-			</div>
-		</div>
-	</div>			
-		
-				<!-- 모집/진행 정보 -->
-				<div class="card mb-4">
+				</section>
+
+				<section class="card mb-4" aria-labelledby="recruit-meta-heading">
 					<div class="card-body">
-						<div class="row">
+						<h3 id="recruit-meta-heading" class="h6 text-muted text-uppercase small mb-3">모집·진행 정보</h3>
+						<div class="row g-3">
 							<div class="col-md-6">
-	<!-- 체크박스 형태로 -->	<div><strong>모집 분류 :</strong> 
-										<th:block th:switch="${teamRecruit.recruitType}">
-											<span th:case="'TEAM_RECRUIT'">팀원 모집</span>
-											<span th:case="'TEAM_JOIN'">팀 가입</span>
-											<span th:case="*">기타</span>
-										</th:block>
-									</div>
-									<div><Strong>모집 상태 : </Strong><span th:text="${teamRecruit.statusName}">모집중</span> </div>
-	<!-- 모집분류에서 팀원으로 선택시 잠김 -->	<div><strong>모집 인원 : </strong> <span th:text="${teamRecruit.totalMembers}"></span> 명 /
-					<strong>남은 인원: </strong><span th:text="${teamRecruit.remainingMembers}"> </span>명 
+								<p class="mb-2"><strong>모집 분류</strong>
+									<th:block th:switch="${teamRecruit.recruitType}">
+										<span th:case="'TEAM_RECRUIT'">팀원 모집</span>
+										<span th:case="'TEAM_JOIN'">팀 가입</span>
+										<span th:case="*">기타</span>
+									</th:block>
+								</p>
+								<p class="mb-2"><strong>모집 상태</strong> <span th:text="${teamRecruit.statusName}">모집중</span></p>
+								<p class="mb-2"><strong>모집 인원</strong> <span th:text="${teamRecruit.totalMembers}">0</span>명 /
+									<strong>남은 인원</strong> <span th:text="${teamRecruit.remainingMembers}">0</span>명</p>
+								<p class="mb-2"><strong>모집 기간</strong> <span th:text="${teamRecruit.recruitPeriod}">—</span></p>
+								<p class="mb-0"><strong>활동 기간</strong> <span th:text="${teamRecruit.activityPeriod}">—</span></p>
+							</div>
+							<div class="col-md-6">
+								<p class="mb-2"><strong>진행 방식</strong>
+									<th:block th:switch="${teamRecruit.progressType}">
+										<span th:case="'ONLINE'">온라인</span>
+										<span th:case="'OFFLINE'">오프라인</span>
+										<span th:case="'MIXED'">혼합</span>
+										<span th:case="*">기타</span>
+									</th:block>
+								</p>
+								<p class="mb-2"><strong>연락 방법</strong> <span th:text="${teamRecruit.contact}">—</span></p>
+								<p class="mb-2"><strong>기술 스택</strong> <span th:text="${teamRecruit.techStack}">—</span></p>
+								<p class="mb-0"><strong>지원 방법</strong> <span th:text="${teamRecruit.applyGuide}">—</span></p>
+								<p class="small text-muted mt-3 mb-0">오픈채팅·이메일 등으로 연락할 때는 스팸·피싱에 유의하고, 과도한 개인정보 요구는 거절하세요.</p>
+							</div>
+						</div>
 					</div>
-	<!-- 날짜 지정 형태로 -->	<div><strong>모집 기간 : </strong> <span th:text="${teamRecruit.recruitPeriod}"></span></div>
-	<!-- 날짜 지정 형태로 -->	<div><strong>활동 기간 :</strong> <span th:text="${teamRecruit.activityPeriod}"></span></div>
-				</div>
-					<div class="col-md-6">
-					<div><strong>진행 방식 : </strong>
-						<th:block th:switch="${teamRecruit.progressType}">
-							<span th:case="'ONLINE'">온라인</span>
-							<span th:case="'OFFLINE'">오프라인</span>
-							<span th:case="'MIXED'">혼합</span>
-							<span th:case="*">기타</span>
-						</th:block>
-					</div>
-					<div><strong>연락 방법 : </strong><span th:text="${teamRecruit.contact}"></span></div>
-					<div><strong>기술 스택 : </strong><span th:text="${teamRecruit.techStack}"></span></div>
-					<div><strong>지원 방법 : </strong><span th:text="${teamRecruit.applyGuide}"></span></div>
-					</div>
-				</div>
-			</div>
-		</div>
-		
-			<div class="card mb-4">
-				<div class="card-body">
-				<h4 th:text="${teamRecruit.title}" class="fw-bold mb-3"></h4>
-				<div class="mb-3 ds-content-pre ds-team-body" th:text="${teamRecruit.content}"></div>
-				</div>
-			</div>
-				
-				<!-- 첨부 파일과 태그 -->
-				<div class="card mb-4">
+				</section>
+
+				<section class="card mb-4" aria-labelledby="recruit-body-heading">
 					<div class="card-body">
-						<div class="mb-3">
-							<strong>첨부파일 : </strong>
+						<h3 id="recruit-body-heading" class="h6 text-muted text-uppercase small mb-3">본문</h3>
+						<h4 th:text="${teamRecruit.title}" class="fw-bold mb-3"></h4>
+						<div class="ds-content-pre ds-team-body" th:text="${teamRecruit.content}"></div>
+					</div>
+				</section>
+
+				<section class="card mb-4" aria-labelledby="recruit-attach-heading">
+					<div class="card-body">
+						<h3 id="recruit-attach-heading" class="h6 text-muted text-uppercase small mb-3">첨부·태그</h3>
+						<p class="mb-2">
+							<strong>첨부파일</strong>
 							<th:block th:if="${teamRecruit.attachmentUrl != null}">
-								<a th:href="@{'/files/' + ${teamRecruit.attachmentUrl}}" class="text-primary">다운로드</a>
+								<a th:href="@{/files/{f}(f=${teamRecruit.attachmentUrl})}" class="text-primary">다운로드</a>
 							</th:block>
 							<th:block th:unless="${teamRecruit.attachmentUrl != null}">
-								첨부파일 없음
-							</th:block>					
-						</div>		
-						<div>
-						<strong>태그 : </strong><span th:text="${teamRecruit.techStack}"></span>
+								<span class="text-secondary">없음</span>
+							</th:block>
+						</p>
+						<p class="mb-0"><strong>태그</strong> <span th:text="${teamRecruit.techStack}">—</span></p>
+					</div>
+				</section>
+
+				<div class="text-center my-4" th:if="${loginId == teamRecruit.userId}">
+					<div class="ds-team-actions d-flex flex-wrap justify-content-center gap-2">
+						<button type="button" class="btn btn-warning" id="detailUpdate">수정</button>
+						<button type="button" class="btn btn-danger" id="detailDelete" data-bs-toggle="modal" data-bs-target="#deleteRecruitModal" aria-label="모집 글 삭제">삭제</button>
+					</div>
+				</div>
+
+				<div class="text-center my-3">
+					<a th:href="@{/teamRecruitList}" class="btn btn-primary">목록보기</a>
+				</div>
+
+				<div class="modal fade" id="deleteRecruitModal" tabindex="-1" aria-labelledby="deleteRecruitModalLabel" aria-hidden="true">
+					<div class="modal-dialog modal-dialog-centered">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h2 class="modal-title fs-5" id="deleteRecruitModalLabel">모집 글 삭제</h2>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+							</div>
+							<div class="modal-body">정말 이 모집 글을 삭제하시겠습니까? 삭제 후에는 복구할 수 없습니다.</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
+								<button type="button" class="btn btn-danger" id="confirmDeleteRecruit">삭제</button>
+							</div>
 						</div>
 					</div>
 				</div>
-				
-		<div class="text-center my-4" th:if="${loginId == teamRecruit.userId}">
-		  <div class="ds-team-actions">
-		    <button type="button" class="btn btn-warning" id="detailUpdate">수정</button>
-		    <button type="button" class="btn btn-danger" id="detailDelete">삭제</button>
-		  </div>
-		</div>
-			<div class="text-center my-2">
-				<a th:href="@{/teamRecruitList}" class="btn btn-primary mx-2">목록보기</a>
 			</div>
-</div>
-		
-		<!-- script 구문 -->
-		<script th:src="@{/js/recruitDetail.js}" defer></script>
-	</th:block>
+		</div>
+	</div>
+
+	<script th:src="@{/js/recruitDetail.js}" defer></script>
+</th:block>
 </body>
 </html>
-

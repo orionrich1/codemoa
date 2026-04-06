@@ -42,6 +42,9 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
 	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.3'
@@ -56,6 +59,12 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+// 로컬 개발: bootRun 시 src/main/resources 를 클래스패스 앞에 둠 → CSS/HTML/JS 저장 즉시 반영
+// (기본값은 build/resources/main 복사본만 사용해, 빌드 전까지 옛 파일이 서빙되는 경우가 많음)
+tasks.named('bootRun', org.springframework.boot.gradle.tasks.run.BootRun) {
+	sourceResources sourceSets.main
 }
 
 configurations.all {

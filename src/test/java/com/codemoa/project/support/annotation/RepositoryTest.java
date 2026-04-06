@@ -10,7 +10,8 @@ import java.lang.annotation.Target;
 
 /**
  * JPA Repository 슬라이스 테스트용 메타 어노테이션.
- * 실제 MySQL 데이터소스를 사용하며(Replace.NONE), JPA 레이어만 로드한다.
+ * 활성 프로파일의 데이터소스(로컬은 보통 MySQL)를 사용한다. {@code Replace.ANY}로 임베디드 DB를 쓰면
+ * {@code user} 테이블명 등 예약어 이슈가 있어, 기본은 실제 DB와 동일 스키마를 쓴다.
  *
  * 사용 예:
  * <pre>

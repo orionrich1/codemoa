@@ -1,9 +1,7 @@
 package com.codemoa.project.domain.community.controller;
 
 import com.codemoa.project.domain.community.service.CommunityBoardService;
-import com.codemoa.project.support.annotation.ApiControllerTest;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -18,9 +16,15 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/**
+ * JUnit {@code @Nested} 내부 클래스는 별도 테스트 클래스로 인식되어 {@link WebMvcTest}가 적용되지 않고
+ * 전체 애플리케이션 컨텍스트가 기동되는 문제가 있어, 평면 구조로 유지한다.
+ */
 @WebMvcTest(CommunityBoardController.class)
 @DisplayName("CommunityBoardController 슬라이스 테스트")
 class CommunityBoardControllerTest {
@@ -31,63 +35,48 @@ class CommunityBoardControllerTest {
     @MockBean
     CommunityBoardService communityBoardService;
 
-    @Nested
-    @DisplayName("GET /api/boards — 게시글 목록 조회")
-    class GetBoardList {
+    @Test
+    @WithMockUser
+    @DisplayName("GET /api/boards — 정상 조회 시 200")
+    void getBoardList_ok() throws Exception {
+        given(communityBoardService.findAll(anyString(), anyString(), anyString(), anyString(), any()))
+                .willReturn(Page.empty());
 
-        @Test
-        @WithMockUser
-        @DisplayName("정상 조회 시 200을 반환한다")
-        void 정상_조회_시_200_반환() throws Exception {
-            given(communityBoardService.findAll(anyString(), anyString(), anyString(), any()))
-                    .willReturn(Page.empty());
-
-            mockMvc.perform(get("/api/boards")
-                            .param("category", "Java")
-                            .contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isOk());
-        }
+        mockMvc.perform(get("/api/boards")
+                        .param("category", "Java")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
-    @Nested
-    @DisplayName("GET /api/boards/{boardNo} — 게시글 단건 조회")
-    class GetBoard {
+    @Test
+    @WithMockUser
+    @DisplayName("GET /api/boards/{id} — 없는 글은 서비스 예외 → 404")
+    void getBoard_notFound() throws Exception {
+        willThrow(new IllegalArgumentException("게시글을 찾을 수 없습니다."))
+                .given(communityBoardService).findById(9999);
 
-        @Test
-        @WithMockUser
-        @DisplayName("존재하지 않는 게시글 조회 시 예외를 서비스에 위임한다")
-        void 존재하지_않는_게시글_서비스에_위임() throws Exception {
-            willThrow(new IllegalArgumentException("게시글을 찾을 수 없습니다."))
-                    .given(communityBoardService).findById(9999);
-
-            mockMvc.perform(get("/api/boards/9999"))
-                    .andExpect(status().isNotFound());
-        }
+        mockMvc.perform(get("/api/boards/9999"))
+                .andExpect(status().isNotFound());
     }
 
-    @Nested
-    @DisplayName("DELETE /api/boards/{boardNo} — 게시글 삭제")
-    class DeleteBoard {
+    @Test
+    @WithMockUser(username = "user01")
+    @DisplayName("DELETE /api/boards/{id} — 정상 삭제 200")
+    void deleteBoard_ok() throws Exception {
+        mockMvc.perform(delete("/api/boards/1").with(csrf()))
+                .andExpect(status().isOk());
 
-        @Test
-        @WithMockUser(username = "user01")
-        @DisplayName("정상 삭제 시 200을 반환하고 서비스를 호출한다")
-        void 정상_삭제_시_200_반환() throws Exception {
-            mockMvc.perform(delete("/api/boards/1"))
-                    .andExpect(status().isOk());
+        verify(communityBoardService).delete(1, "user01");
+    }
 
-            verify(communityBoardService).delete(1, "user01");
-        }
+    @Test
+    @WithMockUser(username = "hacker")
+    @DisplayName("DELETE /api/boards/{id} — 권한 없음 403")
+    void deleteBoard_forbidden() throws Exception {
+        willThrow(new IllegalStateException("삭제 권한이 없습니다."))
+                .given(communityBoardService).delete(1, "hacker");
 
-        @Test
-        @WithMockUser(username = "hacker")
-        @DisplayName("권한 없는 삭제 시 서비스 예외가 403으로 응답된다")
-        void 권한없는_삭제_시_403_반환() throws Exception {
-            willThrow(new IllegalStateException("삭제 권한이 없습니다."))
-                    .given(communityBoardService).delete(1, "hacker");
-
-            mockMvc.perform(delete("/api/boards/1"))
-                    .andExpect(status().isForbidden());
-        }
+        mockMvc.perform(delete("/api/boards/1").with(csrf()))
+                .andExpect(status().isForbidden());
     }
 }

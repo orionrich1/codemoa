@@ -6,7 +6,7 @@
 }
 
 .page-search__title {
-    font-family: var(--font-display), "Georgia", serif;
+    font-family: var(--font-display);
     font-size: var(--text-h2);
     font-weight: 300;
     letter-spacing: -0.04em;

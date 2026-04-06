@@ -99,7 +99,7 @@ public class TeamRecruitController {
 			redirectAttrs.addFlashAttribute("errorMsg", "수정 중 오류가 발생했습니다.");
 			return "redirect:/recruit/updateForm?recruitId=" + teamRecruit.getRecruitId();
 		}
-		return "redirect:/recruit/teamRecruitDetail?recruitId=" + teamRecruit.getRecruitId();
+		return "redirect:/teamRecruitDetail?recruitId=" + teamRecruit.getRecruitId();
 	}
 
 	@GetMapping("/files/{filename}")

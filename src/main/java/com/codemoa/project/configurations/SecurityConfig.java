@@ -72,7 +72,6 @@ public class SecurityConfig {
                     "/problems/listUpdate",
                     // 채용 REST API
                     "/employmentfetch",
-                    "/employment/crawl",
                     // 커뮤니티 REST API
                     "/api/**",
                     // 정보 추천 REST API

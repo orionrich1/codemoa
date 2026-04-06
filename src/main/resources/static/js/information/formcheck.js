@@ -14,23 +14,26 @@ $(function() {
 	});
 
 	
-	// 게시 글 상세보기 "삭제하기" 버튼 이벤트
 	$("#lectureDetailDelete").on("click", function() {
-		
 		let pass = $("#pass").val();
 		if(pass.length <= 0) {
 			alert("비밀번호를 입력해 주세요");
 			return false;
 		}
-
 		$("#rPass").val(pass);
-		$("#checkForm").attr("action","lectureDelete");
-		$("#checkForm").attr("method","post");
-		$("#checkForm").submit();
+		const modalEl = document.getElementById("lectureDeleteModal");
+		if (modalEl) {
+			bootstrap.Modal.getOrCreateInstance(modalEl).show();
+		}
+	});
+
+	$("#confirmLectureDelete").on("click", function() {
+		$("#checkForm").attr("action", "/information/lectureDelete");
+		$("#checkForm").attr("method", "post");
+		$("#checkForm")[0].submit();
 	});
 	
 	
-	// 게시 글 상세보기 "수정버튼" 이벤트
 	$("#detailUpdate").on("click", function() {
 		
 		let pass = $("#pass").val();
@@ -40,9 +43,9 @@ $(function() {
 		}
 
 		$("#rPass").val(pass);
-		$("#checkForm").attr("action","lectureUpdateForm");
-		$("#checkForm").attr("method","post");
-		$("#checkForm").submit();
+		$("#checkForm").attr("action", "/information/lectureUpdateForm");
+		$("#checkForm").attr("method", "post");
+		$("#checkForm")[0].submit();
 	});
 	
 	
@@ -59,22 +62,25 @@ $(function() {
 	});
 
 	
-	// 게시 글 상세보기 "삭제하기" 버튼 이벤트
 	$("#contestDetailDelete").on("click", function() {
-		
 		let pass = $("#pass").val();
 		if(pass.length <= 0) { 
 			alert("비밀번호를 입력해 주세요");
 			return false;
 		}
-
 		$("#rPass").val(pass);
-		$("#checkForm").attr("action","contestDelete");
-		$("#checkForm").attr("method","post");
-		$("#checkForm").submit();
+		const modalEl = document.getElementById("contestDeleteModal");
+		if (modalEl) {
+			bootstrap.Modal.getOrCreateInstance(modalEl).show();
+		}
 	});
 	
-	// 게시 글 상세보기 "수정버튼" 이벤트
+	$("#confirmContestDelete").on("click", function() {
+		$("#checkForm").attr("action", "/information/contestDelete");
+		$("#checkForm").attr("method", "post");
+		$("#checkForm")[0].submit();
+	});
+	
 	$("#contestDetailUpdate").on("click", function() {
 		
 		let pass = $("#pass").val();
@@ -84,9 +90,9 @@ $(function() {
 		}
 		
 		$("#rPass").val(pass);
-		$("#checkForm").attr("action","contestUpdateForm");
-		$("#checkForm").attr("method","post");
-		$("#checkForm").submit();
+		$("#checkForm").attr("action", "/information/contestUpdateForm");
+		$("#checkForm").attr("method", "post");
+		$("#checkForm")[0].submit();
 	});
 	
 	
@@ -105,20 +111,24 @@ $(function() {
 	
 		
 	$("#bookDetailDelete").on("click", function() {
-		
 		let pass = $("#pass").val();
 		if(pass.length <= 0) { 
 			alert("비밀번호를 입력해 주세요");
 			return false;
 		}
-		
 		$("#rPass").val(pass);
-		$("#checkForm").attr("action","bookDelete");
-		$("#checkForm").attr("method","post");
-		$("#checkForm").submit();
+		const modalEl = document.getElementById("bookDeleteModal");
+		if (modalEl) {
+			bootstrap.Modal.getOrCreateInstance(modalEl).show();
+		}
 	});
 	
-	// 게시 글 상세보기 "수정버튼" 이벤트
+	$("#confirmBookDelete").on("click", function() {
+		$("#checkForm").attr("action", "/information/bookDelete");
+		$("#checkForm").attr("method", "post");
+		$("#checkForm")[0].submit();
+	});
+	
 	$("#bookDetailUpdate").on("click", function() {
 		
 		let pass = $("#pass").val();
@@ -128,9 +138,9 @@ $(function() {
 		}
 
 		$("#rPass").val(pass);
-		$("#checkForm").attr("action","bookUpdateForm");
-		$("#checkForm").attr("method","post");
-		$("#checkForm").submit();
+		$("#checkForm").attr("action", "/information/bookUpdateForm");
+		$("#checkForm").attr("method", "post");
+		$("#checkForm")[0].submit();
 	});
 	
 	$(".searchbox").on("submit", function() {

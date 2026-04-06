@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}">
+
+<head>
+	<th:block layout:fragment="extra-head">
+		<link th:href="@{/css/information-hub.css}" rel="stylesheet">
+	</th:block>
+</head>
+
+<div layout:fragment="content" class="ui-view">
+	<main class="container my-5 information-hub">
+		<header class="text-center mb-5">
+			<p class="hub-eyebrow mb-2">IT 정보</p>
+			<h1 class="fw-light fs-1 mb-2">강좌 · 도서 · 공모전 허브</h1>
+			<p class="text-secondary mb-0">한 곳에서 IT 학습 자료와 공모전 일정을 살펴보세요.</p>
+		</header>
+
+		<div class="row g-4 mb-5">
+			<div class="col-md-4">
+				<a class="hub-card hub-card-link d-block h-100 p-4" th:href="@{/information/lecture}">
+					<h2 class="h5 fw-normal mb-2">강좌 추천</h2>
+					<p class="text-secondary small mb-0">카테고리별 강의 정보와 별점을 확인합니다.</p>
+				</a>
+			</div>
+			<div class="col-md-4">
+				<a class="hub-card hub-card-link d-block h-100 p-4" th:href="@{/information/book}">
+					<h2 class="h5 fw-normal mb-2">도서 추천</h2>
+					<p class="text-secondary small mb-0">IT 도서 출판 정보와 요약을 둘러봅니다.</p>
+				</a>
+			</div>
+			<div class="col-md-4">
+				<a class="hub-card hub-card-link d-block h-100 p-4" th:href="@{/information/contest}">
+					<h2 class="h5 fw-normal mb-2">공모전 정보</h2>
+					<p class="text-secondary small mb-0">
+						<span th:if="${contestsEndingSoonCount > 0}">
+							마감 <strong th:text="${contestsEndingSoonCount}">0</strong>건이 14일 이내입니다.
+						</span>
+						<span th:if="${contestsEndingSoonCount == 0}">진행 중인 공모전을 모아 봅니다.</span>
+					</p>
+				</a>
+			</div>
+		</div>
+
+		<section class="mb-5" aria-labelledby="hub-lectures-heading">
+			<div class="d-flex justify-content-between align-items-center mb-3">
+				<h2 id="hub-lectures-heading" class="h5 fw-normal mb-0">최신 강좌</h2>
+				<a class="small text-secondary" th:href="@{/information/lecture}">전체 보기</a>
+			</div>
+			<div class="row g-4 row-cols-1 row-cols-sm-2 row-cols-lg-4">
+				<div class="col" th:each="lec : ${hubLectures}">
+					<article class="hub-card h-100 overflow-hidden">
+						<a class="hub-card-link d-block" th:href="@{/information/lectureDetail(no=${lec.recommendNo}, pageNum=1)}">
+							<div class="hub-thumb-wrap">
+								<img th:if="${lec.file1 != null and !lec.file1.isEmpty()}"
+									th:src="@{/files/information/{f}(f=${lec.file1})}"
+									th:alt="|강좌 썸네일: ${lec.title}|"
+									class="hub-thumb" loading="lazy" width="320" height="200">
+								<div th:unless="${lec.file1 != null and !lec.file1.isEmpty()}" class="d-flex w-100 h-100 align-items-center justify-content-center">
+									<i class="bi bi-collection-play fs-1 text-secondary" aria-hidden="true"></i>
+								</div>
+							</div>
+							<div class="p-3">
+								<h3 class="h6 fw-normal mb-1 text-truncate" th:text="${lec.title}">제목</h3>
+								<p class="small text-secondary mb-0 text-truncate" th:text="${lec.subtitle}">부제</p>
+							</div>
+						</a>
+					</article>
+				</div>
+			</div>
+			<div th:if="${#lists.isEmpty(hubLectures)}" class="text-center py-5 text-secondary border rounded-3">
+				<p class="mb-3">등록된 강좌가 없습니다.</p>
+				<a class="btn btn-outline-dark btn-sm" th:href="@{/information/lecture}">강좌 목록</a>
+			</div>
+		</section>
+
+		<section class="mb-5" aria-labelledby="hub-books-heading">
+			<div class="d-flex justify-content-between align-items-center mb-3">
+				<h2 id="hub-books-heading" class="h5 fw-normal mb-0">최신 도서</h2>
+				<a class="small text-secondary" th:href="@{/information/book}">전체 보기</a>
+			</div>
+			<div class="row g-4 row-cols-1 row-cols-sm-2 row-cols-lg-4">
+				<div class="col" th:each="bk : ${hubBooks}">
+					<article class="hub-card h-100 overflow-hidden">
+						<a class="hub-card-link d-block" th:href="@{/information/bookDetail(no=${bk.bookNo}, pageNum=1)}">
+							<div class="hub-thumb-wrap">
+								<img th:if="${bk.file1 != null and !bk.file1.isEmpty()}"
+									th:src="@{/files/information/{f}(f=${bk.file1})}"
+									th:alt="|도서 표지: ${bk.title}|"
+									class="hub-thumb" loading="lazy" width="320" height="200">
+								<div th:unless="${bk.file1 != null and !bk.file1.isEmpty()}" class="d-flex w-100 h-100 align-items-center justify-content-center">
+									<i class="bi bi-book fs-1 text-secondary" aria-hidden="true"></i>
+								</div>
+							</div>
+							<div class="p-3">
+								<h3 class="h6 fw-normal mb-1 text-truncate" th:text="${bk.title}">제목</h3>
+								<p class="small text-secondary mb-0" th:text="${bk.publisher}">출판사</p>
+							</div>
+						</a>
+					</article>
+				</div>
+			</div>
+			<div th:if="${#lists.isEmpty(hubBooks)}" class="text-center py-5 text-secondary border rounded-3">
+				<p class="mb-3">등록된 도서가 없습니다.</p>
+				<a class="btn btn-outline-dark btn-sm" th:href="@{/information/book}">도서 목록</a>
+			</div>
+		</section>
+
+		<section aria-labelledby="hub-contests-heading">
+			<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+				<h2 id="hub-contests-heading" class="h5 fw-normal mb-0">공모전 · 마감 임박</h2>
+				<a class="small text-secondary" th:href="@{/information/contest(contestFilter='soon')}">임박 목록만 보기</a>
+			</div>
+			<div class="row g-4 row-cols-1 row-cols-md-2 row-cols-lg-4">
+				<div class="col" th:each="c : ${hubContests}">
+					<article class="hub-card h-100 overflow-hidden">
+						<a class="hub-card-link d-block" th:href="@{/information/contestDetail(no=${c.contestNo}, pageNum=1, contestFilter='all')}">
+							<div class="hub-thumb-wrap">
+								<img th:if="${c.file1 != null and !c.file1.isEmpty()}"
+									th:src="@{/files/information/{f}(f=${c.file1})}"
+									th:alt="|공모전 포스터: ${c.title}|"
+									class="hub-thumb" loading="lazy" width="320" height="200">
+								<div th:unless="${c.file1 != null and !c.file1.isEmpty()}" class="d-flex w-100 h-100 align-items-center justify-content-center">
+									<i class="bi bi-trophy fs-1 text-secondary" aria-hidden="true"></i>
+								</div>
+							</div>
+							<div class="p-3">
+								<div class="d-flex justify-content-between align-items-start gap-2 mb-1">
+									<h3 class="h6 fw-normal mb-0" th:text="${c.title}">제목</h3>
+									<span th:with="d=${T(com.codemoa.project.domain.information.support.InformationDisplayUtils).daysUntilEnd(c.endDate)}"
+										th:if="${d != null and d >= 0}"
+										class="hub-pill hub-dday-soon flex-shrink-0"
+										th:text="${d == 0} ? 'D-day' : |D-${d}|">D-3</span>
+								</div>
+								<p class="small text-secondary mb-0" th:text="${c.hostOrganization}">주최</p>
+							</div>
+						</a>
+					</article>
+				</div>
+			</div>
+			<div th:if="${#lists.isEmpty(hubContests)}" class="text-center py-5 text-secondary border rounded-3">
+				<p class="mb-3">표시할 공모전이 없습니다.</p>
+				<a class="btn btn-outline-dark btn-sm" th:href="@{/information/contest}">공모전 목록</a>
+			</div>
+		</section>
+	</main>
+</div>
+</html>

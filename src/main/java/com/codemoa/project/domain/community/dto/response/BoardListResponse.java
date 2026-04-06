@@ -2,6 +2,7 @@ package com.codemoa.project.domain.community.dto.response;
 
 
 import com.codemoa.project.domain.community.entity.CommunityBoard;
+import com.codemoa.project.common.community.CommunityCategoryPaths;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -12,6 +13,7 @@ public class BoardListResponse {
     private final Integer boardNo;
     private final String title;
     private final String category;
+    private final String categoryUrlSegment;
     private final String authorNickname;
     private final String authorGradeIconName; 
     private final LocalDateTime createdAt;
@@ -21,6 +23,7 @@ public class BoardListResponse {
         this.boardNo = board.getBoardNo();
         this.title = board.getTitle();
         this.category = board.getCategory();
+        this.categoryUrlSegment = CommunityCategoryPaths.toUrlSegment(board.getCategory());
         this.authorNickname = board.getUser().getNickname();
         this.authorGradeIconName = board.getUser().getGrade().name().toLowerCase();
         this.createdAt = board.getCreatedAt();

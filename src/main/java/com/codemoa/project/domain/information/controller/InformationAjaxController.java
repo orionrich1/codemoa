@@ -40,17 +40,19 @@ public class InformationAjaxController {
 	public Map<String, Object> ordercontest(@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword,
 			@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
 			@RequestParam(value = "order", required = false, defaultValue = "null") String order,
-			@RequestParam(value = "type", required = false, defaultValue = "null") String type) {
+			@RequestParam(value = "type", required = false, defaultValue = "null") String type,
+			@RequestParam(value = "contestFilter", required = false, defaultValue = "all") String contestFilter) {
 		
-		return informationService.contestList(pageNum, type, keyword, 8, 10, order);
+		return informationService.contestList(pageNum, type, keyword, 8, 10, order, contestFilter);
 	}
 	
 	@GetMapping("/contestsearch")
 	public Map<String, Object> contestSearch(@RequestParam(value = "keyword", required = false, defaultValue = "null") String keyword,
 			@RequestParam(value = "order", required = false, defaultValue = "null") String order,
-			@RequestParam(value = "type", required = false, defaultValue = "null") String type) {
+			@RequestParam(value = "type", required = false, defaultValue = "null") String type,
+			@RequestParam(value = "contestFilter", required = false, defaultValue = "all") String contestFilter) {
 		
-		return informationService.contestList(1, "title", keyword, 8, 10, order);
+		return informationService.contestList(1, "title", keyword, 8, 10, order, contestFilter);
 	}
 	
 	

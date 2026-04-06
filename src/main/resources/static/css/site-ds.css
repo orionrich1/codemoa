@@ -6,8 +6,8 @@
  */
 
 body.site-ds {
-    /* Display: 오픈 라이선스 대체 (DESIGN.md Waldenburg 300 역할) — 실제 웹폰트 로드됨 */
-    --font-display: "Cormorant Garamond", "Georgia", "Times New Roman", serif;
+    /* Display: 대형 제목도 본문과 동일 고딕 스택 (DESIGN.md — 세리프 미사용) */
+    --font-display: "Inter", "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
     --ds-text: #000000;
     --ds-text-secondary: #4e4e4e;
     --ds-text-muted: #777169;
@@ -61,7 +61,7 @@ body.site-ds .h3,
 body.site-ds .h4,
 body.site-ds .h5,
 body.site-ds .h6 {
-    font-family: var(--font-display), "Georgia", serif;
+    font-family: var(--font-display);
     font-weight: 300 !important;
     letter-spacing: -0.04em;
     color: var(--ds-text);

@@ -199,7 +199,7 @@
                       아직 인기 글이 없습니다. <a th:href="@{/community/free/write}">첫 글 남기기</a>
                     </li>
                     <li th:each="post : ${popularPosts}">
-                      <a class="home-feed-row" th:href="${post.stub} ? @{/community/free} : @{/community/{cat}/{no}(cat=${T(com.codemoa.project.domain.main.support.CommunityCategoryPaths).toUrlSegment(post.category)}, no=${post.boardNo})}">
+                      <a class="home-feed-row" th:href="${post.stub} ? @{/community/free} : @{/community/{cat}/{no}(cat=${T(com.codemoa.project.common.community.CommunityCategoryPaths).toUrlSegment(post.category)}, no=${post.boardNo})}">
                         <span class="home-feed-row__title text-truncate" th:text="${post.title}">제목</span>
                         <span class="home-feed-row__meta">
                           <span class="badge rounded-pill text-bg-light border" th:text="${post.category}">자유</span>
@@ -215,7 +215,7 @@
                       최신 글이 없습니다. <a th:href="@{/community/free}">게시판 둘러보기</a>
                     </li>
                     <li th:each="post : ${latestPostsAll}">
-                      <a class="home-feed-row" th:href="${post.stub} ? @{/community/free} : @{/community/{cat}/{no}(cat=${T(com.codemoa.project.domain.main.support.CommunityCategoryPaths).toUrlSegment(post.category)}, no=${post.boardNo})}">
+                      <a class="home-feed-row" th:href="${post.stub} ? @{/community/free} : @{/community/{cat}/{no}(cat=${T(com.codemoa.project.common.community.CommunityCategoryPaths).toUrlSegment(post.category)}, no=${post.boardNo})}">
                         <span class="home-feed-row__title text-truncate" th:text="${post.title}">제목</span>
                         <span class="home-feed-row__meta">
                           <span class="badge rounded-pill text-bg-light border" th:text="${post.category}">자유</span>
@@ -353,7 +353,7 @@
     <section class="home-section container px-2 px-sm-3" aria-labelledby="home-hub-title">
       <header class="home-section__header">
         <h2 id="home-hub-title" class="home-section__title home-section__title--left mb-0">IT 정보 허브</h2>
-        <a th:href="@{/information/lecture}" class="home-section__more">정보 홈</a>
+        <a th:href="@{/information}" class="home-section__more">IT 정보 허브</a>
       </header>
       <div class="row g-4 mt-1">
         <div class="col-md-4">

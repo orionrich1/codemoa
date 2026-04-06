@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layouts/default_layout}">
 
 <head>
@@ -17,10 +18,12 @@
 
                 <div class="card">
                     <div class="card-body p-4">
+                        <span id="employmentTypeState" class="d-none" th:data-type="${type}"></span>
+
                         <form method="get" th:action="@{/employmentList}">
                             <div class="d-flex flex-wrap gap-2 mb-2">
                                 <div class="flex-shrink-0 ds-filter-w-180">
-                                    <select id="type" name="type" class="form-select">
+                                    <select id="type" name="type" class="form-select" aria-label="고용 형태 필터">
                                         <option th:value="''" th:selected="${type == null or type == ''}">고용 형태 선택</option>
                                         <option th:value="'정규직'" th:selected="${type == '정규직'}">정규직</option>
                                         <option th:value="'비정규직'" th:selected="${type == '비정규직'}">비정규직</option>
@@ -29,36 +32,43 @@
                                     </select>
                                 </div>
                                 <div class="flex-grow-1">
-                                    <input type="text" name="keyword" class="form-control" placeholder="기업명, 제목, 키워드 검색" th:value="${param.keyword}">
+                                    <input type="text" name="keyword" class="form-control" placeholder="기업명, 제목, 키워드 검색" th:value="${keyword}" aria-label="검색어">
                                 </div>
                                 <div class="flex-shrink-0">
                                     <button type="submit" class="btn btn-primary px-4">검색</button>
                                 </div>
-                                <div class="flex-shrink-0">
-                                    <button type="button" class="btn btn-outline-secondary" onclick="submitCrawlForm()">
-                                        <i class="bi bi-arrow-clockwise"></i> 정보 갱신
+                                <div class="flex-shrink-0" sec:authorize="hasRole('ADMIN')">
+                                    <button type="button" class="btn btn-outline-secondary" onclick="submitCrawlForm()" aria-label="고용24 데이터 수동 갱신">
+                                        <i class="bi bi-arrow-clockwise" aria-hidden="true"></i> 정보 갱신
                                     </button>
                                 </div>
                             </div>
                         </form>
-                        
-                        <form id="crawlForm" th:action="@{/employment/crawl}" method="get" class="d-none"></form>
-                         
+
+                        <form id="crawlForm" th:action="@{/employment/crawl}" method="get" class="d-none" sec:authorize="hasRole('ADMIN')"></form>
+
                         <div class="text-end mb-4">
-                            <small class="text-muted"> 
-                                ※고용 정보글은 매일 새벽 3시에 자동 갱신되며, 수동갱신이 필요할 경우 정보 갱신버튼을 누르면 갱신됩니다. 
+                            <small class="text-muted d-block">
+                                ※ 고용 정보는 매일 새벽 자동 수집되며, 필요 시 관리자만 수동 갱신할 수 있습니다.
+                            </small>
+                            <small class="text-muted d-block mt-1" th:if="${latestDatasetRegDt != null}">
+                                최근 수집 데이터 기준일(최신 공고 행): <span th:text="${latestDatasetRegDt}">—</span>
                             </small>
                         </div>
 
                         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
                             <div class="col" th:each="post : ${employmentList}">
-                               <div class="card employment-card h-100" th:attr="data-url=${post.url}">
+                               <div class="card employment-card h-100"
+                                    role="link"
+                                    tabindex="0"
+                                    th:attr="data-url=${post.url}"
+                                    th:aria-label="|외부 채용 공고 열기: ${post.company}, ${post.title}|">
                                   <div class="card-body d-flex flex-column p-4">
                                         <div>
-                                            <h6 class="card-subtitle mb-2 text-secondary">[[${post.company}]]</h6>
-                                            <h5 class="card-title fw-bold ds-employment-card-title">[[${post.title}]]</h5>
+                                            <h6 class="card-subtitle mb-2 text-secondary" th:text="${post.company}">회사</h6>
+                                            <h5 class="card-title fw-bold ds-employment-card-title" th:text="${post.title}">제목</h5>
                                         </div>
-                                        
+
                                         <div class="mt-auto border-top pt-3">
                                             <p class="card-text small mb-1">
                                                 <strong class="me-1">유형:</strong>
@@ -73,29 +83,30 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div th:if="${#lists.isEmpty(employmentList)}" class="text-center my-5 p-5 bg-light rounded">
-                            <p class="text-muted">검색 결과가 없습니다.</p>
+                            <p class="text-muted mb-3">검색 결과가 없습니다.</p>
+                            <a class="btn btn-outline-primary btn-sm" th:href="@{/employmentList}">필터·검색 초기화</a>
                         </div>
                     </div>
 
                     <div class="card-footer" th:if="${pagination['totalPages'] > 0}">
-                        <nav>
+                        <nav aria-label="채용 목록 페이지">
                             <ul class="pagination justify-content-center mb-0">
                               <li class="page-item" th:classappend="${pagination['currentPage'] == 1} ? 'disabled'">
-                                    <a class="page-link" th:href="@{/employmentList(page=${pagination['currentPage'] - 1}, type=${type}, keyword=${param.keyword})}">이전</a>
+                                    <a class="page-link" th:href="@{/employmentList(page=${pagination['currentPage'] - 1}, type=${type}, keyword=${keyword})}">이전</a>
                                 </li>
                                 <li class="page-item" th:each="i : ${#numbers.sequence(pagination['startPage'], pagination['endPage'])}"
                                     th:classappend="${i == pagination['currentPage']} ? 'active'">
-                                    <a class="page-link" th:href="@{/employmentList(page=${i}, type=${type}, keyword=${param.keyword})}" th:text="${i}">1</a>
+                                    <a class="page-link" th:href="@{/employmentList(page=${i}, type=${type}, keyword=${keyword})}" th:text="${i}">1</a>
                                 </li>
                                 <li class="page-item" th:classappend="${pagination['currentPage'] == pagination['totalPages'] or pagination['totalPages'] == 0} ? 'disabled'">
-                                    <a class="page-link" th:href="@{/employmentList(page=${pagination['currentPage'] + 1}, type=${type}, keyword=${param.keyword})}">다음</a>
+                                    <a class="page-link" th:href="@{/employmentList(page=${pagination['currentPage'] + 1}, type=${type}, keyword=${keyword})}">다음</a>
                                 </li>
                             </ul>
                         </nav>
                     </div>
-                </div>	
+                </div>
             </div>
         </div>
     </div>

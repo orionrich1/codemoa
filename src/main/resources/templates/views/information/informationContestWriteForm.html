@@ -1,7 +1,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/default_layout}">
-	<th:block layout:fragment="content" class="ui-view">
+	<div layout:fragment="content" class="ui-view">
 	<script th:src="@{/js/information/formcheck.js}"></script>
   		
   		<!-- content -->
@@ -12,10 +12,10 @@
 						<h2 class="fs-3 fw-bold">공모전 추천글 쓰기</h2>
 					</div>
 				</div>  
-				<form name="contestWriteForm" action="contestWrite" id="contestWriteForm" 
+				<form name="contestWriteForm" th:action="@{/information/contestWrite}" id="contestWriteForm" 
 					class="row g-3 border-primary" method="post"
 					enctype="multipart/form-data">
-				
+					<input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 					<div class="col-6 offset-md-2">
 						<label for="userId" class="form-label">글쓴이</label>
 						<input type="text" class="form-control" name="userId" id="userId" 
@@ -48,22 +48,21 @@
 					<div class="col-8 offset-md-2">
 						<label for="addFile" class="form-label">업로드 할 이미지</label>
 						<input type="file" class="form-control" name="addFile" id="addFile" >
+						<p class="form-text text-secondary mb-0">가로형(약 16:9) JPG·PNG·WebP 권장. 파일당 5MB 이하. 저장 후 <code>/files/information</code> 썸네일.</p>
 					</div>
 					<div class="col-8 offset-md-2">
 						<label for="contestSource" class="form-label">출 처</label>
 						<input type="text" class="form-control" name="contestSource"  id="contestSource">
 					</div>
 					<div class="col-8 offset-md-2 text-center mt-5">
-						<input type="submit" value="등록하기" class="btn btn-primary" id="contestWriteForm"/>
-							&nbsp;&nbsp;
-						<input type="button" value="목록보기" 
-							onclick="location.href='contest'" class="btn btn-primary"/>
+						<input type="submit" value="등록하기" class="btn btn-primary">
+						<a th:href="@{/information/contest}" class="btn btn-primary ms-2" role="button">목록보기</a>
 					</div>	
 				</form>
 			</div>
 		</div>
 		
-	</th:block>
+	</div>
 	
 </html>
 		

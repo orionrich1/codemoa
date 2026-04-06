@@ -2,11 +2,11 @@ package com.codemoa.project.domain.information.entity;
 
 import java.sql.Timestamp;
 
-import groovy.transform.ToString;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @NoArgsConstructor
 @Getter

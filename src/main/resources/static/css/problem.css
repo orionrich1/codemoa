@@ -10,7 +10,7 @@
 }
 
 .ai-page__title {
-    font-family: var(--font-display), "Georgia", serif;
+    font-family: var(--font-display);
     font-size: 2.25rem;
     font-weight: 400;
     letter-spacing: -0.03em;
@@ -118,7 +118,7 @@
 }
 
 .ai-result-score-num {
-    font-family: var(--font-display, "Georgia"), serif;
+    font-family: var(--font-display);
     font-size: 5rem;
     font-weight: 300;
     line-height: 1;

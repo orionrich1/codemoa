@@ -35,11 +35,14 @@
                             <li><a class="dropdown-item" th:href="@{/community/Python}">Python</a></li>
                             <li><a class="dropdown-item" th:href="@{/community/JavaScript}">JavaScript</a></li>
                             <li><a class="dropdown-item" th:href="@{/community/Kotlin}">Kotlin</a></li>
+                            <li><a class="dropdown-item" th:href="@{/community/C#}">C#</a></li>
+                            <li><a class="dropdown-item" th:href="@{/community/etc}">기타 언어</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle fw-bold" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">IT 정보</a>
                         <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" th:href="@{/information}">IT 정보 허브</a></li>
                             <li><a class="dropdown-item" th:href="@{/information/book}">도서 추천</a></li>
                             <li><a class="dropdown-item" th:href="@{/information/lecture}">강좌 추천</a></li>
                             <li><a class="dropdown-item" th:href="@{/information/contest}">공모전 정보</a></li>
@@ -88,6 +91,8 @@
                                 <a th:href="@{/community/Python}">Python</a>
                                 <a th:href="@{/community/JavaScript}">JavaScript</a>
                                 <a th:href="@{/community/Kotlin}">Kotlin</a>
+                                <a th:href="@{/community/C#}">C#</a>
+                                <a th:href="@{/community/etc}">기타 언어</a>
                             </div>
                         </div>
                     </div>
@@ -97,6 +102,7 @@
                         </h2>
                         <div id="navMobIt" class="accordion-collapse collapse" data-bs-parent="#navMobileAccordion">
                             <div class="accordion-body">
+                                <a th:href="@{/information}">IT 정보 허브</a>
                                 <a th:href="@{/information/book}">도서 추천</a>
                                 <a th:href="@{/information/lecture}">강좌 추천</a>
                                 <a th:href="@{/information/contest}">공모전 정보</a>
