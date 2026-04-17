@@ -1,85 +1,119 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layouts/default_layout}">
 
 <head>
-    <title>Q&A</title>
+	<title>Q&amp;A</title>
 </head>
 
 <th:block layout:fragment="content" class="ui-view">
-    <div class="container my-5">
-        <div class="row text-center mb-4">
-            <div class="col">
-                <h2 class="fs-3 fw-bold">Q&A</h2>
-            </div>
-        </div>
-        
-        <form name="searchForm" id="searchForm" th:action="@{/support/qna}" class="row justify-content-center my-3">
-            <div class="col-auto">
-                <select name="type" class="form-select">
-                    <option value="title" th:selected="${param.type == 'title'}">제목</option>
-                    <option value="writer" th:selected="${param.type == 'writer'}">작성자</option>
-                    <option value="content" th:selected="${param.type == 'content'}">내용</option>
-                </select>
-            </div>
-            <div class="col-4">
-                <input type="text" name="keyword" class="form-control" th:value="${param.keyword}"/>
-            </div>
-            <div class="col-auto">
-                <button type="submit" class="btn btn-primary">검색</button>
-            </div>
-        </form>
+	<div class="container my-5">
+		<nav class="mb-3" aria-label="breadcrumb">
+			<ol class="breadcrumb mb-0">
+				<li class="breadcrumb-item"><a th:href="@{/}">홈</a></li>
+				<li class="breadcrumb-item"><a th:href="@{/support}">고객센터</a></li>
+				<li class="breadcrumb-item active" aria-current="page">Q&amp;A</li>
+			</ol>
+		</nav>
 
-        <div class="row my-3">
-            <div class="col">
-                <table class="table table-hover text-center">
-                    <thead class="table-light">
-                        <tr>
-                            <th class="ds-table-col-10">번호</th>
-                            <th class="ds-table-col-50">제목</th>
-                            <th class="ds-table-col-15">작성자</th>
-                            <th class="ds-table-col-15">작성일</th>
-                            <th class="ds-table-col-10">조회수</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:if="${!#lists.isEmpty(qnaList)}" th:each="qna : ${qnaList}">
-                            <td th:text="${qna.qnaId}"></td>
-                            <td class="text-start">
-                                <a th:href="@{/support/qna/{qnaId}(qnaId=${qna.qnaId})}"
-                                   th:text="${qna.title}" class="text-decoration-none text-dark"></a>
-                                <span th:if="${qna.isAnswered}" class="badge bg-success ms-1">답변완료</span>
-                            </td>
-                            <td th:text="${qna.writerNickname}"></td>
-                            <td th:text="${#temporals.format(qna.createdAt, 'yyyy-MM-dd')}"></td>
-                            <td th:text="${qna.viewCount}"></td>
-                        </tr>
-                        <tr th:if="${#lists.isEmpty(qnaList)}">
-                            <td colspan="5" class="py-5 text-muted">게시글이 존재하지 않습니다.</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        
-        <div class="d-flex justify-content-end mb-3">
-            <a th:href="@{/support/qna/write}" class="btn btn-primary">글쓰기</a>
-        </div>
+		<header class="ds-page-header ds-page-header--compact">
+			<p class="ds-page-kicker mb-0">Q&amp;A</p>
+			<h1 class="h3 mb-0 ds-page-title">질문과 답변</h1>
+		</header>
 
-        <nav aria-label="Page navigation" th:if="${totalPages > 1}">
-            <ul class="pagination justify-content-center">
-                <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
-                    <a class="page-link" th:href="@{/support/qna(page=${currentPage - 1}, type=${param.type}, keyword=${param.keyword})}">&laquo;</a>
-                </li>
-                <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}" th:classappend="${i == currentPage} ? 'active'">
-                    <a class="page-link" th:href="@{/support/qna(page=${i}, type=${param.type}, keyword=${param.keyword})}" th:text="${i}"></a>
-                </li>
-                <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
-                    <a class="page-link" th:href="@{/support/qna(page=${currentPage + 1}, type=${param.type}, keyword=${param.keyword})}">&raquo;</a>
-                </li>
-            </ul>
-        </nav>
-    </div>
+		<div class="alert alert-light border text-center py-3 mb-4" sec:authorize="isAnonymous()">
+			<span class="text-secondary">질문을 등록하려면 로그인이 필요합니다.</span>
+			<a th:href="@{/loginForm}" class="btn btn-sm btn-primary ms-2">로그인</a>
+		</div>
+
+		<ul class="nav nav-pills flex-wrap justify-content-start gap-2 mb-3" role="tablist">
+			<li class="nav-item">
+				<a class="nav-link" th:classappend="${answerFilter == 'all'} ? 'active'"
+				   th:href="@{/support/qna(answer='all', page=1, type=${searchType}, keyword=${keyword})}">전체</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" th:classappend="${answerFilter == 'waiting'} ? 'active'"
+				   th:href="@{/support/qna(answer='waiting', page=1, type=${searchType}, keyword=${keyword})}">답변대기</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" th:classappend="${answerFilter == 'answered'} ? 'active'"
+				   th:href="@{/support/qna(answer='answered', page=1, type=${searchType}, keyword=${keyword})}">답변완료</a>
+			</li>
+		</ul>
+
+		<form name="searchForm" id="searchForm" th:action="@{/support/qna}" method="get" class="row justify-content-start align-items-end g-2 my-3">
+			<input type="hidden" name="answer" th:value="${answerFilter}">
+			<input type="hidden" name="page" value="1">
+			<div class="col-auto">
+				<label for="qnaSearchType" class="visually-hidden">검색 범위</label>
+				<select name="type" id="qnaSearchType" class="form-select" aria-label="검색 범위">
+					<option value="title" th:selected="${searchType == 'title'}">제목</option>
+					<option value="writer" th:selected="${searchType == 'writer'}">작성자</option>
+					<option value="content" th:selected="${searchType == 'content'}">내용</option>
+				</select>
+			</div>
+			<div class="col-12 col-sm-6 col-md-4">
+				<label for="qnaKeyword" class="visually-hidden">검색어</label>
+				<input type="text" name="keyword" id="qnaKeyword" class="form-control" th:value="${keyword}" placeholder="검색어" autocomplete="off">
+			</div>
+			<div class="col-auto">
+				<button type="submit" class="btn btn-primary">검색</button>
+			</div>
+		</form>
+
+		<div class="table-responsive mb-3">
+			<table class="table table-hover text-center align-middle mb-0">
+				<thead class="table-light">
+					<tr>
+						<th class="ds-table-col-10" scope="col">번호</th>
+						<th class="ds-table-col-40" scope="col">제목</th>
+						<th scope="col">상태</th>
+						<th class="ds-table-col-15" scope="col">작성자</th>
+						<th class="ds-table-col-15" scope="col">작성일</th>
+						<th class="ds-table-col-10" scope="col">조회수</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:if="${!#lists.isEmpty(qnaList)}" th:each="qna : ${qnaList}">
+						<td th:text="${qna.qnaId}"></td>
+						<td class="text-start">
+							<a th:href="@{/support/qna/{id}(id=${qna.qnaId})}"
+							   th:text="${qna.title}" class="text-decoration-none"></a>
+						</td>
+						<td>
+							<span th:if="${qna.isAnswered}" class="badge text-bg-success">답변완료</span>
+							<span th:unless="${qna.isAnswered}" class="badge text-bg-warning text-dark">답변대기</span>
+						</td>
+						<td th:text="${qna.writerNickname}"></td>
+						<td th:text="${#temporals.format(qna.createdAt, 'yyyy-MM-dd')}"></td>
+						<td th:text="${qna.viewCount}"></td>
+					</tr>
+					<tr th:if="${#lists.isEmpty(qnaList)}">
+						<td colspan="6" class="py-5 text-muted">게시글이 존재하지 않습니다.</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<div class="d-flex justify-content-end mb-3 flex-wrap gap-2">
+			<a sec:authorize="isAuthenticated()" th:href="@{/support/qna/write}" class="btn btn-primary">질문하기</a>
+		</div>
+
+		<nav aria-label="Q&amp;A 페이지" th:if="${totalPages > 1}">
+			<ul class="pagination justify-content-center flex-wrap mb-0">
+				<li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+					<a class="page-link" th:href="@{/support/qna(page=${currentPage - 1}, type=${searchType}, keyword=${keyword}, answer=${answerFilter})}">&laquo;</a>
+				</li>
+				<li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}" th:classappend="${i == currentPage} ? 'active'">
+					<a class="page-link" th:href="@{/support/qna(page=${i}, type=${searchType}, keyword=${keyword}, answer=${answerFilter})}" th:text="${i}"></a>
+				</li>
+				<li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+					<a class="page-link" th:href="@{/support/qna(page=${currentPage + 1}, type=${searchType}, keyword=${keyword}, answer=${answerFilter})}">&raquo;</a>
+				</li>
+			</ul>
+		</nav>
+	</div>
 </th:block>
 </html>

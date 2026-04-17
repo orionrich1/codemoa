@@ -190,6 +190,10 @@ public class ProblemService {
 
 	// ─── 기능 7: 학습 통계 ──────────────────────────────────────────────
 
+	public int countSubmissionsLast7Days(String userId) {
+		return submissionMapper.countSubmissionsLast7Days(userId);
+	}
+
 	public StatsResponse getMyStats(String userId) {
 		int total   = submissionMapper.countTotalSubmissions(userId);
 		Double avg  = submissionMapper.avgScore(userId);

@@ -1,0 +1,162 @@
+---
+description: 기술 코드 패턴 — 모든 역할에 항상 적용 (HOW to code)
+alwaysApply: true
+---
+
+# 기술 코드 패턴 (Technical Patterns)
+
+## 패키지 구조
+
+```text
+domain/{도메인명}/
+  controller/   → {Domain}Controller.java (REST), {Domain}ViewController.java (Thymeleaf)
+  service/      → 비즈니스 로직
+  entity/       → JPA 엔티티
+  repository/   → JPA Repository
+  dto/
+    request/    → 입력 DTO
+    response/   → 출력 DTO
+```
+
+- 공통 유틸 → `common/util/`
+- 공통 예외 처리 → `common/exception/`
+- 공통 DTO → `common/dto/`
+
+---
+
+## 엔티티 작성 패턴
+
+```java
+@Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "sample_entity")
+public class SampleEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    // 상태 변경은 도메인 의미가 담긴 메서드로
+    public void changeValue(String newValue) { this.value = newValue; }
+
+    // 생성은 정적 팩토리 메서드 또는 @Builder
+    public static SampleEntity create(User user, String value) {
+        SampleEntity e = new SampleEntity();
+        e.user = user;
+        e.value = value;
+        return e;
+    }
+}
+```
+
+---
+
+## 서비스 작성 패턴
+
+```java
+@Service
+@RequiredArgsConstructor
+public class SampleService {
+
+    private final SampleRepository sampleRepository;
+
+    @Transactional(readOnly = true)
+    public SampleResponse findById(Long id) {
+        Sample sample = sampleRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("리소스를 찾을 수 없습니다."));
+        return new SampleResponse(sample);
+    }
+
+    @Transactional
+    public void create(SampleRequest request, String userId) { ... }
+}
+```
+
+- 권한 없음 → `throw new IllegalStateException("메시지")`
+- 리소스 없음 → `throw new IllegalArgumentException("메시지")`
+- HTTP 상태코드는 Service에서 직접 명시하지 않는다 (GlobalExceptionHandler가 담당)
+
+---
+
+## 컨트롤러 작성 패턴
+
+```java
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/{리소스}")
+public class SampleController {
+
+    private final SampleService sampleService;
+
+    @PostMapping
+    public ResponseEntity<SampleResponse> create(
+            @Valid @RequestBody SampleRequest request,
+            @AuthenticationPrincipal CustomUserDetails user) {
+        return ResponseEntity.ok(sampleService.create(request, user.getUsername()));
+    }
+}
+```
+
+- 현재 로그인 사용자: `@AuthenticationPrincipal CustomUserDetails user`
+- 성공(생성): `ResponseEntity.created(URI).build()`
+- 성공(조회/수정): `ResponseEntity.ok(data)`
+- 성공(삭제): `ResponseEntity.ok().build()`
+- 예외는 컨트롤러에서 try-catch 하지 않고 `GlobalExceptionHandler`에 위임
+
+---
+
+## DTO 패턴
+
+```java
+// Request — Validation 어노테이션 필수
+public class CreateSampleRequest {
+    @NotBlank private String title;
+    @NotNull  private Integer count;
+}
+
+// Response — record 타입 권장
+public record SampleResponse(Long id, String title) {
+    public SampleResponse(Sample entity) {
+        this(entity.getId(), entity.getTitle());
+    }
+}
+```
+
+---
+
+## Thymeleaf 패턴
+
+```html
+<!-- 레이아웃 -->
+<html layout:decorate="~{layouts/default_layout}">
+
+<!-- 인증 정보 -->
+<span sec:authentication="name"></span>
+<div sec:authorize="isAuthenticated()">...</div>
+
+<!-- record DTO 접근 — getName() 아닌 name() 사용 -->
+<span th:text="${response.name()}"></span>
+
+<!-- 날짜 / 숫자 포맷 -->
+<span th:text="${#temporals.format(item.createdAt, 'yyyy.MM.dd')}"></span>
+<span th:text="${#numbers.formatInteger(count, 1, 'COMMA')}"></span>
+
+<!-- 빈 목록 -->
+<div th:if="${#lists.isEmpty(items)}" class="text-center py-5 text-muted">
+    등록된 항목이 없습니다.
+</div>
+```
+
+---
+
+## 코딩 컨벤션
+
+- Lombok: `@Getter`, `@RequiredArgsConstructor`, `@Builder`, `@NoArgsConstructor` 활용
+- 주석: 코드를 직역하는 주석 금지. '왜(Why)'를 설명하는 주석만 허용
+- 로깅: `System.out.println` 금지 → SLF4J `log.info/debug/error` 사용
+- 인코딩: UTF-8

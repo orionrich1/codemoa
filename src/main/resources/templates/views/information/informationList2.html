@@ -11,10 +11,11 @@
 	</head>
 	<div layout:fragment="content" class="ui-view">
 		<main class="container my-5 information-hub">
-			<div class="text-center mb-4">
-				<h2 class="fw-bold fs-2">공모전 추천</h2>
-				<p class="text-secondary small mb-0">진행·마감 임박·종료 상태로 필터할 수 있습니다.</p>
-			</div>
+			<header class="ds-page-header ds-page-header--compact">
+				<p class="ds-page-kicker mb-0">IT 정보</p>
+				<h1 class="h2 mb-2 ds-page-title">공모전 추천</h1>
+				<p class="ds-page-lead small mb-0">진행·마감 임박·종료 상태로 필터할 수 있습니다.</p>
+			</header>
 
 			<input type="hidden" id="contestFilterState" th:value="${contestFilter}">
 

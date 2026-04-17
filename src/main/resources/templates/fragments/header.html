@@ -1,6 +1,6 @@
-<div th:fragment="header" xmlns:th="http://www.thymeleaf.org"
-     xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-    <nav class="navbar navbar-expand-lg navbar-light bg-white py-2 py-lg-3 shadow-sm border-bottom">
+<header th:fragment="header" class="site-header-root" xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <nav id="site-header-nav" class="navbar navbar-expand-lg navbar-dark bg-transparent site-header-nav py-2 py-lg-3 border-bottom border-opacity-0">
         <div class="container-fluid px-3 mx-auto ds-container-header">
 
             <a class="navbar-brand py-0" th:href="@{/}">
@@ -17,14 +17,14 @@
                 <!-- 데스크톱: 5개 1-depth + 드롭다운 -->
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-lg-center desktop-nav-lg d-none d-lg-flex">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle fw-bold" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">AI 코딩</a>
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">AI 코딩</a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" th:href="@{/problems}">문제 풀기</a></li>
                             <li><a class="dropdown-item" th:href="@{/problems/aiAnswer}">AI 답변 받기</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle fw-bold" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">커뮤니티</a>
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">커뮤니티</a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" th:href="@{/ranking}">랭킹</a></li>
                             <li><a class="dropdown-item" th:href="@{/community/free}">자유게시판</a></li>
@@ -35,12 +35,12 @@
                             <li><a class="dropdown-item" th:href="@{/community/Python}">Python</a></li>
                             <li><a class="dropdown-item" th:href="@{/community/JavaScript}">JavaScript</a></li>
                             <li><a class="dropdown-item" th:href="@{/community/Kotlin}">Kotlin</a></li>
-                            <li><a class="dropdown-item" th:href="@{/community/C#}">C#</a></li>
+                            <li><a class="dropdown-item" th:href="@{/community/{seg}(seg='C#')}">C#</a></li>
                             <li><a class="dropdown-item" th:href="@{/community/etc}">기타 언어</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle fw-bold" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">IT 정보</a>
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">IT 정보</a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" th:href="@{/information}">IT 정보 허브</a></li>
                             <li><a class="dropdown-item" th:href="@{/information/book}">도서 추천</a></li>
@@ -49,15 +49,16 @@
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle fw-bold" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">채용 · 팀</a>
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">채용 · 팀</a>
                         <ul class="dropdown-menu rounded-3">
                             <li><a class="dropdown-item" th:href="@{/employmentList}">채용 공고</a></li>
                             <li><a class="dropdown-item" th:href="@{/teamRecruitList}">팀원 모집</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle fw-bold" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">고객센터</a>
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">고객센터</a>
                         <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" th:href="@{/support}">고객센터 홈</a></li>
                             <li><a class="dropdown-item" th:href="@{/support/qna}">Q&amp;A</a></li>
                             <li><a class="dropdown-item" th:href="@{/support/faq}">FAQ</a></li>
                         </ul>
@@ -91,7 +92,7 @@
                                 <a th:href="@{/community/Python}">Python</a>
                                 <a th:href="@{/community/JavaScript}">JavaScript</a>
                                 <a th:href="@{/community/Kotlin}">Kotlin</a>
-                                <a th:href="@{/community/C#}">C#</a>
+                                <a th:href="@{/community/{seg}(seg='C#')}">C#</a>
                                 <a th:href="@{/community/etc}">기타 언어</a>
                             </div>
                         </div>
@@ -126,6 +127,7 @@
                         </h2>
                         <div id="navMobCs" class="accordion-collapse collapse" data-bs-parent="#navMobileAccordion">
                             <div class="accordion-body">
+                                <a th:href="@{/support}">고객센터 홈</a>
                                 <a th:href="@{/support/qna}">Q&amp;A</a>
                                 <a th:href="@{/support/faq}">FAQ</a>
                             </div>
@@ -146,7 +148,7 @@
                 <div class="navbar-nav align-items-stretch align-items-lg-center ms-lg-3">
                     <div sec:authorize="isAnonymous()">
                         <ul class="navbar-nav flex-row flex-lg-row gap-2 gap-lg-0 align-items-center">
-                            <li class="nav-item"><a class="nav-link fw-bold" th:href="@{/loginForm}">로그인</a></li>
+                            <li class="nav-item"><a class="nav-link" th:href="@{/loginForm}">로그인</a></li>
                             <li class="nav-item"><a class="btn btn-primary px-3" th:href="@{/joinForm}"><i class="bi bi-person-plus-fill me-1" aria-hidden="true"></i>회원가입</a></li>
                         </ul>
                     </div>
@@ -163,7 +165,7 @@
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     <li><a class="dropdown-item" th:href="@{/my-pages}"><i class="bi bi-person-circle me-2" aria-hidden="true"></i>마이페이지</a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+                                    <th:block sec:authorize="hasRole('ADMIN')">
                                         <li><a class="dropdown-item" th:href="@{/admin/users}"><i class="bi bi-person-video me-2" aria-hidden="true"></i>유저 관리</a></li>
                                         <li><hr class="dropdown-divider"></li>
                                     </th:block>
@@ -181,5 +183,4 @@
             </div>
         </div>
     </nav>
-</div>
-
+</header>

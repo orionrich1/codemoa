@@ -1,6 +1,7 @@
 package com.codemoa.project.domain.main.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -20,9 +21,20 @@ import lombok.RequiredArgsConstructor;
 public class MainService {
 	private final MainMapper mainMapper;
 
+	public static final int SEARCH_RESULT_MAX = 200;
+
 	public Map<String, Object> searchAll(String keyword, String sort, String typeFilter) {
 		Map<String, Object> map = new HashMap<>();
-		List<MainSearch> list = new ArrayList<>(mainMapper.searchAll(keyword));
+		if (!StringUtils.hasText(keyword)) {
+			map.put("searchList", Collections.emptyList());
+			map.put("searchCount", 0);
+			map.put("sort", sort == null ? "recent" : sort);
+			map.put("typeFilter", typeFilter == null ? "all" : typeFilter);
+			map.put("emptyKeyword", Boolean.TRUE);
+			return map;
+		}
+
+		List<MainSearch> list = new ArrayList<>(mainMapper.searchAll(keyword.trim()));
 
 		if (StringUtils.hasText(typeFilter) && !"all".equalsIgnoreCase(typeFilter)) {
 			list = list.stream().filter(s -> matchesTypeFilter(s, typeFilter)).collect(Collectors.toList());
@@ -30,6 +42,11 @@ public class MainService {
 
 		Comparator<MainSearch> comparator = comparatorForSort(sort);
 		list.sort(comparator);
+
+		if (list.size() > SEARCH_RESULT_MAX) {
+			list = new ArrayList<>(list.subList(0, SEARCH_RESULT_MAX));
+			map.put("searchTruncated", Boolean.TRUE);
+		}
 
 		map.put("searchList", list);
 		map.put("searchCount", list.size());
@@ -42,7 +59,7 @@ public class MainService {
 		String url = s.getUrl() == null ? "" : s.getUrl();
 		String type = s.getType() == null ? "" : s.getType();
 		return switch (filter.toLowerCase()) {
-			case "community" -> url.startsWith("/boards/");
+			case "community" -> url.startsWith("/community/");
 			case "lecture" -> "강좌 추천".equals(type);
 			case "contest" -> "공모전 정보".equals(type);
 			case "book" -> "도서 추천".equals(type);

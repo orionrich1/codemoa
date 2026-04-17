@@ -48,4 +48,7 @@ public interface SubmissionMapper {
 
     /** 최근 7일 일별 제출 수 */
     List<DailyStat> recentDailyCount(@Param("userId") String userId);
+
+    /** 최근 7일간 AI 문제 제출 횟수 (마이페이지 활동 요약) */
+    int countSubmissionsLast7Days(@Param("userId") String userId);
 }

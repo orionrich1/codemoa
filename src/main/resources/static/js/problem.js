@@ -1,5 +1,22 @@
 /* AI 코딩 문제 풀이 — problem.js */
 
+function getCsrfHeadersForProblem() {
+    var headers = {};
+    var tokenMeta = document.querySelector("meta[name='_csrf']");
+    var headerMeta = document.querySelector("meta[name='_csrf_header']");
+    if (tokenMeta && headerMeta && tokenMeta.content && headerMeta.content) {
+        headers[headerMeta.content] = tokenMeta.content;
+    }
+    var match = document.cookie.match(/(?:^|;\s*)XSRF-TOKEN=([^;]+)/);
+    var xsrf = match ? decodeURIComponent(match[1]) : '';
+    if (xsrf) {
+        if (!headers['X-XSRF-TOKEN']) {
+            headers['X-XSRF-TOKEN'] = xsrf;
+        }
+    }
+    return headers;
+}
+
 let typeFilterSelected = [0, 0, 0, 0];      // JAVA, Javascript, Python, Kotlin
 let difficultyFilterSelected = [0, 0, 0];   // 상, 중, 하
 
@@ -260,22 +277,51 @@ function renderResult(resultText) {
 }
 
 function saveSubmission(problemId, submittedAnswer, aiScore, aiFeedback) {
+    var csrfPart = getCsrfHeadersForProblem();
+    var hasCsrf = Object.keys(csrfPart).length > 0;
+    var headers = Object.assign(
+        { 'Content-Type': 'application/json' },
+        csrfPart
+    );
     fetch('/problems/saveSubmission', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: headers,
+        credentials: 'include',
         body: JSON.stringify({ problemId, submittedAnswer, aiScore, aiFeedback })
     })
-    .then(res => res.json())
-    .then(data => {
+    .then(function (res) {
+        if (!res.ok) {
+            if (res.status === 403 && !hasCsrf) {
+                throw new Error('CSRF');
+            }
+            return res.json().catch(function () { return null; }).then(function (body) {
+                throw new Error((body && body.message) || ('HTTP ' + res.status));
+            });
+        }
+        return res.json();
+    })
+    .then(function (data) {
         if (data.pointAwarded > 0) {
             $('#pointMessageText').text(data.message);
             $('#pointMessage').removeClass('d-none');
         } else if (data.alreadyReceivedToday) {
             $('#pointMessageText').text('오늘 이미 이 문제로 포인트를 받으셨습니다.');
             $('#pointMessage').removeClass('d-none');
+        } else if (data.message && String(data.message).indexOf('로그인') !== -1) {
+            $('#pointMessageText').text(data.message);
+            $('#pointMessage').removeClass('d-none');
         }
     })
-    .catch(() => { /* 저장 실패는 조용히 처리 — 결과 화면에 영향 주지 않음 */ });
+    .catch(function (err) {
+        var msg = '풀이 이력 저장에 실패했습니다. 로그인 상태를 확인한 뒤 다시 시도해 주세요.';
+        if (err && String(err.message) === 'CSRF') {
+            msg = '보안 토큰이 없어 저장되지 않았습니다. 페이지를 새로고침한 뒤 다시 제출해 주세요.';
+        } else if (err && String(err.message).indexOf('403') !== -1) {
+            msg = '요청이 거부되었습니다. 페이지를 새로고침한 뒤 다시 시도하거나 로그인 상태를 확인해 주세요.';
+        }
+        $('#pointMessageText').text(msg);
+        $('#pointMessage').removeClass('d-none');
+    });
 }
 
 /* 점수 파싱 — 여러 형식 대응 */

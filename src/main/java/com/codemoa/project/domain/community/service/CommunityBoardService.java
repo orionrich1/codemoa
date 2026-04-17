@@ -23,6 +23,7 @@ import jakarta.persistence.criteria.Root;
 import jakarta.persistence.criteria.Subquery;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -59,11 +60,25 @@ public class CommunityBoardService {
 
     private static final List<String> MAIN_CATEGORIES = Arrays.asList("Java", "Python", "JavaScript", "C#", "Kotlin");
 
+    @Transactional(readOnly = true)
     public Page<BoardListResponse> findAll(String category, String searchType, String keyword, String sort,
             Pageable pageable) {
         Specification<CommunityBoard> spec = boardListSpecification(category, searchType, keyword, sort);
         Pageable withoutSort = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
-        return communityBoardRepository.findAll(spec, withoutSort).map(BoardListResponse::new);
+        Page<CommunityBoard> entityPage = communityBoardRepository.findAll(spec, withoutSort);
+        List<BoardListResponse> dtoList = entityPage.getContent().stream()
+                .map(b -> new BoardListResponse(b, categoryPostNoWithinFilter(spec, b)))
+                .toList();
+        return new PageImpl<>(dtoList, withoutSort, entityPage.getTotalElements());
+    }
+
+    /**
+     * 목록과 동일한 필터(게시판·검색)에서, 더 오래된 글(board_no 작음) 개수 + 1 = 해당 방 기준 연번.
+     */
+    private int categoryPostNoWithinFilter(Specification<CommunityBoard> listSpec, CommunityBoard board) {
+        Specification<CommunityBoard> olderInSameFilter = (root, query, cb) ->
+                cb.lessThan(root.get("boardNo"), board.getBoardNo());
+        return 1 + (int) communityBoardRepository.count(listSpec.and(olderInSameFilter));
     }
 
     private Specification<CommunityBoard> boardListSpecification(String category, String searchType, String keyword,

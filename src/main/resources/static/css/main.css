@@ -16,10 +16,11 @@
     align-items: center;
     gap: 0.25rem;
     padding: 0.75rem 1rem;
-    background: rgba(245, 242, 239, 0.85);
+    background: var(--secondary);
     border-radius: var(--radius);
-    box-shadow: rgba(78, 50, 23, 0.04) 0px 6px 16px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
-    color: #000;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+    color: var(--foreground);
     text-decoration: none;
     font-size: var(--text-body-sm);
     min-height: 48px;
@@ -27,8 +28,8 @@
 }
 
 .home-personal-card__item:hover {
-    background: rgba(235, 231, 226, 0.95);
-    color: #000;
+    background: var(--muted);
+    color: var(--foreground);
 }
 
 .home-personal-card__item--cta {
@@ -36,7 +37,7 @@
 }
 
 .home-personal-card__item:focus-visible {
-    outline: 2px solid rgba(147, 197, 253, 0.8);
+    outline: 2px solid var(--ring);
     outline-offset: 2px;
 }
 
@@ -77,7 +78,6 @@
     outline-offset: 3px;
 }
 
-/* DESIGN.md: 포커스 링은 약한 블루 톤 */
 .home-portal .home-feed-row:focus-visible,
 .home-portal .home-mini-row:focus-visible,
 .home-portal .home-thumb-card:focus-visible,
@@ -87,7 +87,7 @@
 .home-portal .home-feature-card:focus-visible,
 .home-portal .home-post-card a.list-group-item-action:focus-visible,
 .home-portal .home-section__more:focus-visible {
-    outline-color: rgba(147, 197, 253, 0.8);
+    outline-color: var(--ring);
 }
 
 .home-hero {
@@ -114,7 +114,7 @@
     font-weight: 300;
     line-height: 1.15;
     margin: 0 0 1rem;
-    color: #000000;
+    color: var(--foreground);
 }
 
 .home-hero__lead {
@@ -155,7 +155,7 @@
 }
 
 .home-portal-ribbon a {
-    color: #777169;
+    color: var(--muted-foreground);
     text-decoration: none;
 }
 
@@ -693,6 +693,11 @@
     border-top: 1px solid var(--border);
 }
 
+/* 게시판 탭 시작선 = 카드 내부 목록 패딩과 맞춤 (DESIGN.md §5) */
+.home-ds .home-community-section .home-board-tabs-wrap {
+    padding-inline: 1rem;
+}
+
 .home-community-grid {
     display: grid;
     gap: 1.25rem;
@@ -757,7 +762,7 @@
     }
 }
 
-/* 히어로: radius-xl, 섹션 하단 여백 48–64px 느낌 */
+/* 히어로: 다크 캔버스 + 민트 글로우(파티클 느낌 메시는 .home-ds-hero__mesh) */
 .home-ds .home-hero.home-ds-hero {
     max-width: 75rem;
     margin: 0 auto clamp(2rem, 4vw, 3rem);
@@ -765,14 +770,23 @@
     border-radius: var(--ds-r-xl);
     border: 1px solid var(--border);
     box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
     background:
-        radial-gradient(ellipse 120% 80% at 20% 0%, rgba(15, 118, 110, 0.1), transparent 52%),
-        radial-gradient(ellipse 100% 55% at 100% 100%, rgba(15, 118, 110, 0.05), transparent 50%),
-        linear-gradient(160deg, var(--card) 0%, var(--secondary) 100%);
+        radial-gradient(ellipse 95% 75% at 78% 36%, var(--accent) 0%, transparent 58%),
+        linear-gradient(168deg, var(--card) 0%, var(--background) 100%);
 }
 
-.home-ds-hero__inner {
-    padding: clamp(2rem, 5vw, 3.5rem) clamp(1.25rem, 4vw, 2rem);
+.home-ds-hero__mesh {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.42;
+    background-image: radial-gradient(circle, var(--primary) 1px, transparent 1.2px);
+    background-size: 17px 17px;
+    mask-image: radial-gradient(ellipse 68% 62% at 76% 40%, #000 0%, transparent 74%);
+    -webkit-mask-image: radial-gradient(ellipse 68% 62% at 76% 40%, #000 0%, transparent 74%);
 }
 
 .home-ds .home-hero__lead {
@@ -796,7 +810,7 @@
 
 .home-ds .home-ds-cta-primary:focus-visible,
 .home-ds .home-ds-cta-secondary:focus-visible {
-    outline: 2px solid rgba(147, 197, 253, 0.8);
+    outline: 2px solid var(--ring);
     outline-offset: 2px;
 }
 
@@ -901,9 +915,9 @@
 }
 
 .home-ds-panel__title {
-    font-size: var(--text-h2);
+    font-size: var(--ds-type-page, clamp(1.875rem, 3.5vw, 2.125rem));
     font-weight: 700;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.05em;
     color: var(--foreground);
     margin: 0;
 }
@@ -950,9 +964,12 @@
     padding-top: 0.25rem;
 }
 
-/* 피드 리스트: 패널 안에서는 바깥 보더만 */
-.home-ds .home-ds-panel__body .home-feed-list {
-    border-radius: calc(var(--ds-r-lg) - 2px);
+/* 패널·게시판 탭 패널 안 피드: 바깥 셸만 보더/라운드 유지, 리스트 이중 테두리 제거 */
+.home-ds .home-ds-panel__body .home-feed-list,
+.home-ds .home-board-tab-content .home-feed-list {
+    border: none;
+    border-radius: 0;
+    background: transparent;
 }
 
 /* 세그먼트 탭: 최소 44px 터치 */
@@ -987,18 +1004,15 @@
 
 .home-ds .home-ds-feature-card:hover {
     transform: none;
-    box-shadow: var(--shadow-md);
-    border-color: rgba(15, 118, 110, 0.28);
+    box-shadow: var(--shadow-md), var(--ds-shadow-warm, 0 0 28px rgba(110, 240, 220, 0.08));
+    border-color: var(--border);
 }
 
 .home-ds .home-ds-feature-icon {
-    background: #f5f5f5;
-    color: #000000;
-    border: 1px solid rgba(0, 0, 0, 0.06);
-    box-shadow:
-        0 0 0 1px rgba(0, 0, 0, 0.06),
-        0 1px 2px rgba(0, 0, 0, 0.04),
-        0 2px 4px rgba(0, 0, 0, 0.04);
+    background: var(--secondary);
+    color: var(--foreground);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
 }
 
 .home-ds .home-ds-feature-card h3 {
@@ -1047,9 +1061,7 @@
 }
 
 /* ==========================================================================
-   ElevenLabs-inspired theme overrides for main page
-   DESIGN.md 규칙에 맞게 색/폰트/섀도/버튼만 재정렬한다.
-   레이아웃 구조(preview.html)는 그대로 유지.
+   메인 홈 — 다크 DS 토큰(body.site-ds)과 동기화된 색·타이포·섀도
    ========================================================================== */
 
 .home-portal {
@@ -1060,13 +1072,25 @@
 /* Typography: 표제·본문 모두 Inter / Pretendard 고딕 */
 
 .home-ds {
-    color: #000000;
+    color: var(--foreground);
+}
+
+/* 메인 섹션 제목·부제: 기본 중앙 대신 왼쪽 축 통일 */
+.home-ds .home-section__title {
+    text-align: start;
+}
+
+.home-ds .home-section__subtitle {
+    text-align: start;
+    margin-left: 0;
+    margin-right: 0;
+    max-width: 42rem;
 }
 
 .home-ds .text-muted,
 .home-ds .home-hero__lead,
 .home-ds .home-section__subtitle {
-    color: #4e4e4e;
+    color: var(--muted-foreground);
 }
 
 .home-hero__title,
@@ -1084,11 +1108,11 @@
 }
 
 .home-section__title {
-    font-size: 2.25rem;
+    font-size: var(--ds-type-page, clamp(1.875rem, 3.5vw, 2.125rem));
 }
 
 .home-hub-column__head h3 {
-    font-size: 2rem;
+    font-size: var(--ds-type-content, clamp(1.5rem, 2.5vw, 1.75rem));
 }
 
 .home-portal p,
@@ -1100,20 +1124,19 @@
     letter-spacing: 0.18px;
 }
 
-/* Hero: 완전 화이트 배경 + 미세 그림자 */
+/* Hero: 서페이스 카드 + 다크 그림자 스택 */
 
 .home-hero,
 .home-ds-hero {
-    background: #ffffff;
+    background: var(--card);
     border-radius: 24px;
     border: none;
-    box-shadow:
-        0 0 0 1px rgba(0, 0, 0, 0.06),
-        0 1px 2px rgba(0, 0, 0, 0.04),
-        0 2px 4px rgba(0, 0, 0, 0.04);
+    box-shadow: var(--shadow-sm);
 }
 
 .home-ds-hero__inner {
+    position: relative;
+    z-index: 1;
     padding: 6.25rem 2.5rem 5rem;
 }
 
@@ -1123,114 +1146,105 @@
     }
 }
 
-/* Buttons: 블랙 필 + 웜 스톤 필 */
+/* Buttons: 민트 필 + 글래스 보더 보조 */
 
 .home-ds-cta-primary {
-    background: #000000;
-    color: #ffffff;
+    background: var(--primary);
+    color: var(--primary-foreground);
     border-radius: 9999px;
     padding-inline: 14px;
     border: none;
-    box-shadow:
-        0 0 1px rgba(0, 0, 0, 0.4),
-        0 4px 4px rgba(0, 0, 0, 0.04);
+    box-shadow: var(--ds-shadow-warm, 0 0 24px rgba(110, 240, 220, 0.12));
 }
 
 .home-ds-cta-primary:hover {
-    background: #111111;
-    color: #ffffff;
+    background: var(--primary-hover);
+    color: var(--primary-foreground);
 }
 
 .home-ds-cta-secondary {
-    background: rgba(245, 242, 239, 0.8);
-    color: #000000;
+    background: transparent;
+    color: var(--foreground);
     border-radius: 30px;
-    border: none;
-    box-shadow: 0 6px 16px rgba(78, 50, 23, 0.04);
+    border: 1px solid var(--border);
+    box-shadow: none;
 }
 
 .home-ds-cta-secondary:hover {
-    background: rgba(245, 242, 239, 1);
+    background: var(--secondary);
+    border-color: var(--primary);
 }
 
 /* 상단 칩: 무채색 + warm gray, 얕은 보더 */
 
 .home-ds-chip {
-    background: #f5f5f5;
-    color: #777169;
+    background: var(--secondary);
+    color: var(--muted-foreground);
     border-radius: 9999px;
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border);
 }
 
 .home-ds-chip--ghost {
-    background: #ffffff;
+    background: var(--card);
 }
 
 .home-ds-chip__stat {
-    color: #000000;
+    color: var(--foreground);
 }
 
-/* Warm-stone 섹션 래퍼 */
+/* 악센트 틴트 섹션 래퍼 */
 
 .home-ds-warm-section {
-    background: rgba(245, 242, 239, 0.8);
+    background: var(--accent);
     border-radius: 24px;
-    box-shadow: 0 6px 16px rgba(78, 50, 23, 0.04);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
     padding: 2.5rem clamp(1.5rem, 4vw, 2.5rem);
 }
 
-/* 카드 & 패널: ElevenLabs식 shadow stack */
+/* 카드 & 패널 */
 
 .home-ds-panel,
 .home-post-card,
 .home-thumb-card,
 .home-mini-list {
-    background: #ffffff;
+    background: var(--card);
     border-radius: 18px;
     border: none;
-    box-shadow:
-        0 0 0 1px rgba(0, 0, 0, 0.06),
-        0 1px 2px rgba(0, 0, 0, 0.04),
-        0 2px 4px rgba(0, 0, 0, 0.04);
+    box-shadow: var(--shadow-sm);
 }
 
 .home-sidebar-card {
-    background: #ffffff;
+    background: var(--card);
     border-radius: 18px;
     border: none;
-    box-shadow:
-        0 0 0 1px rgba(0, 0, 0, 0.06),
-        0 1px 2px rgba(0, 0, 0, 0.04),
-        0 2px 4px rgba(0, 0, 0, 0.04);
+    box-shadow: var(--shadow-sm);
 }
 
 .home-feature-card {
-    background: #ffffff;
+    background: var(--card);
     border-radius: 20px;
     border: none;
-    box-shadow:
-        0 0 0 1px rgba(0, 0, 0, 0.06),
-        0 1px 2px rgba(0, 0, 0, 0.04),
-        0 2px 4px rgba(0, 0, 0, 0.04);
+    box-shadow: var(--shadow-sm);
 }
 
 .home-feature-card h3 {
-    color: #000000;
+    color: var(--foreground);
 }
 
 .home-feature-icon,
 .home-ds-feature-icon {
-    background: #f5f5f5;
-    color: #000000;
+    background: var(--secondary);
+    color: var(--foreground);
 }
 
 /* Section label (모노) */
 
 .home-ds-section-label {
-    font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     font-size: 0.75rem;
     font-weight: 500;
-    color: #777169;
+    color: var(--muted-foreground);
     margin-bottom: 0.5rem;
 }
 
@@ -1256,19 +1270,19 @@
 .home-thumb-card__meta,
 .home-mini-row__meta,
 .home-qna-hint__row {
-    color: #4e4e4e;
+    color: var(--muted-foreground);
 }
 
 .home-section__more:hover,
 .home-quick-links a:hover {
-    color: #000000;
+    color: var(--primary);
 }
 
 /* Inset Edge demo card (DESIGN.md Inset Edge spec) */
 .home-ds-inset-card {
     box-shadow:
-        0 0 0 0.5px rgba(0, 0, 0, 0.075) inset,
-        0 0 0 0px #ffffff inset;
+        0 0 0 0.5px var(--border) inset,
+        0 0 0 0 transparent inset;
 }
 
 /* ═══════════════════════════════════════════════
@@ -1335,13 +1349,14 @@
     border-right: none;
     padding: 0.6rem 1rem;
     font-size: 0.95rem;
-    background: rgba(255,255,255,0.9);
+    background: var(--secondary);
+    color: var(--foreground);
 }
 
 .home-hero-search__input:focus {
     outline: none;
-    border-color: var(--ring);
-    box-shadow: 0 0 0 3px rgba(147,197,253,0.25);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--accent);
 }
 
 .home-hero-search__btn {
@@ -1394,8 +1409,8 @@
     align-items: center;
     gap: 1rem;
     padding: 1rem 1.25rem;
-    background: linear-gradient(135deg, var(--secondary, #f5f5f5) 0%, rgba(245, 242, 239, 0.6) 100%);
-    border: 1.5px solid var(--border, #e5e5e5);
+    background: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%);
+    border: 1.5px solid var(--border);
     border-radius: var(--radius-xl, 1rem);
     position: relative;
     overflow: hidden;
@@ -1662,7 +1677,7 @@
    공모전 D-Day 7일 이내 카드 강조
 ═══════════════════════════════════════════════ */
 .home-thumb-card--urgent {
-    border: 2px solid rgba(78, 50, 23, 0.28) !important;
-    box-shadow: 0 0 0 3px rgba(78, 50, 23, 0.06);
+    border: 2px solid var(--primary) !important;
+    box-shadow: var(--shadow-sm), 0 0 0 3px var(--accent);
 }
 

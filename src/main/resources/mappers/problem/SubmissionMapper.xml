@@ -94,4 +94,11 @@
         ORDER BY day ASC
     </select>
 
+    <select id="countSubmissionsLast7Days" resultType="int">
+        SELECT COUNT(*)
+        FROM problem_submissions
+        WHERE user_id = #{userId}
+          AND submitted_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+    </select>
+
 </mapper>

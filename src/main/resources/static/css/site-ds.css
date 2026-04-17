@@ -1,37 +1,95 @@
 @charset "UTF-8";
 
 /**
- * 사이트 전역 ElevenLabs DS (DESIGN.md / main-page-elevenlabs-spec.md)
- * body.site-ds 하위에만 적용. 로고(이미지) 제외 UI는 무채색·웜스톤 팔레트.
+ * 사이트 전역 DS — 다크 테크 캔버스 + 민트 악센트 (레퍼런스: 미니멀 하이엔드 테크)
+ * body.site-ds 하위에만 적용. 토큰만 사용하고 페이지 CSS에서는 16진 하드코딩 지양.
  */
 
 body.site-ds {
     /* Display: 대형 제목도 본문과 동일 고딕 스택 (DESIGN.md — 세리프 미사용) */
     --font-display: "Inter", "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
-    --ds-text: #000000;
-    --ds-text-secondary: #4e4e4e;
-    --ds-text-muted: #777169;
-    --ds-surface: #ffffff;
-    --ds-surface-subtle: #f5f5f5;
-    --ds-warm: rgba(245, 242, 239, 0.8);
-    --ds-border: #e5e5e5;
-    --ds-border-subtle: rgba(0, 0, 0, 0.05);
-    --ds-ring: rgba(147, 197, 253, 0.45);
-    --ds-shadow-outline: 0 0 0 1px rgba(0, 0, 0, 0.06);
-    --ds-shadow-elev: 0 1px 2px rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.04);
+    --ds-canvas: #0a0a0a;
+    --ds-accent: #6ef0dc;
+    --ds-accent-soft: rgba(110, 240, 220, 0.14);
+    --ds-accent-line: rgba(110, 240, 220, 0.45);
+    --ds-text-on-accent: #0a0a0a;
+    --ds-text: #f0f0f0;
+    --ds-text-secondary: #b8b8b8;
+    --ds-text-muted: #9a9a9a;
+    --ds-surface: #151515;
+    --ds-surface-subtle: #1a1a1a;
+    --ds-surface-elevated: #212121;
+    --ds-warm: var(--ds-accent-soft);
+    --ds-border: rgba(255, 255, 255, 0.12);
+    --ds-border-subtle: rgba(255, 255, 255, 0.08);
+    /* fixed 헤더 높이에 맞춘 본문 패딩 (navbar + safe area) */
+    --ds-site-header-h: 4.35rem;
+    --ds-ring: rgba(110, 240, 220, 0.45);
+    --ds-shadow-outline: 0 0 0 1px rgba(255, 255, 255, 0.1);
+    --ds-shadow-elev: 0 1px 2px rgba(0, 0, 0, 0.5), 0 6px 28px rgba(0, 0, 0, 0.35);
     --ds-shadow-card: var(--ds-shadow-outline), var(--ds-shadow-elev);
-    --ds-shadow-warm: 0 6px 16px rgba(78, 50, 23, 0.04);
+    --ds-shadow-warm: 0 0 32px rgba(110, 240, 220, 0.07);
+    /* common.css · main.css 상속용 별칭 */
+    --background: var(--ds-canvas);
+    --foreground: var(--ds-text);
+    --card: var(--ds-surface);
+    --card-foreground: var(--ds-text);
+    --popover: var(--ds-surface-elevated);
+    --popover-foreground: var(--ds-text);
+    --primary: var(--ds-accent);
+    --primary-hover: #8ef5e8;
+    --primary-foreground: var(--ds-text-on-accent);
+    --secondary: var(--ds-surface-subtle);
+    --secondary-foreground: var(--ds-text);
+    --muted: var(--ds-surface-subtle);
+    --muted-foreground: var(--ds-text-muted);
+    --accent: var(--ds-accent-soft);
+    --accent-foreground: var(--ds-text);
+    --border: var(--ds-border);
+    --input: rgba(255, 255, 255, 0.16);
+    --ring: var(--ds-ring);
+    --foreground-subtle: var(--ds-text-muted);
     /* 정보 허브 등 레거시 인라인 CSS 변수 호환 */
-    --surface-default: #ffffff;
-    --text-primary: #000000;
-    --text-secondary: #777169;
-    --text-inverse: #ffffff;
-    --brand-primary: #000000;
+    --surface-default: var(--ds-surface);
+    --text-primary: var(--ds-text);
+    --text-secondary: var(--ds-text-muted);
+    --text-inverse: var(--ds-text-on-accent);
+    --brand-primary: var(--ds-accent);
     --font-weight-bold: 500;
-    --border-radius-lg: 18px;
-    --border-radius-md: 12px;
+    --border-radius-lg: 20px;
+    --border-radius-md: 14px;
     --shadow-sm: var(--ds-shadow-card);
-    --shadow-md: 0 0 0 1px rgba(0, 0, 0, 0.06), 0 8px 24px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 10px 40px rgba(0, 0, 0, 0.45);
+
+    /* 타이포 계층 — 화면마다 제목 크기가 달라지지 않도록 단일 스케일 */
+    --ds-type-page: clamp(1.875rem, 3.5vw, 2.125rem);
+    --ds-type-content: clamp(1.5rem, 2.5vw, 1.75rem);
+    --ds-type-subsection: 1.125rem;
+    --ds-type-ui: 0.9375rem;
+    --ds-type-caption: 0.8125rem;
+    /* IT 정보 갤러리(도서·강좌·공모전) 오버레이 — 단색 rgba 대신 캔버스 톤 */
+    --ds-gallery-overlay-grad: linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--ds-canvas) 25%, transparent) 0%,
+        color-mix(in srgb, var(--ds-canvas) 78%, transparent) 55%,
+        color-mix(in srgb, var(--ds-canvas) 92%, transparent) 100%
+    );
+    --ds-gallery-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --ds-gallery-duration: 0.32s;
+
+    /* Bootstrap 5.3 컴포넌트가 참조 — 미설정 시 라이트용 어두운 보조색이 들어가 폼 힌트·플로팅 라벨이 묻힘 */
+    --bs-body-color: var(--ds-text);
+    --bs-body-bg: var(--ds-canvas);
+    --bs-body-color-rgb: 240, 240, 240;
+    --bs-secondary-color: var(--ds-text-secondary);
+    --bs-secondary-color-rgb: 184, 184, 184;
+    --bs-tertiary-color: var(--ds-text-muted);
+    --bs-tertiary-color-rgb: 154, 154, 154;
+    --bs-emphasis-color: var(--ds-text);
+    --bs-border-color: var(--ds-border);
+    /* 폼 검증 문구 — 다크 배경 대비 */
+    --ds-form-error: #fca5a5;
+    --ds-form-success: #86efac;
 }
 
 /* -------------------------------------------------------------------------
@@ -41,6 +99,13 @@ body.site-ds {
     color: var(--ds-text);
     font-family: "Inter", "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
     letter-spacing: 0.16px;
+    background-color: var(--ds-canvas);
+    color-scheme: dark;
+}
+
+/* 고정 헤더 아래 앵커 스크롤 보정 (--ds-site-header-h 는 body에만 있어 여기서는 고정값) */
+html:has(body.site-ds) {
+    scroll-padding-top: 5.5rem;
 }
 
 body.site-ds .text-muted,
@@ -73,22 +138,154 @@ body.site-ds .h1 {
 }
 
 /* -------------------------------------------------------------------------
-   헤더 · 푸터
+   타이포 계층 통일 (목록·상세·메인 공통) — Bootstrap .h*·display-*와 무관하게
+   동일 역할이면 동일 크기: 페이지 머리제목 / 글·카드 본제목 / 페이지 내 섹션 라벨
    ------------------------------------------------------------------------- */
-body.site-ds .navbar {
-    background: #ffffff !important;
-    border-bottom: 1px solid var(--ds-border-subtle) !important;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+body.site-ds main.ui-page-shell {
+    font-size: 1rem;
+    line-height: 1.55;
+    /* common .ui-page-shell margin-top 대신: fixed 헤더 아래로 본문 시작 */
+    margin-top: 0;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 2.5rem;
+    max-width: 1200px;
+    padding-top: calc(var(--ds-site-header-h) + env(safe-area-inset-top, 0px) + 0.75rem);
+    padding-left: clamp(1rem, 3vw, 1.25rem);
+    padding-right: clamp(1rem, 3vw, 1.25rem);
 }
 
-body.site-ds .navbar.shadow-sm {
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+body.site-ds main.ui-page-shell .ds-page-title,
+body.site-ds main.ui-page-shell .community-page__title,
+body.site-ds main.ui-page-shell .ai-page__title,
+body.site-ds main.ui-page-shell h1.ds-page-head,
+body.site-ds main.ui-page-shell .ds-page-head > h1,
+body.site-ds main.ui-page-shell h1.display-5,
+body.site-ds main.ui-page-shell h1.display-6,
+body.site-ds main.ui-page-shell .page-search__title {
+    font-size: var(--ds-type-page) !important;
+    line-height: 1.2 !important;
+    font-weight: 300 !important;
+    letter-spacing: -0.05em !important;
+}
+
+body.site-ds main.ui-page-shell .community-post__title,
+body.site-ds main.ui-page-shell .card .card-body h1:not(.ds-page-title),
+body.site-ds main.ui-page-shell .ai-page h4.ai-page__title {
+    font-size: var(--ds-type-content) !important;
+    line-height: 1.25 !important;
+    font-weight: 300 !important;
+    letter-spacing: -0.04em !important;
+}
+
+body.site-ds main.ui-page-shell .ds-type-section-label {
+    font-family: var(--font-display);
+    font-size: var(--ds-type-subsection) !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.02em;
+    line-height: 1.35;
+    color: var(--ds-text);
+}
+
+body.site-ds main.ui-page-shell .card-header h3.fs-5,
+body.site-ds main.ui-page-shell .card-header h2.fs-5 {
+    font-size: var(--ds-type-content) !important;
+    font-weight: 500 !important;
+    line-height: 1.3 !important;
+    letter-spacing: -0.03em !important;
+}
+
+body.site-ds .home-ds .home-section__title,
+body.site-ds .home-ds .home-ds-panel__title {
+    font-size: var(--ds-type-page) !important;
+}
+
+body.site-ds .home-ds .home-hub-column__head h3 {
+    font-size: var(--ds-type-content) !important;
+}
+
+/* -------------------------------------------------------------------------
+   헤더 · 푸터
+   ------------------------------------------------------------------------- */
+/* 상단 고정: sticky는 부모/오버플로우에 무력화되기 쉬워 fixed 사용 (site-header.js 가 .is-scrolled 토글) */
+body.site-ds .navbar.site-header-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 1030;
+    padding-top: env(safe-area-inset-top, 0px);
+    background: transparent !important;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-bottom: 1px solid transparent !important;
+    box-shadow: none;
+    transition:
+        background-color 0.28s ease,
+        backdrop-filter 0.28s ease,
+        border-color 0.28s ease,
+        box-shadow 0.28s ease;
+}
+
+body.site-ds .navbar.site-header-nav.is-scrolled {
+    background: rgba(10, 10, 10, 0.82) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom-color: var(--ds-border) !important;
+    box-shadow: 0 4px 28px rgba(0, 0, 0, 0.45);
+}
+
+body.site-ds .navbar.site-header-nav .nav-link {
+    color: rgba(240, 240, 240, 0.9);
+}
+
+body.site-ds .navbar.site-header-nav .nav-link:hover,
+body.site-ds .navbar.site-header-nav .nav-link:focus {
+    color: var(--ds-text);
+}
+
+body.site-ds .navbar.site-header-nav .navbar-brand {
+    opacity: 0.95;
+}
+
+/* 헤더 통합 검색: 윤곽 버튼 대비 */
+body.site-ds .header-search .btn-outline-secondary {
+    border-color: var(--ds-border);
+    color: var(--ds-text-secondary);
+    background: var(--ds-surface-subtle);
+}
+
+body.site-ds .header-search .btn-outline-secondary:hover {
+    border-color: var(--ds-accent-line);
+    color: var(--ds-text);
+    background: var(--ds-surface-elevated);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.site-ds .navbar.site-header-nav {
+        transition: none;
+    }
+}
+
+body.site-ds .navbar.site-header-nav.shadow-sm {
+    box-shadow: none !important;
+}
+
+body.site-ds .navbar.site-header-nav.is-scrolled.shadow-sm {
+    box-shadow: 0 4px 28px rgba(0, 0, 0, 0.35) !important;
 }
 
 body.site-ds .dropdown-menu {
     border: 1px solid var(--ds-border-subtle);
     border-radius: 16px;
     box-shadow: var(--ds-shadow-card);
+    background: var(--ds-surface-elevated);
+    color: var(--ds-text);
+}
+
+body.site-ds .dropdown-item {
+    color: var(--ds-text);
 }
 
 body.site-ds .dropdown-item:hover,
@@ -97,9 +294,32 @@ body.site-ds .dropdown-item:focus {
     color: var(--ds-text);
 }
 
+body.site-ds .dropdown-header {
+    color: var(--ds-text-muted);
+}
+
+body.site-ds .dropdown-divider {
+    border-top-color: var(--ds-border-subtle);
+}
+
+body.site-ds hr {
+    border-color: var(--ds-border-subtle);
+    opacity: 1;
+}
+
 body.site-ds .footer-codemoa {
-    background-color: var(--ds-surface-subtle) !important;
+    background-color: var(--ds-surface) !important;
+    border-top: 1px solid var(--ds-border-subtle) !important;
     border-color: var(--ds-border-subtle) !important;
+    box-shadow: inset 0 1px 0 0 var(--ds-accent-line);
+}
+
+body.site-ds .footer-codemoa a.text-muted {
+    color: var(--ds-text-secondary) !important;
+}
+
+body.site-ds .footer-codemoa a.text-muted:hover {
+    color: var(--ds-text) !important;
 }
 
 body.site-ds .footer-codemoa__heading {
@@ -107,9 +327,53 @@ body.site-ds .footer-codemoa__heading {
     letter-spacing: 0.15px;
 }
 
+/* 푸터 3열: 동일 시작선 + 균등 열·간격 (가독성 위해 브랜드 열은 살짝 넓게) */
+body.site-ds .footer-codemoa__brand {
+    max-width: none;
+}
+
+body.site-ds .footer-codemoa__brand p {
+    line-height: 1.55;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+}
+
+body.site-ds .footer-codemoa__grid {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: 1fr;
+    align-items: start;
+    text-align: start;
+}
+
+@media (min-width: 768px) {
+    body.site-ds .footer-codemoa__grid {
+        grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr) minmax(0, 1fr);
+        column-gap: clamp(2rem, 5vw, 3.25rem);
+        row-gap: 1.5rem;
+    }
+}
+
 body.site-ds .nav-accordion-mobile .accordion-button {
     font-weight: 500;
     letter-spacing: 0.15px;
+    background: transparent;
+    color: var(--ds-text);
+}
+
+body.site-ds .nav-accordion-mobile .accordion-button:not(.collapsed) {
+    background: var(--ds-surface-subtle);
+    color: var(--ds-text);
+    box-shadow: none;
+}
+
+body.site-ds .nav-accordion-mobile .accordion-body {
+    background: var(--ds-canvas);
+    color: var(--ds-text-secondary);
+}
+
+body.site-ds .nav-accordion-mobile .accordion-body a {
+    color: var(--ds-text);
 }
 
 /* -------------------------------------------------------------------------
@@ -120,6 +384,27 @@ body.site-ds main.ui-page-shell .card:not(.ai-card) {
     border-radius: 18px;
     background: var(--ds-surface);
     box-shadow: var(--ds-shadow-card);
+}
+
+body.site-ds main.ui-page-shell .card .card-title {
+    font-weight: 500 !important;
+    letter-spacing: 0.15px;
+    color: var(--ds-text);
+}
+
+/* 로그인·가입 카드 등: 클래스 없는 링크가 BS 기본 파랑으로 남지 않게 */
+body.site-ds main.ui-page-shell .card .card-body a:not(.btn):not(.page-link):not(.nav-link) {
+    color: var(--ds-accent);
+    text-underline-offset: 2px;
+}
+
+body.site-ds main.ui-page-shell .card .card-body a:not(.btn):not(.page-link):not(.nav-link):hover,
+body.site-ds main.ui-page-shell .card .card-body a:not(.btn):not(.page-link):not(.nav-link):focus-visible {
+    color: var(--primary-hover);
+}
+
+body.site-ds .form-check-label {
+    color: var(--ds-text-secondary);
 }
 
 body.site-ds main.ui-page-shell .card.shadow-sm {
@@ -152,23 +437,29 @@ body.site-ds .employment-card {
 
 body.site-ds .employment-card:hover {
     box-shadow:
-        0 0 0 1px rgba(0, 0, 0, 0.08),
-        0 4px 12px rgba(0, 0, 0, 0.06);
+        0 0 0 1px var(--ds-accent-line),
+        0 8px 28px rgba(0, 0, 0, 0.45);
     transform: translateY(-2px);
 }
 
 /* -------------------------------------------------------------------------
-   표
+   표 — Bootstrap 5가 --bs-table-bg로 셀을 칠함; tbody 기본이 밝으면 다크 텍스트가 묻힘
    ------------------------------------------------------------------------- */
 body.site-ds .table {
+    --bs-table-bg: var(--ds-surface);
+    --bs-table-color: var(--ds-text);
+    --bs-table-border-color: var(--ds-border-subtle);
+    --bs-table-striped-bg: var(--ds-surface-subtle);
+    --bs-table-hover-bg: var(--ds-surface-subtle);
+    --bs-table-active-bg: var(--ds-surface-elevated);
     border-color: var(--ds-border-subtle);
     color: var(--ds-text);
 }
 
 body.site-ds .table thead th,
 body.site-ds .table-light {
-    --bs-table-bg: #f5f5f5;
-    --bs-table-color: var(--ds-text-muted);
+    --bs-table-bg: var(--ds-surface-subtle);
+    --bs-table-color: var(--ds-text-secondary);
     font-family: "Inter", "Pretendard", sans-serif;
     font-size: 0.81rem;
     font-weight: 500;
@@ -176,12 +467,43 @@ body.site-ds .table-light {
     border-bottom: 1px solid var(--ds-border-subtle);
 }
 
+body.site-ds .table tbody tr {
+    --bs-table-bg: var(--ds-surface);
+    --bs-table-color: var(--ds-text);
+}
+
 body.site-ds .table > :not(caption) > * > * {
     border-color: var(--ds-border-subtle);
 }
 
+body.site-ds .table tbody > tr > * {
+    color: var(--ds-text);
+}
+
+/* 보조 열(날짜·캡션)은 본문보다 한 단계만 낮춤 */
+body.site-ds .table tbody td.community-caption {
+    color: var(--ds-text-secondary);
+}
+
+body.site-ds .table tbody a:not(.btn) {
+    color: var(--ds-text);
+}
+
+body.site-ds .table tbody a:not(.btn):hover {
+    color: var(--ds-accent);
+}
+
 body.site-ds .table-hover > tbody > tr:hover > * {
-    background-color: #fafafa;
+    --bs-table-bg: var(--ds-surface-subtle);
+    background-color: var(--ds-surface-subtle);
+}
+
+body.site-ds .table-bordered {
+    border-color: var(--ds-border-subtle);
+}
+
+body.site-ds .table-bordered > :not(caption) > * {
+    border-color: var(--ds-border-subtle);
 }
 
 /* -------------------------------------------------------------------------
@@ -196,10 +518,53 @@ body.site-ds .input-group-text {
     letter-spacing: 0.16px;
     color: var(--ds-text);
     min-height: 44px;
+    background-color: var(--ds-surface-elevated);
+    caret-color: var(--ds-accent);
+}
+
+body.site-ds .input-group-text {
+    color: var(--ds-text-secondary);
+}
+
+body.site-ds .form-control::placeholder {
+    color: var(--ds-text-muted);
+    opacity: 1;
 }
 
 body.site-ds .form-floating > .form-control {
     border-radius: 16px;
+}
+
+/* 도움말·글자 수 안내 — .form-text 단독도 명시 (일부 BS 빌드/순서 이슈 대비) */
+body.site-ds .form-text {
+    color: var(--ds-text-secondary) !important;
+}
+
+body.site-ds .form-text code {
+    color: var(--ds-accent);
+    font-size: 0.92em;
+}
+
+body.site-ds .invalid-feedback {
+    color: var(--ds-form-error);
+}
+
+body.site-ds .valid-feedback {
+    color: var(--ds-form-success);
+}
+
+body.site-ds .form-floating > label {
+    color: var(--ds-text-secondary) !important;
+}
+
+body.site-ds .form-floating > .form-control:focus ~ label,
+body.site-ds .form-floating > .form-control:not(:placeholder-shown) ~ label,
+body.site-ds .form-floating > .form-select ~ label {
+    color: var(--ds-text-muted) !important;
+}
+
+body.site-ds .form-floating > .form-control:disabled ~ label {
+    color: var(--ds-text-muted) !important;
 }
 
 body.site-ds .form-label {
@@ -208,14 +573,38 @@ body.site-ds .form-label {
     color: var(--ds-text);
 }
 
+body.site-ds .form-check-input {
+    background-color: var(--ds-surface-elevated);
+    border-color: var(--ds-border);
+}
+
 body.site-ds .form-check-input:checked {
-    background-color: #000000;
-    border-color: #000000;
+    background-color: var(--ds-accent);
+    border-color: var(--ds-accent);
 }
 
 body.site-ds .form-check-input:focus {
-    border-color: rgba(0, 0, 0, 0.2);
+    border-color: var(--ds-accent-line);
     box-shadow: 0 0 0 3px var(--ds-ring);
+}
+
+/* Primary CTA — 브랜드 민트 필 */
+body.site-ds .btn-primary {
+    background-color: var(--ds-accent) !important;
+    border-color: var(--ds-accent) !important;
+    color: var(--ds-text-on-accent) !important;
+    border-radius: 9999px;
+    font-weight: 500;
+    letter-spacing: 0.15px;
+    box-shadow: var(--ds-shadow-warm);
+}
+
+body.site-ds .btn-primary:hover,
+body.site-ds .btn-primary:focus,
+body.site-ds .btn-primary:active {
+    background-color: var(--primary-hover) !important;
+    border-color: var(--primary-hover) !important;
+    color: var(--ds-text-on-accent) !important;
 }
 
 body.site-ds .btn:focus-visible,
@@ -227,7 +616,7 @@ body.site-ds .page-link:focus,
 body.site-ds .accordion-button:focus,
 body.site-ds .navbar-toggler:focus,
 body.site-ds .dropdown-toggle:focus-visible {
-    border-color: rgba(0, 0, 0, 0.12) !important;
+    border-color: var(--ds-accent-line) !important;
     box-shadow: 0 0 0 3px var(--ds-ring) !important;
     outline: none !important;
 }
@@ -238,28 +627,28 @@ body.site-ds .dropdown-toggle:focus-visible {
 body.site-ds .btn-secondary {
     background: var(--ds-surface-subtle);
     color: var(--ds-text);
-    border: 1px solid rgba(0, 0, 0, 0.06);
+    border: 1px solid var(--ds-border-subtle);
     border-radius: 9999px;
     font-weight: 500;
 }
 
 body.site-ds .btn-secondary:hover {
-    background: #ebebeb;
+    background: rgba(255, 255, 255, 0.08);
     color: var(--ds-text);
 }
 
 body.site-ds .btn-outline-primary {
     color: var(--ds-text);
-    border: 1px solid rgba(0, 0, 0, 0.12);
+    border: 1px solid var(--ds-border);
     border-radius: 9999px;
-    background: #ffffff;
+    background: transparent;
     font-weight: 500;
 }
 
 body.site-ds .btn-outline-primary:hover {
     background: var(--ds-surface-subtle);
     color: var(--ds-text);
-    border-color: rgba(0, 0, 0, 0.18);
+    border-color: var(--ds-accent-line);
 }
 
 body.site-ds .btn-success,
@@ -271,22 +660,20 @@ body.site-ds .btn-info {
 }
 
 body.site-ds .btn-success {
-    background: #000000;
-    color: #ffffff;
-    box-shadow:
-        0 0 1px rgba(0, 0, 0, 0.4),
-        0 4px 4px rgba(0, 0, 0, 0.04);
+    background: var(--ds-accent);
+    color: var(--ds-text-on-accent);
+    box-shadow: var(--ds-shadow-warm);
 }
 
 body.site-ds .btn-success:hover {
-    background: #1a1a1a;
-    color: #ffffff;
+    background: var(--primary-hover);
+    color: var(--ds-text-on-accent);
 }
 
 body.site-ds .btn-danger {
-    background: #ffffff;
+    background: transparent;
     color: var(--ds-text);
-    border: 1px solid rgba(0, 0, 0, 0.12);
+    border: 1px solid var(--ds-border);
 }
 
 body.site-ds .btn-danger:hover {
@@ -301,7 +688,7 @@ body.site-ds .btn-info {
 }
 
 body.site-ds .btn-info:hover {
-    background: rgba(245, 242, 239, 0.95);
+    background: rgba(110, 240, 220, 0.18);
     color: var(--ds-text);
 }
 
@@ -316,7 +703,7 @@ body.site-ds .btn-warning.text-dark {
 }
 
 body.site-ds .btn-warning:hover {
-    background: rgba(245, 242, 239, 0.95);
+    background: rgba(110, 240, 220, 0.18);
     color: var(--ds-text) !important;
 }
 
@@ -326,9 +713,9 @@ body.site-ds .btn-warning:hover {
 body.site-ds .pagination .page-link {
     border-radius: 9999px;
     margin: 0 0.15rem;
-    border: 1px solid rgba(0, 0, 0, 0.06);
+    border: 1px solid var(--ds-border-subtle);
     color: var(--ds-text-secondary);
-    background: #ffffff;
+    background: var(--ds-surface);
     font-family: "Inter", "Pretendard", sans-serif;
     font-weight: 500;
     letter-spacing: 0.15px;
@@ -336,12 +723,10 @@ body.site-ds .pagination .page-link {
 }
 
 body.site-ds .pagination .page-item.active .page-link {
-    background: #000000;
-    border-color: #000000;
-    color: #ffffff;
-    box-shadow:
-        0 0 1px rgba(0, 0, 0, 0.4),
-        0 4px 4px rgba(0, 0, 0, 0.04);
+    background: var(--ds-accent);
+    border-color: var(--ds-accent);
+    color: var(--ds-text-on-accent);
+    box-shadow: var(--ds-shadow-warm);
 }
 
 body.site-ds .pagination .page-item.disabled .page-link {
@@ -363,16 +748,16 @@ body.site-ds .badge {
 
 body.site-ds .badge.bg-primary,
 body.site-ds .badge.text-bg-primary {
-    background: #f5f5f5 !important;
-    color: #000000 !important;
-    border: 1px solid rgba(0, 0, 0, 0.06);
+    background: var(--ds-surface-subtle) !important;
+    color: var(--ds-text) !important;
+    border: 1px solid var(--ds-border-subtle);
 }
 
 body.site-ds .badge.bg-secondary,
 body.site-ds .badge.text-bg-secondary {
-    background: #f5f5f5 !important;
-    color: #4e4e4e !important;
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    background: var(--ds-surface-subtle) !important;
+    color: var(--ds-text-secondary) !important;
+    border: 1px solid var(--ds-border-subtle);
 }
 
 body.site-ds .badge.bg-success,
@@ -381,33 +766,33 @@ body.site-ds .badge.bg-danger,
 body.site-ds .badge.text-bg-danger,
 body.site-ds .badge.bg-warning,
 body.site-ds .badge.text-bg-warning {
-    background: #f5f5f5 !important;
-    color: #000000 !important;
-    border: 1px solid rgba(0, 0, 0, 0.06);
+    background: var(--ds-surface-subtle) !important;
+    color: var(--ds-text) !important;
+    border: 1px solid var(--ds-border-subtle);
 }
 
 body.site-ds .badge.text-bg-dark {
-    background: #000000 !important;
-    color: #ffffff !important;
+    background: var(--ds-accent) !important;
+    color: var(--ds-text-on-accent) !important;
     border: none;
 }
 
-/* 시맨틱 뱃지: 색 대신 왼쪽 악센트로만 구분 (텍스트 라벨 병행 권장) */
+/* 시맨틱 뱃지: 왼쪽 악센트 라인으로만 구분 */
 body.site-ds .badge.text-bg-success,
 body.site-ds .badge.bg-success {
-    box-shadow: inset 3px 0 0 #000000;
+    box-shadow: inset 3px 0 0 var(--ds-accent);
     padding-left: 0.65em;
 }
 
 body.site-ds .badge.text-bg-warning,
 body.site-ds .badge.bg-warning {
-    box-shadow: inset 3px 0 0 #777169;
+    box-shadow: inset 3px 0 0 var(--ds-text-muted);
     padding-left: 0.65em;
 }
 
 body.site-ds .badge.text-bg-danger,
 body.site-ds .badge.bg-danger {
-    box-shadow: inset 3px 0 0 #4e4e4e;
+    box-shadow: inset 3px 0 0 var(--ds-text-secondary);
     padding-left: 0.65em;
 }
 
@@ -419,16 +804,22 @@ body.site-ds .alert {
 }
 
 body.site-ds .alert-danger {
-    background: #fafafa;
-    border-color: rgba(0, 0, 0, 0.08);
+    background: var(--ds-surface-subtle);
+    border-color: var(--ds-border);
     color: var(--ds-text);
+}
+
+body.site-ds .alert-light {
+    background: var(--ds-surface-subtle) !important;
+    border-color: var(--ds-border-subtle) !important;
+    color: var(--ds-text) !important;
 }
 
 body.site-ds .alert-success,
 body.site-ds .alert-info,
 body.site-ds .alert-warning {
-    background: rgba(245, 242, 239, 0.5);
-    border-color: rgba(0, 0, 0, 0.06);
+    background: var(--ds-accent-soft);
+    border-color: var(--ds-border-subtle);
     color: var(--ds-text);
 }
 
@@ -467,7 +858,7 @@ body.site-ds .progress {
 }
 
 body.site-ds .progress-bar {
-    background: #000000;
+    background: var(--ds-accent);
 }
 
 body.site-ds .progress-bar-striped {
@@ -484,21 +875,135 @@ body.site-ds .progress-bar-striped {
 }
 
 /* -------------------------------------------------------------------------
-   리스트 그룹 · 아코디언
+   리스트 그룹 — Bootstrap --bs-list-group-* 기본이 밝아 다크 본문과 충돌
    ------------------------------------------------------------------------- */
+body.site-ds .list-group {
+    --bs-list-group-color: var(--ds-text);
+    --bs-list-group-bg: var(--ds-surface);
+    --bs-list-group-border-color: var(--ds-border-subtle);
+    --bs-list-group-action-color: var(--ds-text);
+    --bs-list-group-action-hover-color: var(--ds-text);
+    --bs-list-group-action-hover-bg: var(--ds-surface-subtle);
+    --bs-list-group-action-active-color: var(--ds-text);
+    --bs-list-group-action-active-bg: var(--ds-surface-elevated);
+    --bs-list-group-disabled-color: var(--ds-text-muted);
+    --bs-list-group-disabled-bg: var(--ds-surface);
+}
+
 body.site-ds .list-group-item {
+    background-color: var(--ds-surface);
+    color: var(--ds-text);
+    border-color: var(--ds-border-subtle);
+}
+
+body.site-ds .list-group-item-action:hover,
+body.site-ds .list-group-item-action:focus {
+    background-color: var(--ds-surface-subtle);
+    color: var(--ds-text);
+}
+
+body.site-ds .list-group-item-action:active {
+    background-color: var(--ds-surface-elevated);
+    color: var(--ds-text);
+}
+
+/* 채팅방 등: 링크가 text-reset 이면 부모 대비 명시 */
+body.site-ds .list-group-item a.text-reset {
+    color: var(--ds-text) !important;
+}
+
+body.site-ds .list-group-item a.text-reset:hover,
+body.site-ds .list-group-item a.text-reset:focus {
+    color: var(--ds-accent) !important;
+}
+
+/* 템플릿의 bg-white 애드온 — 폼 블록과 동일 톤 */
+body.site-ds .input-group-text.bg-white {
+    background-color: var(--ds-surface-elevated) !important;
+}
+
+/* -------------------------------------------------------------------------
+   브레드크럼
+   ------------------------------------------------------------------------- */
+body.site-ds .breadcrumb {
+    --bs-breadcrumb-divider-color: var(--ds-text-muted);
+}
+
+body.site-ds .breadcrumb-item,
+body.site-ds .breadcrumb-item a {
+    color: var(--ds-text-secondary);
+}
+
+body.site-ds .breadcrumb-item a:hover {
+    color: var(--ds-accent);
+}
+
+body.site-ds .breadcrumb-item.active {
+    color: var(--ds-text-muted);
+}
+
+/* -------------------------------------------------------------------------
+   탭·필터 (nav-pills) — Bootstrap 기본 primary(파랑) 대신 DS 악센트
+   ------------------------------------------------------------------------- */
+body.site-ds .nav-pills {
+    --bs-nav-pills-link-active-color: var(--ds-text-on-accent);
+    --bs-nav-pills-link-active-bg: var(--ds-accent);
+}
+
+body.site-ds .nav-pills .nav-link {
+    color: var(--ds-text-secondary);
+    background-color: transparent;
+}
+
+body.site-ds .nav-pills .nav-link:hover,
+body.site-ds .nav-pills .nav-link:focus {
+    color: var(--ds-text);
+    background-color: var(--ds-surface-subtle);
+}
+
+body.site-ds .nav-pills .nav-link.active,
+body.site-ds .nav-pills .show > .nav-link {
+    color: var(--ds-text-on-accent);
+    background-color: var(--ds-accent);
+}
+
+/* 레거시: 표 안 제목 링크에 text-dark 남아 있으면 다크 배경에서 묻힘 */
+body.site-ds .table tbody a.text-dark {
+    color: var(--ds-text) !important;
+}
+
+body.site-ds .table tbody a.text-dark:hover {
+    color: var(--ds-accent) !important;
+}
+
+/* -------------------------------------------------------------------------
+   아코디언 (FAQ 등)
+   ------------------------------------------------------------------------- */
+body.site-ds .accordion-item {
+    background-color: var(--ds-surface);
     border-color: var(--ds-border-subtle);
 }
 
 body.site-ds .accordion-button {
     font-weight: 500;
     letter-spacing: 0.15px;
+    background-color: var(--ds-surface);
+    color: var(--ds-text);
 }
 
 body.site-ds .accordion-button:not(.collapsed) {
-    background: var(--ds-surface);
+    background: var(--ds-surface-subtle);
     color: var(--ds-text);
     box-shadow: none;
+}
+
+body.site-ds .accordion-button::after {
+    filter: invert(1) brightness(1.2);
+}
+
+body.site-ds .accordion-body {
+    background-color: var(--ds-surface);
+    color: var(--ds-text-secondary);
 }
 
 /* -------------------------------------------------------------------------
@@ -507,7 +1012,9 @@ body.site-ds .accordion-button:not(.collapsed) {
 body.site-ds .modal-content {
     border: none;
     border-radius: 18px;
-    box-shadow: var(--ds-shadow-card), 0 16px 48px rgba(0, 0, 0, 0.08);
+    box-shadow: var(--ds-shadow-card), 0 24px 64px rgba(0, 0, 0, 0.55);
+    background: var(--ds-surface);
+    color: var(--ds-text);
 }
 
 body.site-ds .modal-header,
@@ -515,11 +1022,15 @@ body.site-ds .modal-footer {
     border-color: var(--ds-border-subtle);
 }
 
+body.site-ds .btn-close {
+    filter: invert(1) grayscale(1) brightness(1.35);
+}
+
 /* -------------------------------------------------------------------------
    빈 상태
    ------------------------------------------------------------------------- */
 body.site-ds .ui-empty-state {
-    border: 1px dashed rgba(0, 0, 0, 0.1);
+    border: 1px dashed var(--ds-border);
     background: var(--ds-surface);
     color: var(--ds-text-muted);
     border-radius: 18px;
@@ -606,21 +1117,17 @@ body.site-ds .book-gallery-card {
     flex-direction: column;
     border: none;
     transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+        transform var(--ds-gallery-duration) var(--ds-gallery-ease),
+        box-shadow var(--ds-gallery-duration) var(--ds-gallery-ease);
 }
 
-body.site-ds .item-gallery-card:hover,
-body.site-ds .book-gallery-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-md);
-}
-
-body.site-ds .item-cover-image,
-body.site-ds .book-cover-image {
-    width: 100%;
-    height: 250px;
-    object-fit: contain;
+/* 썸네일 링크에 올렸을 때만 카드 리프트 — 제목/메타 영역만 호버 시 덜컥 움직이지 않음 */
+body.site-ds .item-gallery-card:has(> a:hover),
+body.site-ds .item-gallery-card:has(> a:focus-visible),
+body.site-ds .book-gallery-card:has(> a:hover),
+body.site-ds .book-gallery-card:has(> a:focus-visible) {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md), var(--ds-shadow-warm);
 }
 
 body.site-ds .item-texts,
@@ -659,6 +1166,24 @@ body.site-ds .item-gallery-card a,
 body.site-ds .book-gallery-card a {
     position: relative;
     display: block;
+    overflow: hidden;
+    border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+}
+
+body.site-ds .item-cover-image,
+body.site-ds .book-cover-image {
+    width: 100%;
+    height: 250px;
+    object-fit: contain;
+    transition: transform calc(var(--ds-gallery-duration) + 0.08s) var(--ds-gallery-ease);
+    transform-origin: center center;
+}
+
+body.site-ds .item-gallery-card a:hover .item-cover-image,
+body.site-ds .item-gallery-card a:focus-visible .item-cover-image,
+body.site-ds .book-gallery-card a:hover .book-cover-image,
+body.site-ds .book-gallery-card a:focus-visible .book-cover-image {
+    transform: scale(1.03);
 }
 
 body.site-ds .item-hover-overlay,
@@ -668,29 +1193,91 @@ body.site-ds .book-hover-overlay {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.72);
-    color: var(--text-inverse);
-    padding: 1.5rem;
+    background: var(--ds-gallery-overlay-grad);
+    color: var(--ds-text);
+    padding: 1.25rem 1.35rem;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transform: translateY(0.4rem);
+    transition:
+        opacity var(--ds-gallery-duration) var(--ds-gallery-ease),
+        transform var(--ds-gallery-duration) var(--ds-gallery-ease);
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: center;
     text-align: center;
+    pointer-events: none;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
 }
 
 body.site-ds .item-gallery-card a:hover .item-hover-overlay,
-body.site-ds .book-gallery-card a:hover .book-hover-overlay {
+body.site-ds .item-gallery-card a:focus-visible .item-hover-overlay,
+body.site-ds .book-gallery-card a:hover .book-hover-overlay,
+body.site-ds .book-gallery-card a:focus-visible .book-hover-overlay {
     opacity: 1;
+    transform: translateY(0);
 }
 
 body.site-ds .item-hover-content,
 body.site-ds .book-hover-content {
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: var(--ds-text-secondary);
     display: -webkit-box;
-    -webkit-line-clamp: 10;
+    -webkit-line-clamp: 8;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    max-width: 100%;
+    transform: translateY(0.35rem);
+    transition: transform var(--ds-gallery-duration) var(--ds-gallery-ease);
+}
+
+body.site-ds .item-gallery-card a:hover .item-hover-content,
+body.site-ds .item-gallery-card a:focus-visible .item-hover-content,
+body.site-ds .book-gallery-card a:hover .book-hover-content,
+body.site-ds .book-gallery-card a:focus-visible .book-hover-content {
+    transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.site-ds .item-gallery-card,
+    body.site-ds .book-gallery-card,
+    body.site-ds .item-hover-overlay,
+    body.site-ds .book-hover-overlay,
+    body.site-ds .item-hover-content,
+    body.site-ds .book-hover-content,
+    body.site-ds .item-cover-image,
+    body.site-ds .book-cover-image {
+        transition-duration: 0.01ms !important;
+    }
+
+    body.site-ds .item-gallery-card:has(> a:hover),
+    body.site-ds .item-gallery-card:has(> a:focus-visible),
+    body.site-ds .book-gallery-card:has(> a:hover),
+    body.site-ds .book-gallery-card:has(> a:focus-visible) {
+        transform: none;
+    }
+
+    body.site-ds .item-gallery-card a:hover .item-cover-image,
+    body.site-ds .item-gallery-card a:focus-visible .item-cover-image,
+    body.site-ds .book-gallery-card a:hover .book-cover-image,
+    body.site-ds .book-gallery-card a:focus-visible .book-cover-image {
+        transform: none;
+    }
+
+    body.site-ds .item-gallery-card a:hover .item-hover-overlay,
+    body.site-ds .item-gallery-card a:focus-visible .item-hover-overlay,
+    body.site-ds .book-gallery-card a:hover .book-hover-overlay,
+    body.site-ds .book-gallery-card a:focus-visible .book-hover-overlay {
+        transform: none;
+    }
+
+    body.site-ds .item-gallery-card a:hover .item-hover-content,
+    body.site-ds .item-gallery-card a:focus-visible .item-hover-content,
+    body.site-ds .book-gallery-card a:hover .book-hover-content,
+    body.site-ds .book-gallery-card a:focus-visible .book-hover-content {
+        transform: none;
+    }
 }
 
 /* -------------------------------------------------------------------------
@@ -716,9 +1303,9 @@ body.site-ds .btn-kakao:hover {
    푸터 링크 포커스
    ------------------------------------------------------------------------- */
 body.site-ds .footer-codemoa__inner a.text-muted:focus-visible {
-    outline: 2px solid rgba(147, 197, 253, 0.8);
+    outline: 2px solid var(--ds-accent);
     outline-offset: 2px;
-    color: #000000 !important;
+    color: var(--ds-text) !important;
 }
 
 /* -------------------------------------------------------------------------
@@ -742,6 +1329,131 @@ body.site-ds .ds-section-kicker {
 }
 
 /* -------------------------------------------------------------------------
+   페이지 헤더 · 허브 타일 (목록·고객센터 등 통일)
+   ------------------------------------------------------------------------- */
+/* DESIGN.md §5 — 목록·허브 페이지 머리글은 본문과 동일 왼쪽 축 */
+body.site-ds .ds-page-header {
+    text-align: start;
+    margin-bottom: clamp(2rem, 5vw, 3rem);
+}
+
+/* 간단 래퍼: 예전 text-center mb-4 머리글 교체용 */
+body.site-ds .ds-page-head {
+    text-align: start;
+}
+
+body.site-ds .ds-page-head h1,
+body.site-ds .ds-page-head h2,
+body.site-ds .ds-page-head h3,
+body.site-ds .ds-page-head p {
+    text-align: inherit;
+}
+
+/* 머리글 바로 아래 리드(한 줄 설명) — 페이지 간 동일 본문 크기 */
+body.site-ds main.ui-page-shell .ds-page-head__lead {
+    font-size: 1rem !important;
+    line-height: 1.55;
+    letter-spacing: 0.16px;
+    max-width: 42rem;
+    color: var(--ds-text-secondary) !important;
+}
+
+body.site-ds .ds-page-header .ds-page-kicker {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ds-text-muted);
+    margin-bottom: 0.5rem;
+}
+
+body.site-ds .ds-page-header h1,
+body.site-ds .ds-page-header .ds-page-title {
+    margin-bottom: 0.75rem;
+}
+
+body.site-ds .ds-page-header .ds-page-lead {
+    color: var(--ds-text-secondary);
+    font-size: 1rem;
+    letter-spacing: 0.16px;
+    line-height: 1.55;
+    max-width: 42rem;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+body.site-ds .ds-page-header--compact {
+    margin-bottom: 1.25rem;
+}
+
+/* 아이콘 + 멀티라인: 둘째 줄은 본문 시작선에 맞춤 (DESIGN.md §5) */
+body.site-ds .ds-icon-lead {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    text-align: start;
+}
+
+body.site-ds .ds-icon-lead__icon {
+    flex-shrink: 0;
+    line-height: 1.5;
+    color: var(--ds-text-muted);
+}
+
+body.site-ds .ds-icon-lead__body {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+body.site-ds a.ds-hub-tile {
+    display: block;
+    height: 100%;
+    padding: 1.5rem;
+    border-radius: 18px;
+    background: var(--ds-surface);
+    box-shadow: var(--ds-shadow-card);
+    text-decoration: none;
+    color: var(--ds-text);
+    border: none;
+    transition:
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+body.site-ds a.ds-hub-tile:hover {
+    color: var(--ds-text);
+    box-shadow:
+        0 0 0 1px var(--ds-accent-line),
+        0 10px 32px rgba(0, 0, 0, 0.4);
+    transform: translateY(-2px);
+}
+
+body.site-ds a.ds-hub-tile .ds-hub-tile__title {
+    font-size: var(--ds-type-subsection);
+    font-weight: 500;
+    letter-spacing: 0.15px;
+    margin-bottom: 0.35rem;
+    color: var(--ds-text);
+}
+
+body.site-ds a.ds-hub-tile .ds-hub-tile__desc {
+    font-size: var(--ds-type-caption);
+    letter-spacing: 0.14px;
+    color: var(--ds-text-secondary);
+    margin-bottom: 0;
+}
+
+body.site-ds .ds-form-section-title {
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--ds-text-muted);
+    margin-bottom: 0.75rem;
+}
+
+/* -------------------------------------------------------------------------
    관리자 홈
    ------------------------------------------------------------------------- */
 body.site-ds .ds-admin-dashboard {
@@ -756,7 +1468,8 @@ body.site-ds .ds-admin-dashboard__intro {
     letter-spacing: 0.16px;
     color: var(--ds-text-muted);
     margin-bottom: 2rem;
-    text-align: center;
+    text-align: start;
+    max-width: 42rem;
 }
 
 body.site-ds .ds-admin-dashboard__grid {
@@ -772,7 +1485,7 @@ body.site-ds .ds-admin-dashboard__action {
     gap: 0.35rem;
     padding: 1.25rem 1.35rem;
     border-radius: 18px;
-    background: #ffffff;
+    background: var(--ds-surface);
     border: none;
     box-shadow: var(--ds-shadow-card);
     text-align: left;
@@ -790,8 +1503,8 @@ body.site-ds .ds-admin-dashboard__action {
 body.site-ds .ds-admin-dashboard__action:hover {
     color: var(--ds-text);
     box-shadow:
-        0 0 0 1px rgba(0, 0, 0, 0.08),
-        0 6px 16px rgba(0, 0, 0, 0.06);
+        0 0 0 1px var(--ds-accent-line),
+        0 10px 32px rgba(0, 0, 0, 0.4);
     transform: translateY(-2px);
 }
 

@@ -12,19 +12,29 @@
 <div layout:fragment="content" class="ui-view page-search">
 
 	<header class="page-search__header">
-		<h1 class="page-search__title">
+		<h1 class="page-search__title" th:if="${emptyKeyword == null}">
 			<span class="page-search__keyword" th:text="${keyword}"></span> 검색 결과
 		</h1>
-		<p class="page-search__count" th:if="${searchCount != null}">
+		<h1 class="page-search__title" th:if="${emptyKeyword != null}">
+			검색 키워드가 없습니다
+		</h1>
+		<p class="page-search__count text-muted" th:if="${emptyKeyword != null}">
+			검색어를 입력한 뒤 다시 시도해 주세요.
+		</p>
+		<p class="page-search__count" th:if="${emptyKeyword == null && searchCount != null}">
 			총 <strong th:text="${searchCount}">0</strong>건
+			<span th:if="${searchTruncated != null}" class="text-muted small ms-1">(최대 200건까지 표시)</span>
 		</p>
 	</header>
 
-	<form class="page-search__toolbar" th:action="@{/search}" method="get" id="searchFilterForm">
+	<form class="page-search__toolbar" th:action="@{/search}" method="get" id="searchFilterForm"
+		th:attr="aria-busy=${false}">
 		<input type="hidden" name="keyword" th:value="${keyword}" />
 		<div>
 			<label for="searchSort">정렬</label>
-			<select class="form-select" id="searchSort" name="sort" onchange="this.form.submit()">
+			<select class="form-select" id="searchSort" name="sort"
+				aria-describedby="searchFilterHint"
+				onchange="this.form.setAttribute('aria-busy','true'); this.form.submit();">
 				<option value="recent" th:selected="${sort == 'recent'}">최신순</option>
 				<option value="oldest" th:selected="${sort == 'oldest'}">오래된순</option>
 				<option value="title" th:selected="${sort == 'title'}">제목 가나다순</option>
@@ -32,7 +42,9 @@
 		</div>
 		<div>
 			<label for="searchType">유형</label>
-			<select class="form-select" id="searchType" name="type" onchange="this.form.submit()">
+			<select class="form-select" id="searchType" name="type"
+				aria-describedby="searchFilterHint"
+				onchange="this.form.setAttribute('aria-busy','true'); this.form.submit();">
 				<option value="all" th:selected="${typeFilter == 'all'}">전체</option>
 				<option value="community" th:selected="${typeFilter == 'community'}">게시글</option>
 				<option value="lecture" th:selected="${typeFilter == 'lecture'}">강좌 추천</option>
@@ -41,13 +53,14 @@
 				<option value="recruit" th:selected="${typeFilter == 'recruit'}">팀원 모집</option>
 			</select>
 		</div>
+		<p id="searchFilterHint" class="visually-hidden">값을 바꾸면 결과가 곧바로 다시 불러와집니다.</p>
 	</form>
 
-	<th:block th:if="${searchList != null && !#lists.isEmpty(searchList)}">
+	<th:block th:if="${emptyKeyword == null && searchList != null && !#lists.isEmpty(searchList)}">
 		<ul class="page-search__list" role="list">
 			<li th:each="board : ${searchList}">
 				<a class="page-search__card text-decoration-none text-reset"
-				   th:href="${board.url}">
+				   th:href="@{${board.url}}">
 					<div class="page-search__meta">
 						<span class="page-search__type" th:text="${board.type}">유형</span>
 						<span class="page-search__writer" th:text="${board.writer}">작성자</span>
@@ -60,9 +73,22 @@
 		</ul>
 	</th:block>
 
-	<div th:if="${searchList == null || #lists.isEmpty(searchList)}" class="ui-empty" role="status">
+	<div th:if="${emptyKeyword == null && (searchList == null || #lists.isEmpty(searchList))}" class="ui-empty" role="status">
 		<strong>검색 결과가 없습니다</strong>
 		<span>다른 키워드로 검색하거나 유형 필터를 <b>전체</b>로 바꿔 보세요.</span>
+		<div class="mt-4 d-flex flex-wrap gap-2 justify-content-center">
+			<a class="btn btn-outline-primary" th:href="@{/community/free}">커뮤니티(자유)</a>
+			<a class="btn btn-outline-primary" th:href="@{/information}">IT 정보 허브</a>
+			<a class="btn btn-outline-primary" th:href="@{/teamRecruitList}">팀 모집</a>
+		</div>
+	</div>
+
+	<div th:if="${emptyKeyword != null}" class="ui-empty" role="status">
+		<strong>검색어를 입력해 주세요</strong>
+		<span>상단 검색창에서 키워드를 입력한 뒤 검색해 주세요.</span>
+		<div class="mt-4 d-flex flex-wrap gap-2 justify-content-center">
+			<a class="btn btn-primary" th:href="@{/}">메인으로</a>
+		</div>
 	</div>
 
 </div>

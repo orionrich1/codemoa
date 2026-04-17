@@ -10,7 +10,10 @@ import java.time.LocalDateTime;
 
 @Getter
 public class BoardListResponse {
+    /** URL·API용 글로벌 PK */
     private final Integer boardNo;
+    /** 목록 「번호」열: 같은 필터(게시판·검색) 안에서 오래된 글부터 1, 2, 3… */
+    private final int categoryPostNo;
     private final String title;
     private final String category;
     private final String categoryUrlSegment;
@@ -19,8 +22,9 @@ public class BoardListResponse {
     private final LocalDateTime createdAt;
     private final Integer stakedPoints;
 
-    public BoardListResponse(CommunityBoard board) {
+    public BoardListResponse(CommunityBoard board, int categoryPostNo) {
         this.boardNo = board.getBoardNo();
+        this.categoryPostNo = categoryPostNo;
         this.title = board.getTitle();
         this.category = board.getCategory();
         this.categoryUrlSegment = CommunityCategoryPaths.toUrlSegment(board.getCategory());

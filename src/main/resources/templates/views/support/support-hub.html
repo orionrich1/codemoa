@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+<head>
+	<title>고객센터</title>
+</head>
+<body>
+<th:block layout:fragment="content" class="ui-view">
+	<div class="container my-5">
+		<header class="ds-page-header">
+			<p class="ds-page-kicker mb-0">Support</p>
+			<h1 class="ds-page-title h2">고객센터</h1>
+			<p class="ds-page-lead mb-0">
+				FAQ에서 자주 묻는 질문을 먼저 확인해 주세요. 해결되지 않으면 Q&amp;A로 문의해 주세요.
+			</p>
+		</header>
+		<div class="row g-4 justify-content-start">
+			<div class="col-md-5">
+				<a th:href="@{/support/faq}" class="ds-hub-tile">
+					<h2 class="ds-hub-tile__title">FAQ</h2>
+					<p class="ds-hub-tile__desc">결제, 계정, 학습 등 자주 묻는 질문과 답변을 확인합니다.</p>
+				</a>
+			</div>
+			<div class="col-md-5">
+				<a th:href="@{/support/qna}" class="ds-hub-tile">
+					<h2 class="ds-hub-tile__title">Q&amp;A</h2>
+					<p class="ds-hub-tile__desc">로그인 후 1:1 질문을 남기면 운영자가 답변합니다.</p>
+				</a>
+			</div>
+		</div>
+	</div>
+</th:block>
+</body>
+</html>

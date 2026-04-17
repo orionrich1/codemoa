@@ -20,7 +20,7 @@
                         <li class="breadcrumb-item active" aria-current="page" th:text="${categoryName}">게시판</li>
                     </ol>
                 </nav>
-                <div class="text-center mb-4">
+                <div class="ds-page-head mb-4">
                     <p class="community-page__kicker mb-0">Community</p>
                     <h1 class="community-page__title mb-0" th:text="${categoryName}">게시판</h1>
                 </div>
@@ -68,7 +68,7 @@
                                         <th class="text-center d-none d-md-table-cell ds-table-col-10">번호</th>
                                         <th class="text-center ds-table-col-15">카테고리</th>
                                         <th>제목</th>
-                                        <th class="text-center ds-table-col-15">작성자</th>
+                                        <th class="text-center ds-table-col-author">작성자</th>
                                         <th class="text-center d-none d-md-table-cell ds-table-col-15">작성일</th>
                                     </tr>
                                 </thead>
@@ -78,7 +78,7 @@
                                         tabindex="0"
                                         role="link"
                                         th:attr="data-href=@{/community/{cat}/{boardNo}(cat=${board.categoryUrlSegment}, boardNo=${board.boardNo})}">
-                                        <td class="td-no text-center d-none d-md-table-cell" th:text="${board.boardNo}">1</td>
+                                        <td class="td-no text-center d-none d-md-table-cell" th:text="${board.categoryPostNo}">1</td>
                                         <td class="td-category text-center">
                                             <span class="community-ds-chip" th:text="${board.category}">Java</span>
                                         </td>

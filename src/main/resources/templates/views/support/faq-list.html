@@ -1,65 +1,103 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layouts/default_layout}">
 
 <head>
-    <title>FAQ</title>
+	<title>FAQ</title>
 </head>
 
 <th:block layout:fragment="content" class="ui-view">
-    <div class="container my-5">
-        <div class="row text-center mb-4">
-            <div class="col">
-                <h2 class="fs-3 fw-bold">FAQ</h2>
-            </div>
-        </div>
+	<div class="container my-5">
+		<nav class="mb-3" aria-label="breadcrumb">
+			<ol class="breadcrumb mb-0">
+				<li class="breadcrumb-item"><a th:href="@{/}">홈</a></li>
+				<li class="breadcrumb-item"><a th:href="@{/support}">고객센터</a></li>
+				<li class="breadcrumb-item active" aria-current="page">FAQ</li>
+			</ol>
+		</nav>
 
-        <div class="row justify-content-center mb-5" 
-             sec:authorize="isAuthenticated() and authentication.principal.getUser().getGrade().name().equalsIgnoreCase('admin')">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">
-                        FAQ 신규 등록
-                    </div>
-                    <div class="card-body">
-                        <form th:action="@{/support/faq}" method="post">
-                            <div class="mb-3">
-                                <label for="question" class="form-label">질문 (Question)</label>
-                                <input type="text" class="form-control" id="question" name="question" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="answer" class="form-label">답변 (Answer)</label>
-                                <textarea class="form-control" id="answer" name="answer" rows="5" required></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary">등록하기</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="accordion" id="faqAccordion">
-            <th:block th:if="${!#lists.isEmpty(faqList)}">
-                <div class="accordion-item" th:each="faq, iterStat : ${faqList}">
-                    <h2 class="accordion-header" th:id="'heading' + ${iterStat.count}">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapse' + ${iterStat.count}" aria-expanded="false" th:aria-controls="'collapse' + ${iterStat.count}">
-                            <strong th:text="${faq.question}"></strong>
-                        </button>
-                    </h2>
-                    <div th:id="'collapse' + ${iterStat.count}" class="accordion-collapse collapse" th:aria-labelledby="'heading' + ${iterStat.count}" data-bs-parent="#faqAccordion">
-                        <div class="accordion-body ds-faq-answer" th:text="${faq.answer}">
-                        </div>
-                    </div>
-                </div>
-            </th:block>
+		<header class="ds-page-header ds-page-header--compact">
+			<p class="ds-page-kicker mb-0">FAQ</p>
+			<h1 class="h3 mb-0 ds-page-title">자주 묻는 질문</h1>
+		</header>
 
-            <th:block th:if="${#lists.isEmpty(faqList)}">
-                <div class="text-center p-5">
-                    <p class="text-muted">등록된 FAQ가 없습니다.</p>
-                </div>
-            </th:block>
-        </div>
-    </div>
+		<div class="row justify-content-center mb-5" sec:authorize="hasRole('ADMIN')">
+			<div class="col-md-8">
+				<div class="card">
+					<div class="card-header">
+						FAQ 신규 등록
+					</div>
+					<div class="card-body">
+						<form th:action="@{/support/faq}" th:object="${faqCreate}" method="post">
+							<input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+							<div class="mb-3">
+								<label for="faqCategory" class="form-label">카테고리</label>
+								<select class="form-select" id="faqCategory" th:field="*{category}" required aria-required="true">
+									<option value="" disabled th:selected="${faqCreate.category == null or #strings.isEmpty(faqCreate.category)}">선택</option>
+									<option th:each="cat : ${faqCategoryOrder}" th:value="${cat}" th:text="${cat}"></option>
+								</select>
+								<p class="text-danger small mb-0" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></p>
+							</div>
+							<div class="mb-3">
+								<label for="question" class="form-label">질문</label>
+								<input type="text" class="form-control" id="question" th:field="*{question}" maxlength="500" required aria-required="true">
+								<p class="form-text text-muted mb-0">최대 500자 · 목록에 그대로 표시됩니다.</p>
+								<p class="text-danger small mb-0" th:if="${#fields.hasErrors('question')}" th:errors="*{question}"></p>
+							</div>
+							<div class="mb-3">
+								<label for="answer" class="form-label">답변</label>
+								<textarea class="form-control" id="answer" th:field="*{answer}" rows="5" maxlength="4000" required aria-required="true"></textarea>
+								<p class="form-text text-muted mb-0">최대 4000자 · 줄바꿈은 그대로 표시됩니다.</p>
+								<p class="text-danger small mb-0" th:if="${#fields.hasErrors('answer')}" th:errors="*{answer}"></p>
+							</div>
+							<button type="submit" class="btn btn-primary" id="faqSubmitBtn">등록하기</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<th:block th:if="${faqHasAny}">
+				<th:block th:each="catLabel, catStat : ${faqCategoryOrder}">
+					<th:block th:with="catFaqs=${faqByCategory.get(catLabel)}">
+						<section th:if="${catFaqs != null and !catFaqs.isEmpty()}" class="mb-4" th:attr="aria-labelledby=${'faqCatHeading' + catStat.index}">
+							<h2 class="ds-type-section-label mb-3" th:id="${'faqCatHeading' + catStat.index}" th:text="${catLabel}">카테고리</h2>
+							<div class="accordion" th:id="${'faqAccordion' + catStat.index}">
+								<div class="accordion-item" th:each="faq, iterStat : ${catFaqs}">
+									<h3 class="accordion-header" th:id="${'heading' + catStat.index + '_' + iterStat.index}">
+										<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+											th:data-bs-target="${'#collapse' + catStat.index + '_' + iterStat.index}"
+											aria-expanded="false"
+											th:attr="aria-controls=${'collapse' + catStat.index + '_' + iterStat.index}"
+											th:attrappend="aria-label=${faq.question}">
+											<strong th:text="${faq.question}"></strong>
+										</button>
+									</h3>
+									<div th:id="${'collapse' + catStat.index + '_' + iterStat.index}" class="accordion-collapse collapse"
+										th:attr="aria-labelledby=${'heading' + catStat.index + '_' + iterStat.index}"
+										th:attrappend="data-bs-parent=${'#faqAccordion' + catStat.index}">
+										<div class="accordion-body ds-faq-answer" th:text="${faq.answer}">
+										</div>
+									</div>
+								</div>
+							</div>
+						</section>
+					</th:block>
+				</th:block>
+		</th:block>
+		<div th:unless="${faqHasAny}" class="text-center p-5">
+			<p class="text-muted">등록된 FAQ가 없습니다.</p>
+		</div>
+	</div>
+	<script>
+		(function () {
+			var btn = document.getElementById('faqSubmitBtn');
+			if (!btn) return;
+			var f = btn.closest('form');
+			if (!f) return;
+			f.addEventListener('submit', function () { btn.disabled = true; });
+		})();
+	</script>
 </th:block>
 </html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+
+<head>
+	<title>Q&amp;A 수정</title>
+</head>
+
+<th:block layout:fragment="content" class="ui-view">
+	<div class="container my-5">
+		<nav class="mb-3" aria-label="breadcrumb">
+			<ol class="breadcrumb mb-0">
+				<li class="breadcrumb-item"><a th:href="@{/}">홈</a></li>
+				<li class="breadcrumb-item"><a th:href="@{/support}">고객센터</a></li>
+				<li class="breadcrumb-item"><a th:href="@{/support/qna}">Q&amp;A</a></li>
+				<li class="breadcrumb-item"><a th:href="@{/support/qna/{id}(id=${editQnaId})}">상세</a></li>
+				<li class="breadcrumb-item active" aria-current="page">수정</li>
+			</ol>
+		</nav>
+		<div class="row justify-content-center">
+			<div class="col-md-8">
+				<div class="card">
+					<div class="card-header">
+						<h2 class="ds-page-title mb-0">질문 수정</h2>
+						<p class="text-muted small mb-0 mt-2">답변이 등록되기 전에만 수정할 수 있습니다.</p>
+					</div>
+					<div class="card-body">
+						<form th:action="@{/support/qna/{id}/edit(id=${editQnaId})}" th:object="${qnaForm}" method="post" id="qnaEditForm">
+							<input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+							<div class="mb-3">
+								<label for="title" class="form-label">제목</label>
+								<input type="text" class="form-control" id="title" th:field="*{title}" maxlength="200" required aria-required="true">
+								<p class="form-text text-muted mb-0">최대 200자</p>
+								<p class="text-danger small mb-0" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
+							</div>
+							<div class="mb-3">
+								<label for="content" class="form-label">내용</label>
+								<textarea class="form-control" id="content" th:field="*{content}" rows="10" maxlength="5000" required aria-required="true"></textarea>
+								<p class="form-text text-muted mb-0">최대 5000자</p>
+								<p class="text-danger small mb-0" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></p>
+							</div>
+							<div class="d-flex justify-content-end flex-wrap gap-2">
+								<a th:href="@{/support/qna/{id}(id=${editQnaId})}" class="btn btn-secondary">취소</a>
+								<button type="submit" class="btn btn-primary" id="qnaEditSubmitBtn">저장하기</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		(function () {
+			var btn = document.getElementById('qnaEditSubmitBtn');
+			if (!btn) return;
+			var f = document.getElementById('qnaEditForm');
+			if (!f) return;
+			f.addEventListener('submit', function () { btn.disabled = true; });
+		})();
+	</script>
+</th:block>
+</html>

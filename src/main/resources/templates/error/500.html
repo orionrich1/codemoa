@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+<head>
+    <title>500 — 서버 오류 — CodeMoa</title>
+</head>
+<body>
+<section layout:fragment="content" class="ui-view container py-5 text-center" aria-labelledby="err500-title">
+    <div class="mx-auto col-12 col-lg-8 col-xl-6">
+        <p class="text-secondary small mb-2">500</p>
+        <h1 id="err500-title" class="ds-page-title mb-3">일시적인 오류가 발생했습니다</h1>
+        <p class="text-secondary mb-4" th:text="${message != null && !#strings.isEmpty(message)} ? ${message} : '잠시 후 다시 시도해 주세요. 문제가 계속되면 운영자에게 알려 주세요.'">
+            잠시 후 다시 시도해 주세요.
+        </p>
+        <div class="d-flex flex-wrap gap-2 justify-content-center">
+            <a class="btn btn-primary" th:href="@{/}">홈으로</a>
+            <button type="button" class="btn btn-outline-secondary" onclick="location.reload();">새로고침</button>
+        </div>
+        <p class="small text-muted mt-4 mb-0" th:if="${path != null}" th:text="'요청 경로: ' + ${path}"></p>
+    </div>
+</section>
+</body>
+</html>

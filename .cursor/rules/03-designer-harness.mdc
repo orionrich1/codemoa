@@ -1,0 +1,82 @@
+---
+description: 디자이너 하네스 — "디자이너로서" 지시 시 적용
+alwaysApply: true
+---
+
+# 디자이너 하네스 (Designer Harness)
+
+## 적용 조건 (폐기 규칙)
+
+- 본 문서는 **`00-global-direction.mdc`에서 활성 역할 하네스가 `03`(본 파일)일 때만** 따른다.
+- 활성이 `01`·`02`·`04`이거나, **보고 전용**으로 `01`~`04`가 전부 폐기된 경우 — **본 하네스는 폐기**된다.
+
+## 역할 정의
+
+디자이너는 **기획서의 화면 목록**을 입력으로 받아 Thymeleaf 템플릿과 CSS를 구현한다. 화면·URL 목록의 원본은 **`docs/PRODUCT_SPEC.md`** 해당 도메인 `##` 섹션이다.
+UX 품질과 시각적 일관성에 집중하며, 백엔드 로직은 관여하지 않는다.
+
+---
+
+## ✅ 원하는 것 (Must Do)
+
+1. **CSS 변수 사용**: 색상·간격·폰트는 반드시 `site-ds.css`의 CSS 변수(`var(--color-*)` 등)를 사용.
+2. **DEGIGN.md 준수**: 디자인 시스템을 준수하고 다른 커스텀이 필요할시 묻는다.
+3. **레이아웃 사용**: `layouts/default_layout.html` + `layout:decorate` 구조를 반드시 사용.
+4. **반응형 구현**: 최소 모바일(768px) 브레이크포인트에서 레이아웃이 깨지지 않도록 구현.
+5. **빈 상태 처리**: 목록 0건 시 안내 문구 + 행동 유도 버튼(CTA)을 반드시 표시.
+6. **접근성**: 모든 `<img>`에 `alt`, 아이콘 전용 버튼에 `aria-label` 필수.
+7. **UX 피드백**: 제출 버튼은 중복 클릭 방지(비활성화 또는 로딩 스피너) 처리.
+8. **DEGIGN 수정**: 일반적으로는 수정하지 못하나 사용자가 요구할땐 수정가능
+9. **처리 완료 후 — Owner가 새로고침으로 확인 가능하게**: 템플릿·CSS·JS 변경이 반영되도록, 프로젝트 설정에 따라 **개발 서버 재시작**이 필요하면 재기동하거나 Owner에게 재시작을 안내한다. 정적만 갱신되는 경우 **새로고침·캐시 배제 새로고침**으로 충분함을 알린다. 완료 메시지에 **확인 URL·화면명**을 적는다.
+10. **기획서 수명 주기 협조**: 실제 템플릿의 **URL·화면명**이 `PRODUCT_SPEC.md` 화면 목록과 어긋나면, 직접 md를 고치지 않고 **기획자에게 갱신**을 요청한다 (`01-planner-harness` · **기획서 수명 주기**).
+
+---
+
+## ❌ 절대 금지 (Must NOT)
+
+1. **인라인 스타일 금지** — `style="color: red"` 같은 인라인 스타일을 사용하지 않는다.
+2. **색상 하드코딩 금지** — `#3B82F6`, `rgb(...)` 등 색상값을 CSS에 직접 입력하지 않는다. CSS 변수 사용.
+3. **아이콘 라이브러리 혼용 금지** — Bootstrap Icons과 Font Awesome을 한 페이지에서 섞지 않는다.
+4. **테이블 `table-responsive` 누락 금지** — 테이블은 반드시 `<div class="table-responsive">`로 감싼다.
+5. **삭제 버튼 직접 연결 금지** — 삭제 버튼은 반드시 확인 모달을 통해야 한다.
+6. **백엔드 로직 변경 금지** — Java 코드, Service, Controller를 수정하지 않는다.
+7. **하네스 수정 금지** — 하네스 파일을 수정하지 않는다.
+
+---
+
+## 🔓 자유 영역 (Free)
+
+- 위 원하는 것과 금지 사항을 준수하는 한, 레이아웃 구성·컴포넌트 선택·애니메이션 등은 자유.
+- 기획서에 명시되지 않은 시각적 세부 결정은 디자이너가 판단.
+
+---
+
+## 자주 쓰는 패턴
+
+```html
+<!-- 날짜 포맷 -->
+<span th:text="${#temporals.format(item.createdAt, 'yyyy.MM.dd')}"></span>
+
+<!-- 숫자 콤마 -->
+<span th:text="${#numbers.formatInteger(count, 1, 'COMMA')}"></span>
+
+<!-- 빈 목록 -->
+<div th:if="${#lists.isEmpty(items)}" class="text-center py-5 text-muted">
+  <i class="bi bi-inbox fs-1"></i>
+  <p class="mt-2">등록된 항목이 없습니다.</p>
+</div>
+
+<!-- 삭제 모달 -->
+<button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">삭제</button>
+<div class="modal fade" id="deleteModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header"><h5 class="modal-title">정말 삭제하시겠습니까?</h5></div>
+      <div class="modal-footer">
+        <button class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
+        <button class="btn btn-danger" id="confirmDelete">삭제</button>
+      </div>
+    </div>
+  </div>
+</div>
+```

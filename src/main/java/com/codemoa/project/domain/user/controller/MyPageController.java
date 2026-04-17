@@ -22,6 +22,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.codemoa.project.domain.diary.dto.request.SaveProjectRequest;
 import com.codemoa.project.domain.diary.entity.Project;
 import com.codemoa.project.domain.diary.service.DiaryService;
+import com.codemoa.project.domain.problem.service.ProblemService;
+import com.codemoa.project.domain.support.service.SupportService;
 import com.codemoa.project.domain.user.dto.request.UserPassUpdateRequest;
 import com.codemoa.project.domain.user.dto.request.UserUpdateRequest;
 import com.codemoa.project.domain.user.entity.User;
@@ -33,7 +35,10 @@ import com.codemoa.project.domain.user.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.validation.BindingResult;
 
 @Controller
 @RequestMapping("/my-pages")
@@ -43,6 +48,8 @@ public class MyPageController {
 	private final SnsUserService snsUserService;
 	private final UserService userService;
 	private final DiaryService diaryService;
+	private final ProblemService problemService;
+	private final SupportService supportService;
 
 	private final UserRepository userRepository;
 
@@ -61,17 +68,22 @@ public class MyPageController {
 		User user = principal.getUser();
 		model.addAttribute("myPageUser", myPageService.checkSnsLinked(user));
 
+		String userId = principal.getUsername();
 		if (keyword != null) {
-			model.addAttribute("projects", diaryService.searchProjectList(principal.getUsername(), keyword));
+			model.addAttribute("projects", diaryService.searchProjectList(userId, keyword));
 			model.addAttribute("searched", true);
 		} else {
-			model.addAttribute("projects", diaryService.getProjectList(principal.getUsername()));
+			model.addAttribute("projects", diaryService.getProjectList(userId));
 		}
+
+		model.addAttribute("activityAiSubmissions7d", problemService.countSubmissionsLast7Days(userId));
+		model.addAttribute("activityMyUnansweredQna", supportService.countMyUnansweredQna(userId));
+		model.addAttribute("activityProjectsInProgress", diaryService.countProjectsByStatus(userId, "진행중"));
 
 		return "views/user/mypage/myPageMain";
 	}
 
-	@GetMapping("/snsUnlink")
+	@PostMapping("/snsUnlink")
 	public String snsUnlink(@AuthenticationPrincipal CustomUserDetails principal) {
 		User user = principal.getUser();
 		snsUserService.unlinkSnsAccount(user.getUserId());
@@ -81,6 +93,12 @@ public class MyPageController {
 	@GetMapping("/updateUserForm")
 	public String updateUserForm(Model model, @AuthenticationPrincipal CustomUserDetails principal) {
 		User user = principal.getUser();
+		UserUpdateRequest form = new UserUpdateRequest();
+		form.setName(user.getName());
+		form.setNickname(user.getNickname());
+		form.setMobile(user.getMobile());
+		form.setEmail(user.getEmail());
+		model.addAttribute("userUpdateRequest", form);
 		model.addAttribute("user", user);
 		return "views/user/mypage/updateForm";
 	}
@@ -98,10 +116,13 @@ public class MyPageController {
 	}
 
 	@PostMapping("/updateUser")
-	public String updateUser(UserUpdateRequest request,
-			@AuthenticationPrincipal CustomUserDetails principal) {
-		// C-1: 클라이언트 request에서 userId를 받지 않고 인증된 세션의 userId로 강제 교체
+	public String updateUser(@Valid @ModelAttribute("userUpdateRequest") UserUpdateRequest request,
+			BindingResult bindingResult, Model model, @AuthenticationPrincipal CustomUserDetails principal) {
 		request.setUserId(principal.getUsername());
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("user", principal.getUser());
+			return "views/user/mypage/updateForm";
+		}
 		userService.updateUser(request);
 
 		User updatedUser = userRepository.findById(request.getUserId()).orElseThrow();

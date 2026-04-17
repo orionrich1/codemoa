@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+<head>
+    <title>403 — 접근 제한 — CodeMoa</title>
+</head>
+<body>
+<section layout:fragment="content" class="ui-view container py-5 text-center" aria-labelledby="err403-title">
+    <div class="mx-auto col-12 col-lg-8 col-xl-6">
+        <p class="text-secondary small mb-2">403</p>
+        <h1 id="err403-title" class="ds-page-title mb-3">이 작업을 수행할 권한이 없습니다</h1>
+        <p class="text-secondary mb-4" th:text="${message != null && !#strings.isEmpty(message)} ? ${message} : '로그인 계정을 확인하거나 관리자에게 문의해 주세요.'">
+            로그인 계정을 확인하거나 관리자에게 문의해 주세요.
+        </p>
+        <div class="d-flex flex-wrap gap-2 justify-content-center">
+            <a class="btn btn-primary" th:href="@{/loginForm}">로그인</a>
+            <a class="btn btn-outline-secondary" th:href="@{/}">홈으로</a>
+        </div>
+        <p class="small text-muted mt-4 mb-0" th:if="${path != null}" th:text="'요청 경로: ' + ${path}"></p>
+    </div>
+</section>
+</body>
+</html>

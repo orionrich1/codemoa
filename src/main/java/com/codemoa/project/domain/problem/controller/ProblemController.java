@@ -15,7 +15,6 @@ import com.codemoa.project.domain.problem.dto.request.UpdateProblemRequest;
 import com.codemoa.project.domain.problem.dto.request.WriteProblemRequest;
 import com.codemoa.project.domain.problem.service.ProblemService;
 import com.codemoa.project.domain.user.security.CustomUserDetails;
-import com.codemoa.project.domain.user.security.CustomUserDetails;
 
 import lombok.RequiredArgsConstructor;
 
@@ -88,22 +87,39 @@ public class ProblemController {
 	}
 
 	@GetMapping("/problemWrite")
-	public String problemWriteForm() {
+	public String problemWriteForm(@AuthenticationPrincipal CustomUserDetails principal) {
+		if (principal == null) {
+			return "redirect:/loginForm";
+		}
+		if (!isAdmin(principal)) {
+			throw new IllegalStateException("문제 등록은 관리자만 할 수 있습니다.");
+		}
 		return "views/problem/problemWriteForm";
 	}
 
 	@PostMapping("/problemWrite")
 	public String problemWriteResult(WriteProblemRequest request,
 			@AuthenticationPrincipal CustomUserDetails principal) {
-		if (!checkAuth(principal))
+		if (principal == null) {
 			return "redirect:/loginForm";
+		}
+		if (!isAdmin(principal)) {
+			throw new IllegalStateException("문제 등록은 관리자만 할 수 있습니다.");
+		}
 
 		int newProblemId = problemService.addProblemAndGetId(request, principal.getUsername());
 		return "redirect:/problems/problemDetail?problemId=" + newProblemId;
 	}
 
 	@GetMapping("/problemUpdate")
-	public String problemUpdateForm(@RequestParam("no") int no, Model model) {
+	public String problemUpdateForm(@RequestParam("no") int no, Model model,
+			@AuthenticationPrincipal CustomUserDetails principal) {
+		if (principal == null) {
+			return "redirect:/loginForm";
+		}
+		if (!isAdmin(principal)) {
+			throw new IllegalStateException("문제 수정은 관리자만 할 수 있습니다.");
+		}
 		model.addAttribute("problem", problemService.getProblemDetail(no));
 		return "views/problem/problemUpdateForm";
 	}
@@ -111,8 +127,12 @@ public class ProblemController {
 	@PostMapping("/problemUpdate")
 	public String problemUpdateResult(UpdateProblemRequest request,
 			@AuthenticationPrincipal CustomUserDetails principal) {
-		if (!checkAuth(principal))
+		if (principal == null) {
 			return "redirect:/loginForm";
+		}
+		if (!isAdmin(principal)) {
+			throw new IllegalStateException("문제 수정은 관리자만 할 수 있습니다.");
+		}
 
 		problemService.updateProblem(request);
 		return "redirect:/problems/problemDetail?problemId=" + request.getProblemId();
@@ -120,20 +140,19 @@ public class ProblemController {
 
 	@GetMapping("/problemDelete")
 	public String problemDelete(@RequestParam("no") int no, @AuthenticationPrincipal CustomUserDetails principal) {
-		// 권한 체크
-		if (!checkAuth(principal))
+		if (principal == null) {
 			return "redirect:/loginForm";
+		}
+		if (!isAdmin(principal)) {
+			throw new IllegalStateException("문제 삭제는 관리자만 할 수 있습니다.");
+		}
 
 		problemService.deleteProblem(no);
 		return "redirect:/problems/";
 	}
 
-	// 권한 체크 메소드
-	private boolean checkAuth(CustomUserDetails principal) {
-		if (principal == null
-				|| !principal.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"))) {
-			return false;
-		}
-		return true;
+	private static boolean isAdmin(CustomUserDetails principal) {
+		return principal.getAuthorities().stream()
+				.anyMatch(auth -> "ROLE_ADMIN".equals(auth.getAuthority()));
 	}
 }

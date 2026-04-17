@@ -12,9 +12,10 @@
     <div class="container my-5">
         <div class="row justify-content-center">
             <div class="col-lg-10">
-                <div class="text-center mb-4">
-                    <h2 class="fw-bold fs-2">채용 공고 목록</h2>
-                </div>
+                <header class="ds-page-header ds-page-header--compact">
+                    <p class="ds-page-kicker mb-0">Employment</p>
+                    <h1 class="h2 mb-0 ds-page-title">채용 공고</h1>
+                </header>
 
                 <div class="card">
                     <div class="card-body p-4">
@@ -66,7 +67,7 @@
                                   <div class="card-body d-flex flex-column p-4">
                                         <div>
                                             <h6 class="card-subtitle mb-2 text-secondary" th:text="${post.company}">회사</h6>
-                                            <h5 class="card-title fw-bold ds-employment-card-title" th:text="${post.title}">제목</h5>
+                                            <h5 class="card-title ds-employment-card-title" th:text="${post.title}">제목</h5>
                                         </div>
 
                                         <div class="mt-auto border-top pt-3">

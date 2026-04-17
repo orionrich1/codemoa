@@ -7,8 +7,8 @@
   <div class="container my-5">
     <div class="row justify-content-center">
       <div class="col-lg-10 col-xl-8">
-        <div class="text-center mb-4">
-          <h2 class="fw-bold fs-2">팀 모집 글 작성</h2>
+        <div class="ds-page-head mb-4">
+          <h1 class="h2 mb-0 ds-page-title">팀 모집 글 작성</h1>
         </div>
 
         <div class="card">
@@ -16,7 +16,7 @@
             <form th:action="@{/recruit/write}" th:object="${teamRecruit}"
                   method="post" enctype="multipart/form-data" id="recruitWriteForm">          
         
-              <h4 class="fw-bold mb-3">공모전 정보</h4>
+              <h2 class="h5 mb-3">공모전 정보</h2>
               <div class="border rounded-3 p-3 mb-4">
                 <div class="mb-3 row g-2 align-items-center">
                   <label for="contestTitle" class="col-sm-3 col-form-label">공모전 페이지 URL</label>
@@ -31,13 +31,13 @@
                   <div class="mb-2" id="contestPreviewImageWrapper">
                     <img id="contestPreviewImage" src="" alt="공모전 미리보기 이미지" class="img-fluid ds-preview-img d-none">
                   </div>
-                  <div class="mb-2 fw-bold" id="contestPreviewTitle"></div>
+                  <div class="mb-2 fw-medium" id="contestPreviewTitle"></div>
                   <div class="small text-muted mb-2" id="contestPreviewDesc"></div>
                   <a id="contestPreviewLink" href="#" target="_blank" class="btn btn-outline-primary btn-sm">공모전 바로가기</a>
                 </div>
               </div>
 
-              <h4 class="fw-bold mb-3">모집 정보</h4>
+              <h2 class="h5 mb-3">모집 정보</h2>
               <div class="border rounded-3 p-3 mb-4">
                 <div class="row">
                   <div class="col-md-6 mb-3 mb-md-0">
@@ -111,7 +111,7 @@
                 </div>
               </div>
         
-              <h4 class="fw-bold mb-3">게시글 내용</h4>
+              <h2 class="h5 mb-3">게시글 내용</h2>
               <div class="border rounded-3 p-3 mb-4">
                 <div class="mb-3">
                   <label for="title" class="form-label fw-semibold">제목</label>

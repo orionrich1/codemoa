@@ -13,14 +13,14 @@
         <div class="row justify-content-center">
             <div class="col-lg-10">
 
-                <div class="text-center mb-4">
+                <div class="ds-page-head mb-4">
                     <p class="ai-page__kicker mb-2">AI Coding</p>
                     <h2 class="ai-page__title mb-0">문제 목록</h2>
                 </div>
 
                 <!-- 진행 요약 (로그인 사용자만) -->
                 <div th:if="${solvedCount != null}"
-                     class="text-center mb-3 text-secondary small">
+                     class="text-start mb-3 text-secondary small">
                     전체 <strong th:text="${totalCount}">0</strong>개 중
                     <strong th:text="${solvedCount}">0</strong>개 풀었습니다
                     <span th:if="${totalCount > 0}"
@@ -35,7 +35,7 @@
                             <div class="d-flex flex-column gap-2 flex-grow-1">
                                 <!-- 키워드 검색 -->
                                 <div class="input-group ds-problem-search-cap">
-                                    <span class="input-group-text bg-white border-end-0">
+                                    <span class="input-group-text border-end-0">
                                         <i class="bi bi-search text-secondary" aria-hidden="true"></i>
                                     </span>
                                     <input type="search" id="problemSearch" class="form-control border-start-0 ps-1"
@@ -68,7 +68,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div sec:authorize="hasRole('ROLE_ADMIN')">
+                            <div sec:authorize="hasRole('ADMIN')">
                                 <a th:href="@{problemWrite}" class="btn btn-primary">
                                     <i class="bi bi-pencil-square me-2" aria-hidden="true"></i>문제 작성
                                 </a>

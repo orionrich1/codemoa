@@ -9,48 +9,46 @@
 <div layout:fragment="content" class="ui-view">
     <div class="container my-5">
 
-        <div class="text-center mb-5">
-            <h1 class="display-5">🏆 명예의 전당</h1>
-            <p class="text-secondary fs-5">CodeMoa의 성장에 기여해주신 분들을 소개합니다.</p>
+        <div class="ds-page-head mb-5">
+            <h1 class="ds-page-title">🏆 명예의 전당</h1>
+            <p class="text-secondary mb-0 ds-page-head__lead">CodeMoa의 성장에 기여해주신 분들을 소개합니다.</p>
         </div>
 
-        <div th:if="${rankingData.myRankingInfo != null}" class="row justify-content-center mb-5">
-            <div class="col-lg-8">
-                <div class="card shadow-sm border-0">
-                    <div class="card-body p-4">
-                        <h3 class="mb-4"><i class="bi bi-person-fill me-2 text-secondary"></i>내 랭킹 정보</h3>
+        <div th:if="${rankingData.myRankingInfo != null}" class="mb-5">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <h3 class="mb-4 ds-type-section-label"><i class="bi bi-person-fill me-2 text-secondary"></i>내 랭킹 정보</h3>
 
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div>
-                                <h5 class="card-title d-flex align-items-center">
-                                    <img th:src="@{/images/rank/{icon}.png(icon=${rankingData.myRankingInfo.currentGradeIconName})}"
-                                         th:alt="${rankingData.myRankingInfo.currentGradeName}" class="me-2 ds-rank-icon-lg">
-                                    <span th:text="${rankingData.myRankingInfo.currentGradeName}">현재 등급</span>
-                                </h5>
-                                <p class="card-text text-secondary mb-0" th:text="|현재 누적 포인트: ${#numbers.formatInteger(rankingData.myRankingInfo.totalPoints, 3, 'COMMA')} P|">현재 누적 포인트</p>
-                            </div>
-                            <div class="text-end" th:if="${rankingData.myRankingInfo.nextGradeName != '최고 등급'}">
-                                <span class="badge bg-success fs-6" th:text="|다음 등급: ${rankingData.myRankingInfo.nextGradeName}|">다음 등급</span>
-                            </div>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <h5 class="card-title d-flex align-items-center">
+                                <img th:src="@{/images/rank/{icon}.png(icon=${rankingData.myRankingInfo.currentGradeIconName})}"
+                                     th:alt="${rankingData.myRankingInfo.currentGradeName}" class="me-2 ds-rank-icon-lg">
+                                <span th:text="${rankingData.myRankingInfo.currentGradeName}">현재 등급</span>
+                            </h5>
+                            <p class="card-text text-secondary mb-0" th:text="|현재 누적 포인트: ${#numbers.formatInteger(rankingData.myRankingInfo.totalPoints, 3, 'COMMA')} P|">현재 누적 포인트</p>
                         </div>
+                        <div class="text-end" th:if="${rankingData.myRankingInfo.nextGradeName != '최고 등급'}">
+                            <span class="badge bg-success fs-6" th:text="|다음 등급: ${rankingData.myRankingInfo.nextGradeName}|">다음 등급</span>
+                        </div>
+                    </div>
 
-                        <div th:if="${rankingData.myRankingInfo.nextGradeName != '최고 등급'}">
-                            <div class="progress ds-progress-ranking">
-                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
-                                     th:with="progress=${(rankingData.myRankingInfo.nextGradeMinPoints - rankingData.myRankingInfo.currentGradeMinPoints == 0) ? 100 : ((rankingData.myRankingInfo.totalPoints - rankingData.myRankingInfo.currentGradeMinPoints) * 100.0) / (rankingData.myRankingInfo.nextGradeMinPoints - rankingData.myRankingInfo.currentGradeMinPoints)}"
-                                     th:style="|width: ${progress}%;|"
-                                     th:aria-valuenow="${progress}"
-                                     aria-valuemin="0" aria-valuemax="100"
-                                     th:text="|${#numbers.formatDecimal(progress, 1, 1)}%|">
-                                </div>
-                            </div>
-                            <div class="text-end mt-1 text-secondary small"
-                                 th:text="|다음 등급까지 ${#numbers.formatInteger(rankingData.myRankingInfo.pointsNeededForNextGrade, 3, 'COMMA')} P 남음|">
+                    <div th:if="${rankingData.myRankingInfo.nextGradeName != '최고 등급'}">
+                        <div class="progress ds-progress-ranking">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                                 th:with="progress=${(rankingData.myRankingInfo.nextGradeMinPoints - rankingData.myRankingInfo.currentGradeMinPoints == 0) ? 100 : ((rankingData.myRankingInfo.totalPoints - rankingData.myRankingInfo.currentGradeMinPoints) * 100.0) / (rankingData.myRankingInfo.nextGradeMinPoints - rankingData.myRankingInfo.currentGradeMinPoints)}"
+                                 th:style="|width: ${progress}%;|"
+                                 th:aria-valuenow="${progress}"
+                                 aria-valuemin="0" aria-valuemax="100"
+                                 th:text="|${#numbers.formatDecimal(progress, 1, 1)}%|">
                             </div>
                         </div>
-                        <div th:if="${rankingData.myRankingInfo.nextGradeName == '최고 등급'}" class="text-center p-3 bg-light rounded mt-3">
-                            <span class="fw-bold text-success">🎉 최고 등급을 달성하셨습니다! 축하합니다!</span>
+                        <div class="text-end mt-1 text-secondary small"
+                             th:text="|다음 등급까지 ${#numbers.formatInteger(rankingData.myRankingInfo.pointsNeededForNextGrade, 3, 'COMMA')} P 남음|">
                         </div>
+                    </div>
+                    <div th:if="${rankingData.myRankingInfo.nextGradeName == '최고 등급'}" class="text-center p-3 bg-light rounded mt-3">
+                        <span class="fw-medium text-success">🎉 최고 등급을 달성하셨습니다! 축하합니다!</span>
                     </div>
                 </div>
             </div>
@@ -58,7 +56,7 @@
 
         <div class="card shadow-sm border-0">
             <div class="card-body p-4">
-                <h3 class="mb-4"><i class="bi bi-award-fill me-2 text-warning"></i>주간 명예의 전당 TOP 10</h3>
+                <h3 class="mb-4 ds-type-section-label"><i class="bi bi-award-fill me-2 text-warning"></i>주간 명예의 전당 TOP 10</h3>
                 <div class="table-responsive">
                     <table class="table table-hover align-middle text-center">
                         <thead class="table-light">
@@ -72,14 +70,14 @@
                         </thead>
                         <tbody>
                             <tr th:each="user : ${rankingData.weeklyTop10}">
-                                <td class="fw-bold" th:text="${user.rank}">1</td>
+                                <td class="fw-medium" th:text="${user.rank}">1</td>
                                 <td th:text="${user.nickname}">Nickname</td>
                                 <td class="ds-grade-cell">
                                     <img th:src="@{/images/rank/{icon}.png(icon=${user.gradeIconName})}"
                                          th:alt="${user.gradeName}" class="ds-rank-icon-sm">
                                     <span th:text="${user.gradeName}">Grade</span>
                                 </td>
-                                <td class="text-primary fw-bold" th:text="|+ ${#numbers.formatInteger(user.weeklyPoints, 3, 'COMMA')} P|">+1,234 P</td>
+                                <td class="text-primary fw-medium" th:text="|+ ${#numbers.formatInteger(user.weeklyPoints, 3, 'COMMA')} P|">+1,234 P</td>
                                 <td class="text-secondary" th:text="|${#numbers.formatInteger(user.totalPoints, 3, 'COMMA')} P|">12,345 P</td>
                             </tr>
                             <tr th:if="${#lists.isEmpty(rankingData.weeklyTop10)}">
@@ -93,7 +91,7 @@
 
         <div class="card shadow-sm border-0 mt-5">
             <div class="card-body p-4">
-                <h3 class="mb-4"><i class="bi bi-question-circle-fill me-2 text-info"></i>포인트는 어떻게 얻나요?</h3>
+                <h3 class="mb-4 ds-type-section-label"><i class="bi bi-question-circle-fill me-2 text-info"></i>포인트는 어떻게 얻나요?</h3>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3">
                         회원가입

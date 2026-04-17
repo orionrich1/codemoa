@@ -25,8 +25,10 @@ public interface DiaryMapper {
 
 	public List<Project> searchProjectList(@Param("userId") String userId, @Param("keyword") String keyword);
 
-	/** 메인 페이지용: 전체 사용자의 최신 프로젝트 목록 */
-	public List<Project> findLatestProjects(@Param("limit") int limit);
+	/** 메인 페이지용: 해당 사용자의 최신 프로젝트만 */
+	List<Project> findLatestProjectsByUser(@Param("userId") String userId, @Param("limit") int limit);
+
+	int countProjectsByStatus(@Param("userId") String userId, @Param("status") String status);
 
 	public Project getProjectDetail(Integer projectId);
 

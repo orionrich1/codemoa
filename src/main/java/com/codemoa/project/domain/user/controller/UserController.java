@@ -33,6 +33,12 @@ public class UserController {
 		return "views/user/loginForm";
 	}
 
+	/** Spring Security 기본 로그인 URL(/login)으로 들어온 경우 커스텀 로그인 화면으로 보냄 */
+	@GetMapping("/login")
+	public String redirectLegacyLoginPath() {
+		return "redirect:/loginForm";
+	}
+
 	// SNS 계정으로 접속한 상태일 때, 연동 해제 요청
 	@GetMapping("/snsDisconnect")
 	public String snsDisconnect(HttpSession session) {

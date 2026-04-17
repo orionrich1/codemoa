@@ -13,8 +13,10 @@ import java.util.Optional;
 public interface SupportMapper {
     // FAQ
     List<Faq> findAllFaqs();
-    
-    void insertFaq(Faq faq); // 메서드 추가
+
+    int countFaqs();
+
+    void insertFaq(Faq faq);
     
     // Q&A
     int getQnaCount(Map<String, Object> params);

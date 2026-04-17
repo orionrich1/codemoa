@@ -3,8 +3,22 @@
 <mapper namespace="com.codemoa.project.domain.main.mapper.MainMapper">
 
 	<select id="searchAll" resultType="MainSearch">
-		SELECT category type, user_id writer, title, content, created_at createdAt,
-			CONCAT('/boards/', board_no) url
+		SELECT * FROM (
+		SELECT CONCAT('커뮤니티 · ', category) type, user_id writer, title, content, created_at createdAt,
+			CONCAT('/community/',
+				CASE TRIM(category)
+					WHEN '자유' THEN 'free'
+					WHEN 'Java' THEN 'Java'
+					WHEN 'Python' THEN 'Python'
+					WHEN 'JavaScript' THEN 'JavaScript'
+					WHEN 'C#' THEN 'C#'
+					WHEN 'Kotlin' THEN 'Kotlin'
+					WHEN '기타' THEN 'etc'
+					ELSE 'etc'
+				END,
+				'/',
+				board_no
+			) url
 		FROM community_board
 		WHERE user_id LIKE CONCAT('%', #{keyword}, '%')
 			OR title LIKE CONCAT('%', #{keyword}, '%')
@@ -31,7 +45,7 @@
 		
 		UNION ALL
 		
-		SELECT '도서 추천' type, user_id writer, title, content, reg_date createAt,
+		SELECT '도서 추천' type, user_id writer, title, content, reg_date createdAt,
 			CONCAT('/information/bookDetail?no=', book_no) url
 		FROM book
 		WHERE user_id LIKE CONCAT('%', #{keyword}, '%')
@@ -45,6 +59,8 @@
 		FROM recruitbbs
 		WHERE user_id LIKE CONCAT('%', #{keyword}, '%')
 			OR title LIKE CONCAT('%', #{keyword}, '%')
-			OR content LIKE CONCAT('%', #{keyword}, '%');
+			OR content LIKE CONCAT('%', #{keyword}, '%')
+		) merged
+		LIMIT 200
 	</select>
 </mapper>

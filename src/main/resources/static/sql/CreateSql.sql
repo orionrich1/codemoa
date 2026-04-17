@@ -224,6 +224,7 @@ CREATE TABLE project_diary (
 
 CREATE TABLE faq (
     faq_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    category VARCHAR(32) NOT NULL DEFAULT '일반',
     question VARCHAR(255) NOT NULL,
     answer TEXT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -274,4 +275,19 @@ CREATE TABLE IF NOT EXISTS problem_submissions (
     point_awarded   INT NOT NULL DEFAULT 0,
     FOREIGN KEY (user_id)    REFERENCES user(user_id)    ON DELETE CASCADE,
     FOREIGN KEY (problem_id) REFERENCES problems(problem_id) ON DELETE CASCADE
+);
+
+-- JPA 엔티티 ChatRoom / ChatMessage (PhysicalNamingStrategyStandardImpl: 클래스명·필드명 그대로)
+CREATE TABLE IF NOT EXISTS ChatRoom (
+    roomId VARCHAR(36) NOT NULL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS ChatMessage (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    roomId VARCHAR(36) NOT NULL,
+    sender VARCHAR(100) NOT NULL,
+    message TEXT NOT NULL,
+    sentAt DATETIME(6) NOT NULL,
+    type VARCHAR(20) NOT NULL
 );

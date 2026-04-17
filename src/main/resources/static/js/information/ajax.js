@@ -317,8 +317,8 @@ function renderBookList(bList, pageNum, order, keyword, type) {
 					<div class="item-texts">
 						<strong>${escapeHtml(book.title)}</strong>
 						<div class="metadata">
-							<span><b class="fw-bold">출판일:</b> ${escapeHtml(pub)}</span>
-							<span><b class="fw-bold">평점:</b> ${escapeHtml(book.rating)}</span>
+							<span><strong class="fw-medium">출판일:</strong> ${escapeHtml(pub)}</span>
+							<span><strong class="fw-medium">평점:</strong> ${escapeHtml(book.rating)}</span>
 						</div>
 					</div>
 				</div>
@@ -363,8 +363,8 @@ function renderContestList(resData, pageNum = 1, order = '', keyword = '', type 
                     <div class="book-texts">
                         <strong>${escapeHtml(contest.title)}</strong>
                         <div class="metadata">
-                            <span><b>기한:</b> ${escapeHtml(startDate)} ~ ${escapeHtml(endDate)}</span>
-                            <span><b>주최기관:</b> ${escapeHtml(contest.hostOrganization)}</span>
+                            <span><strong class="fw-medium">기한:</strong> ${escapeHtml(startDate)} ~ ${escapeHtml(endDate)}</span>
+                            <span><strong class="fw-medium">주최기관:</strong> ${escapeHtml(contest.hostOrganization)}</span>
                         </div>
                     </div>
                 </div>
@@ -401,8 +401,8 @@ function renderLectureList(lList, pageNum, order, keyword, type) {
 					<div class="item-texts">
 						<strong>${escapeHtml(lecture.title)}</strong>
 						<div class="metadata">
-							<span><b class="fw-bold">평점:</b> ${escapeHtml(lecture.rating)}</span>
-							<span><b class="fw-bold">작성자:</b> ${escapeHtml(lecture.userId)}</span>
+							<span><strong class="fw-medium">평점:</strong> ${escapeHtml(lecture.rating)}</span>
+							<span><strong class="fw-medium">작성자:</strong> ${escapeHtml(lecture.userId)}</span>
 						</div>
 					</div>
 				</div>

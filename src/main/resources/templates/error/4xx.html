@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+<head>
+    <title th:text="${status != null} ? (${status} + ' — 요청 오류 — CodeMoa') : '요청 오류 — CodeMoa'">요청 오류 — CodeMoa</title>
+</head>
+<body>
+<section layout:fragment="content" class="ui-view container py-5 text-center" aria-labelledby="err4xx-title">
+    <div class="mx-auto col-12 col-lg-8 col-xl-6">
+        <p class="text-secondary small mb-2" th:text="${status != null} ? ${status} : '4xx'">400</p>
+        <h1 id="err4xx-title" class="ds-page-title mb-3">요청을 처리할 수 없습니다</h1>
+        <p class="text-secondary mb-4" th:text="${message != null && !#strings.isEmpty(message)} ? ${message} : '입력 값이나 주소를 확인한 뒤 다시 시도해 주세요.'">
+            입력 값이나 주소를 확인한 뒤 다시 시도해 주세요.
+        </p>
+        <div class="d-flex flex-wrap gap-2 justify-content-center">
+            <a class="btn btn-primary" th:href="@{/}">홈으로</a>
+            <button type="button" class="btn btn-outline-secondary" onclick="history.back();">이전 페이지</button>
+        </div>
+        <p class="small text-muted mt-4 mb-0" th:if="${path != null}" th:text="'요청 경로: ' + ${path}"></p>
+    </div>
+</section>
+</body>
+</html>

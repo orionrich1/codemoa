@@ -11,6 +11,7 @@
 
     <!-- ① 히어로 -->
     <section class="home-hero home-ds-hero" aria-labelledby="home-hero-title">
+      <div class="home-ds-hero__mesh" aria-hidden="true"></div>
       <div class="home-ds-hero__inner">
 
         <!-- 비로그인 히어로 -->
@@ -30,8 +31,8 @@
             <li class="home-hero-value-item"><i class="bi bi-briefcase me-1" aria-hidden="true"></i>채용 정보</li>
           </ul>
           <!-- 회원가입 유도 -->
-          <p class="home-hero-signup-hint mt-2 mb-0">
-            아직 계정이 없으신가요? <a th:href="@{/joinForm}" class="fw-semibold">가입하기</a>
+            <p class="home-hero-signup-hint mt-2 mb-0">
+            아직 계정이 없으신가요? <a th:href="@{/joinForm}" class="fw-medium">가입하기</a>
           </p>
         </div>
 
@@ -56,7 +57,7 @@
             </span>
           </p>
           <div class="home-hero__actions">
-            <a th:href="@{/my-pages/myPageMain}" class="btn btn-primary btn-lg home-ds-cta-primary">내 프로젝트 보기</a>
+            <a th:href="@{/my-pages/}" class="btn btn-primary btn-lg home-ds-cta-primary">내 프로젝트 보기</a>
             <a th:href="@{/problems}" class="btn btn-lg home-ds-cta-secondary">문제 풀기</a>
           </div>
         </div>
@@ -322,7 +323,7 @@
                   채팅방이 없습니다. <a th:href="@{/chat/rooms}">만들기</a>
                 </li>
                 <li th:each="room : ${sidebarChatRooms}">
-                  <a th:href="@{/chat/rooms/{id}(id=${room.roomId})}" class="home-chat-rooms__row">
+                  <a th:href="@{/chat/room/{roomId}(roomId=${room.roomId})}" class="home-chat-rooms__row">
                     <i class="bi bi-hash me-1 text-secondary" aria-hidden="true"></i>
                     <span class="text-truncate" th:text="${room.name}">방 이름</span>
                   </a>
@@ -642,25 +643,27 @@
       </div>
     </section>
 
-    <!-- ⑨ 프로젝트 다이어리 섹션 -->
-    <section class="home-section container px-2 px-sm-3" aria-labelledby="home-diary-title">
+    <!-- ⑨ 프로젝트 다이어리 섹션 (로그인 사용자만 표시) -->
+    <section class="home-section container px-2 px-sm-3" aria-labelledby="home-diary-title" sec:authorize="isAuthenticated()">
       <header class="home-section__header">
         <div>
-          <h2 id="home-diary-title" class="home-section__title home-section__title--left mb-1">최근 프로젝트 다이어리</h2>
-          <p class="home-section__subtitle home-section__subtitle--left mb-0">개발자들의 진행 중인 프로젝트를 둘러보세요</p>
+          <h2 id="home-diary-title" class="home-section__title home-section__title--left mb-1">내 프로젝트 다이어리</h2>
+          <p class="home-section__subtitle home-section__subtitle--left mb-0">최근에 기록한 내 프로젝트입니다. 마이페이지에서 전체를 관리할 수 있어요.</p>
         </div>
-        <a th:href="@{/my-pages/myPageMain}" class="home-section__more">더보기</a>
+        <a th:href="@{/my-pages/}" class="home-section__more">더보기</a>
       </header>
       <div class="home-diary-grid mt-3">
         <th:block th:if="${#lists.isEmpty(latestProjects)}">
-          <div class="home-empty-hint">
-            <i class="bi bi-folder2-open me-1"></i>아직 프로젝트가 없습니다.
-            <a sec:authorize="isAuthenticated()" th:href="@{/my-pages/myPageMain}">내 프로젝트 시작하기</a>
-            <a sec:authorize="isAnonymous()" th:href="@{/loginForm}">로그인 후 시작하기</a>
+          <div class="home-empty-hint ds-icon-lead">
+            <span class="ds-icon-lead__icon" aria-hidden="true"><i class="bi bi-folder2-open"></i></span>
+            <span class="ds-icon-lead__body">
+              <span>아직 등록한 프로젝트가 없습니다.</span>
+              <a th:href="@{/my-pages/}" class="ms-1">프로젝트 만들기</a>
+            </span>
           </div>
         </th:block>
         <article th:each="project : ${latestProjects}" class="home-diary-card">
-          <a th:href="@{/my-pages/projectDetail(projectId=${project.projectId})}" class="home-diary-card__link text-decoration-none stretched-link">
+          <a th:href="@{/my-pages/projects(id=${project.projectId})}" class="home-diary-card__link text-decoration-none stretched-link">
             <div class="home-diary-card__thumb" aria-hidden="true">
               <i class="bi bi-folder2-open"></i>
             </div>
@@ -670,9 +673,6 @@
                     th:text="${project.status != null ? project.status.name() : '계획'}">진행중</span>
               <h3 class="home-diary-card__title text-truncate" th:text="${project.name}">프로젝트명</h3>
               <p class="home-diary-card__desc text-truncate" th:text="${project.description}">설명</p>
-              <span class="home-diary-card__author small text-secondary">
-                <i class="bi bi-person me-1" aria-hidden="true"></i><span th:text="${project.userId}">작성자</span>
-              </span>
             </div>
           </a>
         </article>

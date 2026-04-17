@@ -11,14 +11,22 @@
 		SELECT * FROM project WHERE user_id=#{userID} ORDER BY project_id DESC
 	</select>
 	
-	<select id="findLatestProjects" resultType="Project">
-		SELECT * FROM project ORDER BY project_id DESC LIMIT #{limit}
+	<!-- 메인 위젯: 로그인 사용자 본인 프로젝트만 (타인 프로젝트 비노출) -->
+	<select id="findLatestProjectsByUser" resultType="Project">
+		SELECT * FROM project
+		WHERE user_id = #{userId}
+		ORDER BY project_id DESC
+		LIMIT #{limit}
 	</select>
 
 	<select id="searchProjectList" resultType="Project">
 		SELECT * FROM project
 		WHERE user_id=#{userId} AND name LIKE CONCAT('%', #{keyword}, '%')
 		ORDER BY project_id DESC
+	</select>
+
+	<select id="countProjectsByStatus" resultType="int">
+		SELECT COUNT(*) FROM project WHERE user_id = #{userId} AND status = #{status}
 	</select>
 	
 	<select id="getProjectDetail" resultType="Project">

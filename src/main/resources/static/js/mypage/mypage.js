@@ -20,7 +20,9 @@ $(function() {
 
 			// 현재 비밀번호 검사
 			$.ajax({
-				url: 'checkPass',       // 요청 보낼 URL
+				url: (typeof window.MYPAGE_CHECK_PASS_URL !== 'undefined' && window.MYPAGE_CHECK_PASS_URL)
+					? window.MYPAGE_CHECK_PASS_URL
+					: 'checkPass',
 				type: 'POST',            // HTTP 메소드 (GET, POST, PUT, DELETE 등)
 				dataType: 'json',       // 서버에서 받을 데이터 타입
 				data: { userId: userId, pass: currentPass },

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+<head>
+    <title>404 — 페이지를 찾을 수 없습니다 — CodeMoa</title>
+</head>
+<body>
+<section layout:fragment="content" class="ui-view container py-5 text-center" aria-labelledby="err404-title">
+    <div class="mx-auto col-12 col-lg-8 col-xl-6">
+        <p class="text-secondary small mb-2">404</p>
+        <h1 id="err404-title" class="ds-page-title mb-3">페이지를 찾을 수 없습니다</h1>
+        <p class="text-secondary mb-4" th:text="${message != null && !#strings.isEmpty(message)} ? ${message} : '삭제되었거나 주소가 잘못되었을 수 있습니다.'">
+            삭제되었거나 주소가 잘못되었을 수 있습니다.
+        </p>
+        <div class="d-flex flex-wrap gap-2 justify-content-center">
+            <a class="btn btn-primary" th:href="@{/}">홈으로</a>
+            <a class="btn btn-outline-secondary" th:href="@{/community/free}">커뮤니티</a>
+        </div>
+        <p class="small text-muted mt-4 mb-0" th:if="${path != null}" th:text="'요청 경로: ' + ${path}"></p>
+    </div>
+</section>
+</body>
+</html>

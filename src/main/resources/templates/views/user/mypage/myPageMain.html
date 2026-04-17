@@ -3,76 +3,131 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/default_layout}">
 
-<div layout:fragment="content" class="ui-view">
-	<!-- 임시 css 사용중 -->
+<div layout:fragment="content" class="ui-view" th:attr="data-mypage-base=@{/my-pages/}">
 	<link rel="stylesheet" th:href="@{/css/mypage/mypage.css}" />
 	<link rel="stylesheet" th:href="@{/css/mypage/diary.css}" />
 	
 	<div class="container mt-5">
-		<h1 class="mb-4 fw-bold">마이 페이지</h1>
+		<h1 class="mb-4 ds-page-title">마이 페이지</h1>
 
-	     <!-- 내 계정 정보 -->
-	     <h2 class="mb-4">내 계정 정보</h2>
-	     <table class="table table-bordered">
-	         <tbody>
-	             <tr>
-	                 <th>아이디</th>
-	                 <td th:text="${myPageUser.user.userId}">userId</td>
-	             </tr>
-	             <tr>
-	                 <th>이름</th>
-	                 <td th:text="${myPageUser.user.name}">name</td>
-	             </tr>
-	             <tr>
-	                 <th>닉네임</th>
-	                 <td th:text="${myPageUser.user.nickname}">nickname</td>
-	             </tr>
-	             <tr>
-	                 <th>전화번호</th>
-	                 <td th:text="${myPageUser.user.mobile}">mobile</td>
-	             </tr>
-	             <tr>
-	                 <th>이메일</th>
-	                 <td th:text="${myPageUser.user.email}">email</td>
-	             </tr>
-	             <tr>
-	                 <th>가입일</th>
-	                 <td th:text="${#temporals.format(myPageUser.user.membershipDate, 'yyyy/MM/dd HH:mm')}">membershipDate</td>
-	             </tr>
-	             <tr>
-	                 <th>보유 포인트</th>
-	                 <td th:text="${myPageUser.user.totalPoints}">totalPoints</td>
-	             </tr>
-	             <tr>
-	                 <th>등급</th>
-	                 <td th:text="${myPageUser.user.grade.gradeName}">userGrade</td>
-	             </tr>
-	             <tr th:if="${myPageUser.snsType}">
-	                 <th>SNS 연동된 계정 타입</th>
-	                 <td th:text="${myPageUser.snsType}">snsType</td>
-	             </tr>
-	         </tbody>
-	     </table>
+		<div th:if="${errorMessage != null}" class="alert alert-danger" role="alert" th:text="${errorMessage}">
+			오류 메시지
+		</div>
+
+		<section class="mb-5" aria-labelledby="activity-summary-heading">
+			<h2 id="activity-summary-heading" class="h5 mb-3">활동 요약</h2>
+			<div class="row g-3">
+				<div class="col-md-4">
+					<div class="card border shadow-sm h-100">
+						<div class="card-body">
+							<p class="text-muted small mb-1">최근 7일 AI 문제 제출</p>
+							<p class="fs-4 fw-medium mb-0">
+								<span th:text="${activityAiSubmissions7d != null ? activityAiSubmissions7d : 0}">0</span>회
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="card border shadow-sm h-100">
+						<div class="card-body">
+							<p class="text-muted small mb-1">내 미답변 Q&amp;A</p>
+							<p class="fs-4 fw-medium mb-0">
+								<span th:text="${activityMyUnansweredQna != null ? activityMyUnansweredQna : 0}">0</span>건
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="card border shadow-sm h-100">
+						<div class="card-body">
+							<p class="text-muted small mb-1">진행 중 프로젝트</p>
+							<p class="fs-4 fw-medium mb-0">
+								<span th:text="${activityProjectsInProgress != null ? activityProjectsInProgress : 0}">0</span>개
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="mb-5" aria-labelledby="quick-links-heading">
+			<h2 id="quick-links-heading" class="h5 mb-3">빠른 링크</h2>
+			<div class="d-flex flex-wrap gap-2">
+				<a class="btn btn-outline-primary btn-sm" th:href="@{/problems/myHistory}">AI 풀이 이력</a>
+				<a class="btn btn-outline-primary btn-sm" th:href="@{/problems/stats}">학습 통계</a>
+				<a class="btn btn-outline-primary btn-sm" th:href="@{/support/qna}">Q&amp;A</a>
+				<a class="btn btn-outline-primary btn-sm" th:href="@{/ranking}">랭킹</a>
+				<a class="btn btn-outline-primary btn-sm" th:href="@{/community/free}">커뮤니티</a>
+			</div>
+		</section>
+
+	     <h2 class="mb-3 h4">내 계정 정보</h2>
+	     <div class="table-responsive mb-3">
+		     <table class="table table-bordered mb-0">
+		         <tbody>
+		             <tr>
+		                 <th scope="row">아이디</th>
+		                 <td th:text="${myPageUser.user.userId}">userId</td>
+		             </tr>
+		             <tr>
+		                 <th scope="row">이름</th>
+		                 <td th:text="${myPageUser.user.name}">name</td>
+		             </tr>
+		             <tr>
+		                 <th scope="row">닉네임</th>
+		                 <td th:text="${myPageUser.user.nickname}">nickname</td>
+		             </tr>
+		             <tr>
+		                 <th scope="row">전화번호</th>
+		                 <td th:text="${myPageUser.user.mobile}">mobile</td>
+		             </tr>
+		             <tr>
+		                 <th scope="row">이메일</th>
+		                 <td th:text="${myPageUser.user.email}">email</td>
+		             </tr>
+		             <tr>
+		                 <th scope="row">가입일</th>
+		                 <td th:text="${#temporals.format(myPageUser.user.membershipDate, 'yyyy/MM/dd HH:mm')}">membershipDate</td>
+		             </tr>
+		             <tr>
+		                 <th scope="row">보유 포인트</th>
+		                 <td th:text="${myPageUser.user.totalPoints}">totalPoints</td>
+		             </tr>
+		             <tr>
+		                 <th scope="row">등급</th>
+		                 <td th:text="${myPageUser.user.grade.gradeName}">userGrade</td>
+		             </tr>
+		             <tr th:if="${myPageUser.snsType}">
+		                 <th scope="row">SNS 연동된 계정 타입</th>
+		                 <td th:text="${myPageUser.snsType}">snsType</td>
+		             </tr>
+		         </tbody>
+		     </table>
+	     </div>
 	
-	     <!-- 계정 관련 버튼 -->
-	     <div class="d-flex gap-2 my-4">
-	         <a th:href="@{updateUserForm}" class="btn btn-primary">정보 수정</a>
-	         <!-- C-4: GET → POST 로 변경. th:action이 CSRF 토큰을 자동 포함 -->
-	         <form id="deleteUserForm" th:action="@{deleteUser}" method="post" class="d-inline">
-	             <button type="button" class="btn btn-danger" id="deleteBtn">계정 탈퇴</button>
+	     <div class="d-flex flex-wrap gap-2 my-4">
+	         <a th:href="@{/my-pages/updateUserForm}" class="btn btn-primary">정보 수정</a>
+	         <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#withdrawConfirmModal"
+	         	aria-haspopup="dialog">계정 탈퇴</button>
+	         <form id="deleteUserForm" th:action="@{/my-pages/deleteUser}" method="post" class="d-none">
+	         	<input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 	         </form>
-	         <a th:if="${myPageUser.isSnsLinked == true}" th:href="@{/my-pages/snsUnlink}"
-	         	class="btn btn-outline-secondary" id="snsUnlinkBtn">SNS 연동 해제</a>
+	         <th:block th:if="${myPageUser.isSnsLinked == true}">
+		         <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#snsUnlinkModal"
+		         	aria-haspopup="dialog">SNS 연동 해제</button>
+		         <form id="snsUnlinkForm" th:action="@{/my-pages/snsUnlink}" method="post" class="d-none">
+		         	<input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+		         </form>
+	         </th:block>
 	     </div>
 	     <hr>
 	
-		<!-- 프로젝트 버튼 -->
-		<div class="container my-5">
-		<h2 class="mb-4">프로젝트 리스트</h2>
+		<div class="my-5">
+		<h2 class="mb-3 h4">프로젝트 리스트</h2>
 	
-		<div class="text-end mt-4">
-			<button th:if="${searched}" class="btn btn-secondary me-2" onclick="location.href='/my-pages/'">검색 초기화</button>
-			<button class="btn btn-primary my-4" id="write-btn" onclick="location.href='projectForm/0'">작성</button>
+		<div class="text-end mt-4 d-flex flex-wrap justify-content-end gap-2">
+			<a th:if="${searched}" class="btn btn-secondary" th:href="@{/my-pages/}">검색 초기화</a>
+			<a class="btn btn-primary" id="write-btn" th:href="@{/my-pages/projectForm/0}">작성</a>
 		</div>
 	
 	    <div class="d-flex flex-wrap gap-3">
@@ -89,12 +144,12 @@
 					            상태
 					        </div>
 					        <button type="button" class="projectUpdateBtn diaryBtn btn btn-sm btn-outline-secondary me-1"
-					        	th:data-id="${project.projectId}">
-					            <i class="bi bi-pencil"></i>
+					        	th:data-id="${project.projectId}" aria-label="프로젝트 수정">
+					            <i class="bi bi-pencil" aria-hidden="true"></i>
 					        </button>
 					         <button type="button" class="projectDeleteBtn diaryBtn btn btn-sm btn-outline-secondary"
-					        	th:data-id="${project.projectId}">
-					            <i class="bi bi-trash3"></i>
+					        	th:data-id="${project.projectId}" aria-label="프로젝트 삭제">
+					            <i class="bi bi-trash3" aria-hidden="true"></i>
 					        </button>
 					    </div>
 					</div>
@@ -111,13 +166,19 @@
 	        </th:block>
 	        
 	        <th:block th:unless="!${#lists.isEmpty(projects)}">
-	        	<h5 th:if="${searched == null || !searched}" class="text-center w-100 my-5">작성된 프로젝트가 없습니다.</h5>
-	        	<h5 th:if="${searched}" class="text-center w-100 my-5">검색된 프로젝트가 없습니다.</h5>
+	        	<div class="text-center w-100 my-5" th:if="${searched == null || !searched}">
+	        		<p class="text-muted mb-3">작성된 프로젝트가 없습니다.</p>
+	        		<a class="btn btn-primary" th:href="@{/my-pages/projectForm/0}">프로젝트 작성하기</a>
+	        	</div>
+	        	<div class="text-center w-100 my-5" th:if="${searched}">
+	        		<p class="text-muted mb-3">검색된 프로젝트가 없습니다.</p>
+	        		<a class="btn btn-outline-primary me-2" th:href="@{/my-pages/}">전체 목록</a>
+	        		<a class="btn btn-primary" th:href="@{/my-pages/projectForm/0}">새 프로젝트 작성</a>
+	        	</div>
 	        </th:block>
 	    </div>
 	
-		<form class="row g-2 align-items-center my-3 mx-auto" action="/my-pages/"
-			class="ds-form-medium" id="searchForm">
+		<form class="row g-2 align-items-center my-3 mx-auto ds-form-medium" th:action="@{/my-pages/}" method="get" id="searchForm">
 			<div class="col-auto flex-grow-1">
 				<input type="text" class="form-control" name="keyword" required
 					placeholder="검색할 제목을 입력하세요" />
@@ -130,28 +191,77 @@
 	</div>
 
 	 </div>
-	 <script th:inline="javascript" th:if="${errorMessage != null}">
-	 	alert('[[${errorMessage}]]');
-	 </script>
+
+	<div class="modal fade" id="withdrawConfirmModal" tabindex="-1" aria-labelledby="withdrawConfirmLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="withdrawConfirmLabel">계정 탈퇴</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+				</div>
+				<div class="modal-body">
+					<p class="mb-0">정말 탈퇴하시겠습니까? 이 작업은 되돌릴 수 없습니다.</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
+					<button type="button" class="btn btn-danger" id="confirmWithdrawBtn">탈퇴하기</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="snsUnlinkModal" tabindex="-1" aria-labelledby="snsUnlinkLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="snsUnlinkLabel">SNS 연동 해제</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+				</div>
+				<div class="modal-body">
+					<p class="mb-0">SNS 연동을 해제하시겠습니까?</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
+					<button type="button" class="btn btn-primary" id="confirmSnsUnlinkBtn">해제하기</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="projectDeleteModal" tabindex="-1" aria-labelledby="projectDeleteLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="projectDeleteLabel">프로젝트 삭제</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+				</div>
+				<div class="modal-body">
+					<p class="mb-0">이 프로젝트를 삭제하시겠습니까?</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
+					<button type="button" class="btn btn-danger" id="confirmProjectDeleteBtn">삭제</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	 <script>
 		document.addEventListener('DOMContentLoaded', function () {
-			var snsUnlinkbtn = document.querySelector("#snsUnlinkBtn");
-			if(snsUnlinkbtn){
-				snsUnlinkbtn.addEventListener('click', function(e){
-					var doUnlink = confirm("정말 해제하시겠습니까?");
-					if (!doUnlink){
-						e.preventDefault();
-						return false;
-					}
+			var withdrawBtn = document.getElementById('confirmWithdrawBtn');
+			if (withdrawBtn) {
+				withdrawBtn.addEventListener('click', function () {
+					var f = document.getElementById('deleteUserForm');
+					if (f) f.submit();
 				});
 			}
-			
-		document.querySelector("#deleteBtn").addEventListener('click', function(e){
-			var doDelete = confirm("정말 탈퇴하시겠습니까?\n이 결정은 되돌릴 수 없습니다.");
-			if (doDelete){
-				document.getElementById("deleteUserForm").submit();
+			var snsBtn = document.getElementById('confirmSnsUnlinkBtn');
+			if (snsBtn) {
+				snsBtn.addEventListener('click', function () {
+					var f = document.getElementById('snsUnlinkForm');
+					if (f) f.submit();
+				});
 			}
-		});
 		});
 	 </script>
 	 <script th:src="@{/js/mypage/project.js}"></script>

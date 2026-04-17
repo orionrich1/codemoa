@@ -1,13 +1,13 @@
 <div th:fragment="footer" class="border-top mt-5 footer-codemoa" xmlns:th="http://www.thymeleaf.org">
     <div class="footer-codemoa__inner">
-        <div class="row align-items-start gy-4">
-            <div class="col-12 col-md-4 footer-codemoa__brand">
+        <div class="footer-codemoa__grid">
+            <div class="footer-codemoa__cell footer-codemoa__brand">
                 <strong class="d-block footer-codemoa__heading">CodeMoa</strong>
                 <p class="small text-muted mb-0 lh-base">
                     AI와 함께하는 코딩 학습과 개발자 지식 공유를 위한 커뮤니티입니다.
                 </p>
             </div>
-            <div class="col-6 col-md-4">
+            <div class="footer-codemoa__cell">
                 <strong class="d-block footer-codemoa__heading">바로가기</strong>
                 <ul class="list-unstyled small mb-0">
                     <li class="mb-2"><a th:href="@{/problems}" class="text-muted">문제 풀기</a></li>
@@ -16,7 +16,7 @@
                     <li class="mb-0"><a th:href="@{/support/faq}" class="text-muted">FAQ</a></li>
                 </ul>
             </div>
-            <div class="col-6 col-md-4">
+            <div class="footer-codemoa__cell">
                 <strong class="d-block footer-codemoa__heading">문의 · 정책</strong>
                 <ul class="list-unstyled small mb-0">
                     <li class="mb-2"><a th:href="@{/support/qna}" class="text-muted">Q&amp;A 문의</a></li>

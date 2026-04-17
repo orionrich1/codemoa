@@ -9,10 +9,11 @@
         <div class="row justify-content-center">
             <div class="col-lg-10">
 
-                <div class="text-center mb-4">
-                    <h2 class="fw-bold fs-2">팀 모집</h2>
-                    <p class="text-secondary">함께 성장하고 프로젝트를 완성할 최고의 팀원을 찾아보세요.</p>
-                </div>
+                <header class="ds-page-header ds-page-header--compact">
+                    <p class="ds-page-kicker mb-0">Team</p>
+                    <h1 class="h2 mb-2 ds-page-title">팀 모집</h1>
+                    <p class="ds-page-lead mb-0">함께 성장하고 프로젝트를 완성할 팀원을 찾아보세요.</p>
+                </header>
 
                 <div class="alert alert-light border text-center py-3 mb-4" sec:authorize="isAnonymous()">
                     <span class="text-secondary">로그인 후 팀원 모집 글을 작성할 수 있습니다.</span>
@@ -39,7 +40,7 @@
                                             </div>
                                         </div>
                                         <h4 class="card-title h5 mt-2">
-                                            <a th:href="@{/teamRecruitDetail(recruitId=${teamRecruit.recruitId}, pageNum=${currentPage})}" class="fw-bold" th:text="${teamRecruit.title}">제목</a>
+                                            <a th:href="@{/teamRecruitDetail(recruitId=${teamRecruit.recruitId}, pageNum=${currentPage})}" class="fw-medium" th:text="${teamRecruit.title}">제목</a>
                                         </h4>
                                         <div class="mt-auto">
                                             <div class="d-flex justify-content-between align-items-center pt-3 border-top text-secondary small">

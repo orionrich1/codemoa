@@ -3,12 +3,10 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/default_layout}">
 
-<div layout:fragment="content" class="ui-view">
-	<!-- 임시 css 사용중 -->
+<div layout:fragment="content" class="ui-view admin-users-page">
 	<link rel="stylesheet" th:href="@{/css/admin/users.css}" />
-	
-	<form class="row g-2 align-items-center my-5 mx-auto" action="/admin/users"
-		class="ds-form-medium" id="searchForm">
+
+	<form class="row g-2 align-items-center my-5 mx-auto ds-form-medium" action="/admin/users" id="searchForm">
 		<div class="col-auto flex-grow-1 me-3">
 			<input type="text" class="form-control" name="keyword" required
 				placeholder="검색할 아이디를 입력하세요" />
@@ -21,10 +19,11 @@
 	</form>
 	
 	<div th:if="${searched}">
-		<h4 class="text-center mb-4">[[${keyword}]] 검색 결과</h4>
+		<h4 class="mb-4 text-start">[[${keyword}]] 검색 결과</h4>
 	</div>
 	
 	
+	<div class="table-responsive">
 	<table class="table text-center my-3 align-middle">
 		<thead>
 			<tr class="table-skyblue">
@@ -58,6 +57,7 @@
 			</th:block>
 		</tbody>
 	</table>
+	</div>
 	
 	<script th:src="@{/js/admin/users.js}"></script>
 </div>

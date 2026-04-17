@@ -10,9 +10,10 @@
 
 <div layout:fragment="content" class="ui-view">
 	<main class="container my-5">
-		<div class="text-center mb-4">
-			<h2 class="fw-bold fs-2">IT 도서 추천</h2>
-		</div>
+		<header class="ds-page-header ds-page-header--compact">
+			<p class="ds-page-kicker mb-0">IT 정보</p>
+			<h1 class="h2 mb-0 ds-page-title">IT 도서 추천</h1>
+		</header>
 
 		<div class="d-flex justify-content-end align-items-center mb-4">
 			<div class="d-flex align-items-center gap-2">
@@ -57,8 +58,8 @@
 							<div class="item-texts">
 								<strong>[[${book.title}]]</strong>
 								<div class="metadata">
-									<span><b class="fw-bold">출판일:</b> [[${#dates.format(book.pubDate, 'yyyy-MM-dd')}]]</span>
-									<span><b class="fw-bold">평점:</b> [[${book.rating}]]</span>
+									<span><strong class="fw-medium">출판일:</strong> [[${#dates.format(book.pubDate, 'yyyy-MM-dd')}]]</span>
+									<span><strong class="fw-medium">평점:</strong> [[${book.rating}]]</span>
 								</div>
 							</div>
 						</div>

@@ -20,35 +20,36 @@
     --bp-lg: 992px;
     --bp-xl: 1200px;
 
-    --background: #f8fafc;
-    --foreground: #0f172a;
+    /* DESIGN.md / site-ds 단일 팔레트 (틸 primary 폐지) */
+    --background: #f5f5f5;
+    --foreground: #000000;
     --card: #ffffff;
-    --card-foreground: #0f172a;
+    --card-foreground: #000000;
     --popover: #ffffff;
-    --popover-foreground: #0f172a;
-    --primary: #0f766e;
-    --primary-hover: #115e59;
-    --primary-foreground: #f8fafc;
-    --secondary: #f1f5f9;
-    --secondary-foreground: #0f172a;
-    --muted: #e2e8f0;
-    --muted-foreground: #64748b;
-    --accent: #ccfbf1;
-    --accent-foreground: #134e4a;
-    --border: #e2e8f0;
-    --input: #e2e8f0;
-    --ring: #14b8a6;
+    --popover-foreground: #000000;
+    --primary: #000000;
+    --primary-hover: #1a1a1a;
+    --primary-foreground: #ffffff;
+    --secondary: #f5f5f5;
+    --secondary-foreground: #000000;
+    --muted: #f5f5f5;
+    --muted-foreground: #777169;
+    --accent: rgba(245, 242, 239, 0.8);
+    --accent-foreground: #000000;
+    --border: #e5e5e5;
+    --input: #e5e5e5;
+    --ring: rgba(147, 197, 253, 0.45);
     --destructive: #dc2626;
     --destructive-foreground: #fef2f2;
     /* DS §11 선택 토큰 (문서·컴포넌트 공통) */
-    --foreground-subtle: #94a3b8;
+    --foreground-subtle: #777169;
     --success: #16a34a;
     --success-foreground: #f0fdf4;
     --warning: #d97706;
     --warning-foreground: #fffbeb;
     --radius: 0.75rem;
-    --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.08);
-    --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.1);
+    --shadow-sm: 0 0 0 1px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.04);
+    --shadow-md: 0 0 0 1px rgba(0, 0, 0, 0.06), 0 8px 24px rgba(0, 0, 0, 0.06);
 }
 
 *,
@@ -143,7 +144,7 @@ a {
 .card-header,
 .card-footer {
     border-color: var(--border);
-    background-color: #fcfdff;
+    background-color: var(--card);
 }
 
 .ui-btn,
@@ -202,7 +203,8 @@ a {
 }
 
 .form-label {
-    font-weight: 600;
+    font-weight: 500;
+    letter-spacing: 0.15px;
     color: var(--foreground);
 }
 
@@ -212,9 +214,10 @@ a {
 }
 
 .table thead th {
-    background: #f8fafc;
-    color: #334155;
-    font-weight: 600;
+    background: var(--muted);
+    color: var(--muted-foreground);
+    font-weight: 500;
+    letter-spacing: 0.14px;
     border-bottom: 1px solid var(--border);
 }
 
@@ -279,7 +282,8 @@ a {
 }
 
 .nav-accordion-mobile .accordion-button {
-    font-weight: 700;
+    font-weight: 500;
+    letter-spacing: 0.15px;
     font-size: var(--text-body);
     padding: 0.85rem 1rem;
     min-height: 48px;
@@ -346,10 +350,10 @@ a {
 
 .footer-codemoa__heading {
     font-size: var(--text-body-sm);
-    font-weight: 700;
+    font-weight: 500;
+    letter-spacing: 0.15px;
     color: var(--foreground);
     margin-bottom: 0.75rem;
-    letter-spacing: -0.01em;
 }
 
 .footer-codemoa__inner a.text-muted:hover {

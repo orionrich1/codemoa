@@ -24,10 +24,10 @@
             <div class="col-lg-9">
 
                 <!-- 페이지 헤더 -->
-                <div class="text-center mb-4">
+                <div class="ds-page-head mb-4">
                     <p class="ai-page__kicker mb-2">AI Coding</p>
                     <h2 class="ai-page__title mb-1" th:text="${problem.title}">문제 제목</h2>
-                    <div class="d-flex justify-content-center align-items-center gap-2 mt-2">
+                    <div class="d-flex justify-content-start align-items-center gap-2 mt-2 flex-wrap">
                         <span class="badge text-bg-dark" th:text="${problem.category}">언어</span>
                         <span th:if="${problem.difficulty == '상'}" class="badge bg-danger">상</span>
                         <span th:if="${problem.difficulty == '중'}" class="badge bg-warning text-dark">중</span>

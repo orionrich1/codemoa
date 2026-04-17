@@ -6,7 +6,7 @@
  */
 
 .community-ds {
-    color: #000000;
+    color: var(--ds-text);
     padding-top: clamp(2rem, 4vw, 3rem);
     padding-bottom: clamp(2rem, 4vw, 3rem);
 }
@@ -22,26 +22,26 @@
     font-weight: 500;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: #777169;
+    color: var(--ds-text-muted);
     margin-bottom: 0.5rem;
 }
 
 .community-ds .community-page__title {
     font-family: var(--font-display);
-    font-size: 2.25rem;
+    font-size: var(--ds-type-page, clamp(1.875rem, 3.5vw, 2.125rem));
     font-weight: 300;
-    line-height: 1.17;
-    letter-spacing: -0.06em;
-    color: #000000;
+    line-height: 1.2;
+    letter-spacing: -0.05em;
+    color: var(--ds-text);
 }
 
 .community-ds .community-post__title {
     font-family: var(--font-display);
-    font-size: 2rem;
+    font-size: var(--ds-type-content, clamp(1.5rem, 2.5vw, 1.75rem));
     font-weight: 300;
-    line-height: 1.2;
+    line-height: 1.25;
     letter-spacing: -0.04em;
-    color: #000000;
+    color: var(--ds-text);
 }
 
 .community-ds .community-card__heading {
@@ -49,7 +49,7 @@
     font-size: 1.25rem;
     font-weight: 300;
     line-height: 1.25;
-    color: #000000;
+    color: var(--ds-text);
 }
 
 .community-ds .community-ui,
@@ -65,18 +65,16 @@
     font-family: "Inter", "Pretendard", sans-serif;
     font-size: 0.88rem;
     letter-spacing: 0.14px;
-    color: #777169;
+    /* 표 작성일 등: muted는 다크 표면에서 너무 흐림 */
+    color: var(--ds-text-secondary);
 }
 
 /* --- Card / panel (spec §3.4, DESIGN.md §6 Outline Ring) --- */
 .community-ds .community-card {
-    background: #ffffff;
+    background: var(--ds-surface);
     border: none;
     border-radius: 18px;
-    box-shadow:
-        0 0 0 1px rgba(0, 0, 0, 0.06),
-        0 1px 2px rgba(0, 0, 0, 0.04),
-        0 2px 4px rgba(0, 0, 0, 0.04);
+    box-shadow: var(--ds-shadow-card, 0 0 0 1px rgba(255, 255, 255, 0.08), 0 6px 28px rgba(0, 0, 0, 0.35));
     overflow: hidden;
 }
 
@@ -91,22 +89,20 @@
 }
 
 .community-ds .community-card__footer {
-    background: #f5f5f5;
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    background: var(--ds-surface-subtle);
+    border-top: 1px solid var(--ds-border-subtle);
     padding: 1rem 1.25rem;
 }
 
 .community-ds .community-card__footer--inset {
-    background: #ffffff;
-    box-shadow:
-        0 0 0 0.5px rgba(0, 0, 0, 0.075) inset,
-        0 0 0 0 #ffffff inset;
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    background: var(--ds-surface);
+    box-shadow: 0 0 0 0.5px var(--ds-border-subtle) inset;
+    border-top: 1px solid var(--ds-border-subtle);
 }
 
 .community-ds .community-card__header {
-    background: #ffffff;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    background: var(--ds-surface);
+    border-bottom: 1px solid var(--ds-border-subtle);
     padding: 1rem 1.5rem;
 }
 
@@ -120,16 +116,16 @@
     font-size: 0.81rem;
     font-weight: 500;
     letter-spacing: 0.14px;
-    color: #4e4e4e;
-    background: #f5f5f5;
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    color: var(--ds-text-secondary);
+    background: var(--ds-surface-subtle);
+    border: 1px solid var(--ds-border-subtle);
     border-radius: 9999px;
 }
 
 .community-ds .community-ds-chip--dark {
-    color: #000000;
-    background: #f5f5f5;
-    border-color: rgba(0, 0, 0, 0.06);
+    color: var(--ds-text);
+    background: var(--ds-surface-elevated);
+    border-color: var(--ds-border);
 }
 
 /* --- Buttons (spec §3.3) --- */
@@ -150,8 +146,8 @@
     font-size: 0.94rem;
     font-weight: 500;
     line-height: 1.47;
-    color: #ffffff;
-    background: #000000;
+    color: var(--text-inverse);
+    background: var(--ds-text);
     border: none;
     border-radius: 9999px;
     box-shadow:
@@ -164,7 +160,7 @@
 }
 
 .community-ds .community-ds-cta-primary:hover {
-    color: #ffffff;
+    color: var(--text-inverse);
     background: #1a1a1a;
     box-shadow:
         0 0 1px rgba(0, 0, 0, 0.45),
@@ -180,7 +176,7 @@
     font-family: "Inter", "Pretendard", sans-serif;
     font-size: 0.94rem;
     font-weight: 500;
-    color: #000000;
+    color: var(--ds-text);
     background: rgba(245, 242, 239, 0.8);
     border: none;
     border-radius: 30px;
@@ -192,7 +188,7 @@
 }
 
 .community-ds .community-ds-cta-warm:hover {
-    color: #000000;
+    color: var(--ds-text);
     background: rgba(245, 242, 239, 0.95);
     box-shadow: 0 8px 20px rgba(78, 50, 23, 0.06);
 }
@@ -206,8 +202,8 @@
     font-family: "Inter", "Pretendard", sans-serif;
     font-size: 0.94rem;
     font-weight: 500;
-    color: #000000;
-    background: #ffffff;
+    color: var(--ds-text);
+    background: var(--ds-surface);
     border: 1px solid rgba(0, 0, 0, 0.06);
     border-radius: 9999px;
     box-shadow:
@@ -220,8 +216,8 @@
 }
 
 .community-ds .community-ds-cta-ghost:hover {
-    color: #000000;
-    background: #f5f5f5;
+    color: var(--ds-text);
+    background: var(--ds-surface-subtle);
     border-color: rgba(0, 0, 0, 0.08);
 }
 
@@ -234,8 +230,8 @@
     font-family: "Inter", "Pretendard", sans-serif;
     font-size: 0.94rem;
     font-weight: 500;
-    color: #000000;
-    background: #ffffff;
+    color: var(--ds-text);
+    background: var(--ds-surface);
     border: 1px solid rgba(0, 0, 0, 0.12);
     border-radius: 9999px;
     transition:
@@ -244,9 +240,9 @@
 }
 
 .community-ds .community-ds-cta-danger:hover {
-    background: #f5f5f5;
+    background: var(--ds-surface-subtle);
     border-color: rgba(0, 0, 0, 0.2);
-    color: #000000;
+    color: var(--ds-text);
 }
 
 .community-ds .community-ds-cta-sm {
@@ -259,7 +255,7 @@
 .community-ds .community-table-wrap {
     border-radius: 12px;
     overflow: hidden;
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--ds-border-subtle);
 }
 
 .community-ds .community-table-wrap .table-responsive {
@@ -277,15 +273,15 @@
 
 .community-ds .community-toolbar {
     padding-bottom: 1rem;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    border-bottom: 1px solid var(--ds-border-subtle);
 }
 
 .community-ds .community-table__row {
     cursor: pointer;
 }
 
-.community-ds .community-table__row:hover {
-    background-color: rgba(0, 0, 0, 0.02);
+.community-ds .community-table__row:hover td {
+    background-color: var(--ds-surface-subtle);
 }
 
 .community-ds .community-toast {
@@ -305,7 +301,7 @@
 .community-ds .community-table {
     margin-bottom: 0;
     font-size: 1rem;
-    color: #000000;
+    color: var(--ds-text);
 }
 
 .community-ds .community-table thead th {
@@ -313,15 +309,19 @@
     font-size: 0.81rem;
     font-weight: 500;
     letter-spacing: 0.14px;
-    color: #777169;
-    background: #f5f5f5;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    color: var(--ds-text-secondary);
+    background: var(--ds-surface-subtle);
+    border-bottom: 1px solid var(--ds-border-subtle);
     padding: 0.75rem 1rem;
     vertical-align: middle;
 }
 
 .community-ds .community-table tbody td {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    --bs-table-bg: var(--ds-surface);
+    --bs-table-color: var(--ds-text);
+    background-color: var(--ds-surface);
+    color: var(--ds-text);
+    border-bottom: 1px solid var(--ds-border-subtle);
     padding: 0.85rem 1rem;
     vertical-align: middle;
     min-height: 48px;
@@ -332,24 +332,53 @@
 }
 
 .community-ds .community-table tbody tr:hover td {
-    background: #fafafa;
+    background-color: var(--ds-surface-subtle);
+}
+
+.community-ds .community-table .td-no {
+    color: var(--ds-text-secondary);
 }
 
 .community-ds .community-table .community-table__title-link {
     font-weight: 500;
     letter-spacing: 0.16px;
-    color: #000000;
+    color: var(--ds-text);
     text-decoration: none;
 }
 
 .community-ds .community-table .community-table__title-link:hover {
-    color: #4e4e4e;
+    color: var(--ds-accent);
     text-decoration: underline;
     text-underline-offset: 3px;
 }
 
+/* 작성자 열: 닉네임 한 줄 + 등급 아이콘 흰 캔버스 완화(원형 클리핑·인라인 이미지 갭 제거) */
+.community-ds .community-table .ds-table-col-author,
+.community-ds .community-table .td-author {
+    width: 18%;
+    min-width: 11.5rem;
+}
+
+.community-ds .community-table .td-author .ds-userprofile-gap {
+    flex-wrap: nowrap;
+    justify-content: center;
+}
+
+.community-ds .community-table .td-author .ds-userprofile-nickname {
+    white-space: nowrap;
+}
+
+.community-ds .community-table .td-author .ds-rank-icon-sm {
+    display: block;
+    flex-shrink: 0;
+    border: none;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+}
+
 .community-ds .community-empty {
-    color: #777169;
+    color: var(--ds-text-muted);
     padding: 3rem 1rem;
     text-align: center;
 }
@@ -360,9 +389,9 @@
     font-size: 0.94rem;
     font-weight: 500;
     letter-spacing: 0.15px;
-    color: #4e4e4e;
-    background: #ffffff;
-    border: 1px solid rgba(0, 0, 0, 0.06);
+    color: var(--ds-text-secondary);
+    background: var(--ds-surface);
+    border: 1px solid var(--ds-border-subtle);
     border-radius: 9999px;
     margin: 0 0.2rem;
     padding: 0.45rem 0.85rem;
@@ -374,18 +403,16 @@
 }
 
 .community-ds .community-pagination .page-item.active .page-link {
-    background: #000000;
-    border-color: #000000;
-    color: #ffffff;
-    box-shadow:
-        0 0 1px rgba(0, 0, 0, 0.4),
-        0 4px 4px rgba(0, 0, 0, 0.04);
+    background: var(--ds-accent);
+    border-color: var(--ds-accent);
+    color: var(--ds-text-on-accent);
+    box-shadow: var(--ds-shadow-warm, 0 0 24px rgba(110, 240, 220, 0.12));
 }
 
 .community-ds .community-pagination .page-item.disabled .page-link {
-    color: #777169;
-    background: #f5f5f5;
-    border-color: rgba(0, 0, 0, 0.04);
+    color: var(--ds-text-muted);
+    background: var(--ds-surface-subtle);
+    border-color: var(--ds-border-subtle);
 }
 
 /* --- Forms --- */
@@ -394,7 +421,7 @@
     font-size: 0.94rem;
     font-weight: 500;
     letter-spacing: 0.15px;
-    color: #000000;
+    color: var(--ds-text);
 }
 
 .community-ds .form-control,
@@ -402,9 +429,9 @@
     font-family: "Inter", "Pretendard", sans-serif;
     font-size: 1rem;
     letter-spacing: 0.16px;
-    color: #000000;
-    background: #ffffff;
-    border: 1px solid #e5e5e5;
+    color: var(--ds-text);
+    background: var(--ds-surface);
+    border: 1px solid var(--ds-border);
     border-radius: 16px;
     padding: 12px 16px;
     min-height: 44px;
@@ -422,13 +449,13 @@
 
 /* Summernote */
 .community-ds .note-editor.note-frame {
-    border: 1px solid #e5e5e5 !important;
+    border: 1px solid var(--ds-border) !important;
     border-radius: 16px !important;
     overflow: hidden;
 }
 
 .community-ds .note-toolbar {
-    background: #f5f5f5 !important;
+    background: var(--ds-surface-subtle) !important;
     border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
 }
 
@@ -436,11 +463,11 @@
 .community-ds .community-post-body {
     font-size: 1rem;
     line-height: 1.6;
-    color: #4e4e4e;
+    color: var(--ds-text-secondary);
 }
 
 .community-ds .community-post-body a {
-    color: #000000;
+    color: var(--ds-text);
     text-decoration: underline;
     text-underline-offset: 3px;
 }
@@ -462,7 +489,7 @@
     font-family: "Inter", "Pretendard", sans-serif;
     font-size: 1rem;
     letter-spacing: 0.16px;
-    color: #4e4e4e;
+    color: var(--ds-text-secondary);
 }
 
 /* --- Focus (DESIGN.md ring) --- */
@@ -470,7 +497,7 @@
 .community-ds button:focus-visible,
 .community-ds .form-control:focus-visible,
 .community-ds .form-select:focus-visible {
-    outline: 2px solid rgba(147, 197, 253, 0.8);
+    outline: 2px solid var(--ds-ring);
     outline-offset: 2px;
 }
 
@@ -490,7 +517,7 @@
     }
 
     .community-ds .responsive-table tr {
-        border: 1px solid rgba(0, 0, 0, 0.06);
+        border: 1px solid var(--ds-border-subtle);
         border-radius: 16px;
         margin-bottom: 1rem;
         padding: 1.25rem;
@@ -499,10 +526,8 @@
         grid-template-rows: auto auto;
         gap: 0.5rem;
         align-items: center;
-        background: #ffffff;
-        box-shadow:
-            0 0 0 1px rgba(0, 0, 0, 0.06),
-            0 1px 2px rgba(0, 0, 0, 0.04);
+        background: var(--ds-surface);
+        box-shadow: var(--ds-shadow-card, 0 0 0 1px rgba(255, 255, 255, 0.08), 0 4px 16px rgba(0, 0, 0, 0.35));
     }
 
     .community-ds .responsive-table .td-title {
@@ -521,12 +546,26 @@
         grid-column: 1;
         grid-row: 2;
         font-size: 0.88rem;
-        color: #777169;
+        color: var(--ds-text-secondary);
         letter-spacing: 0.14px;
     }
 
     .community-ds .responsive-table .td-author .d-flex {
         justify-content: flex-start !important;
+    }
+
+    .community-ds .responsive-table .td-author .ds-userprofile-nickname {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: min(12rem, 58vw);
+    }
+
+    .community-ds .responsive-table .td-author .ds-rank-icon-sm {
+        display: block;
+        flex-shrink: 0;
+        border-radius: 50%;
+        object-fit: cover;
+        object-position: center;
     }
 
     .community-ds .responsive-table .td-category {

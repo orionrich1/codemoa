@@ -1,5 +1,7 @@
 package com.codemoa.project.domain.support.service;
 
+import com.codemoa.project.domain.support.FaqCategory;
+import com.codemoa.project.domain.support.dto.QnaCreateRequest;
 import com.codemoa.project.domain.support.entity.Faq;
 import com.codemoa.project.domain.support.entity.Qna;
 import com.codemoa.project.domain.support.entity.QnaReply;
@@ -8,9 +10,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +28,44 @@ public class SupportService {
     @Transactional(readOnly = true)
     public List<Faq> getAllFaqs() {
         return supportMapper.findAllFaqs();
+    }
+
+    /**
+     * FAQ를 정해진 카테고리 순으로 묶는다. DB에 없는 라벨은 「일반」으로 취급한다.
+     */
+    @Transactional(readOnly = true)
+    public boolean hasAnyFaq() {
+        return supportMapper.countFaqs() > 0;
+    }
+
+    @Transactional(readOnly = true)
+    public LinkedHashMap<String, List<Faq>> getFaqsGroupedByCategory() {
+        List<Faq> all = new ArrayList<>(supportMapper.findAllFaqs());
+        all.sort(Comparator
+                .comparingInt((Faq f) -> categoryOrderIndex(normalizeFaqCategoryLabel(f.getCategory())))
+                .thenComparing(f -> Optional.ofNullable(f.getFaqId()).orElse(0L), Comparator.reverseOrder()));
+        LinkedHashMap<String, List<Faq>> map = new LinkedHashMap<>();
+        for (String label : FaqCategory.orderedLabels()) {
+            map.put(label, new ArrayList<>());
+        }
+        for (Faq f : all) {
+            String key = normalizeFaqCategoryLabel(f.getCategory());
+            map.computeIfAbsent(key, k -> new ArrayList<>()).add(f);
+        }
+        return map;
+    }
+
+    private static String normalizeFaqCategoryLabel(String raw) {
+        if (raw == null || raw.isBlank() || !FaqCategory.isValidLabel(raw)) {
+            return FaqCategory.GENERAL.getLabel();
+        }
+        return raw.trim();
+    }
+
+    private static int categoryOrderIndex(String normalizedLabel) {
+        List<String> order = FaqCategory.orderedLabels();
+        int i = order.indexOf(normalizedLabel);
+        return i >= 0 ? i : order.size();
     }
 
     @Transactional(readOnly = true)
@@ -39,14 +83,19 @@ public class SupportService {
         return supportMapper.findLatestQnaForMain(limit);
     }
 
-    // Q&A 목록 조회 (페이지네이션 포함)
+    /**
+     * @param answerFilter {@code null} 또는 {@code all} 이면 필터 없음. {@code waiting}·{@code answered} 는 XML과 동일 문자열.
+     */
     @Transactional(readOnly = true)
-    public Map<String, Object> getQnaList(int page, int pageSize, String type, String keyword) {
+    public Map<String, Object> getQnaList(int page, int pageSize, String type, String keyword, String answerFilter) {
         Map<String, Object> params = new HashMap<>();
         params.put("startRow", (page - 1) * pageSize);
         params.put("pageSize", pageSize);
         params.put("type", type);
         params.put("keyword", keyword);
+        if (answerFilter != null) {
+            params.put("answerFilter", answerFilter);
+        }
 
         int totalCount = supportMapper.getQnaCount(params);
         List<Qna> qnaList = supportMapper.findQnaList(params);
@@ -80,15 +129,51 @@ public class SupportService {
     // Q&A 수정
     @Transactional
     public void updateQna(Qna qna) {
-        // 본인 확인 로직 등은 Controller에서 처리 후 호출
         supportMapper.updateQna(qna);
     }
 
     // Q&A 삭제
     @Transactional
     public void deleteQna(Long qnaId) {
-        // 본인 확인 로직 등은 Controller에서 처리 후 호출
         supportMapper.deleteQna(qnaId);
+    }
+
+    /**
+     * 답변 등록 전이며 작성자 본인인 경우에만 수정 가능.
+     */
+    @Transactional(readOnly = true)
+    public Qna getQnaForAuthorEdit(Long qnaId, String userId) {
+        Qna qna = supportMapper.findQnaById(qnaId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 Q&A를 찾을 수 없습니다. id=" + qnaId));
+        assertAuthorCanMutateUnanswered(qna, userId);
+        return qna;
+    }
+
+    @Transactional
+    public void updateQnaByAuthor(Long qnaId, QnaCreateRequest request, String userId) {
+        Qna qna = supportMapper.findQnaById(qnaId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 Q&A를 찾을 수 없습니다. id=" + qnaId));
+        assertAuthorCanMutateUnanswered(qna, userId);
+        qna.setTitle(request.getTitle() != null ? request.getTitle().trim() : null);
+        qna.setContent(request.getContent() != null ? request.getContent().trim() : null);
+        supportMapper.updateQna(qna);
+    }
+
+    @Transactional
+    public void deleteQnaByAuthor(Long qnaId, String userId) {
+        Qna qna = supportMapper.findQnaById(qnaId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 Q&A를 찾을 수 없습니다. id=" + qnaId));
+        assertAuthorCanMutateUnanswered(qna, userId);
+        supportMapper.deleteQna(qnaId);
+    }
+
+    private static void assertAuthorCanMutateUnanswered(Qna qna, String userId) {
+        if (userId == null || !userId.equals(qna.getWriterId())) {
+            throw new IllegalStateException("본인의 질문만 수정하거나 삭제할 수 있습니다.");
+        }
+        if (qna.isAnswered()) {
+            throw new IllegalStateException("답변이 등록된 질문은 수정하거나 삭제할 수 없습니다.");
+        }
     }
     
  // ▼▼▼ [FAQ 생성 서비스 추가] ▼▼▼

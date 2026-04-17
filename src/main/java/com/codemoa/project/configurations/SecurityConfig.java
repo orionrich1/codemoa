@@ -9,10 +9,12 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 
@@ -143,8 +145,34 @@ public class SecurityConfig {
                     .key("codemoa-remember-me")
                     .tokenValiditySeconds(14 * 24 * 60 * 60)
                     .userDetailsService(userDetailsService)
-            );
+            )
+
+            // 폼/OAuth2 모두 loginPage("/loginForm")를 쓰면 Spring Security 6.5+ 가
+            // DefaultLoginPageGeneratingFilter 로 기본 HTML(Login with OAuth 2.0)을
+            // 먼저 내려보내 Thymeleaf 로그인이 가려질 수 있음 → 자동 생성 비활성화.
+            .with(new DisableDefaultLoginPageHtmlConfigurer(), c -> {});
 
         return http.build();
+    }
+
+    /**
+     * 커스텀 로그인 페이지(/loginForm)를 쓰는 경우, 내부 기본 로그인 HTML 생성 필터가
+     * 동일 경로·/login 등에서 응답을 가로채지 않도록 끈다.
+     */
+    private static final class DisableDefaultLoginPageHtmlConfigurer
+            extends AbstractHttpConfigurer<DisableDefaultLoginPageHtmlConfigurer, HttpSecurity> {
+
+        @Override
+        public void configure(HttpSecurity http) {
+            DefaultLoginPageGeneratingFilter filter = http.getSharedObject(DefaultLoginPageGeneratingFilter.class);
+            if (filter == null) {
+                return;
+            }
+            filter.setFormLoginEnabled(false);
+            filter.setOauth2LoginEnabled(false);
+            filter.setLoginPageUrl(null);
+            filter.setFailureUrl(null);
+            filter.setLogoutSuccessUrl(null);
+        }
     }
 }

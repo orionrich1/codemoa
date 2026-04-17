@@ -110,8 +110,9 @@ public class MainController {
 		Problem dailyProblem = problemService.getDailyProblem();
 		model.addAttribute("dailyProblem", dailyProblem);
 
-		// P1: 프로젝트 다이어리 섹션
-		List<Project> latestProjects = diaryService.findLatestProjects(DIARY_WIDGET_LIMIT);
+		// P1: 프로젝트 다이어리 섹션 — 본인 프로젝트만 (비로그인 시 빈 목록)
+		String diaryUserId = userDetails != null ? userDetails.getUsername() : null;
+		List<Project> latestProjects = diaryService.findLatestProjectsForMain(diaryUserId, DIARY_WIDGET_LIMIT);
 		model.addAttribute("latestProjects", latestProjects);
 
 		// P1: 플랫폼 신뢰 통계 바
@@ -146,7 +147,7 @@ public class MainController {
 
 	@GetMapping("/search")
 	public String search(
-			@RequestParam("keyword") String keyword,
+			@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
 			@RequestParam(value = "sort", required = false, defaultValue = "recent") String sort,
 			@RequestParam(value = "type", required = false, defaultValue = "all") String typeFilter,
 			Model model) {

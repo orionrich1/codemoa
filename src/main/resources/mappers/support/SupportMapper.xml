@@ -21,6 +21,16 @@
             </choose>
         </if>
     </sql>
+
+    <!-- answerFilter: all | waiting | answered — 컨트롤러·폼 value와 동일 문자열 유지 -->
+    <sql id="qnaAnswerFilter">
+        <if test="answerFilter != null and answerFilter == 'waiting'">
+            AND COALESCE(q.is_answered, 0) = 0
+        </if>
+        <if test="answerFilter != null and answerFilter == 'answered'">
+            AND COALESCE(q.is_answered, 0) = 1
+        </if>
+    </sql>
     
     <update id="updateQnaAnsweredStatus" parameterType="long">
     UPDATE qna SET is_answered = TRUE WHERE qna_id = #{qnaId}
@@ -32,6 +42,7 @@
         LEFT JOIN user u ON q.writer_id = u.user_id
         WHERE 1=1
         <include refid="qnaSearchCondition" />
+        <include refid="qnaAnswerFilter" />
     </select>
 
     <select id="countUnansweredQna" resultType="int">
@@ -60,6 +71,7 @@
         LEFT JOIN user u ON q.writer_id = u.user_id
         WHERE 1=1
         <include refid="qnaSearchCondition" />
+        <include refid="qnaAnswerFilter" />
         ORDER BY q.qna_id DESC
         LIMIT #{startRow}, #{pageSize}
     </select>
@@ -115,12 +127,18 @@
         SELECT * FROM qna_reply WHERE reply_id = #{replyId}
     </select>
     
+    <select id="countFaqs" resultType="int">
+        SELECT COUNT(*) FROM faq
+    </select>
+
+    <!-- category 컬럼이 없는 기존 DB에서도 조회되도록 ORDER BY에 category 미사용. 정렬은 SupportService에서 수행. -->
         <select id="findAllFaqs" resultType="com.codemoa.project.domain.support.entity.Faq">
-        SELECT * FROM faq ORDER BY faq_id DESC
+        SELECT * FROM faq
+        ORDER BY faq_id DESC
     </select>
     
     <insert id="insertFaq" parameterType="com.codemoa.project.domain.support.entity.Faq">
-        INSERT INTO faq (question, answer) VALUES (#{question}, #{answer})
+        INSERT INTO faq (category, question, answer) VALUES (#{category}, #{question}, #{answer})
     </insert>
 
 </mapper>

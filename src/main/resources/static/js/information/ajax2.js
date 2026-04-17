@@ -311,8 +311,8 @@ function renderBookList(bList, pageNum, order, keyword, type) {
 					<div class="book-texts">
 						<strong>${book.title}</strong>
 						<div class="metadata">
-							<span><b class="fw-bold">출판일:</b> ${book.pubDate.split("T")[0]}</span>
-							<span><b class="fw-bold">평점:</b> ${book.rating}</span>
+							<span><strong class="fw-medium">출판일:</strong> ${book.pubDate.split("T")[0]}</span>
+							<span><strong class="fw-medium">평점:</strong> ${book.rating}</span>
 						</div>
 					</div>
 				</div>
@@ -345,8 +345,8 @@ function renderLectureList(lList, pageNum, order, keyword, type) {
 					<div class="item-texts">
 						<strong>${lecture.title}</strong>
 						<div class="metadata">
-							<span><b class="fw-bold">평점:</b> ${lecture.rating}</span>
-							<span><b class="fw-bold">작성자:</b> ${lecture.userId}</span>
+							<span><strong class="fw-medium">평점:</strong> ${lecture.rating}</span>
+							<span><strong class="fw-medium">작성자:</strong> ${lecture.userId}</span>
 						</div>
 					</div>
 				</div>

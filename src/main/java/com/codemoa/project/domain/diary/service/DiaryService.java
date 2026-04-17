@@ -31,13 +31,23 @@ public class DiaryService {
 		return diaryMapper.getProjectList(userId);
 	}
 
-	// 메인 페이지용: 전체 최신 프로젝트
-	public List<Project> findLatestProjects(int limit) {
-		return diaryMapper.findLatestProjects(limit);
+	/**
+	 * 메인 위젯: 로그인 시 본인 프로젝트만, 비로그인 시 빈 목록.
+	 * (다이어리는 마이페이지 소유 데이터 — 타인 프로젝트를 메인에 노출하지 않음)
+	 */
+	public List<Project> findLatestProjectsForMain(String userId, int limit) {
+		if (userId == null || userId.isBlank()) {
+			return List.of();
+		}
+		return diaryMapper.findLatestProjectsByUser(userId, limit);
 	}
 	
 	public List<Project> searchProjectList(String userId, String keyword) {
 		return diaryMapper.searchProjectList(userId, keyword);
+	}
+
+	public int countProjectsByStatus(String userId, String status) {
+		return diaryMapper.countProjectsByStatus(userId, status);
 	}
 
 	// 프로젝트 상세 가져오기
