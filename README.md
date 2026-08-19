@@ -45,3 +45,28 @@ CodeMoa는 기존의 개발자 커뮤니티 기능에 AI를 활용한 코딩 학
 | **Backend** | 임재용 | IT 정보(뉴스, 공모전), 학습 콘텐츠(강의, 책 추천)  |
 | **Backend** | 김종효 | 팀원 모집, 채용 정보, 기업 정보 [cite: 340, 341] |
 | **Frontend** | 박기찬 | 메인 페이지, 헤더/푸터, 회원 관리(가입/로그인)  |
+
+---
+
+## 🙋 이윤식 (PL / Backend) 담당 파트
+
+- **GitHub 관리**: 브랜치 전략 수립, PR 리뷰, AWS EC2 배포 환경(Spring Boot 8080) 구성 및 서버 오류 대응
+- **커뮤니티 Q&A**: 질문/답변 게시판, FAQ, 답변 채택 로직
+- **랭킹 시스템**: 포인트 적립(게시글 작성·답변 채택 등) → 등급·주간 랭킹 산출 및 위젯 연동
+- **실시간 채팅**: WebSocket(STOMP) 기반 언어별/주제별 채팅방, 입장·퇴장 처리, 스크롤 이슈 해결
+- **인증**: 소셜 로그인(Google/Kakao OAuth2) 연동, SNS 계정 충돌 처리, 비밀번호 처리 방식 개선
+
+---
+
+## 🚀 로컬 실행 방법
+
+1. MySQL 8.x를 설치하고 `codemoa_db` 데이터베이스를 생성합니다.
+2. `src/main/resources/application-local.properties`에 본인 로컬 DB 접속 정보(`spring.datasource.username/password`)를 설정합니다. (이 파일은 `.gitignore`에 등록되어 있어 저장소에 커밋되지 않습니다.)
+3. `src/main/resources/secret.properties`에 Google/Kakao OAuth 클라이언트 ID·Secret 등 민감 정보를 채웁니다.
+4. 아래 명령으로 실행합니다.
+
+```bash
+./gradlew bootRun
+```
+
+5. 브라우저에서 `http://localhost:8080` 접속.

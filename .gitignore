@@ -27,3 +27,11 @@ hs_err_pid*
 
 # API Key
 secret.properties
+
+# Secrets / credentials
+*.pem
+*.key
+application-local.properties
+
+# DB dumps
+*.sql

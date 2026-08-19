@@ -80,7 +80,7 @@ public class MainController {
 		model.addAttribute("latestPostsAll", new ArrayList<CommunityPostPreview>(latestRaw));
 
 		List<UserRankingResponse> weekly = rankingService.getWeeklyTopForPublic(RANKING_WIDGET_LIMIT);
-		model.addAttribute("weeklyRanking", weekly);
+		model.addAttribute("weeklyRanking", weekly.isEmpty() ? MainPageDemoData.weeklyRanking() : weekly);
 
 		List<Lecture> hubLectures = informationService.findLatestLectures(HUB_COLUMN_LIMIT);
 		model.addAttribute("hubLectures", hubLectures);
