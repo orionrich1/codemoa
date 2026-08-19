@@ -593,7 +593,7 @@ body.site-ds .btn-primary {
     background-color: var(--ds-accent) !important;
     border-color: var(--ds-accent) !important;
     color: var(--ds-text-on-accent) !important;
-    border-radius: 9999px;
+    border-radius: var(--radius);
     font-weight: 500;
     letter-spacing: 0.15px;
     box-shadow: var(--ds-shadow-warm);
@@ -628,7 +628,7 @@ body.site-ds .btn-secondary {
     background: var(--ds-surface-subtle);
     color: var(--ds-text);
     border: 1px solid var(--ds-border-subtle);
-    border-radius: 9999px;
+    border-radius: var(--radius);
     font-weight: 500;
 }
 
@@ -640,7 +640,7 @@ body.site-ds .btn-secondary:hover {
 body.site-ds .btn-outline-primary {
     color: var(--ds-text);
     border: 1px solid var(--ds-border);
-    border-radius: 9999px;
+    border-radius: var(--radius);
     background: transparent;
     font-weight: 500;
 }
@@ -654,7 +654,7 @@ body.site-ds .btn-outline-primary:hover {
 body.site-ds .btn-success,
 body.site-ds .btn-danger,
 body.site-ds .btn-info {
-    border-radius: 9999px;
+    border-radius: var(--radius);
     font-weight: 500;
     border: none;
 }
@@ -697,7 +697,7 @@ body.site-ds .btn-warning.text-dark {
     background: var(--ds-warm);
     color: var(--ds-text) !important;
     border: none;
-    border-radius: 9999px;
+    border-radius: var(--radius);
     font-weight: 500;
     box-shadow: var(--ds-shadow-warm);
 }
@@ -711,7 +711,7 @@ body.site-ds .btn-warning:hover {
    페이지네이션
    ------------------------------------------------------------------------- */
 body.site-ds .pagination .page-link {
-    border-radius: 9999px;
+    border-radius: var(--radius);
     margin: 0 0.15rem;
     border: 1px solid var(--ds-border-subtle);
     color: var(--ds-text-secondary);
@@ -742,7 +742,7 @@ body.site-ds .badge {
     font-family: "Inter", "Pretendard", sans-serif;
     font-weight: 500;
     letter-spacing: 0.14px;
-    border-radius: 9999px;
+    border-radius: var(--radius);
     padding: 0.35em 0.65em;
 }
 
@@ -852,7 +852,7 @@ body.site-ds .bg-info {
    프로그레스
    ------------------------------------------------------------------------- */
 body.site-ds .progress {
-    border-radius: 9999px;
+    border-radius: var(--radius);
     background: var(--ds-surface-subtle);
     height: 10px;
 }
@@ -1287,7 +1287,7 @@ body.site-ds .btn-kakao {
     background-color: #fee500 !important;
     color: #000000 !important;
     border: none !important;
-    border-radius: 9999px !important;
+    border-radius: var(--radius) !important;
     font-weight: 600 !important;
     box-shadow:
         0 0 1px rgba(0, 0, 0, 0.15),

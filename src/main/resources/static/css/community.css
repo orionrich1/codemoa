@@ -120,7 +120,7 @@
     color: var(--ds-text-secondary);
     background: var(--ds-surface-subtle);
     border: 1px solid var(--ds-border-subtle);
-    border-radius: 9999px;
+    border-radius: var(--radius);
     white-space: nowrap;
 }
 
@@ -151,7 +151,7 @@
     color: var(--text-inverse);
     background: var(--ds-text);
     border: none;
-    border-radius: 9999px;
+    border-radius: var(--radius);
     box-shadow:
         0 0 1px rgba(0, 0, 0, 0.4),
         0 4px 4px rgba(0, 0, 0, 0.04);
@@ -181,7 +181,7 @@
     color: var(--ds-text);
     background: rgba(245, 242, 239, 0.8);
     border: none;
-    border-radius: 30px;
+    border-radius: var(--radius);
     box-shadow: 0 6px 16px rgba(78, 50, 23, 0.04);
     text-decoration: none;
     transition:
@@ -207,7 +207,7 @@
     color: var(--ds-text);
     background: var(--ds-surface);
     border: 1px solid rgba(0, 0, 0, 0.06);
-    border-radius: 9999px;
+    border-radius: var(--radius);
     box-shadow:
         0 0 1px rgba(0, 0, 0, 0.4),
         0 4px 4px rgba(0, 0, 0, 0.04);
@@ -235,7 +235,7 @@
     color: var(--ds-text);
     background: var(--ds-surface);
     border: 1px solid rgba(0, 0, 0, 0.12);
-    border-radius: 9999px;
+    border-radius: var(--radius);
     transition:
         background-color 0.16s ease,
         border-color 0.16s ease;
