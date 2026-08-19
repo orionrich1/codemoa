@@ -123,6 +123,32 @@ scp -i "C:\경로\키.pem" "C:\경로\로컬파일.jar" ubuntu@<퍼블릭IP>:~/
 - **SFTP(FileZilla 등)**: 프로토콜 **SFTP**, 포트 **22**, 사용자 **`ubuntu`**, 인증에 **키 파일** 지정. (**FTP 21 아님.**)  
 - 업로드 위치는 보통 **`/home/ubuntu/`** 홈 디렉터리.
 
+### 5.4.1 SSH 키(PEM) — Owner 로컬 기준 (참고)
+
+> **Owner 기준**으로만 적어 둔 값입니다. **공개 Git·타인과 공유하는 저장소에는 키를 넣지 않는 것이 원칙**이며, 이 환경에서는 **원격에 올릴 계획이 없어** 로컬 작업 편의를 위해 프로젝트 폴더에 두는 방식을 문서에 남깁니다.
+
+| 항목 | 값 |
+|------|-----|
+| 키 파일명 | `codemoa-key.pem` |
+| 로컬 경로 (예) | 프로젝트 루트: `C:\git\SpringBootStudy\final-project\codemoa-key.pem` |
+| SSH 사용자 | `ubuntu` (Ubuntu AMI 기준) |
+| 퍼블릭 IPv4 (확인 시점 기록) | `13.124.7.63` — **Elastic IP가 아니면** 인스턴스 재시작·교체 시 바뀔 수 있음. 접속 전 **AWS 콘솔의 현재 퍼블릭 IPv4**를 본다. |
+
+**PowerShell에서 SSH (원격 셸 한 줄 실행 예시)**
+
+```powershell
+ssh -i "C:\git\SpringBootStudy\final-project\codemoa-key.pem" ubuntu@13.124.7.63 "hostname && sudo ss -tlnp | grep -E '8080|8081'"
+```
+
+**PowerShell에서 JAR 업로드 (`scp`)**
+
+```powershell
+scp -i "C:\git\SpringBootStudy\final-project\codemoa-key.pem" "C:\git\SpringBootStudy\final-project\build\libs\final-project-0.0.1-SNAPSHOT.jar" ubuntu@13.124.7.63:~/
+```
+
+- OpenSSH가 **`UNPROTECTED PRIVATE KEY FILE`** 를 내면 Windows에서 해당 `.pem`에 **권한 축소**가 필요합니다. → **§6.1** 참고.
+- 키 지문 확인(내용 노출 없이 형식만 검증): `ssh-keygen -lf codemoa-key.pem`
+
 ### 5.5 로컬에서 MySQL 덤프 만들기 (Windows)
 
 - PowerShell에서 **`>` 리다이렉트로 `mysqldump` 출력을 파일에 쓰면** UTF-16 등으로 깨져 서버에서 `mysql < dump.sql` 시 **`ERROR 1366` / `ASCII '\0'`** 가 날 수 있습니다.  
@@ -157,6 +183,51 @@ mysql -u codemoa_user -p비밀번호 codemoa_db < ~/codemoa_dump.sql
   - **네트워크·방화벽·키 권한**에 따라 `scp`/`ssh`가 실패할 수 있으며, 그때는 **본인 PC 터미널에서 동일 명령**을 실행하면 됩니다.
   - **브라우저로 사이트 동작 확인**은 IDE가 대신할 수 없고, 배포 후 **`http://<퍼블릭IP>:8080/`** 등으로 직접 확인하는 것이 좋습니다.
 
+### 5.9 8080이 “안 열릴 때” 복구 (AWS → OS 방화벽 → 프로세스 순서)
+
+브라우저에서 `http://<퍼블릭IP>:8080/` 이 **타임아웃**이거나 **연결 거부**일 때 아래를 **위에서부터** 확인합니다.
+
+1. **퍼블릭 IP·Elastic IP**
+   - 인스턴스를 재시작하면 퍼블릭 IP가 바뀔 수 있습니다. **콘솔에 표시된 현재 퍼블릭 IPv4**로 접속하는지 확인합니다.
+
+2. **보안 그룹 (가장 흔한 원인)**
+   - EC2 → **보안 그룹** → 인바운드 규칙에 **TCP 8080** 이 **본인 PC에서 접속 가능한 소스**(예: `내 IP/32` 또는 팀 정책에 맞는 대역)로 열려 있는지 확인합니다.
+   - SSH(22)만 열고 8080을 닫아 두면 **외부에서는 8080이 항상 막힙니다.**
+
+3. **Ubuntu 방화벽 (`ufw`)**
+   - SSH로 접속한 뒤:
+     ```bash
+     sudo ufw status
+     ```
+   - `Status: active` 인데 8080이 없으면:
+     ```bash
+     sudo ufw allow 8080/tcp
+     sudo ufw reload
+     ```
+   - (정책에 따라 필요할 때만) `sudo ufw disable` 은 보안상 권장하지 않으며, **규칙 추가**로 해결하는 것이 좋습니다.
+
+4. **8080에 실제로 누가 리슨하는지**
+   ```bash
+   sudo ss -tlnp | grep 8080
+   ```
+   - **아무 것도 안 나오면** Spring Boot 프로세스가 **죽었거나 기동 실패**한 상태입니다. `~/nohup.out` 또는 기동 방식에 맞는 로그를 확인합니다.
+   ```bash
+   tail -n 80 ~/nohup.out
+   ```
+
+5. **애플리케이션 재기동 (§4 절차와 동일)**
+   - 기존 8080 자바 종료 후(§4.2~4.4), 프로파일을 유지해 다시 기동합니다. 예:
+     ```bash
+     cd ~
+     nohup java -jar -Dspring.profiles.active=server final-project-0.0.1-SNAPSHOT.jar >> nohup.out 2>&1 &
+     ```
+   - 다시 `sudo ss -tlnp | grep 8080` 으로 리슨 여부를 확인합니다.
+
+6. **MySQL 등 부팅 실패로 JAR가 즉시 종료되는 경우**
+   - `nohup.out` 에 DB 연결 오류가 있으면 DB가 먼저 살아 있어야 합니다(§4.0, `application-server.properties` 의 `127.0.0.1:3306`).
+
+로컬 저장소의 설정은 **`server.port=8080`** 이고 `server.address` 로 루프백만 묶는 설정은 없으므로, **정상 기동만 되면** 기본적으로 **모든 인터페이스(0.0.0.0)** 에 바인딩됩니다. 외부에서 안 보이면 **대부분 2·3·5(보안 그룹 / ufw / 프로세스 미기동)** 중 하나입니다.
+
 ---
 
 ## 6. SSH 접속 시 자주 겪는 이슈 (Windows)
@@ -180,7 +251,7 @@ mysql -u codemoa_user -p비밀번호 codemoa_db < ~/codemoa_dump.sql
 
 ## 7. 보안·운영 메모
 
-- **`.pem`을 Git 저장소 안에 두면** 실수로 커밋·푸시될 위험이 큼. 가능하면 `~/.ssh/` 등 저장소 밖으로 옮기고, 저장소에는 넣지 않는 것을 권장.  
+- **`.pem`은 일반적으로** 저장소 밖(예: `~/.ssh/`)에 두는 것이 안전합니다. **공개·팀 원격에 푸시할 계획이 있다면** 저장소에 두지 말 것. Owner가 **로컬 전용·비공개**로 쓰고 키 위치를 **§5.4.1**에만 적어 둔 경우는 예외적으로 본인 책임 하에 관리합니다.  
 - EC2 **퍼블릭 IP는 변경될 수 있음.** Elastic IP를 쓰지 않으면 접속 주소가 바뀔 때가 있음.  
 - MOTD의 `*** System restart required ***`는 **커널/패치 적용을 위해 재부팅이 필요하다는 알림**일 수 있음. 유지보수 창에서 재부팅·서비스 기동 순서를 정해 두면 좋음.
 
@@ -204,7 +275,7 @@ ls -la /usr/local/tomcat10/webapps
 ## 9. 문서 갱신 시점
 
 - **배포 방식 변경** (예: 8080만 systemd로 전환, JAR 경로 변경, 리버스 프록시 추가)  
-- **인스턴스 교체·IP 고정 정책 변경**  
+- **인스턴스 교체·IP 고정 정책 변경** (§5.4.1 퍼블릭 IP 갱신)  
 - **Tomcat/team_mini 제거 또는 포트 변경**  
 - **DB 덤프·문자집합·업로드 절차**를 팀에서 바꾼 경우 (§5 보강)  
 - **Cursor·IDE에서 배포 자동화 범위**를 바꾼 경우 (§5.8)
