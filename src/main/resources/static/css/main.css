@@ -1448,7 +1448,7 @@
     font-size: 0.85rem;
     color: var(--muted-foreground, #4e4e4e);
     margin-bottom: 0;
-    max-width: 420px;
+    max-width: 100%;
 }
 
 .home-daily-problem__meta {
@@ -1467,8 +1467,12 @@
         flex-direction: column;
         align-items: flex-start;
     }
+    .home-daily-problem__body {
+        width: 100%;
+    }
     .home-daily-problem__cta {
         align-self: stretch;
+        width: 100%;
         text-align: center;
     }
 }

@@ -82,6 +82,11 @@
     color: var(--ds-text-secondary);
 }
 
+.ai-problem-meta span {
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
 .ai-code,
 .code-editor-textarea,
 .code-block {

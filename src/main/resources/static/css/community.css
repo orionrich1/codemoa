@@ -110,6 +110,7 @@
 .community-ds .community-ds-chip {
     display: inline-flex;
     align-items: center;
+    flex-shrink: 0;
     min-height: 28px;
     padding: 0 0.65rem;
     font-family: "Inter", "Pretendard", sans-serif;
@@ -120,6 +121,7 @@
     background: var(--ds-surface-subtle);
     border: 1px solid var(--ds-border-subtle);
     border-radius: 9999px;
+    white-space: nowrap;
 }
 
 .community-ds .community-ds-chip--dark {

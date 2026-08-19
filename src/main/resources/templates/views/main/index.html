@@ -136,7 +136,7 @@
         <div class="home-daily-problem__body">
           <p class="home-daily-problem__eyebrow">오늘의 추천 문제</p>
           <h2 id="home-daily-problem-title" class="home-daily-problem__title" th:text="${dailyProblem.title}">문제 제목</h2>
-          <p class="home-daily-problem__desc text-truncate" th:text="${dailyProblem.content}">문제 설명</p>
+          <p class="home-daily-problem__desc text-truncate" th:text="${#strings.abbreviate(dailyProblem.content, 60)}">문제 설명</p>
         </div>
         <div class="home-daily-problem__meta">
           <span class="badge home-daily-problem__badge"
