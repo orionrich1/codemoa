@@ -391,7 +391,7 @@
 }
 
 .home-qna-hint__row:hover {
-    color: #000000;
+    color: var(--primary);
 }
 
 .home-hub-column__sub {
@@ -420,10 +420,6 @@
     color: var(--foreground);
     text-decoration: none;
     padding: 0.5rem 0;
-}
-
-.home-quick-links a:hover {
-    color: #000000;
 }
 
 .home-hub-column__head {
