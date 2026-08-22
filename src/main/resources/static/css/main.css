@@ -1344,7 +1344,7 @@
 
 .home-hero-search__input {
     flex: 1;
-    border-radius: var(--radius) 0 0 var(--radius);
+    border-radius: var(--radius) 0 0 var(--radius) !important;
     border: 1.5px solid var(--border);
     border-right: none;
     padding: 0.6rem 1rem;
