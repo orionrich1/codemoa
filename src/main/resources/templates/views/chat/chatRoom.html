@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/default_layout}">
 
@@ -27,7 +27,7 @@
                     <div class="card-body d-flex flex-column p-3 ds-chat-card-body">
                         <div id="msgArea" class="msgArea p-2 mb-2 ds-chat-msg-scroll"></div>
                         <div class="input-group">
-                            <input type="text" class="form-control content p-3" placeholder="메시지를 입력하세요...">
+                            <input type="text" class="form-control content p-3" aria-label="메시지 입력" placeholder="메시지를 입력하세요...">
                             <button type="button" class="btn btn-primary sendBtn px-4">전송</button>
                         </div>
                     </div>
@@ -114,7 +114,10 @@
 
             users.forEach(user => {
                 const li = document.createElement('li');
-                li.innerHTML = `<a class="dropdown-item" href="#">${user}</a>`;
+                const span = document.createElement('span');
+                span.className = 'dropdown-item-text';
+                span.textContent = user;
+                li.appendChild(span);
                 userDropdownEl.appendChild(li);
             });
         }

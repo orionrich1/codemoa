@@ -2,7 +2,9 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/default_layout}">
- 
+<head>
+    <title>팀 모집 글 수정</title>
+</head>
 <th:block layout:fragment="content" class="ui-view">
   <div class="container my-5">
     <div class="row justify-content-center">
@@ -33,7 +35,7 @@
                   <div class="mb-2" id="contestPreviewImageWrapper"><img id="contestPreviewImage" src="" alt="공모전 미리보기 이미지" class="img-fluid ds-preview-img d-none"></div>
                   <div class="mb-2 fw-medium" id="contestPreviewTitle"></div>
                   <div class="small text-muted mb-2" id="contestPreviewDesc"></div>
-                  <a id="contestPreviewLink" href="#" target="_blank" class="btn btn-outline-primary btn-sm">공모전 바로가기</a>
+                  <a id="contestPreviewLink" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary btn-sm">공모전 바로가기</a>
                 </div>
               </div>
 

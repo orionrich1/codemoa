@@ -4,6 +4,9 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layouts/default_layout}">
 
+<head>
+    <title>문제 목록</title>
+</head>
 <th:block layout:fragment="extra-head">
     <link rel="stylesheet" th:href="@{/css/problem.css}" />
 </th:block>
@@ -15,7 +18,7 @@
 
                 <div class="ds-page-head mb-4">
                     <p class="ai-page__kicker mb-2">AI Coding</p>
-                    <h2 class="ai-page__title mb-0">문제 목록</h2>
+                    <h1 class="ai-page__title mb-0">문제 목록</h1>
                 </div>
 
                 <!-- 진행 요약 (로그인 사용자만) -->
@@ -80,7 +83,8 @@
                             <th:block th:if="${problemList != null && !#lists.isEmpty(problemList)}">
                                 <th:block th:each="problem : ${problemList}">
                                     <li class="list-group-item list-group-item-action ai-list-item p-3 ds-cursor-pointer"
-                                        th:onclick="@{|location.href='problemDetail?problemId=${problem.problemId}'|}">
+                                        role="link" tabindex="0"
+                                        th:attr="data-href=@{problemDetail(problemId=${problem.problemId})}">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="flex-grow-1">
                                                 <div class="d-flex align-items-center gap-3">

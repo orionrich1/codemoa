@@ -22,6 +22,17 @@ let difficultyFilterSelected = [0, 0, 0];   // 상, 중, 하
 
 $(function () {
 
+    /* ── 문제 목록: 카드 클릭/키보드 이동 (서버 렌더링·AJAX 렌더링 공통, 이벤트 위임) ── */
+    $("#problemTableBody").on("click", ".ai-list-item[data-href]", function () {
+        location.href = $(this).data("href");
+    });
+    $("#problemTableBody").on("keydown", ".ai-list-item[data-href]", function (e) {
+        if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            location.href = $(this).data("href");
+        }
+    });
+
     /* ── 문제 목록: 언어·난이도 필터 ── */
     $(".typeFilter").on("change", function () {
         typeFilterSelected[$(this).val() - 1] = $(this).is(':checked') ? 1 : 0;
@@ -200,7 +211,7 @@ function refreshList(problemList) {
             : '';
         container.append(`
             <li class="list-group-item list-group-item-action ai-list-item p-3 ds-cursor-pointer"
-                onclick="location.href='problemDetail?problemId=${p.problemId}'">
+                role="link" tabindex="0" data-href="problemDetail?problemId=${p.problemId}">
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="flex-grow-1">
                         <div class="d-flex align-items-center gap-3">

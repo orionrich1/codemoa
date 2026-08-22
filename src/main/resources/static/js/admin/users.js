@@ -32,6 +32,13 @@ $(function() {
 		var id = $(this).data("id");
 		location.href = "users?userId=" + id;
 	});
+	$(".users").on("keydown", function(e) {
+		if (e.key === "Enter" || e.key === " ") {
+			e.preventDefault();
+			var id = $(this).data("id");
+			location.href = "users?userId=" + id;
+		}
+	});
 
 	// 유저 상세 페이지 - 차단 해제 버튼 (C-4: GET → POST)
 	$("#unBanBtn").click(function() {

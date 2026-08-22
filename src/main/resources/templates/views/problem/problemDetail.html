@@ -4,6 +4,9 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layouts/default_layout}">
 
+<head>
+    <title th:text="${problem.title} + ' · 문제 풀기'">문제 풀기</title>
+</head>
 <th:block layout:fragment="extra-head">
     <link rel="stylesheet" th:href="@{/css/problem.css}" />
 </th:block>
@@ -19,7 +22,7 @@
     <div class="container-fluid px-4 my-4">
         <div class="ds-page-head mb-3">
             <p class="ai-page__kicker mb-1">AI Coding</p>
-            <h2 class="ai-page__title mb-0">문제 풀기</h2>
+            <h1 class="ai-page__title mb-0">문제 풀기</h1>
         </div>
 
         <!-- 모바일: 문제 내용 접기/펼치기 토글 버튼 -->
@@ -47,7 +50,7 @@
                                     <span th:if="${problem.difficulty == '하'}"
                                           class="badge bg-success">하</span>
                                 </div>
-                                <h4 class="card-title mb-0" th:text="${problem.title}">문제 제목</h4>
+                                <h2 class="card-title mb-0" th:text="${problem.title}">문제 제목</h2>
                             </div>
 
                             <div class="flex-grow-1 ds-problem-pane">
