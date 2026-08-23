@@ -8,6 +8,21 @@ CodeMoa는 기존의 개발자 커뮤니티 기능에 AI를 활용한 코딩 학
 
 ---
 
+## 🔗 배포
+
+현재 AWS EC2 프리티어 기간이 만료되어 라이브 데모는 잠시 내려간 상태입니다. 재배포 후 이 자리에 URL을 업데이트할 예정입니다.
+그 전까지는 아래 [로컬 실행 방법](#-로컬-실행-방법)으로 직접 띄워서 확인하실 수 있습니다.
+
+## 📸 스크린샷
+
+> `docs/screenshots/` 폴더에 캡처 이미지를 추가하고 아래 표를 채워주세요. (예: 홈, 커뮤니티, AI 코딩, 랭킹 페이지)
+
+| 홈 | 커뮤니티 | AI 코딩 |
+| :---: | :---: | :---: |
+| _(스크린샷 추가 예정)_ | _(스크린샷 추가 예정)_ | _(스크린샷 추가 예정)_ |
+
+---
+
 ## 📅 프로젝트 기간
 
 2025년 7월 1일 ~ 2025년 8월 12일
@@ -28,10 +43,12 @@ CodeMoa는 기존의 개발자 커뮤니티 기능에 AI를 활용한 코딩 학
 
 ## 🛠️ 기술 스택
 
-* **Backend**: Java, Spring, Gradle
-* **Frontend**: HTML, CSS, JavaScript, AJAX 
-* **Database**: MySQL 
-* **Version Control**: Git 
+* **Backend**: Java 21, Spring Boot 3, Spring Security(OAuth2 Google/Kakao), Spring Data JPA + MyBatis, WebSocket(STOMP), Gradle
+* **AI**: Google GenAI / Vertex AI (AI 코딩 문제 피드백)
+* **Frontend**: Thymeleaf, HTML, CSS, JavaScript(jQuery), AJAX
+* **Database**: MySQL 8.x
+* **Infra**: AWS EC2
+* **Version Control**: Git, GitHub
 * **IDE**: IntelliJ, Eclipse
 
 ---
