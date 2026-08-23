@@ -364,8 +364,9 @@
 
 .home-rank-row__icon {
     flex-shrink: 0;
-    border-radius: 4px;
-    object-fit: contain;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #fff;
 }
 
 .home-rank-row__grade {
@@ -1376,6 +1377,9 @@
 .home-hero-welcome__grade-badge img {
     vertical-align: middle;
     margin-left: 0.3rem;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #fff;
 }
 
 .home-hero-welcome__stats {

@@ -1623,13 +1623,18 @@ body.site-ds .progress.ds-progress-ranking {
 body.site-ds .ds-rank-icon-lg {
     width: 32px;
     height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #fff;
 }
 
 body.site-ds .ds-rank-icon-sm {
     width: 24px;
     height: 24px;
     vertical-align: middle;
-    object-fit: contain;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #fff;
 }
 
 body.site-ds .ds-grade-cell {
